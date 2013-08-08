@@ -62,4 +62,23 @@
     <servlet-name>Resource Servlet</servlet-name>
     <url-pattern>/xmlhttp/*</url-pattern>
   </servlet-mapping>
+  
+  <servlet>
+        <servlet-name>Captcha</servlet-name>
+        <servlet-class>mx.com.asteca.util.Captcha</servlet-class>
+        <init-param>
+            <description>passing height</description>
+            <param-name>height</param-name>
+            <param-value>30</param-value>
+        </init-param>
+        <init-param>
+            <description>passing height</description>
+            <param-name>width</param-name>
+            <param-value>120</param-value>
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Captcha</servlet-name>
+        <url-pattern>/Captcha.jpg</url-pattern>
+    </servlet-mapping>
 </web-app>
