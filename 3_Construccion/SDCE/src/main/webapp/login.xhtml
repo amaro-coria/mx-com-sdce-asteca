@@ -11,13 +11,13 @@
             <h:form styleClass="login" >
                 <fieldset>
                     <legend>#{msg.login}</legend>
-                    <h:panelGrid columns="2">
+                    <h:panelGrid columns="2" style="text-align:right;" >
                         <h:outputLabel value="#{msg.usuario} :" for="usuario" />
                         <h:inputText id="usuario" value="#{login.usuario}" title="#{msg.usuario}" maxlength="20" required="true" requiredMessage="#{msg.usuarioRequerido}" style="width:100%"/>
                         <h:outputLabel value="#{msg.contrasenia} :" for="contrasenia" />
                         <h:inputSecret  id="contrasenia" value="#{login.contrasenia}" title="#{msg.contrasenia}" maxlength="20" required="true" requiredMessage="#{msg.contraseniaRequerida}" style="width:100%"/>
                         <h:outputLabel value="#{msg.captcha} :"/>
-                        <h:graphicImage value="/captcha" alt="Captcha" />
+                        <h:graphicImage id="capimg" value="#{facesContext.externalContext.requestContextPath}/../Captcha.jpg"/>
                         <h:outputLabel value="#{msg.captchaInput} :"/>
                         <h:inputText  value="#{login.captcha}"  maxlength="5" required="true" requiredMessage="#{msg.frsErrorCaptcha}" style="width:100%"/>
                     </h:panelGrid>
