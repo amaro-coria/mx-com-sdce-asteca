@@ -44,7 +44,8 @@ public class ClientesTest {
             }
             assertNotNull(listaClientes);
         } catch (PersistenciaException ex) {
-            java.util.logging.Logger.getLogger(ClientesTest.class.getName()).log(Level.SEVERE, null, ex);
+        	LOGGER.error("ERROR DE PERSISTENCIA EN CLASE DE TEST", ex);
+            throw new RuntimeException("ERROR DE PERSISTENCIA EN CLASE DE TEST", ex);
         }
     }
     
