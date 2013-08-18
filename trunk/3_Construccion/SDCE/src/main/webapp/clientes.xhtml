@@ -1,33 +1,42 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:h="http://java.sun.com/jsf/html">
-    <ui:composition template="/layout.xhtml">
-        <ui:define name="body">
-            <h:panelGroup id="messagePanel" layout="block">
-                <h:messages errorStyle="color: red" infoStyle="color: green" layout="list"/>
-            </h:panelGroup>
-            <h:form styleClass="login" >
-                <fieldset>
-                    <legend>#{msg.login}</legend>
-                    <h:panelGrid columns="2">
-                        <h:outputLabel value="#{msg.usuario} :" for="usuario" />
-                        <h:inputText id="usuario" value="#{login.usuario}" title="#{msg.usuario}" maxlength="20" required="true" requiredMessage="#{msg.usuarioRequerido}" style="width:100%"/>
-                        <h:outputLabel value="#{msg.contrasenia} :" for="contrasenia" />
-                        <h:inputSecret  id="contrasenia" value="#{login.contrasenia}" title="#{msg.contrasenia}" maxlength="20" required="true" requiredMessage="#{msg.contraseniaRequerida}" style="width:100%"/>
-                        <h:outputLabel value="#{msg.captcha} :"/>
-                        <h:graphicImage value="/captcha" alt="Captcha" />
-                        <h:outputLabel value="#{msg.captchaInput} :"/>
-                        <h:inputText  value="#{login.captcha}"  maxlength="5" required="true" requiredMessage="#{msg.frsErrorCaptcha}" style="width:100%"/>
-                    </h:panelGrid>
-                </fieldset>
-                <br />
-                <ul class="buttons">
-                    <li><h:commandButton action="#{login.guardar}" value="#{msg.aceptar}" /></li>
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ace="http://www.icefaces.org/icefaces/components"
+	xmlns:ice="http://www.icesoft.com/icefaces/component"
+	xmlns:icecore="http://www.icefaces.org/icefaces/core"
+	  xmlns:f="http://java.sun.com/jsf/core">
+<ui:composition template="/layout.xhtml" xmlns:ace="http://www.icefaces.org/icefaces/components"
+xmlns:ice="http://www.icesoft.com/icefaces/component">
+	<ui:define name="body">
+		<h:panelGroup id="messagePanel" layout="block">
+			<h:messages errorStyle="color: red" infoStyle="color: green"
+				layout="list" />
+		</h:panelGroup>
+		<h:form styleClass="login">
+			<ace:panel id="panel" header="Buscar" closable="false"
+				toggleable="false" style="text-align:center;">
+				<h:panelGrid columns="2" style="text-align:left;">
+					<h:outputText value="#{msg.clave} :" />
+					<ace:simpleSelectOneMenu id="selectProvince" label="" labelPosition="top">
+						 <f:selectItem itemValue="" itemLabel="" />
+					</ace:simpleSelectOneMenu>					
+					<h:outputText value="#{msg.nombre} :" />
+					<h:inputText id="nombre" size="55" title="#{msg.nombre}"
+						maxlength="40" />
+						<h:outputText value="#{msg.responsable} :" />
+					<h:inputText id="responsable" size="55" title="#{msg.responsable}"
+						maxlength="40" />
+				</h:panelGrid>
+				<br />
+				<ul class="buttons">
+                    <li><h:commandButton action="#{login.guardar}" value="#{msg.limpiar}" /></li>
+                    <li><h:commandButton action="#{login.guardar}" value="#{msg.buscar}" /></li>
                 </ul>
-            </h:form>
-        </ui:define>
-    </ui:composition>
+			</ace:panel>
+		</h:form>
+	</ui:define>
+</ui:composition>
 
 </html>
