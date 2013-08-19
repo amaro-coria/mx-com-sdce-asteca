@@ -28,7 +28,11 @@ import javax.persistence.TemporalType;
 public class Familia  implements java.io.Serializable {
 
 
-     private int idFam;
+     /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private int idFam;
      private String conyugueNombre;
      private Date conyugueFechaNac;
      private String hijo1Nombre;

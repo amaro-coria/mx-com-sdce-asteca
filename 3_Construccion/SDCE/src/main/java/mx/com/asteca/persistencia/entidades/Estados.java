@@ -25,7 +25,11 @@ import javax.persistence.Table;
 public class Estados  implements java.io.Serializable {
 
 
-     private int idEstado;
+     /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private int idEstado;
      private String nombre;
      private Short activo;
      private String clave;

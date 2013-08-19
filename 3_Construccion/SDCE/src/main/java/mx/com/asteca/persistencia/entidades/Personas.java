@@ -28,7 +28,11 @@ import javax.persistence.TemporalType;
 public class Personas  implements java.io.Serializable {
 
 
-     private int idPersona;
+     /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private int idPersona;
      private Date fechaNac;
      private String lugarNac;
      private String curp;
