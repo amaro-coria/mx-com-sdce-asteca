@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ice="http://www.icesoft.com/icefaces/component">
+    <ui:composition template="/layout.xhtml">
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="list"/>
+            </h:panelGroup>
+            <h:form styleClass="notificacion" >
+                <fieldset>
+                    <legend>#{msg.login}</legend>
+                    <h:panelGrid columns="2">
+                        <h:outputLabel value="#{msg.estado} :" for="estado" />
+                        <h:selectOneListbox id="estado"/>
+                        <h:outputLabel value="#{msg.tipo} :" for="tipo" />
+                        <h:selectOneListbox id="tipo"/>
+                        
+                        <h:commandButton type="reset" value="#{msg.limpiar}" />
+                    	<h:commandButton action="#{beanNotificacion.guardar}" value="#{msg.aceptar}" />
+                    </h:panelGrid>
+                    <h:panelGrid columns="1">
+                    	<h:commandButton action="#{beanNotificacion.ver}" value="#{msg.ver}" />
+                   	</h:panelGrid>
+                   	<h:panelGrid columns="1">
+                   		<ice:dataTable
+			                id="tblRegistros"
+			                rows="10"
+			                width="100%" 
+			                rowClasses="oddRow, evenRow"
+			                value="#{beanNotificacion.listaNotificacion}"
+			                var="item">
+		                
+		                	
+		                
+		                
+		                </ice:dataTable>
+                   	</h:panelGrid>
+                   	
+                   	
+                </fieldset>
+                    	
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>
