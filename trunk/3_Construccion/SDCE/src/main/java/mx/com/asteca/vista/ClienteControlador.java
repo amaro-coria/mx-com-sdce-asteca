@@ -25,7 +25,7 @@ public class ClienteControlador extends BaseController{
 	
 	private void initListaClientes() throws FachadaException{
 		if(CollectionUtils.isEmpty(listaClientes)){
-			listaClientes = clienteFachada.getAllClientes();
+			listaClientes = clienteFachada.getAll();
 		}
 	}
 	
