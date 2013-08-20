@@ -5,7 +5,6 @@ import java.util.List;
 import mx.com.asteca.comun.dto.NotificacionDTO;
 import mx.com.asteca.servicio.NotificacionServicio;
 import mx.com.asteca.servicio.ServicioException;
-import mx.com.asteca.servicio.impl.NotificacionServicioImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
