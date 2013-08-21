@@ -17,4 +17,5 @@ public class Constantes {
 	public static final String ERROR_OBTENIENDO_LISTA_CATALOGO="No se pudo obtener la lista, intenta mas tarde";
 	public static final String BEAN_EQUIPO="beanEquipo";
 	public static final String BEAN_NOTIFICACION="beanNotificacion";
+	public static final String BEAN_CLIENTES="beanClientes";
 }
