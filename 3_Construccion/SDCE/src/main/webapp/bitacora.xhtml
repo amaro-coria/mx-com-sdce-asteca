@@ -17,21 +17,17 @@
 			<ace:panel id="panel" header="Buscar" closable="false"
 				toggleable="false" style="text-align:center;">
 				<h:panelGrid columns="2" style="text-align:left;">
-					<h:outputText value="#{msg.certificado} :" />
+					<h:outputText value="#{msg.accion} :" />
 					<ace:simpleSelectOneMenu id="selectProvince1" label=""
-						labelPosition="top" size="10">
+						labelPosition="top">
 						<f:selectItem itemValue="" itemLabel="" />
 					</ace:simpleSelectOneMenu>
-					<h:outputText value="#{msg.nombre} :" />
+					<h:outputText value="#{msg.usuario} :" />
 					<ace:simpleSelectOneMenu id="selectProvince2" label=""
 						labelPosition="top">
 						<f:selectItem itemValue="" itemLabel="" />
 					</ace:simpleSelectOneMenu>
-					<h:outputText value="#{msg.estatus} :" />
-					<ace:simpleSelectOneMenu id="selectProvince3" label=""
-						labelPosition="top">
-						<f:selectItem itemValue="" itemLabel="" />
-					</ace:simpleSelectOneMenu>
+					
 				</h:panelGrid>
 				<br />
 				<ul class="buttons">
@@ -52,25 +48,28 @@
                           paginator="true"
                           paginatorPosition="bottom"
                           rows="5">
-                <ace:column id="id" headerText="#{msg.certificado}" sortBy="#{car.id}"
+                <ace:column id="id" headerText="#{msg.alta}" sortBy="#{car.id}"
                             >
                     <ice:rowSelector value="#{car.selected}"
                                      preStyleOnSelection="true"/>
                     <h:outputText id="idCell" value="#{car.id}"/>
                 </ace:column>
-                <ace:column id="name" headerText="#{msg.fecha}" sortBy="#{car.name}"
+                <ace:column id="name" headerText="#{msg.accion}" sortBy="#{car.name}"
                             >
                     <h:outputText id="nameCell" value="#{car.name}"/>
                 </ace:column>
-                <ace:column id="chassis" headerText="#{msg.alumno}" sortBy="#{car.chassis}"
+                <ace:column id="chassis" headerText="#{msg.ip}" sortBy="#{car.chassis}"
                             >
                     <h:outputText id="chassisCell" value="#{car.chassis}"/>
                 </ace:column>
-                <ace:column id="weight" headerText="#{msg.estatus}" sortBy="#{car.weight}"
+                <ace:column id="weight" headerText="#{msg.usuario}" sortBy="#{car.weight}"
                             >
                     <h:outputText id="weightCell" value="#{car.weight}lbs."/>
                 </ace:column>
-                
+                <ace:column id="foo" headerText="#{msg.mensaje}" sortBy="#{car.weight}"
+                            >
+                    <h:outputText id="foo2" value="#{car.weight}lbs."/>
+                </ace:column>
                 </ace:dataTable>
 			</ace:panel>
 		</h:form>

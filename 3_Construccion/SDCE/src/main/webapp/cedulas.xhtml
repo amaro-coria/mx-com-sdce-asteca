@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<ui:composition template="/layout.xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:ace="http://www.icefaces.org/icefaces/components"
+	xmlns:ice="http://www.icesoft.com/icefaces/component">
+	<ui:define name="body">
+		<h:panelGroup id="messagePanel" layout="block">
+			<h:messages errorStyle="color: red" infoStyle="color: green"
+				layout="list" />
+		</h:panelGroup>
+		<h:form styleClass="login">
+			<ace:tabSet id="sampleTabSet" clientSide="false">
+                <ace:tabPane id="cedula1" label="#{msg.cedula1}">
+                	<h:panelGrid columns="3" style="text-align:left;">
+					<h:outputText value="#{msg.referencia} :" />
+					<ace:simpleSelectOneMenu id="selectReferencia1" label=""
+						labelPosition="top">
+						<f:selectItem itemValue="" itemLabel="" />
+					</ace:simpleSelectOneMenu>
+					<h:commandButton action="#{login.guardar}"
+							value="#{msg.descargar}" />
+			        </h:panelGrid>
+               	</ace:tabPane>
+               	<ace:tabPane id="cedula2" label="#{msg.cedula2}">
+               		<h:panelGrid columns="3" style="text-align:left;">
+					<h:outputText value="#{msg.referencia} :" />
+					<ace:simpleSelectOneMenu id="selectReferencia2" label=""
+						labelPosition="top">
+						<f:selectItem itemValue="" itemLabel="" />
+					</ace:simpleSelectOneMenu>
+					<h:commandButton action="#{login.guardar}"
+							value="#{msg.descargar}" />
+			        </h:panelGrid>
+               	</ace:tabPane>
+               	<ace:tabPane id="cedula3" label="#{msg.cedula3}">
+               		<h:panelGrid columns="3" style="text-align:left;">
+					<h:outputText value="#{msg.instructor} :" />
+					<ace:simpleSelectOneMenu id="selectReferencia3" label=""
+						labelPosition="top">
+						<f:selectItem itemValue="" itemLabel="" />
+					</ace:simpleSelectOneMenu>
+					<h:commandButton action="#{login.guardar}"
+							value="#{msg.descargar}" />
+			        </h:panelGrid>
+               	</ace:tabPane>
+               	<ace:tabPane id="cedula5" label="#{msg.cedula5}">
+               		<h:panelGrid columns="3" style="text-align:left;">
+					<h:outputText value="#{msg.referencia} :" />
+					<ace:simpleSelectOneMenu id="selectReferencia4" label=""
+						labelPosition="top">
+						<f:selectItem itemValue="" itemLabel="" />
+					</ace:simpleSelectOneMenu>
+					<h:commandButton action="#{login.guardar}"
+							value="#{msg.descargar}" />
+			        </h:panelGrid>
+               	</ace:tabPane>
+               	<ace:tabPane id="cedula6" label="#{msg.cedula6}">
+               	</ace:tabPane>
+               	<ace:tabPane id="inicioCurso" label="#{msg.inicioCurso}">
+               		<h:panelGrid columns="3" style="text-align:left;">
+					<h:outputText value="#{msg.referencia} :" />
+					<ace:simpleSelectOneMenu id="selectReferencia6" label=""
+						labelPosition="top">
+						<f:selectItem itemValue="" itemLabel="" />
+					</ace:simpleSelectOneMenu>
+					<h:commandButton action="#{login.guardar}"
+							value="#{msg.descargar}" />
+			        </h:panelGrid>
+               	</ace:tabPane>
+            </ace:tabSet>
+            
+				
+				
+		</h:form>
+	</ui:define>
+</ui:composition>
+
+</html>
