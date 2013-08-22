@@ -17,21 +17,12 @@
 			<ace:panel id="panel" header="Buscar" closable="false"
 				toggleable="false" style="text-align:center;">
 				<h:panelGrid columns="2" style="text-align:left;">
-					<h:outputText value="#{msg.certificado} :" />
+					<h:outputText value="#{msg.sede} :" />
 					<ace:simpleSelectOneMenu id="selectProvince1" label=""
-						labelPosition="top" size="10">
-						<f:selectItem itemValue="" itemLabel="" />
-					</ace:simpleSelectOneMenu>
-					<h:outputText value="#{msg.nombre} :" />
-					<ace:simpleSelectOneMenu id="selectProvince2" label=""
 						labelPosition="top">
 						<f:selectItem itemValue="" itemLabel="" />
 					</ace:simpleSelectOneMenu>
-					<h:outputText value="#{msg.estatus} :" />
-					<ace:simpleSelectOneMenu id="selectProvince3" label=""
-						labelPosition="top">
-						<f:selectItem itemValue="" itemLabel="" />
-					</ace:simpleSelectOneMenu>
+					
 				</h:panelGrid>
 				<br />
 				<ul class="buttons">
@@ -43,8 +34,20 @@
 					</li>
 				</ul>
 				</ace:panel>
-				<h:commandButton action="#{login.guardar}"
+				<ul class="buttons">
+					<li><h:commandButton action="#{login.guardar}"
+							value="#{msg.nuevo}" />
+					</li>
+					<li><h:commandButton action="#{login.guardar}"
 							value="#{msg.ver}" />
+					</li>
+					<li><h:commandButton action="#{login.guardar}"
+							value="#{msg.editar}" />
+					</li>
+					<li><h:commandButton action="#{login.guardar}"
+							value="#{msg.eliminar}" />
+					</li>
+				</ul>
 				<ace:panel>
 				<ace:dataTable id="carTable"
                           value="#{dataTableBean.carsData}"
@@ -52,21 +55,21 @@
                           paginator="true"
                           paginatorPosition="bottom"
                           rows="5">
-                <ace:column id="id" headerText="#{msg.certificado}" sortBy="#{car.id}"
+                <ace:column id="id" headerText="#{msg.sede}" sortBy="#{car.id}"
                             >
                     <ice:rowSelector value="#{car.selected}"
                                      preStyleOnSelection="true"/>
                     <h:outputText id="idCell" value="#{car.id}"/>
                 </ace:column>
-                <ace:column id="name" headerText="#{msg.fecha}" sortBy="#{car.name}"
+                <ace:column id="name" headerText="#{msg.aula}" sortBy="#{car.name}"
                             >
                     <h:outputText id="nameCell" value="#{car.name}"/>
                 </ace:column>
-                <ace:column id="chassis" headerText="#{msg.alumno}" sortBy="#{car.chassis}"
+                <ace:column id="chassis" headerText="#{msg.capacidad}" sortBy="#{car.chassis}"
                             >
                     <h:outputText id="chassisCell" value="#{car.chassis}"/>
                 </ace:column>
-                <ace:column id="weight" headerText="#{msg.estatus}" sortBy="#{car.weight}"
+                <ace:column id="weight" headerText="Estatus" sortBy="#{car.weight}"
                             >
                     <h:outputText id="weightCell" value="#{car.weight}lbs."/>
                 </ace:column>

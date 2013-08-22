@@ -16,35 +16,17 @@
 		<h:form styleClass="login">
 			<ace:panel id="panel" header="Buscar" closable="false"
 				toggleable="false" style="text-align:center;">
-				<h:panelGrid columns="2" style="text-align:left;">
-					<h:outputText value="#{msg.certificado} :" />
+				<h:panelGrid columns="3" style="text-align:left;">
+					<h:outputText value="#{msg.referencia} :" />
 					<ace:simpleSelectOneMenu id="selectProvince1" label=""
-						labelPosition="top" size="10">
-						<f:selectItem itemValue="" itemLabel="" />
-					</ace:simpleSelectOneMenu>
-					<h:outputText value="#{msg.nombre} :" />
-					<ace:simpleSelectOneMenu id="selectProvince2" label=""
 						labelPosition="top">
 						<f:selectItem itemValue="" itemLabel="" />
 					</ace:simpleSelectOneMenu>
-					<h:outputText value="#{msg.estatus} :" />
-					<ace:simpleSelectOneMenu id="selectProvince3" label=""
-						labelPosition="top">
-						<f:selectItem itemValue="" itemLabel="" />
-					</ace:simpleSelectOneMenu>
+					<h:commandButton action="#{login.guardar}"
+							value="#{msg.aceptar}" />
 				</h:panelGrid>
-				<br />
-				<ul class="buttons">
-					<li><h:commandButton action="#{login.guardar}"
-							value="#{msg.limpiar}" />
-					</li>
-					<li><h:commandButton action="#{login.guardar}"
-							value="#{msg.buscar}" />
-					</li>
-				</ul>
 				</ace:panel>
-				<h:commandButton action="#{login.guardar}"
-							value="#{msg.ver}" />
+				<br />
 				<ace:panel>
 				<ace:dataTable id="carTable"
                           value="#{dataTableBean.carsData}"
@@ -52,27 +34,31 @@
                           paginator="true"
                           paginatorPosition="bottom"
                           rows="5">
-                <ace:column id="id" headerText="#{msg.certificado}" sortBy="#{car.id}"
+                <ace:column id="id" headerText="#{msg.alumnos}" sortBy="#{car.id}"
                             >
                     <ice:rowSelector value="#{car.selected}"
                                      preStyleOnSelection="true"/>
                     <h:outputText id="idCell" value="#{car.id}"/>
                 </ace:column>
-                <ace:column id="name" headerText="#{msg.fecha}" sortBy="#{car.name}"
+                <ace:column id="name" headerText="#{msg.certificado}" sortBy="#{car.name}"
                             >
                     <h:outputText id="nameCell" value="#{car.name}"/>
                 </ace:column>
-                <ace:column id="chassis" headerText="#{msg.alumno}" sortBy="#{car.chassis}"
-                            >
-                    <h:outputText id="chassisCell" value="#{car.chassis}"/>
-                </ace:column>
-                <ace:column id="weight" headerText="#{msg.estatus}" sortBy="#{car.weight}"
-                            >
-                    <h:outputText id="weightCell" value="#{car.weight}lbs."/>
-                </ace:column>
+                
                 
                 </ace:dataTable>
 			</ace:panel>
+			
+			<h:panelGrid columns="1" style="text-align:left;">
+					
+					<ace:textEntry id="folioInput" value="#{textEntryBean.firstName}" label="#{msg.folio}" labelPosition="left" required="true" requiredIndicator="(*)" indicatorPosition="right"/>
+					<ace:textEntry id="folioInput2" value="#{textEntryBean.firstName}" label="#{msg.leyenda1}" labelPosition="left" required="true" requiredIndicator="(*)" indicatorPosition="right"/>
+					<ace:textEntry id="folioInput3" value="#{textEntryBean.firstName}" label="#{msg.leyenda2}" labelPosition="left" required="true" requiredIndicator="(*)" indicatorPosition="right"/>
+                        			
+		    </h:panelGrid>
+		    
+		    <h:commandButton action="#{login.guardar}"
+							value="#{msg.imprimir}" />
 		</h:form>
 	</ui:define>
 </ui:composition>
