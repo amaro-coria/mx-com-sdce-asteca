@@ -8,7 +8,11 @@ import java.util.Date;
 public class NotificacionDTO  implements java.io.Serializable {
 
 
-     private long idNotificacion;
+     /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private long idNotificacion;
      private long idNotificacionesEstados;
      private long idNotificacionesTipos;
      private Date fechaAlta;
