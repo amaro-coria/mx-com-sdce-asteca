@@ -14,7 +14,9 @@ public class Constantes {
 	public static final String ASSEMBLER_FAMILIA="assemblerFamilia";
 	public static final String ASSEMBLER_PERSONA="assemblerPersona";
 	public static final String ASSEMBLER_NOTIFICACION="assemblerNotificacion";
-	public static final String ERROR_OBTENIENDO_LISTA_CATALOGO="No se pudo obtener la lista, intenta mas tarde";
+	public static final String ASSEMBLER_TIPO_CLIENTE="assemblerTipoCliente";
+	public static final String ERROR_OBTENIENDO_LISTA_CATALOGO="No se pudo obtener el catalogo.";
+	public static final String ERROR_NUEVO_REGISTRO="No se pudo completar el nuevo registro.";
 	public static final String BEAN_EQUIPO="beanEquipo";
 	public static final String BEAN_NOTIFICACION="beanNotificacion";
 	public static final String BEAN_CLIENTES="beanClientes";
