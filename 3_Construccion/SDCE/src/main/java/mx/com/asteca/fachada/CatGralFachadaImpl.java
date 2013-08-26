@@ -14,7 +14,6 @@ public class CatGralFachadaImpl implements CatGralFachada {
 	@Autowired
 	private CatGralServicio catGralServicio;
 
-	@Override
 	public Integer saveCatGral(CatGralDTO catGral) throws FachadaException {
 		// TODO validar reglas extras de negocio
 		try {
@@ -26,7 +25,6 @@ public class CatGralFachadaImpl implements CatGralFachada {
 		}
 	}
 
-	@Override
 	public List<CatGralDTO> getAllCatGral() throws FachadaException {
 		try {
 			List<CatGralDTO> listaCatGral = catGralServicio.getAll();
