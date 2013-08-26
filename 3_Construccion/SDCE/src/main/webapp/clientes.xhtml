@@ -3,9 +3,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <ui:composition template="/layout.xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"	
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:ace="http://www.icefaces.org/icefaces/components">
+	xmlns:ace="http://www.icefaces.org/icefaces/components"
+	xmlns:ice="http://www.icesoft.com/icefaces/component">
 	<ui:define name="body">
 		<h:panelGroup id="messagePanel" layout="block">
 			<h:messages errorStyle="color: red" infoStyle="color: green"
@@ -16,57 +18,108 @@
 				toggleable="false" style="text-align:center;">
 				<h:panelGrid columns="2" style="text-align:left;">
 					<h:outputText value="#{msg.clave} :" />
-					<ace:simpleSelectOneMenu id="selectProvince" label=""
-						labelPosition="top">
+					<ace:simpleSelectOneMenu id="selectClave" labelPosition="top"
+						style="min-width: 450px">
 						<f:selectItem itemValue="" itemLabel="" />
 					</ace:simpleSelectOneMenu>
 					<h:outputText value="#{msg.nombre} :" />
-					<h:inputText id="nombre" size="55" title="#{msg.nombre}"
-						maxlength="40" />
+					<ace:simpleSelectOneMenu id="selectNombre" labelPosition="top"
+						style="min-width: 450px">
+						<f:selectItem itemValue="" itemLabel="" />
+					</ace:simpleSelectOneMenu>
 					<h:outputText value="#{msg.responsable} :" />
-					<h:inputText id="responsable" size="55" title="#{msg.responsable}"
-						maxlength="40" />
+					<ace:simpleSelectOneMenu id="selectResponsable" labelPosition="top"
+						style="min-width: 450px">
+						<f:selectItem itemValue="" itemLabel="" />
+					</ace:simpleSelectOneMenu>
 				</h:panelGrid>
 				<br />
 				<ul class="buttons">
+					<li><h:commandButton type="reset" value="#{msg.limpiar}" /></li>
 					<li><h:commandButton action="#{login.guardar}"
 							value="#{msg.buscar}" /></li>
-					<li><h:commandButton action="#{login.guardar}"
-							value="#{msg.limpiar}" /></li>
 				</ul>
 			</ace:panel>
-			<ul class="buttons">
+			<ul class="buttons" style="float: left;">
 				<li><h:commandButton action="#{login.guardar}"
-						value="#{msg.nuevo}" /></li>
-				<li><h:commandButton action="#{login.guardar}"
-						value="#{msg.ver}" /></li>
+						value="#{msg.eliminar}" /></li>
 				<li><h:commandButton action="#{login.guardar}"
 						value="#{msg.editar}" /></li>
 				<li><h:commandButton action="#{login.guardar}"
-						value="#{msg.eliminar}" /></li>
+						value="#{msg.ver}" /></li>
+				<li><h:commandButton onclick="sampleDialog.show();"
+						type="button" value="#{msg.nuevo}" /></li>
 			</ul>
-			<h:panelGrid columns="1">
+			<ace:panel>
 				<ace:dataTable id="clienteTable"
 					value="#{beanClientes.listaClientes}" var="cliente"
-					paginator="true" paginatorPosition="bottom" rows="10">
+					paginator="true" paginatorPosition="bottom" selectionMode="single"
+					rows="5">
 					<ace:column id="clave" headerText="#{msg.clave}"
 						sortBy="#{cliente.clave}" filterBy="#{cliente.clave}"
 						filterMatchMode="contains">
 						<h:outputText id="claveCell" value="#{cliente.clave}" />
 					</ace:column>
 					<ace:column id="nombre" headerText="#{msg.nombre}"
-						sortBy="#{cliente.nombre}" filterBy="#{cliente.nombre}"
-						filterMatchMode="contains">
+						sortBy="#{cliente.nombre}" filterBy="#{cliente.nombre}">
 						<h:outputText id="nombreCell" value="#{cliente.nombre}" />
 					</ace:column>
 					<ace:column id="responsable" headerText="#{msg.responsable}"
-						sortBy="#{cliente.responsable}" filterBy="#{cliente.responsable}"
-						filterMatchMode="contains">
+						sortBy="#{cliente.responsable}" filterBy="#{cliente.responsable}">
 						<h:outputText id="responsableCell" value="#{cliente.responsable}" />
 					</ace:column>
 				</ace:dataTable>
-			</h:panelGrid>
+			</ace:panel>
 		</h:form>
+		<ace:dialog id="dialog" header="#{msg.frsNuevoRegistro}"
+			widgetVar="sampleDialog" closable="false" modal="true"
+			draggable="false" showEffect="clip" hideEffect="fade" width="400">
+
+			<h:form id="inputForm">
+				<h:panelGrid columns="2" width="100%">
+					<h:outputLabel id="clavePopupNuevoLabel" for="firstNameInputField"
+						value="#{msg.clave}" />
+					<h:inputText id="clavePopupNuevo"
+						value="#{beanClientes.nuevoClienteClave }" />
+					<h:outputLabel id="nombrePopupNuevoLabel" for="lastNameInputField"
+						value="#{msg.nombre}" />
+					<h:inputText id="nombrePopupNuevo"
+						value="#{beanClientes.nuevoClienteNombre }" />
+					<h:outputLabel id="responsablePopupNuevoLabel"
+						for="lastNameInputField" value="#{msg.responsable}" />
+					<h:inputText id="responsablePopupNuevo"
+						value="#{beanClientes.nuevoClienteResponsable }" />
+					<h:outputLabel id="telefonoPopupNuevoLabel"
+						for="lastNameInputField" value="#{msg.telefono}" />
+					<h:inputText id="telefonoPopupNuevo"
+						value="#{beanClientes.nuevoClienteTelefono }" />
+					<h:outputLabel id="emailPopupNuevoLabel" for="lastNameInputField"
+						value="#{msg.email}" />
+					<h:inputText id="emailPopupNuevo"
+						value="#{beanClientes.nuevoClienteEmail }" />
+					<h:outputLabel id="tipoPopupNuevoLabel" for="lastNameInputField"
+						value="#{msg.tipo}" />
+					<h:selectOneRadio value="#{beanClientes.nuevoClienteTipo}">
+						<f:selectItems value="#{beanClientes.listaTipoClientes}" var="c"
+							itemLabel="#{c.nombre }" itemValue="#{c.idTipoCliente}" />
+					</h:selectOneRadio>
+				</h:panelGrid>
+
+				<ul class="buttons" style="float: right;">
+					<li><h:commandButton id="cancelarPopupNuevo" value="Cancelar"
+							onclick="sampleDialog.hide();" /></li>
+					<li><ice:commandButton id="aceptarPopupNuevo" value="Aceptar"
+							onclick="sampleDialog.hide();"
+							action="#{beanClientes.saveCliente}" partialSubmit="true" /></li>
+				</ul>
+				<h:panelGrid width="100%" style="text-align: center;">
+
+
+
+				</h:panelGrid>
+			</h:form>
+
+		</ace:dialog>
 	</ui:define>
 </ui:composition>
 
