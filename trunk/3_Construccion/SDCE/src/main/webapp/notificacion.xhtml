@@ -1,49 +1,94 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:ice="http://www.icesoft.com/icefaces/component">
-    <ui:composition template="/layout.xhtml">
-        <ui:define name="body">
-            <h:panelGroup id="messagePanel" layout="block">
-                <h:messages errorStyle="color: red" infoStyle="color: green" layout="list"/>
-            </h:panelGroup>
-            <h:form styleClass="notificacion" >
-                <fieldset>
-                    <legend>#{msg.login}</legend>
-                    <h:panelGrid columns="2">
-                        <h:outputLabel value="#{msg.estado} :" for="estado" />
-                        <h:selectOneListbox id="estado"/>
-                        <h:outputLabel value="#{msg.tipo} :" for="tipo" />
-                        <h:selectOneListbox id="tipo"/>
-                        
-                        <h:commandButton type="reset" value="#{msg.limpiar}" />
-                    	<h:commandButton action="#{beanNotificacion.guardar}" value="#{msg.aceptar}" />
-                    </h:panelGrid>
-                    <h:panelGrid columns="1">
-                    	<h:commandButton action="#{beanNotificacion.ver}" value="#{msg.ver}" />
-                   	</h:panelGrid>
-                   	<h:panelGrid columns="1">
-                   		<ice:dataTable
-			                id="tblRegistros"
-			                rows="10"
-			                width="100%" 
-			                rowClasses="oddRow, evenRow"
-			                value="#{beanNotificacion.listaNotificacion}"
-			                var="item">
-		                
-		                	
-		                
-		                
-		                </ice:dataTable>
-                   	</h:panelGrid>
-                   	
-                   	
-                </fieldset>
-                    	
-            </h:form>
-        </ui:define>
-    </ui:composition>
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:ice="http://www.icesoft.com/icefaces/component"
+	xmlns:ace="http://www.icefaces.org/icefaces/components">
 
+<h:body>
+	<ui:composition>
+		<h:form styleClass="login">
+			<ace:panel id="panel" header="Buscar" closable="false"
+				toggleable="false" style="text-align:center;" >
+				<h:panelGrid columns="2" style="text-align:left;">
+					<h:outputText value="#{msg.estado} :" />
+					<ace:simpleSelectOneMenu id="selectEstado" label=""
+						labelPosition="top" size="10"
+						valueChangeListener="#{beanNotificacion.actualizaEstado}"
+						value="#{beanNotificacion.estadoId}"
+						style="widht:100%;">
+
+						<f:selectItem itemLabel="" itemValue="None"
+							noSelectionOption="true" />
+
+						<f:selectItems value="#{beanNotificacion.estados}" />
+
+					</ace:simpleSelectOneMenu>
+					<h:outputText value="#{msg.tipo} :" />
+					<ace:simpleSelectOneMenu id="selectTipo" label=""
+						labelPosition="top" size="10"
+						valueChangeListener="#{beanNotificacion.actualizaTipo}"
+						value="#{beanNotificacion.tipoId}"
+						style="widht:100%;">
+
+						<f:selectItem itemLabel="" itemValue="None"
+							noSelectionOption="true" />
+
+						<f:selectItems value="#{beanNotificacion.tipos}" />
+
+					</ace:simpleSelectOneMenu>
+				</h:panelGrid>
+				<h:panelGrid style="text-align:right" width="100%">
+					<h:panelGrid columns="2" style="text-align:right">
+						<h:commandButton type="reset" styleClass="button"
+								value="#{msg.limpiar}" />
+						<h:commandButton action="#{login.guardar}" styleClass="button"
+								value="#{msg.buscar}" />
+					</h:panelGrid>
+				</h:panelGrid>
+			</ace:panel>
+			<h:commandButton immediate="true" actionListener="#{beanNotificacion.ver}" value="#{msg.ver}" styleClass="button"/>
+			<ace:panel>
+				<ace:dataTable id="notificacionesTable"
+					value="#{beanNotificacion.listaNotificacion}" var="notif"
+					paginator="true" paginatorPosition="bottom" rows="5"
+					selectionMode="single">
+					<ace:column id="id" headerText="#{msg.id}"
+						sortBy="#{notif.idNotificacion}" rendered="false">
+						<ice:rowSelector value="#{notif.idNotificacion}"
+							preStyleOnSelection="true"/>
+						<h:outputText id="idCell" value="#{notif.idNotificacion}" />
+					</ace:column>
+					<ace:column id="selectRow" headerText="" >
+						<h:selectOneRadio id="selectRadio" value="#{beanNotificacion.notificacionSel}" 
+										valueChangeListener="#{beanNotificacion.actualizaSel}">
+							<f:selectItem itemLabel="" itemValue="#{notif.idNotificacion}" />
+						</h:selectOneRadio>
+					</ace:column>
+					<ace:column id="name" headerText="#{msg.alta}"
+						sortBy="#{notif.fechaAlta}">
+						<h:outputText id="nameCell" value="#{notif.fechaAlta}" />
+					</ace:column>
+					<ace:column id="name2" headerText="#{msg.leidos}"
+						sortBy="#{notif.fechaLeido}">
+						<h:outputText id="nameCell2" value="#{notif.fechaLeido}" />
+					</ace:column>
+					<ace:column id="name3" headerText="#{msg.tipo}"
+						sortBy="#{notif.notificacionesTiposDesc}">
+						<h:outputText id="nameCell3"
+							value="#{notif.notificacionesTiposDesc}" />
+					</ace:column>
+					<ace:column id="name4" headerText="#{msg.mensaje}"
+						sortBy="#{notif.mensaje}">
+						<h:outputText id="nameCell4" value="#{notif.mensaje}" />
+					</ace:column>
+				</ace:dataTable>
+			</ace:panel>
+		</h:form>
+	</ui:composition>
+</h:body>
 </html>

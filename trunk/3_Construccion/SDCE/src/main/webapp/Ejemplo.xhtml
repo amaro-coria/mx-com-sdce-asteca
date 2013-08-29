@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+	<link href="../css/asteca.css" rel="stylesheet" type="text/css" />
+</h:head>
+
+<h:body id="frmEjemplo">
+	<div id="templatemo_container">
+
+		<div id="templatemo_header">
+			<ui:insert name="templatemo_header">
+				<ui:include src="/templates/header.xhtml" />
+			</ui:insert>
+		</div>
+
+		<div id="templatemo_content">
+			<div id="templatemo_left_column">
+				<ui:insert name="templatemo_left_column">
+					<ui:include src="/templates/menu.xhtml" />
+				</ui:insert>
+			</div>
+
+			<div id="templatemo_middle_column">
+				<ui:insert name="templatemo_left_column">
+					<ui:include src="/notificacion.xhtml" />
+				</ui:insert>
+			</div>
+		</div>
+
+		<div id="templatemo_footer">
+			Copyright © <a href="#">Asteca</a> | Designed by RIG
+		</div>
+
+	</div>
+</h:body>
+</html>
