@@ -30,6 +30,9 @@ public class NotificacionAssembler extends Assembler<NotificacionDTO, Notificaci
 		dto.setIdNotificacionesTipos(notificacionesTipos == null 
 				? null : notificacionesTipos.getIdNotifTipo());
 		
+		dto.setNotificacionesTiposDesc(notificacionesTipos == null 
+				? null : notificacionesTipos.getNombre());
+		
 		return dto;
 	}
 
