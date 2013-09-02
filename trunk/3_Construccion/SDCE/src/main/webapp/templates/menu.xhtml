@@ -3,6 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:ice="http://www.icesoft.com/icefaces/component"
 	xmlns:ace="http://www.icefaces.org/icefaces/components">
@@ -14,22 +15,34 @@
 
 <h:body>
 	<ui:composition>
-		<div id="leftcolumn_box01">
-			<div class="leftcolumn_box01_bottom">
-				<ace:menu type="plain" id="exampleMenu">
-					<ace:submenu label="Menú">
-						<ace:menuItem value="Alumnos" url="http://www.icefaces.org"
-							target="_blank" icon="ui-icon ui-icon-home" />
-						<ace:menuItem value="Equipos" url="http://www.icepush.org"
-							target="_blank" icon="ui-icon ui-icon-home" />
-						<ace:menuItem value="Notificaciones" url="http://www.icepdf.org"
-							target="_blank" icon="ui-icon ui-icon-home" />
-						<ace:menuItem value="XXX" url="http://www.icesoft.com"
-							target="_blank" icon="ui-icon ui-icon-home" />
-					</ace:submenu>
-				</ace:menu>
-			</div>
-		</div>
+			<ice:form>
+				<ice:panelGroup>
+					<ice:panelGrid columns="2" frame="vsides" width="100%">
+						<ice:tree value="#{beanTree.model}"
+			                      var="node"
+			                      style="text-align: left;"
+			                      hideRootNode="true"
+			                      hideNavigation="false">
+			                <ice:treeNode>
+			                    <f:facet name="icon">
+			                        <h:graphicImage value="#{node.userObject.icon}"/>
+			                    </f:facet>
+			                     <f:facet name="content">
+			                    	<ice:panelGroup style="display: inline">
+				                    	<ice:commandLink action="#{beanTree.actualizaUrl}" 
+				                    		target="abc" value="#{node.userObject.text}"  partialSubmit="true">
+				                    		<f:param name="url" value="#{node.userObject.displayPanel}" />
+				                    	</ice:commandLink>
+		                            </ice:panelGroup>
+			                    </f:facet>
+			                </ice:treeNode>
+			            </ice:tree>
+			            <ui:insert name="abc">
+		            		<ui:include src="#{beanTree.url}" />
+		            	</ui:insert>
+	            	</ice:panelGrid>
+	            </ice:panelGroup>
+			</ice:form>
 	</ui:composition>
 </h:body>
 </html>
