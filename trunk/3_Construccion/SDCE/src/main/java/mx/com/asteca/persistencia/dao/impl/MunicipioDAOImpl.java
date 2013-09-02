@@ -24,7 +24,6 @@ public class MunicipioDAOImpl extends BaseDAOImpl<Municipios, MunicipiosId>
 		implements MunicipioDAO {
 
 	@SuppressWarnings("unchecked")
-	@Override
 	public List<Municipios> findByEstado(Estados estado)
 			throws PersistenciaException {
 		List<Municipios> listMunicipios = null;

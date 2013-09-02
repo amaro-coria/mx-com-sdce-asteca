@@ -23,7 +23,6 @@ import org.springframework.stereotype.Repository;
 public class AsentamientoDAOImpl extends
 		BaseDAOImpl<Asentamientos, AsentamientosId> implements AsentamientoDAO {
 
-	@Override
 	public List<Asentamientos> findByMunicipio(Municipios municipio)
 			throws PersistenciaException {
 		List<Asentamientos> listAsentamientos = null;
