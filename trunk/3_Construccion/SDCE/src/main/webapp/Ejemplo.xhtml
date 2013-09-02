@@ -3,7 +3,11 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:ui="http://java.sun.com/jsf/facelets">
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:ice="http://www.icesoft.com/icefaces/component"
+	xmlns:ace="http://www.icefaces.org/icefaces/components">
 <h:head>
 	<link href="../css/asteca.css" rel="stylesheet" type="text/css" />
 </h:head>
@@ -17,18 +21,11 @@
 			</ui:insert>
 		</div>
 
-		<div id="templatemo_content">
-			<div id="templatemo_left_column">
-				<ui:insert name="templatemo_left_column">
-					<ui:include src="/templates/menu.xhtml" />
-				</ui:insert>
-			</div>
 
-			<div id="templatemo_middle_column">
-				<ui:insert name="templatemo_left_column">
-					<ui:include src="/notificacion.xhtml" />
-				</ui:insert>
-			</div>
+		<div id="templatemo_content">
+			<ui:insert name="templatemo_content">
+				<ui:include src="/templates/menu.xhtml" />
+			</ui:insert>
 		</div>
 
 		<div id="templatemo_footer">
