@@ -27,5 +27,5 @@ public class Constantes {
 	public static final String ERROR_NO_HAY_SELECCION="Debes seleccionar al menos un elemento.";
 	public static final String ERROR_UPDATE_REGISTRO="Error guardando.";
 	public static final String ERROR_DELETE_REGISTRO="Error borrando.";
-	public static final String BEAN_TREE="beanTree"
+	public static final String BEAN_TREE="beanTree";
 }
