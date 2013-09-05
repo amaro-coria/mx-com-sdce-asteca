@@ -15,9 +15,12 @@
 			<id>java.net</id>
 			<url>http://download.java.net/maven/2/</url>
 		</repository>
+
 		<repository>
-			<id>snapshots</id>
-			<url>http://anonsvn.icefaces.org/repo/maven2/releases/</url>
+			<id>prime-repo</id>
+			<name>PrimeFaces Maven Repository</name>
+			<url>http://repository.primefaces.org</url>
+			<layout>default</layout>
 		</repository>
 	</repositories>
 
@@ -207,20 +210,11 @@
 		</dependency>
 		<!-- Inicio Dependencias ICEFACES -->
 		<dependency>
-			<groupId>org.icefaces</groupId>
-			<artifactId>icefaces-ace</artifactId>
-			<version>3.3.0</version>
+			<groupId>org.primefaces</groupId>
+			<artifactId>primefaces</artifactId>
+			<version>3.5</version>
 		</dependency>
-		<dependency>
-			<groupId>org.icefaces</groupId>
-			<artifactId>icefaces-compat</artifactId>
-			<version>3.3.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.icepush</groupId>
-			<artifactId>icepush</artifactId>
-			<version>3.3.0</version>
-		</dependency>
+		<!-- FIN DEPENCIAS -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>
@@ -241,7 +235,7 @@
 			<artifactId>ejb3-persistence</artifactId>
 			<version>1.0.1.GA</version>
 		</dependency>
-		
+
 	</dependencies>
 	<build>
 		<resources>
