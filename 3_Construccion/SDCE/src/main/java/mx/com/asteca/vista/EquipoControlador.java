@@ -17,15 +17,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 @ViewScoped
 public class EquipoControlador extends BaseController {
 
-	private List<EquipoDTO> listaEquipo;
+//	private List<EquipoDTO> listaEquipo;
 
 	@Autowired
 	private EquipoFachada equipoFachada;
 
 	private void initListaEquipo() throws FachadaException {
-		if (CollectionUtils.isEmpty(listaEquipo)) {
-			listaEquipo = equipoFachada.getAllEquipo();
-		}
+//		if (CollectionUtils.isEmpty(listaEquipo)) {
+//			listaEquipo = equipoFachada.getAllEquipo();
+//		}
 	}
 
 	/**
@@ -37,15 +37,16 @@ public class EquipoControlador extends BaseController {
 		} catch (FachadaException e) {
 			super.addErrorMessage(Constantes.ERROR_OBTENIENDO_LISTA_CATALOGO);
 		}
-		return listaEquipo;
+		return null;
+//		return listaEquipo;
 	}
 
-	/**
-	 * @param listaEquipo
-	 *            the listaEquipo to set
-	 */
-	public void setListaEquipo(List<EquipoDTO> listaEquipo) {
-		this.listaEquipo = listaEquipo;
-	}
+//	/**
+//	 * @param listaEquipo
+//	 *            the listaEquipo to set
+//	 */
+//	public void setListaEquipo(List<EquipoDTO> listaEquipo) {
+//		this.listaEquipo = listaEquipo;
+//	}
 
 }
