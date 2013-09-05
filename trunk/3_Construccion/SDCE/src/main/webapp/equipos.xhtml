@@ -1,18 +1,21 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:c="http://java.sun.com/jsp/jstl/core"
-	xmlns:ace="http://www.icefaces.org/icefaces/components"
-	xmlns:ice="http://www.icesoft.com/icefaces/component"
-	xmlns:ui="http://java.sun.com/jsf/facelets">
-<ui:composition template="/layout.xhtml">
-	<ui:define name="body">
-		<h:panelGroup id="messagePanel" layout="block">
-			<h:messages errorStyle="color: red" infoStyle="color: green"
-				layout="list" />
-		</h:panelGroup>
-		<h:form styleClass="login">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>Equipos</title>
+</h:head>
+<h:body>
+	<h:form id="frmEquipos">
+		<p:panel id="pnlEquipos" header="Equipos" style="margin-bottom:10px;">
+			<h:panelGroup id="messagePanel" layout="block">
+				<h:messages errorStyle="color: red" infoStyle="color: green"
+					layout="list" />
+			</h:panelGroup>
+
 			<h:panelGrid columns="2">
 				<h:outputLabel value="#{msg.clave}" />
 				<h:inputText value="#{msg.clave}" />
@@ -22,26 +25,26 @@
 				<h:selectOneListbox value="#{msg.tipoEquipo}" />
 				<p></p>
 				<h:panelGroup>
-					<ice:commandButton value="#{msg.limpiar}"
+					<p:commandButton value="#{msg.limpiar}"
 						image="/resources/buscar.png" />
-					<ice:outputText value="Limpiar"></ice:outputText>
-					<ice:commandButton type="button"
-						image="/resources/images/icon/search.png" value="Buscar" alt="Close"/>
-					<ice:outputText value="Buscar"></ice:outputText>
+					<p:outputLabel value="Limpiar"></p:outputLabel>
+					<p:commandButton type="button"
+						image="/resources/images/icon/search.png" value="Buscar"
+						alt="Close" />
+					<p:outputLabel value="Buscar"></p:outputLabel>
 				</h:panelGroup>
 			</h:panelGrid>
-			<h:panelGroup style="">
+			<h:panelGroup>
 				<h:commandButton value="#{msg.nuevo}" />
 				<h:commandButton value="#{msg.ver}" />
 				<h:commandButton value="#{msg.editar}" />
 				<h:commandButton value="#{msg.eliminar}" />
-				<ice:commandButton value="     Buscar" style="background-image: url(./resources/images/icon/search.png);position:relative;padding-bottom: 1px; background-repeat: no-repeat">
-					
-				</ice:commandButton>
+				<p:commandButton value="     Buscar"
+					style="background-image: url(./resources/images/icon/search.png);position:relative;padding-bottom: 1px; background-repeat: no-repeat">
+
+				</p:commandButton>
 			</h:panelGroup>
-
-		</h:form>
-	</ui:define>
-</ui:composition>
-
+		</p:panel>
+	</h:form>
+</h:body>
 </html>
