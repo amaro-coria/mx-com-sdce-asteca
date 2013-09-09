@@ -6,73 +6,181 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:ace="http://www.icefaces.org/icefaces/components"
-	xmlns:ice="http://www.icesoft.com/icefaces/component">
+	xmlns:p="http://primefaces.org/ui">
 	<ui:define name="body">
-		<h:panelGroup id="messagePanel" layout="block">
-			<h:messages errorStyle="color: red" infoStyle="color: green"
-				layout="list" />
-		</h:panelGroup>
-		<h:form styleClass="login">
-			<ace:panel id="panel" header="Buscar" closable="false"
+		<h:form id="form">
+			<p:growl id="growl" showDetail="true" sticky="true" />			
+			<p:panel id="panel" header="Buscar" closable="false"
 				toggleable="false" style="text-align:center;">
 				<h:panelGrid columns="2" style="text-align:left;">
 					<h:outputText value="#{msg.pais} :" />
-					<ace:simpleSelectOneMenu id="selectProvince1" label=""
-						labelPosition="top" size="10">
-						<f:selectItem itemValue="" itemLabel="" />
-					</ace:simpleSelectOneMenu>
+					<p:selectOneMenu id="selectPaisFilter"
+						value="#{beanEstados.idPaisFilter }" style="min-width: 500px">
+						<f:selectItem itemLabel="#{msg.seleccionarPais }" itemValue="" />
+						<f:selectItems value="#{beanEstados.listaSelectPaises}" />
+						<p:ajax update="selectEdoFilter"
+							listener="#{beanEstados.cambiaPaisSelect}" />
+					</p:selectOneMenu>
 					<h:outputText value="#{msg.estados} :" />
-					<ace:simpleSelectOneMenu id="selectProvince2" label=""
-						labelPosition="top">
-						<f:selectItem itemValue="" itemLabel="" />
-					</ace:simpleSelectOneMenu>
+					<p:selectOneMenu id="selectEdoFilter" style="min-width: 500px"
+						value="#{beanEstados.idEdoFilter }">
+						<f:selectItem itemLabel="#{msg.seleccionarEdo }" itemValue="" />
+						<f:selectItems value="#{beanEstados.listaSelectEdos}" />
+					</p:selectOneMenu>
 				</h:panelGrid>
 				<br />
 				<ul class="buttons">
-					<li><h:commandButton action="#{login.guardar}"
-							value="#{msg.limpiar}" />
-					</li>
-					<li><h:commandButton action="#{login.guardar}"
-							value="#{msg.buscar}" />
-					</li>
+					<li><p:commandButton value="#{msg.limpiar}" icon="ui-icon-arrowrefresh-1-e"
+							onclick=":form:selectEdoFilter.selectValue('')"
+							actionListener="#{beanEstados.limpiarFiltrado }" update="growl"/></li>
+					<li><p:commandButton icon="ui-icon-search"
+							actionListener="#{beanEstados.buscarFiltrado}"
+							value="#{msg.buscar}" update="growl"/></li>
 				</ul>
-				</ace:panel>
-				<ul class="buttons">
-					<li><h:commandButton action="#{login.guardar}"
-							value="#{msg.nuevo}" />
-					</li>
-					<li><h:commandButton action="#{login.guardar}"
-							value="#{msg.ver}" />
-					</li>
-					<li><h:commandButton action="#{login.guardar}"
-							value="#{msg.editar}" />
-					</li>
-					<li><h:commandButton action="#{login.guardar}"
-							value="#{msg.eliminar}" />
-					</li>
-				</ul>
-				<ace:panel>
-				<ace:dataTable id="carTable"
-                          value="#{dataTableBean.carsData}"
-                          var="car"
-                          paginator="true"
-                          paginatorPosition="bottom"
-                          rows="5">
-                <ace:column id="id" headerText="#{msg.pais}" sortBy="#{car.id}"
-                            >
-                    <ice:rowSelector value="#{car.selected}"
-                                     preStyleOnSelection="true"/>
-                    <h:outputText id="idCell" value="#{car.id}"/>
-                </ace:column>
-                <ace:column id="name" headerText="#{msg.estado}" sortBy="#{car.name}"
-                            >
-                    <h:outputText id="nameCell" value="#{car.name}"/>
-                </ace:column>
-                
-                </ace:dataTable>
-			</ace:panel>
+			</p:panel>
+			<p:panel>
+				<h:panelGrid columns="4" style="text-align:left;">
+					<p:commandButton id="deleteButton" value="#{msg.eliminar }"
+						icon="ui-icon-trash" onclick="borrarDialog.show()" update="growl"/>
+					<p:commandButton id="editarButton" value="#{msg.editar }"
+						icon="ui-icon-pencil" onclick="editarDialog.show()"
+						update=":form:displayEditar, growl" />
+					<p:commandButton id="viewButton" value="#{msg.ver }"
+						icon="ui-icon-search" oncomplete="verDialog.show()"
+						update=":form:displayVer, growl" />
+					<p:commandButton id="nuevoButton" value="#{msg.nuevo }"
+						icon="ui-icon-plusthick" onclick="nuevoDialog.show()"
+						update=":form:displayNuevo, growl" />					
+				</h:panelGrid>
+			</p:panel>
+			<p:panel>
+				<p:dataTable id="estadosTable" value="#{beanEstados.listaEstados}"
+					var="estado" rowKey="#{estado.idEstado}" paginator="true"
+					selection="#{beanEstados.estadoSelected}" filteredValue="#{beanEstados.filteredEstados }"
+					paginatorPosition="bottom" rows="10">
+					<p:column selectionMode="single" style="width:2%" />
+					<p:column id="pais" headerText="#{msg.pais}"  filterBy="#{estado.pais }" 
+						sortBy="#{estado.pais}">
+						<h:outputText id="estadoPais" value="#{estado.pais}" />
+					</p:column>
+					<p:column id="estadoNombre" headerText="#{msg.estado}"  filterBy="#{estado.nombre }"
+						sortBy="#{estado.nombre}">
+						<h:outputText id="nombreEstado" value="#{estado.nombre}" />
+					</p:column>|
+				</p:dataTable>
+			</p:panel>
+			<!-- Panel de Ver -->
+			<p:dialog id="dialog" header="#{msg.ver}" widgetVar="verDialog" modal="true">
+				<h:panelGrid id="displayVer" columns="2" cellpadding="4">
+					<h:panelGroup id="messagePanelVer" layout="block">
+						<h:messages errorStyle="color: red" infoStyle="color: green"
+							layout="list" style="font-size:12px;font-family:Arial" />
+					</h:panelGroup>
+					<h:outputText />
+					<h:outputText value="#{msg.clave}" />
+					<h:outputText value="#{beanEstados.estadoSelected.clave}"
+						style="font-weight:bold" />
+					<h:outputText value="#{msg.nombre}" />
+					<h:outputText value="#{beanEstados.estadoSelected.nombre}"
+						style="font-weight:bold" />
+					<h:outputText value="#{msg.pais}" />
+					<h:outputText value="#{beanEstados.estadoSelected.pais}"
+						style="font-weight:bold" />
+					<h:outputText value="#{msg.activo}" />
+					<h:outputText
+						value="#{beanEstados.estadoSelected.activo == 1 ? 'Si' : 'No' }"
+						style="font-weight:bold" />
+				</h:panelGrid>
+				<p:commandButton id="aceptarVerBtn" value="#{msg.aceptar }" 
+						icon="ui-icon-check" onclick="verDialog.hide()"
+						/>
+			</p:dialog>
+			<!-- Fin de panel de Ver -->
+			<!--  Inicio panel de Nuevo -->
+			<p:dialog id="dialogNuevo" header="#{msg.frsNuevoRegistro}"
+				widgetVar="nuevoDialog" closable="true" modal="true"
+				draggable="false" width="400">
+				<h:panelGrid columns="2" width="100%" id="displayNuevo">
+					<h:outputText value="#{msg.clave}" />
+					<p:inputText value="#{beanEstados.estadoNuevo.clave}" style="width: 260px; "/>
+					<h:outputText id="nombrePopupNuevoLabel" value="#{msg.nombre}" />
+					<p:inputText id="nombrePopupNuevo"
+						value="#{beanEstados.estadoNuevo.nombre }"
+						style="min-width: 260px" />
+					<h:outputText id="paisNuevo" value="#{msg.pais }" />
+					<p:selectOneMenu value="#{beanEstados.idPaisNuevo }"
+						style="min-width: 250px">
+						<f:selectItem itemLabel="#{msg.seleccionarPais }" itemValue="" />
+						<f:selectItems value="#{beanEstados.listaSelectPaises}" />
+					</p:selectOneMenu>
+					<h:outputText id="activoPopupNuevoLabel" value="#{msg.activo}" />
+					<h:selectBooleanCheckbox id="activoPopupNuevo"
+						value="#{beanEstados.nuevoEstadoActivo}">
+					</h:selectBooleanCheckbox>
+				</h:panelGrid>
+				<h:panelGrid style="float: right;" columns="2">
+					<p:commandButton value="#{msg.aceptar }" icon="ui-icon-check"
+						oncomplete="nuevoDialog.hide()"
+						actionListener="#{beanEstados.saveEstado }"
+						update=":form:estadosTable, growl" />
+					<p:commandButton value="#{msg.cancelar }" icon="ui-icon-closethick"
+						oncomplete="nuevoDialog.hide()" actionListener="#{beanEstados.saveEstadoCancel }" />
+				</h:panelGrid>
+			</p:dialog>
+			<!-- Fin de panel de nuevo -->
+			<!-- Inicio de panel de edicion -->
+			<p:dialog id="dialogEditar" header="#{msg.frsNuevoRegistro}"
+				widgetVar="editarDialog" closable="true" modal="true"
+				draggable="false" width="400">
+				<h:panelGrid columns="2" width="100%" id="displayEditar">
+					<h:outputText value="#{msg.clave}" />
+					<h:panelGroup>
+						<p:inputText id="selectedCve" value="#{beanEstados.selectedEstadoClave}" style="width: 260px; " />
+						<p:watermark for="selectedCve"
+							value="#{beanEstados.estadoSelected.clave }" />
+					</h:panelGroup>
+					<h:outputText value="#{msg.nombre}" />
+					<h:panelGroup>
+						<p:inputText id="inputEstadoSelected" style="width: 260px; "
+							value="#{beanEstados.selectedEstadoNombre }" />
+						<p:watermark for="inputEstadoSelected"
+							value="#{beanEstados.estadoSelected.nombre }" />
+					</h:panelGroup>
+					<h:outputText id="paisEditar" value="#{msg.pais }" />
+					<p:selectOneMenu value="#{beanEstados.idPais }"
+						style="min-width: 250px">
+						<f:selectItem itemLabel="#{msg.seleccionarPais }" itemValue="" />
+						<f:selectItems value="#{beanEstados.listaSelectPaises}" />
+					</p:selectOneMenu>
+					<h:outputText value="#{msg.activo}" />
+					<h:selectBooleanCheckbox 
+						value="#{beanEstados.selectedEstadoActivo}">
+					</h:selectBooleanCheckbox>
+				</h:panelGrid>
+				<h:panelGrid style="float: right;" columns="2">
+					<p:commandButton value="#{msg.aceptar }" icon="ui-icon-check"
+						oncomplete="editarDialog.hide()"
+						actionListener="#{beanEstados.updateEstado }"
+						update=":form:estadosTable, growl" />
+					<p:commandButton value="#{msg.cancelar }" icon="ui-icon-closethick"
+						oncomplete="editarDialog.hide()" actionListener="#{beanEstados.cancelDeleteEstado }"/>
+				</h:panelGrid>
+			</p:dialog>
+			<!-- Fin de panel de edicion -->
+			<!-- Panel de borrado -->
+			<p:confirmDialog showEffect="fade" widgetVar="borrarDialog"
+				header="#{msg.confirmar }" message="#{msg.frsBorrarConfirmacion }">
+				<p:commandButton value="#{msg.si }"
+					actionListener="#{beanEstados.deleteEstado}" update="estadosTable, growl"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check"
+					oncomplete="borrarDialog.hide()" />
+				<p:commandButton value="#{msg.no }" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close"
+					onclick="borrarDialog.hide()" />
+			</p:confirmDialog>
+			<!-- Fin de panel de borrado -->
 		</h:form>
+
 	</ui:define>
 </ui:composition>
 
