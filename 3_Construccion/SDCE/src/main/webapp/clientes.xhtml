@@ -1,121 +1,240 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<ui:composition template="/layout.xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:ice="http://www.icesoft.com/icefaces/component"
-	xmlns:ace="http://www.icefaces.org/icefaces/components">
-
-<h:body>
-	<ui:composition>
-		<h:form styleClass="login">
-			<ace:panel id="panel" header="Buscar" closable="false"
+	xmlns:p="http://primefaces.org/ui">
+	<ui:define name="body">
+		<h:form id="form">
+			<p:growl id="growl" showDetail="true" sticky="true" />
+			<p:panel id="panel" header="Buscar" closable="false"
 				toggleable="false" style="text-align:center;">
 				<h:panelGrid columns="2" style="text-align:left;">
 					<h:outputText value="#{msg.clave} :" />
-					<ace:simpleSelectOneMenu id="selectClave" labelPosition="top"
-						style="min-width: 450px">
-						<f:selectItem itemValue="" itemLabel="" />
-					</ace:simpleSelectOneMenu>
+					<p:selectOneMenu id="selectCteCveFilter"
+						value="#{beanClientes.claveSelected }" style="min-width: 480px">
+						<f:selectItem itemLabel="#{msg.seleccionarClave }" itemValue="" />
+						<f:selectItems value="#{beanClientes.listaSelectClave}" />
+						<p:ajax update="selectCteNombre"
+							listener="#{beanClientes.cambiaClaveSelected}" />
+					</p:selectOneMenu>
 					<h:outputText value="#{msg.nombre} :" />
-					<ace:simpleSelectOneMenu id="selectNombre" labelPosition="top"
-						style="min-width: 450px">
-						<f:selectItem itemValue="" itemLabel="" />
-					</ace:simpleSelectOneMenu>
+					<p:selectOneMenu id="selectCteNombre" style="min-width: 480px"
+						value="#{beanClientes.nombreSelected }">
+						<f:selectItem itemLabel="#{msg.seleccionarNombre }" itemValue="" />
+						<f:selectItems value="#{beanClientes.listaSelectNombres}" />
+						<p:ajax update="selectCteResponsable"
+							listener="#{beanClientes.cambiaNombreSelected}" />
+					</p:selectOneMenu>
 					<h:outputText value="#{msg.responsable} :" />
-					<ace:simpleSelectOneMenu id="selectResponsable" labelPosition="top"
-						style="min-width: 450px">
-						<f:selectItem itemValue="" itemLabel="" />
-					</ace:simpleSelectOneMenu>
+					<p:selectOneMenu id="selectCteResponsable" style="min-width: 480px"
+						value="#{beanClientes.responsableSelected }">
+						<f:selectItem itemLabel="#{msg.seleccionarResponsable }"
+							itemValue="" />
+						<f:selectItems value="#{beanClientes.listaSelectReponsable}" />
+					</p:selectOneMenu>
 				</h:panelGrid>
 				<br />
 				<ul class="buttons">
-					<li><h:commandButton type="reset" value="#{msg.limpiar}" /></li>
-					<li><h:commandButton action="#{login.guardar}"
-							value="#{msg.buscar}" /></li>
+					<li><p:commandButton value="#{msg.limpiar}"
+							icon="ui-icon-arrowrefresh-1-e"
+							onclick=":form:selectCteCveFilter.selectValue('')"
+							actionListener="#{beanClientes.limpiarFiltrado }" update="growl" />
+					</li>
+					<li><p:commandButton icon="ui-icon-search"
+							actionListener="#{beanClientes.buscarFiltrado}"
+							value="#{msg.buscar}" update="growl, :form:clientesTable" />
+					</li>
 				</ul>
-			</ace:panel>
-			<ul class="buttons" style="float: left;">
-				<li><h:commandButton action="#{login.guardar}"
-						value="#{msg.eliminar}" /></li>
-				<li><h:commandButton action="#{login.guardar}"
-						value="#{msg.editar}" /></li>
-				<li><h:commandButton action="#{login.guardar}"
-						value="#{msg.ver}" /></li>
-				<li><h:commandButton onclick="sampleDialog.show();"
-						type="button" value="#{msg.nuevo}" /></li>
-			</ul>
-			<ace:panel>
-				<ace:dataTable id="clienteTable"
+			</p:panel>
+			<p:panel>
+				<h:panelGrid columns="4" style="text-align:left;">
+					<p:commandButton id="deleteButton" value="#{msg.eliminar }"
+						icon="ui-icon-trash" onclick="borrarDialog.show()" update="growl" />
+					<p:commandButton id="editarButton" value="#{msg.editar }"
+						icon="ui-icon-pencil" onclick="editarDialog.show()"
+						update=":form:displayEditar, growl" />
+					<p:commandButton id="viewButton" value="#{msg.ver }"
+						icon="ui-icon-search" oncomplete="verDialog.show()"
+						update=":form:displayVer, growl" />
+					<p:commandButton id="nuevoButton" value="#{msg.nuevo }"
+						icon="ui-icon-plusthick" onclick="nuevoDialog.show()"
+						update=":form:displayNuevo, growl" />					
+				</h:panelGrid>
+			</p:panel>
+			<p:panel>
+				<p:dataTable id="clientesTable"
 					value="#{beanClientes.listaClientes}" var="cliente"
-					paginator="true" paginatorPosition="bottom" selectionMode="single"
-					rows="5">
-					<ace:column id="clave" headerText="#{msg.clave}"
-						sortBy="#{cliente.clave}" filterBy="#{cliente.clave}"
-						filterMatchMode="contains">
-						<h:outputText id="claveCell" value="#{cliente.clave}" />
-					</ace:column>
-					<ace:column id="nombre" headerText="#{msg.nombre}"
-						sortBy="#{cliente.nombre}" filterBy="#{cliente.nombre}">
-						<h:outputText id="nombreCell" value="#{cliente.nombre}" />
-					</ace:column>
-					<ace:column id="responsable" headerText="#{msg.responsable}"
-						sortBy="#{cliente.responsable}" filterBy="#{cliente.responsable}">
-						<h:outputText id="responsableCell" value="#{cliente.responsable}" />
-					</ace:column>
-				</ace:dataTable>
-			</ace:panel>
+					rowKey="#{cliente.idCliente}" paginator="true"
+					selection="#{beanClientes.clienteSelected}" filteredValue="#{beanClientes.filteredClientes }"
+					paginatorPosition="bottom" rows="10">
+					<p:column selectionMode="single" style="width:2%" />
+					<p:column id="cteCve" headerText="#{msg.clave}"
+						sortBy="#{cliente.clave}" filterBy="#{cliente.clave }" >
+						<h:outputText id="cveCte" value="#{cliente.clave}" />
+					</p:column>
+					<p:column id="clienteNombre" headerText="#{msg.nombre}" filterBy="#{cliente.nombre }" 
+						sortBy="#{cliente.nombre}">
+						<h:outputText id="nombreCliente" value="#{cliente.nombre}" />
+					</p:column>
+					<p:column id="clienteResponsable" headerText="#{msg.responsable}" filterBy="#{cliente.responsable }" 
+						sortBy="#{cliente.responsable}">
+						<h:outputText id="responsableCliente"
+							value="#{cliente.responsable}" />
+					</p:column>
+				</p:dataTable>
+			</p:panel>
+			<!-- Panel de Ver -->
+			<p:dialog id="dialog" header="#{msg.ver}" widgetVar="verDialog"
+				modal="true">
+				<h:panelGrid id="displayVer" columns="2" cellpadding="4">
+					<h:panelGroup id="messagePanelVer" layout="block">
+						<h:messages errorStyle="color: red" infoStyle="color: green"
+							layout="list" style="font-size:12px;font-family:Arial" />
+					</h:panelGroup>
+					<h:outputText />
+					<h:outputText value="#{msg.clave}" />
+					<h:outputText value="#{beanClientes.clienteSelected.clave}"
+						style="font-weight:bold" />
+					<h:outputText value="#{msg.nombre}" />
+					<h:outputText value="#{beanClientes.clienteSelected.nombre}"
+						style="font-weight:bold" />
+					<h:outputText value="#{msg.responsable}" />
+					<h:outputText value="#{beanClientes.clienteSelected.responsable}"
+						style="font-weight:bold" />
+					<h:outputText value="#{msg.telefono}" />
+					<h:outputText value="#{beanClientes.clienteSelected.telefono}"
+						style="font-weight:bold" />
+					<h:outputText value="#{msg.email}" />
+					<h:outputText value="#{beanClientes.clienteSelected.email}"
+						style="font-weight:bold" />
+					<h:outputText value="#{msg.tipo}" />
+					<h:outputText
+						value="#{beanClientes.clienteSelected.tipoClienteString}"
+						style="font-weight:bold" />
+				</h:panelGrid>
+				<p:commandButton id="aceptarVerBtn" value="#{msg.aceptar }"
+					icon="ui-icon-check" onclick="verDialog.hide()" />
+			</p:dialog>
+			<!-- Fin de panel de Ver -->
+			<!--  Inicio panel de Nuevo -->
+			<p:dialog id="dialogNuevo" header="#{msg.frsNuevoRegistro}"
+				widgetVar="nuevoDialog" closable="true" modal="true"
+				draggable="false" width="400">
+				<h:panelGrid columns="2" width="100%" id="displayNuevo">
+					<h:outputText value="#{msg.clave}" />
+					<p:inputText value="#{beanClientes.clienteNuevo.clave}"
+						style="width: 260px; " />
+					<h:outputText id="nombrePopupNuevoLabel" value="#{msg.nombre}" />
+					<p:inputText id="nombrePopupNuevo"
+						value="#{beanClientes.clienteNuevo.nombre }"
+						style="min-width: 260px" />
+					<h:outputText id="responsablePopupNuevoLabel"
+						value="#{msg.responsable }" />
+					<p:inputText id="responsableNuevoString"
+						value="#{beanClientes.clienteNuevo.responsable}"
+						style="min-width: 260px" />
+					<h:outputText id="telefonoPopupNuevoLabel" value="#{msg.telefono}" />
+					<p:inputText id="telefonoPopupNuevo"
+						value="#{beanClientes.clienteNuevo.telefono}"
+						style="min-width: 260px" />
+					<h:outputText id="emailPopupNuevoLabel" value="#{msg.email}" />
+					<p:inputText id="emailPopupNuevo"
+						value="#{beanClientes.clienteNuevo.email}"
+						style="min-width: 260px" />
+					<h:outputText id="tipoPopupNuevoLabel" value="#{msg.tipo}" />
+					<p:selectOneRadio id="radioTipoNuevo"
+						value="#{beanClientes.idTipoCliente}">
+						<f:selectItems value="#{beanClientes.listaSelectTiposClientes}" />
+					</p:selectOneRadio>
+				</h:panelGrid>
+				<h:panelGrid style="float: right;" columns="2">
+					<p:commandButton value="#{msg.aceptar }" icon="ui-icon-check"
+						oncomplete="nuevoDialog.hide()"
+						actionListener="#{beanClientes.saveCliente }"
+						update=":form:clientesTable, growl" />
+					<p:commandButton value="#{msg.cancelar }" icon="ui-icon-closethick"
+						oncomplete="nuevoDialog.hide()"
+						actionListener="#{beanClientes.saveClienteCancel }" />
+				</h:panelGrid>
+			</p:dialog>
+			<!-- Fin de panel de nuevo -->
+			<!-- Inicio de panel de edicion -->
+			<p:dialog id="dialogEditar" header="#{msg.frsNuevoRegistro}"
+				widgetVar="editarDialog" closable="true" modal="true"
+				draggable="false" width="400">
+				<h:panelGrid columns="2" width="100%" id="displayEditar">
+					<h:outputText value="#{msg.clave}" />
+					<h:panelGroup>
+						<h:inputText id="selectedCve"
+							value="#{beanClientes.selectedClienteClave}"
+							style="width: 260px; " />
+						<p:watermark for="selectedCve"
+							value="#{beanClientes.clienteSelected.clave }" />
+					</h:panelGroup>
+					<h:outputText value="#{msg.nombre}" />
+					<h:panelGroup>
+						<p:inputText id="inputNombreSelected" style="width: 260px; "
+							value="#{beanClientes.selectedClienteNombre }" />
+						<p:watermark for="inputNombreSelected"
+							value="#{beanClientes.clienteSelected.nombre }" />
+					</h:panelGroup>
+					<h:outputText value="#{msg.responsable}" />
+					<h:panelGroup>
+						<p:inputText id="inputResponsableSelected" style="width: 260px; "
+							value="#{beanClientes.selectedClienteResponsable }" />
+						<p:watermark for="inputResponsableSelected"
+							value="#{beanClientes.clienteSelected.responsable }" />
+					</h:panelGroup>
+					<h:outputText value="#{msg.telefono}" />
+					<h:panelGroup>
+						<p:inputText id="inputTelefonoSelected" style="width: 260px; "
+							value="#{beanClientes.selectedClienteTelefono }" />
+						<p:watermark for="inputTelefonoSelected"
+							value="#{beanClientes.clienteSelected.telefono }" />
+					</h:panelGroup>
+					<h:outputText value="#{msg.email}" />
+					<h:panelGroup>
+						<p:inputText id="inputEmailSelected" style="width: 260px; "
+							value="#{beanClientes.selectedClienteEmail }" />
+						<p:watermark for="inputEmailSelected"
+							value="#{beanClientes.clienteSelected.email }" />
+					</h:panelGroup>
+					<h:outputText value="#{msg.tipo}" />
+					<p:selectOneRadio id="nuevoSelectTipo"
+						value="#{beanClientes.selectedTipoCliente}">
+						<f:selectItems value="#{beanClientes.listaSelectTiposClientes}" />
+					</p:selectOneRadio>
+				</h:panelGrid>
+				<h:panelGrid style="float: right;" columns="2">
+					<p:commandButton value="#{msg.aceptar }" icon="ui-icon-check"
+						oncomplete="editarDialog.hide()"
+						actionListener="#{beanClientes.updateCliente }"
+						update=":form:clientesTable, growl" />
+					<p:commandButton value="#{msg.cancelar }" icon="ui-icon-closethick"
+						oncomplete="editarDialog.hide()"
+						actionListener="#{beanClientes.cancelDeleteCliente }" />
+				</h:panelGrid>
+			</p:dialog>
+			<!-- Fin de panel de edicion -->
+			<!-- Panel de borrado -->
+			<p:confirmDialog showEffect="fade" widgetVar="borrarDialog"
+				header="#{msg.confirmar }" message="#{msg.frsBorrarConfirmacion }">
+				<p:commandButton value="#{msg.si }"
+					actionListener="#{beanClientes.deleteCliente}"
+					update="clientesTable, growl" styleClass="ui-confirmdialog-yes"
+					icon="ui-icon-check" oncomplete="borrarDialog.hide()" />
+				<p:commandButton value="#{msg.no }" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close"
+					onclick="borrarDialog.hide()" />
+			</p:confirmDialog>
+			<!-- Fin de panel de borrado -->
 		</h:form>
-		<ace:dialog id="dialog" header="#{msg.frsNuevoRegistro}"
-			widgetVar="sampleDialog" closable="false" modal="true"
-			draggable="false" showEffect="clip" hideEffect="fade" width="400"/>
 
-			<h:form id="inputForm">
-				<h:panelGrid columns="2" width="100%">
-					<h:outputLabel id="clavePopupNuevoLabel" for="firstNameInputField"
-						value="#{msg.clave}" />
-					<h:inputText id="clavePopupNuevo"
-						value="#{beanClientes.nuevoClienteClave }" />
-					<h:outputLabel id="nombrePopupNuevoLabel" for="lastNameInputField"
-						value="#{msg.nombre}" />
-					<h:inputText id="nombrePopupNuevo"
-						value="#{beanClientes.nuevoClienteNombre }" />
-					<h:outputLabel id="responsablePopupNuevoLabel"
-						for="lastNameInputField" value="#{msg.responsable}" />
-					<h:inputText id="responsablePopupNuevo"
-						value="#{beanClientes.nuevoClienteResponsable }" />
-					<h:outputLabel id="telefonoPopupNuevoLabel"
-						for="lastNameInputField" value="#{msg.telefono}" />
-					<h:inputText id="telefonoPopupNuevo"
-						value="#{beanClientes.nuevoClienteTelefono }" />
-					<h:outputLabel id="emailPopupNuevoLabel" for="lastNameInputField"
-						value="#{msg.email}" />
-					<h:inputText id="emailPopupNuevo"
-						value="#{beanClientes.nuevoClienteEmail }" />
-					<h:outputLabel id="tipoPopupNuevoLabel" for="lastNameInputField"
-						value="#{msg.tipo}" />
-					<h:selectOneRadio value="#{beanClientes.nuevoClienteTipo}">
-						<f:selectItems value="#{beanClientes.listaTipoClientes}" var="c"
-							itemLabel="#{c.nombre }" itemValue="#{c.idTipoCliente}" />
-					</h:selectOneRadio>
-				</h:panelGrid>
+	</ui:define>
+</ui:composition>
 
-				<ul class="buttons" style="float: right;">
-					<li><h:commandButton id="cancelarPopupNuevo" value="Cancelar"
-							onclick="sampleDialog.hide();" /></li>
-					<li><ice:commandButton id="aceptarPopupNuevo" value="Aceptar"
-							onclick="sampleDialog.hide();"
-							action="#{beanClientes.saveCliente}" partialSubmit="true" /></li>
-				</ul>
-				<h:panelGrid width="100%" style="text-align: center;">
-
-
-
-				</h:panelGrid>
-			</h:form>
-	</ui:composition>
-</h:body>
 </html>
