@@ -18,69 +18,201 @@
 				toggleable="false" style="text-align:center;">
 				<h:panelGrid columns="2" style="text-align:left;">
 					<h:outputText value="#{msg.pais} :" />
-					<ace:simpleSelectOneMenu id="selectProvince1" label=""
-						labelPosition="top" size="10">
-						<f:selectItem itemValue="" itemLabel="" />
+					<ace:simpleSelectOneMenu id="selectPaisBuscar"
+						labelPosition="top" style="min-width: 450px" value="#{beanMunicipios.paisSelectedId }" >
+						<f:selectItems value="#{beanMunicipios.listaSelectPaises }" />
 					</ace:simpleSelectOneMenu>
 					<h:outputText value="#{msg.estado} :" />
-					<ace:simpleSelectOneMenu id="selectProvince2" label=""
-						labelPosition="top">
-						<f:selectItem itemValue="" itemLabel="" />
+					<ace:simpleSelectOneMenu id="selectEstadoBuscar"
+						labelPosition="top" style="min-width: 450px" value="#{beanMunicipios.estadoSelectedId }" >
+						<f:selectItems value="#{beanMunicipios.listaSelectEstados }" />
 					</ace:simpleSelectOneMenu>
 					<h:outputText value="#{msg.municipio} :" />
-					<ace:simpleSelectOneMenu id="selectProvince3" label=""
-						labelPosition="top">
-						<f:selectItem itemValue="" itemLabel="" />
+					<ace:simpleSelectOneMenu id="selectMunicipioBuscar"
+						labelPosition="top" style="min-width: 450px" value="#{beanMunicipios.municipioSelectedId }" >
+						<f:selectItems value="#{beanMunicipios.listaSelectMunicipios }" />
 					</ace:simpleSelectOneMenu>
 				</h:panelGrid>
 				<br />
 				<ul class="buttons">
-					<li><h:commandButton action="#{login.guardar}"
-							value="#{msg.limpiar}" />
+					<li><h:commandButton type="reset" value="#{msg.limpiar}" />
 					</li>
 					<li><h:commandButton action="#{login.guardar}"
 							value="#{msg.buscar}" />
 					</li>
 				</ul>
-				</ace:panel>
-				<ul class="buttons">
-					<li><h:commandButton action="#{login.guardar}"
-							value="#{msg.nuevo}" />
-					</li>
-					<li><h:commandButton action="#{login.guardar}"
-							value="#{msg.ver}" />
-					</li>
-					<li><h:commandButton action="#{login.guardar}"
-							value="#{msg.editar}" />
-					</li>
-					<li><h:commandButton action="#{login.guardar}"
-							value="#{msg.eliminar}" />
-					</li>
-				</ul>
-				<ace:panel>
-				<ace:dataTable id="carTable"
-                          value="#{dataTableBean.carsData}"
-                          var="car"
-                          paginator="true"
-                          paginatorPosition="bottom"
-                          rows="5">
-                <ace:column id="id" headerText="#{msg.pais}" sortBy="#{car.id}"
-                            >
-                    <ice:rowSelector value="#{car.selected}"
-                                     preStyleOnSelection="true"/>
-                    <h:outputText id="idCell" value="#{car.id}"/>
-                </ace:column>
-                <ace:column id="name" headerText="#{msg.estado}" sortBy="#{car.name}"
-                            >
-                    <h:outputText id="nameCell" value="#{car.name}"/>
-                </ace:column>
-                <ace:column id="name2" headerText="#{msg.municipio}" sortBy="#{car.name}"
-                            >
-                    <h:outputText id="nameCell2" value="#{car.name}"/>
-                </ace:column>
-                </ace:dataTable>
+			</ace:panel>
+			<ul class="buttons" style="float: left;">
+				<li><h:commandButton onclick="dialog4.show();"
+						action="#{beanMunicipios.showMunicipio }" value="#{msg.eliminar}" />
+				</li>
+				<li><ice:commandButton onclick="dialog3.show();" 
+						action="#{beanMunicipios.showMunicipio }" value="#{msg.editar}" partialSubmit="true"/>
+				</li>
+				<li><h:commandButton value="#{msg.ver}"
+						onclick="dialog2.show();"
+					    actionListener="#{beanMunicipios.showMunicipio2}" />
+				</li>
+				<li><h:commandButton onclick="dialog.show();" type="button"
+						value="#{msg.nuevo}" /></li>
+			</ul>
+			<ace:panel>
+				<ace:dataTable id="municipiosTable" 
+					value="#{beanMunicipios.listaMunicipios}" var="municipio"
+				    paginator="true" binding="#{beanMunicipios.municipioTable}"
+					paginatorPosition="bottom" selectionMode="single" rows="5" >
+					<ace:column id="paisId" headerText="#{msg.pais}"
+						sortBy="#{municipio.pais}">
+						<h:outputText id="paisIdCell" value="#{municipio.pais}" />
+					</ace:column>
+					<ace:column id="name" headerText="#{msg.estado}"
+						sortBy="#{municipio.estado}">
+						<h:outputText id="nameCell" value="#{municipio.estado}" />
+					</ace:column>
+					<ace:column id="name2" headerText="#{msg.municipio}"
+						sortBy="#{municipio.nombre}">
+						<h:outputText id="nameCell2" value="#{municipio.nombre}" />
+					</ace:column>
+				</ace:dataTable>
 			</ace:panel>
 		</h:form>
+		<ace:dialog id="dialog" header="#{msg.frsNuevoRegistro}"
+			widgetVar="dialog" closable="true" modal="true" draggable="false"
+			showEffect="clip" hideEffect="fade" width="400">
+			<h:form id="inputForm">
+				<h:panelGrid columns="2" width="100%">
+					<h:outputLabel id="paisPopupNuevoLabel" for="paisPopupNuevo"
+						value="#{msg.pais}" />
+					<ace:simpleSelectOneMenu id="paisPopupNuevo" labelPosition="left"
+						value="#{beanMunicipios.paisSelected }">
+						<f:selectItems value="#{beanMunicipios.listaSelectPaises }" />
+					</ace:simpleSelectOneMenu>
+					<h:outputLabel id="estadoPopupNuevoLabel" for="estadoPopupNuevo"
+						value="#{msg.estado}" />
+					<ace:simpleSelectOneMenu id="estadoPopupNuevo" labelPosition="left"
+						value="#{beanMunicipios.estadoSelected }">
+						<f:selectItems value="#{beanMunicipios.listaSelectEstados }" />
+					</ace:simpleSelectOneMenu>
+					<h:outputLabel id="nombrePopupNuevoLabel" for="nombrePopupNuevo"
+						value="#{msg.estado}" />
+					<h:inputText id="nombrePopupNuevo"
+						value="#{beanMunicipios.municipioNuevo.nombre }" />
+					<h:outputLabel id="activoPopupNuevoLabel" for="activoPopupNuevo"
+						value="#{msg.estado}" />
+					<ace:simpleSelectOneMenu id="activoPopupNuevo" labelPosition="left"
+						value="#{beanMunicipios.activoNuevo }">
+						<f:selectItem itemValue="1" itemLabel="Si" />
+						<f:selectItem itemValue="0" itemLabel="No" />
+					</ace:simpleSelectOneMenu>
+				</h:panelGrid>
+				<ul class="buttons" style="float: right;">
+					<li><h:commandButton id="cancelarPopupNuevo" value="Cancelar"
+							onclick="dialog.hide();" />
+					</li>
+					<li><ice:commandButton id="aceptarPopupNuevo" value="Aceptar"
+							onclick="dialog.hide();" action="#{beanMunicipios.saveMunicipio}"
+							partialSubmit="true" />
+					</li>
+				</ul>
+			</h:form>
+		</ace:dialog>
+
+		<ace:dialog id="dialog2" header="#{msg.ver}" widgetVar="dialog2"
+			closable="true" modal="true" draggable="false" showEffect="clip"
+			hideEffect="fade" width="400">
+				<h:panelGrid columns="2" width="100%">
+					<h:panelGroup id="messagePanelVer" layout="block">
+						<h:messages errorStyle="color: red" infoStyle="color: green"
+							layout="list" style="font-size:12px;font-family:Arial" />
+					</h:panelGroup>
+					<h:outputLabel  hidden="true" />
+					<h:outputLabel id="paisPopupNuevoVer" for="paisPopupVer"
+						value="#{msg.pais}" />
+					<h:outputText id="paisPopupVer"
+						value="#{beanMunicipios.municipioSelected.pais }" />
+					<h:outputLabel id="estadoPopupVerLabel" for="estadoPopupVer"
+						value="#{msg.estado}" />
+					<h:outputText id="estadoPopupVer"
+						value="#{beanMunicipios.municipioSelected.estado }" />
+					<h:outputLabel id="nombrePopupVerLabel" for="nombrePopupVer"
+						value="#{msg.estado}" />
+					<h:inputText id="nombrePopupVer"
+						value="#{beanMunicipios.municipioSelected.nombre }" />
+					<h:outputLabel id="activoPopupNuevoLabel" for="activoPopupVer"
+						value="#{msg.estado}" />
+					<h:outputText id="activoPopupVer"
+						value="#{beanMunicipios.municipioSelected.activo == 1 ? 'Si' : 'No' }" />
+				</h:panelGrid>
+		</ace:dialog>
+
+		<ace:dialog id="dialog3" header="#{msg.editar}" widgetVar="dialog3"
+			closable="true" modal="true" draggable="false" showEffect="clip"
+			hideEffect="fade" width="400" >
+			<h:form id="inputForm3" >
+				<h:panelGrid columns="2" width="100%">
+					<h:panelGroup id="messagePanelEditar" layout="block">
+						<h:messages errorStyle="color: red" infoStyle="color: green"
+							layout="list" style="font-size:12px;font-family:Arial" />
+					</h:panelGroup>
+					<h:outputLabel hidden="true" />
+					<h:outputLabel id="paisPopupEditarLabel" for="paisPopupEditar"
+						value="#{msg.pais}" />
+					<ace:simpleSelectOneMenu id="paisPopupEditar" labelPosition="left"
+						value="#{beanMunicipios.paisSelectedId }">
+						<f:selectItems value="#{beanMunicipios.listaSelectPaises }" />
+					</ace:simpleSelectOneMenu>
+					<h:outputLabel id="estadoPopupEditarLabel" for="estadoPopupEditar"
+						value="#{msg.estado}" />
+					<ace:simpleSelectOneMenu id="estadoPopupEditar" labelPosition="left"
+						value="#{beanMunicipios.estadoSelectedId }" >
+						<f:selectItems value="#{beanMunicipios.listaSelectEstados }" />
+					</ace:simpleSelectOneMenu>
+					<h:outputLabel id="nombrePopupEditarLabel" for="nombrePopupEditar"
+						value="#{msg.estado}" />
+					<h:inputText id="nombrePopupEditar"
+						value="#{beanMunicipios.municipioSelected.nombre }" />
+					<h:outputLabel id="activoPopupNuevoLabel" for="activoPopupNuevo"
+						value="#{msg.estado}" />
+					<ace:simpleSelectOneMenu id="activoPopupNuevo" labelPosition="left"
+						value="#{beanMunicipios.activoEditar }">
+						<f:selectItem itemValue="1" itemLabel="Si" />
+						<f:selectItem itemValue="0" itemLabel="No" />
+					</ace:simpleSelectOneMenu>
+				</h:panelGrid>
+				<ul class="buttons" style="float: right;">
+					<li><ice:commandButton id="cancelarPopupEditar" value="Cancelar" onclick="dialog3.hide();" partialSubmit="true" action="#{beanMunicipios.cancelarAccion }"/>
+					</li>
+					<li><ice:commandButton id="aceptarPopupEditar" value="Aceptar"
+							onclick="dialog3.hide();" action="#{beanMunicipios.updateMunicipio}"
+							partialSubmit="true" />
+					</li>
+				</ul>
+			</h:form>
+		</ace:dialog>
+		
+		<ace:dialog id="dialog4" header="#{msg.eliminar}" widgetVar="dialog4"
+			closable="true" modal="true" draggable="false" showEffect="clip"
+			hideEffect="fade" width="400">
+			<h:form id="inputForm4">
+				<h:panelGrid columns="2" width="100%">
+					<h:panelGroup id="messagePanelBorrar" layout="block">
+						<h:messages errorStyle="color: red" infoStyle="color: green"
+							layout="list" style="font-size:12px;font-family:Arial" />
+					</h:panelGroup>
+					<h:outputLabel hidden="true">
+					</h:outputLabel>
+				</h:panelGrid>
+			</h:form>
+			<ul class="buttons" style="float: right;">
+				<li><h:commandButton id="cancelarPopupEliminar"
+						value="Cancelar" onclick="dialog4.hide();" />
+				</li>
+				<li><ice:commandButton id="aceptarPopupEliminar"
+						value="Aceptar" onclick="dialog4.hide();"
+						action="#{beanMunicipios.deleteMunicipio}" partialSubmit="true" />
+				</li>
+			</ul>
+		</ace:dialog>
 	</ui:define>
 </ui:composition>
 
