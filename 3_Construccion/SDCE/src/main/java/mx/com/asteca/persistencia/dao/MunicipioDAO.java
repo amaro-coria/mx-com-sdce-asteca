@@ -18,4 +18,6 @@ public interface MunicipioDAO extends BaseDAO<Municipios, MunicipiosId> {
 
 	public List<Municipios> findByEstado(Estados estado) throws PersistenciaException;
 	
+	public List<Municipios> findByIdEstado(int idEstado) throws PersistenciaException;
+	
 }

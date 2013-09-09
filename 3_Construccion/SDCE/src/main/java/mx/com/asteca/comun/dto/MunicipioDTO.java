@@ -16,6 +16,7 @@ public class MunicipioDTO implements Serializable {
 	private String clave;
 	private String estado;
 	private String pais;
+	private int idUnico;
 
 	public int getIdMunicipio() {
 		return idMunicipio;
@@ -133,6 +134,20 @@ public class MunicipioDTO implements Serializable {
 				+ idEstado + ", idPais=" + idPais + ", nombre=" + nombre
 				+ ", activo=" + activo + ", clave=" + clave + ", estado="
 				+ estado + ", pais=" + pais + "]";
+	}
+
+	/**
+	 * @return the idUnico
+	 */
+	public int getIdUnico() {
+		return idUnico;
+	}
+
+	/**
+	 * @param idUnico the idUnico to set
+	 */
+	public void setIdUnico(int idUnico) {
+		this.idUnico = idUnico;
 	}
 
 }

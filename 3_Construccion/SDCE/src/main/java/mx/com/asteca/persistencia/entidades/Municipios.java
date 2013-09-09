@@ -32,6 +32,7 @@ public class Municipios  implements java.io.Serializable {
      private Short activo;
      private String clave;
      private Set<Asentamientos> asentamientoses = new HashSet<Asentamientos>(0);
+     private int idUnico;
 
     public Municipios() {
     }
@@ -106,6 +107,16 @@ public class Municipios  implements java.io.Serializable {
     public void setAsentamientoses(Set<Asentamientos> asentamientoses) {
         this.asentamientoses = asentamientoses;
     }
+
+
+    @Column(name="ID_UNICO")
+	public int getIdUnico() {
+		return idUnico;
+	}
+
+	public void setIdUnico(int idUnico) {
+		this.idUnico = idUnico;
+	}
 
 
 

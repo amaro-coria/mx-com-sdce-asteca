@@ -55,4 +55,34 @@ public class MunicipioFachadaImpl extends BaseFachadaImpl<MunicipioDTO, Integer>
 		}
 	}
 
+	@Override
+	public List<EstadoDTO> getFromPais(int paisId) throws FachadaException {
+		try {
+			List<EstadoDTO> listaEstados = servicioEstado.getFromPais(paisId);
+			return listaEstados;
+		} catch (ServicioException e) {
+			throw new FachadaException(Constantes.ERROR_OBTENIENDO_LISTA_CATALOGO, e);
+		}
+	}
+
+	@Override
+	public List<MunicipioDTO> getFromEstado(int edoId) throws FachadaException {
+		try {
+			List<MunicipioDTO> listaDTOs = servicio.getFromEstado(edoId);
+			return listaDTOs;
+		} catch (ServicioException e) {
+			throw new FachadaException(Constantes.ERROR_OBTENIENDO_LISTA_CATALOGO, e);
+		}
+	}
+	
+	@Override
+	public MunicipioDTO getFromMunicipioEdo(int edoID, int mpioID) throws FachadaException{
+		try {
+			MunicipioDTO dto = servicio.getFromMunicipioEdo(edoID, mpioID);
+			return dto;
+		} catch (ServicioException e) {
+			throw new FachadaException(Constantes.ERROR_OBTENIENDO_LISTA_CATALOGO, e);
+		}
+	}
+
 }
