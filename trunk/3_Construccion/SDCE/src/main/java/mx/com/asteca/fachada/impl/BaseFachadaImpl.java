@@ -25,7 +25,7 @@ public abstract class BaseFachadaImpl<DTO, PK extends Serializable> implements B
 	            List<DTO> listaDTO = getBaseService().getAll();
 	            return listaDTO;
 	        } catch (ServicioException ex) {
-	            throw new FachadaException("Hubo error en servicio");
+	            throw new FachadaException("Hubo error en servicio", ex);
 	        }
 	    }
 	    @Transactional
@@ -34,7 +34,7 @@ public abstract class BaseFachadaImpl<DTO, PK extends Serializable> implements B
 	            DTO dto = (DTO) getBaseService().findByPK(id);
 	            return dto;
 	        } catch (ServicioException ex) {
-	            throw new FachadaException("Hubo error en servicio");
+	            throw new FachadaException("Hubo error en servicio", ex);
 	        }
 	    }
 	    @Transactional
@@ -42,7 +42,7 @@ public abstract class BaseFachadaImpl<DTO, PK extends Serializable> implements B
 	        try {
 	        	getBaseService().update(object);
 	        } catch (ServicioException ex) {
-	            throw new FachadaException("Hubo error en servicio");
+	            throw new FachadaException("Hubo error en servicio", ex);
 	        }
 	    }
 	    @Transactional
@@ -50,7 +50,7 @@ public abstract class BaseFachadaImpl<DTO, PK extends Serializable> implements B
 	        try {
 	        	getBaseService().remove(object);
 	        } catch (ServicioException ex) {
-	            throw new FachadaException("Hubo error en servicio");
+	            throw new FachadaException("Hubo error en servicio", ex);
 	        }
 	    }
 	    @Transactional
@@ -59,7 +59,7 @@ public abstract class BaseFachadaImpl<DTO, PK extends Serializable> implements B
 	            PK saved = (PK) getBaseService().save(object);
 	            return saved;
 	        } catch (ServicioException ex) {
-	            throw new FachadaException("Hubo error en servicio");
+	            throw new FachadaException("Hubo error en servicio", ex);
 	        }
 	    }
 	    @Transactional
@@ -67,7 +67,7 @@ public abstract class BaseFachadaImpl<DTO, PK extends Serializable> implements B
 	        try {
 	        	getBaseService().saveOrUpdate(object);
 	        } catch (ServicioException ex) {
-	            throw new FachadaException("Hubo error en servicio");
+	            throw new FachadaException("Hubo error en servicio", ex);
 	        }
 	    }
 	    @Transactional
@@ -75,7 +75,7 @@ public abstract class BaseFachadaImpl<DTO, PK extends Serializable> implements B
 	        try {
 	            return getBaseService().exists(paramPK);
 	        } catch (ServicioException ex) {
-	            throw new FachadaException("Hubo error en servicio");
+	            throw new FachadaException("Hubo error en servicio", ex);
 	        }
 	    }
 	    

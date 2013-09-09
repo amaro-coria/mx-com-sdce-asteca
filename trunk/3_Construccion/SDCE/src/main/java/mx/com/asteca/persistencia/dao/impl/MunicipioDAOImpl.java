@@ -17,7 +17,7 @@ import org.springframework.stereotype.Repository;
 
 /**
  * @author JAMARO
- *
+ * 
  */
 @Repository
 public class MunicipioDAOImpl extends BaseDAOImpl<Municipios, MunicipiosId>
@@ -27,9 +27,26 @@ public class MunicipioDAOImpl extends BaseDAOImpl<Municipios, MunicipiosId>
 	public List<Municipios> findByEstado(Estados estado)
 			throws PersistenciaException {
 		List<Municipios> listMunicipios = null;
-			Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(Municipios.class).add(Restrictions.eq("estados", estado));
-			listMunicipios = criteria.list();
+		Criteria criteria = getSessionFactory().getCurrentSession()
+				.createCriteria(Municipios.class)
+				.add(Restrictions.eq("estados", estado));
+		listMunicipios = criteria.list();
 		return listMunicipios;
+	}
+
+	@Override
+	public List<Municipios> findByIdEstado(int idEstado)
+			throws PersistenciaException {
+		try {
+			Criteria criteria = getSessionFactory().getCurrentSession()
+					.createCriteria(Municipios.class);
+			criteria.add(Restrictions.eq("estados.idEstado", idEstado));
+			List<Municipios> lista = criteria.list();
+			return lista;
+		} catch (Exception ex) {
+			throw new PersistenciaException(
+					"Error obteniendo el muncipio desde el EDO", ex);
+		}
 	}
 
 }

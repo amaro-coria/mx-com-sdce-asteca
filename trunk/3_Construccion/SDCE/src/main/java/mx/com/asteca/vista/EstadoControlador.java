@@ -67,16 +67,6 @@ public class EstadoControlador extends BaseController implements Serializable {
 		paisSelected = new PaisDTO();
 	}
 
-	/**
-	 * Actualiza la lista de estados obteniendo todos
-	 */
-	private void refreshEstados() {
-		try {
-			listaEstados = fachadaEstado.getAll();
-		} catch (FachadaException e) {
-			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR, Constantes.ERROR_OBTENIENDO_LISTA_CATALOGO);
-		}
-	}
 
 	/**
 	 * Inicializa la lista de paises de <code>SelectItem</code>
@@ -276,6 +266,9 @@ public class EstadoControlador extends BaseController implements Serializable {
 	}	
 	
 
+	// --------------------- GETTERS & SETTERS  ------------------------------- //
+	
+	
 	/**
 	 * @return the listaEstados
 	 */

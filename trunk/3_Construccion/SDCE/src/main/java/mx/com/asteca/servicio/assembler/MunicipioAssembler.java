@@ -30,6 +30,8 @@ public class MunicipioAssembler extends Assembler<MunicipioDTO, Municipios> {
 			dto.setIdEstado(mapping.getId().getIdEstado());
 			dto.setIdPais(mapping.getEstados().getPaises().getIdPais());
 			dto.setPais(mapping.getEstados().getPaises().getNombrePais());
+			dto.setEstado(mapping.getEstados().getNombre());
+			dto.setIdUnico(mapping.getIdUnico());
 		return dto;
 	}
 
@@ -47,6 +49,9 @@ public class MunicipioAssembler extends Assembler<MunicipioDTO, Municipios> {
 				id.setIdEstado(dto.getIdEstado());
 				id.setIdMunicipio(dto.getIdMunicipio());
 				mapping.setId(id);
+			}
+			if(dto.getIdUnico() != 0){
+				mapping.setIdUnico(dto.getIdUnico());
 			}
 		return mapping;
 	}

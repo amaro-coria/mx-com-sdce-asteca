@@ -28,22 +28,22 @@ public abstract class BaseServiceImpl <DTO, PK extends Serializable, Mapping> im
     
     private final static Logger LOGGER = LoggerFactory.getLogger(BaseServiceImpl.class);
     
-    @Transactional
+    @Transactional(readOnly=true)
     public List<DTO> getAll() throws ServicioException{
         try {
             List<Mapping> listMapping = getDAO().getAll();
             return getAssembler().getDTOListTransform(listMapping);
         } catch (PersistenciaException ex) {
-            throw new ServicioException("Hubo error en BD");
+            throw new ServicioException("Hubo error en BD", ex);
         }
     }
-    @Transactional
+    @Transactional(readOnly=true)
     public DTO findByPK(PK id) throws ServicioException{
         try {
             Mapping mapping = (Mapping) getDAO().findByPK(id);
             return (DTO) getAssembler().getDTOTransform(mapping);
         } catch (PersistenciaException ex) {
-            throw new ServicioException("Hubo error en BD");
+            throw new ServicioException("Hubo error en BD", ex);
         }
     }
     @Transactional
@@ -52,7 +52,7 @@ public abstract class BaseServiceImpl <DTO, PK extends Serializable, Mapping> im
             Mapping mapping = (Mapping) getAssembler().getMappingTransform(object);
             getDAO().update(mapping);
         } catch (PersistenciaException ex) {
-            throw new ServicioException("Hubo error en BD");
+            throw new ServicioException("Hubo error en BD", ex);
         }
     }
     @Transactional
@@ -61,7 +61,7 @@ public abstract class BaseServiceImpl <DTO, PK extends Serializable, Mapping> im
             Mapping mapping = (Mapping) getAssembler().getMappingTransform(object);
             getDAO().remove(mapping);
         } catch (PersistenciaException ex) {
-            throw new ServicioException("Hubo error en BD");
+            throw new ServicioException("Hubo error en BD", ex);
         }
     }
     @Transactional
@@ -70,7 +70,7 @@ public abstract class BaseServiceImpl <DTO, PK extends Serializable, Mapping> im
             Mapping mapping = (Mapping) getAssembler().getMappingTransform(object);
             return (PK) getDAO().save(mapping);
         } catch (PersistenciaException ex) {
-            throw new ServicioException("Hubo error en BD");
+            throw new ServicioException("Hubo error en BD", ex);
         }
     }
     @Transactional
@@ -79,15 +79,15 @@ public abstract class BaseServiceImpl <DTO, PK extends Serializable, Mapping> im
             Mapping mapping = (Mapping) getAssembler().getMappingTransform(object);
             getDAO().saveOrUpdate(mapping);
         } catch (PersistenciaException ex) {
-            throw new ServicioException("Hubo error en BD");
+            throw new ServicioException("Hubo error en BD", ex);
         }
     }
-    @Transactional
+    @Transactional(readOnly=true)
     public boolean exists(PK paramPK) throws ServicioException{
         try {
             return getDAO().exists(paramPK);
         } catch (PersistenciaException ex) {
-            throw new ServicioException("Hubo error en BD");
+            throw new ServicioException("Hubo error en BD", ex);
         }
     }
     
