@@ -10,9 +10,12 @@ public class MunicipioDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private int idMunicipio;
 	private int idEstado;
+	private int idPais;
 	private String nombre;
 	private Short activo;
 	private String clave;
+	private String estado;
+	private String pais;
 
 	public int getIdMunicipio() {
 		return idMunicipio;
@@ -79,11 +82,57 @@ public class MunicipioDTO implements Serializable {
 		return true;
 	}
 
+	/**
+	 * @return the idPais
+	 */
+	public int getIdPais() {
+		return idPais;
+	}
+
+	/**
+	 * @param idPais the idPais to set
+	 */
+	public void setIdPais(int idPais) {
+		this.idPais = idPais;
+	}
+
+	/**
+	 * @return the estado
+	 */
+	public String getEstado() {
+		return estado;
+	}
+
+	/**
+	 * @param estado the estado to set
+	 */
+	public void setEstado(String estado) {
+		this.estado = estado;
+	}
+
+	/**
+	 * @return the pais
+	 */
+	public String getPais() {
+		return pais;
+	}
+
+	/**
+	 * @param pais the pais to set
+	 */
+	public void setPais(String pais) {
+		this.pais = pais;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
 		return "MunicipioDTO [idMunicipio=" + idMunicipio + ", idEstado="
-				+ idEstado + ", nombre=" + nombre + ", activo=" + activo
-				+ ", clave=" + clave + "]";
+				+ idEstado + ", idPais=" + idPais + ", nombre=" + nombre
+				+ ", activo=" + activo + ", clave=" + clave + ", estado="
+				+ estado + ", pais=" + pais + "]";
 	}
 
 }

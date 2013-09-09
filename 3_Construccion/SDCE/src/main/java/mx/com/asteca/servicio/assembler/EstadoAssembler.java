@@ -6,6 +6,7 @@ package mx.com.asteca.servicio.assembler;
 import mx.com.asteca.comun.Constantes;
 import mx.com.asteca.comun.dto.EstadoDTO;
 import mx.com.asteca.persistencia.entidades.Estados;
+import mx.com.asteca.persistencia.entidades.Paises;
 
 import org.springframework.stereotype.Component;
 
@@ -26,6 +27,8 @@ public class EstadoAssembler extends Assembler<EstadoDTO, Estados> {
 			dto.setClave(mapping.getClave());
 			dto.setIdEstado(mapping.getIdEstado());
 			dto.setNombre(mapping.getNombre());
+			dto.setIdPais(mapping.getPaises().getIdPais());
+			dto.setPais(mapping.getPaises().getNombrePais());
 		return dto;
 	}
 
@@ -40,6 +43,11 @@ public class EstadoAssembler extends Assembler<EstadoDTO, Estados> {
 			mapping.setNombre(dto.getNombre());
 			if(dto.getIdEstado() != 0){
 				mapping.setIdEstado(dto.getIdEstado());
+			}
+			if(dto.getIdPais() != 0 ){
+				Paises pais = new Paises();
+				pais.setIdPais(dto.getIdPais());
+				mapping.setPaises(pais);
 			}
 		return mapping;
 	}

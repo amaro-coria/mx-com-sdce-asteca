@@ -28,4 +28,14 @@ public class Constantes {
 	public static final String ERROR_UPDATE_REGISTRO="Error guardando.";
 	public static final String ERROR_DELETE_REGISTRO="Error borrando.";
 	public static final String BEAN_TREE="beanTree";
+	public static final String ERROR_NECESITAS_SELECCIONAR_UN_PAIS="Necesitas seleccionar un pais";
+	public static final String ERROR_NECESITAS_SELECCIONAR_UN_CLIENTE="Necesitas seleccionar un cliente";
+	public static final String ERROR_NECESITAS_SELECCIONAR_UN_TIPO_CLIENTE="Necesitas seleccionar un tipo de cliente";
+	public static final String NUEVO_REGISTRO_EXITOSO="Se ha insertado un nuevo registro exitosamente";
+	public static final String DELETE_REGISTRO_EXITOSO="Se ha eliminado el registro exitosamente";
+	public static final String UPDATE_REGISTRO_EXITOSO="Se ha actualizado el registro exitosamente";
+	public static final String MESSAGE_TITLE_INFO="Info";
+	public static final String MESSAGE_TITLE_ERROR="Error";
+	public static final String MESSAGE_TITLE_WARNING="Advertencia";
+
 }

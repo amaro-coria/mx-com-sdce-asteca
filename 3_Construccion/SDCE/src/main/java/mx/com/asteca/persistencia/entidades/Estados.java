@@ -1,17 +1,18 @@
 package mx.com.asteca.persistencia.entidades;
-// Generated 31/07/2013 11:41:38 AM by Hibernate Tools 3.2.1.GA
+// Generated 1/09/2013 05:14:39 PM by Hibernate Tools 3.2.1.GA
 
 
 import java.util.HashSet;
 import java.util.Set;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import static javax.persistence.GenerationType.IDENTITY;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -25,11 +26,8 @@ import javax.persistence.Table;
 public class Estados  implements java.io.Serializable {
 
 
-     /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private int idEstado;
+     private Integer idEstado;
+     private Paises paises;
      private String nombre;
      private Short activo;
      private String clave;
@@ -37,28 +35,37 @@ public class Estados  implements java.io.Serializable {
 
     public Estados() {
     }
-
-	
-    public Estados(int idEstado) {
-        this.idEstado = idEstado;
+    
+    public Estados(int randomInt){
+    	idEstado = randomInt;
     }
-    public Estados(int idEstado, String nombre, Short activo, String clave, Set<Municipios> municipioses) {
-       this.idEstado = idEstado;
+
+    public Estados(Paises paises, String nombre, Short activo, String clave, Set<Municipios> municipioses) {
+       this.paises = paises;
        this.nombre = nombre;
        this.activo = activo;
        this.clave = clave;
        this.municipioses = municipioses;
     }
    
-     @Id 
-     @GeneratedValue(strategy=GenerationType.IDENTITY)
+     @Id @GeneratedValue(strategy=IDENTITY)
+    
     @Column(name="ID_ESTADO", unique=true, nullable=false)
-    public int getIdEstado() {
+    public Integer getIdEstado() {
         return this.idEstado;
     }
     
-    public void setIdEstado(int idEstado) {
+    public void setIdEstado(Integer idEstado) {
         this.idEstado = idEstado;
+    }
+@ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="ID_PAIS")
+    public Paises getPaises() {
+        return this.paises;
+    }
+    
+    public void setPaises(Paises paises) {
+        this.paises = paises;
     }
     
     @Column(name="NOMBRE", length=50)

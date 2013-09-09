@@ -24,6 +24,7 @@ public class ClienteAssembler extends Assembler<ClienteDTO, Clientes>{
 			dto.setTelefono(mapping.getTelefono());
 			TiposClientes tipoCliente = mapping.getTiposClientes();
 			dto.setTipoCliente(tipoCliente.getIdTipoCliente());
+			dto.setTipoClienteString(tipoCliente.getNombre());
 		return dto;
 	}
 

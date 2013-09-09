@@ -28,6 +28,22 @@ public class BaseController {
 	protected void addInfoMessage(String messageID, Object[] params) {
 		addMessage(FacesMessage.SEVERITY_INFO, messageID, params);
 	}
+	
+	/**
+	 * Set an info message in the Faces Context
+	 * 
+	 * @param messageID
+	 *            message id
+	 */
+	protected void addInfoMessage(String messageID) {
+		addMessage(FacesMessage.SEVERITY_INFO, messageID);
+	}
+	
+	protected void addInfoMessage(String summary, String detail) {
+		addMessage(FacesMessage.SEVERITY_INFO, summary, detail);
+	}
+
+	
 
 	/**
 	 * Set an info message in the Faces Context with parameters
@@ -48,19 +64,16 @@ public class BaseController {
 	 *            message id
 	 */
 	protected void addWarningMessage(String messageID) {
-		addInfoMessage(messageID, null);
+		addMessage(FacesMessage.SEVERITY_WARN, messageID);
+	}
+	
+	protected void addWarningMessage(String summary, String detail) {
+		addMessage(FacesMessage.SEVERITY_WARN, summary, detail);
 	}
 
-	/**
-	 * Set an info message in the Faces Context
-	 * 
-	 * @param messageID
-	 *            message id
-	 */
-	protected void addInfoMessage(String messageID) {
-		addInfoMessage(messageID, null);
-	}
-
+	
+	
+	
 	/**
 	 * Set an error message with parameters in the Faces Context
 	 * 
@@ -71,15 +84,34 @@ public class BaseController {
 		addMessage(FacesMessage.SEVERITY_ERROR, messageID, params);
 	}
 
+	protected void addErrorMessage(String summary, String detail) {
+		addMessage(FacesMessage.SEVERITY_ERROR, summary, detail);
+	}
+	
 	/**
 	 * Set an error message without parameters in the Faces Context
 	 * 
 	 * @param messageID
 	 */
 	protected void addErrorMessage(String messageID) {
-		addErrorMessage(messageID, null);
+		addMessage(FacesMessage.SEVERITY_ERROR, messageID);
 	}
 
+	private void addMessage(Severity severidad, String summary, String detail) {
+		FacesMessage message = new FacesMessage();
+		message.setSeverity(severidad);
+		message.setSummary(summary);
+		message.setDetail(detail);
+		getFacesContext().addMessage(null, message);
+	}
+	
+	private void addMessage(Severity severidad, String messageID) {
+		FacesMessage message = new FacesMessage();
+		message.setSeverity(severidad);
+		message.setSummary(messageID);
+		getFacesContext().addMessage(null, message);
+	}
+	
 	/**
 	 * Add message in Faces Context
 	 * 

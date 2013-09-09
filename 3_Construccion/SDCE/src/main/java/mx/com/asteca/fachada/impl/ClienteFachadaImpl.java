@@ -38,6 +38,24 @@ public class ClienteFachadaImpl extends BaseFachadaImpl<ClienteDTO, Integer> imp
 		return listaTiposClientes;
 	}
 
+	@Override
+	public List<ClienteDTO> getClientesByClave(String clave) throws FachadaException{
+		try {
+			List<ClienteDTO> listaClientes = clienteServicio.findByClave(clave);
+			return listaClientes;
+		} catch (ServicioException e) {
+			throw new FachadaException(e.getMessage(), e);
+		}
+	}
 	
+	@Override
+	public List<ClienteDTO> getClientesByClaveAndNombre(String clave, String nombre) throws FachadaException{
+		try {
+			List<ClienteDTO> listaClientes = clienteServicio.findByClaveAndNombre(clave, nombre);
+			return listaClientes;
+		} catch (ServicioException e) {
+			throw new FachadaException(e.getMessage(), e);
+		}
+	}
 
 }
