@@ -21,6 +21,7 @@ public class ClienteDTO implements Serializable{
 	private String email;
 	private int tipoCliente;
 	private int idCliente;
+	private String tipoClienteString;
 	
 	
 	
@@ -143,6 +144,12 @@ public class ClienteDTO implements Serializable{
 				+ ", responsable=" + responsable + ", telefono=" + telefono
 				+ ", email=" + email + ", tipoCliente=" + tipoCliente
 				+ ", idCliente=" + idCliente + "]";
+	}
+	public String getTipoClienteString() {
+		return tipoClienteString;
+	}
+	public void setTipoClienteString(String tipoClienteString) {
+		this.tipoClienteString = tipoClienteString;
 	}
 	
 	

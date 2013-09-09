@@ -12,6 +12,8 @@ public class EstadoDTO implements Serializable{
     private String nombre;
     private Short activo;
     private String clave;
+    private int idPais;
+    private String pais;
 	public int getIdEstado() {
 		return idEstado;
 	}
@@ -56,10 +58,39 @@ public class EstadoDTO implements Serializable{
 			return false;
 		return true;
 	}
+	
+	/**
+	 * @return the idPais
+	 */
+	public int getIdPais() {
+		return idPais;
+	}
+	/**
+	 * @param idPais the idPais to set
+	 */
+	public void setIdPais(int idPais) {
+		this.idPais = idPais;
+	}
+	/**
+	 * @return the pais
+	 */
+	public String getPais() {
+		return pais;
+	}
+	/**
+	 * @param pais the pais to set
+	 */
+	public void setPais(String pais) {
+		this.pais = pais;
+	}
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
 		return "EstadoDTO [idEstado=" + idEstado + ", nombre=" + nombre
-				+ ", activo=" + activo + ", clave=" + clave + "]";
+				+ ", activo=" + activo + ", clave=" + clave + ", idPais="
+				+ idPais + ", pais=" + pais + "]";
 	}
     
 	

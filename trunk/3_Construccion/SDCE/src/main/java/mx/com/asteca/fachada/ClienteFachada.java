@@ -8,5 +8,10 @@ import mx.com.asteca.comun.dto.TipoClienteDTO;
 public interface ClienteFachada extends BaseFachada<ClienteDTO, Integer>{
 	
 	public List<TipoClienteDTO> getTiposCliente() throws FachadaException;
+
+	List<ClienteDTO> getClientesByClave(String clave) throws FachadaException;
+
+	List<ClienteDTO> getClientesByClaveAndNombre(String clave, String nombre)
+			throws FachadaException;
 	
 }

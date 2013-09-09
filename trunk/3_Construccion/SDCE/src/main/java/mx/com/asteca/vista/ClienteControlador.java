@@ -1,10 +1,14 @@
 package mx.com.asteca.vista;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import javax.faces.event.ActionEvent;
+import javax.faces.model.SelectItem;
 
 import mx.com.asteca.comun.Constantes;
 import mx.com.asteca.comun.dto.ClienteDTO;
@@ -13,184 +17,651 @@ import mx.com.asteca.fachada.ClienteFachada;
 import mx.com.asteca.fachada.FachadaException;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @ManagedBean(name = Constantes.BEAN_CLIENTES)
 @ViewScoped
-public class ClienteControlador extends BaseController{
+public class ClienteControlador extends BaseController implements Serializable {
 
-	private static Logger LOGGER = LoggerFactory.getLogger(ClienteControlador.class);
-	
+	/**
+	 * Declara ID serializable
+	 */
+	private static final long serialVersionUID = 1L;
+	/*
+	 * Tiene que ser transient para no generar excepcion de no serializacion
+	 */
+	@ManagedProperty("#{clienteFachadaImpl}")
+	private transient ClienteFachada fachadaCliente;
+	private ClienteDTO clienteSelected;
+	private ClienteDTO clienteNuevo;
+	private TipoClienteDTO tipoClienteSelected;
+
 	private List<ClienteDTO> listaClientes;
 	private List<TipoClienteDTO> listaTipoClientes;
-	private short nuevoClienteTipo;
-	private String nuevoClienteClave;
-	private String nuevoClienteNombre;
-	private String nuevoClienteResponsable;
-	private String nuevoClienteTelefono;
-	private String nuevoClienteEmail;
+	private List<SelectItem> listaSelectTiposClientes;
+	private List<SelectItem> listaSelectClientes;
+	private List<SelectItem> listaSelectNombres;
+	private List<SelectItem> listaSelectReponsable;
+	private List<SelectItem> listaSelectClave;
+	private int idTipoCliente;
+	private int idTipoClienteFilter;
+	private int idClienteFilter;
+	private int idCliente;
+	private int selectedIdCliente;
+	private int selectedTipoCliente;
+	private String selectedClienteNombre;
+	private String selectedClienteClave;
+	private String selectedClienteResponsable;
+	private String selectedClienteTelefono;
+	private String selectedClienteEmail;
+	private String claveSelected;
+	private String nombreSelected;
+	private String responsableSelected;
+	private List<ClienteDTO> filteredClientes;
+	
+	public ClienteControlador() {
+		clienteSelected = new ClienteDTO();
+		clienteNuevo = new ClienteDTO();
+		tipoClienteSelected = new TipoClienteDTO();
+	}
 
-	@ManagedProperty("#{clienteFachadaImpl}")
-	private ClienteFachada clienteFachada;
-	
-	private void initListaClientes() throws FachadaException{
-		if(CollectionUtils.isEmpty(listaClientes)){		
-			listaClientes = clienteFachada.getAll();
-		}
-	}
-	
-	private void initListaTipoClientes() throws FachadaException{
-		if(CollectionUtils.isEmpty(listaTipoClientes)){		
-			listaTipoClientes = clienteFachada.getTiposCliente();			
-		}
-	}
-	
-	public String saveCliente(){
-		ClienteDTO nuevoCliente = new ClienteDTO();
-			nuevoCliente.setClave(nuevoClienteClave);
-			nuevoCliente.setEmail(nuevoClienteEmail);
-			nuevoCliente.setNombre(nuevoClienteNombre);
-			nuevoCliente.setResponsable(nuevoClienteResponsable);
-			nuevoCliente.setTelefono(nuevoClienteTelefono);
-			nuevoCliente.setTipoCliente(nuevoClienteTipo);
+	public void refreshClientes() {
 		try {
-			clienteFachada.save(nuevoCliente);
+			listaClientes = fachadaCliente.getAll();
 		} catch (FachadaException e) {
-			super.addErrorMessage(Constantes.ERROR_NUEVO_REGISTRO);
+			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
+					Constantes.ERROR_OBTENIENDO_LISTA_CATALOGO);
 		}
-		return "clientes.xhtml";
+	}
+
+	public void initSelectClientes() {
+		if (CollectionUtils.isEmpty(listaSelectClientes)) {
+			listaSelectClientes = new ArrayList<SelectItem>();
+			for (ClienteDTO dto : getListaClientes()) {
+				SelectItem item = new SelectItem(dto.getIdCliente(),
+						dto.getNombre());
+				listaSelectClientes.add(item);
+			}
+		}
+	}
+
+	public void initSelectClave() {
+		if (CollectionUtils.isEmpty(listaSelectClave)) {
+			listaSelectClave = new ArrayList<SelectItem>();
+			try {
+				List<ClienteDTO> listaClientes = fachadaCliente.getAll();
+				for (ClienteDTO clienteDTO : listaClientes) {
+					SelectItem item = new SelectItem(clienteDTO.getClave(),
+							clienteDTO.getClave());
+					listaSelectClave.add(item);
+				}
+			} catch (FachadaException e) {
+				super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
+						Constantes.ERROR_OBTENIENDO_LISTA_CATALOGO);
+			}
+		}
+	}
+
+	public void initSelectTiposClientes() {
+		if (CollectionUtils.isEmpty(listaSelectTiposClientes)) {
+			listaSelectTiposClientes = new ArrayList<SelectItem>();
+			for (TipoClienteDTO dto : getListaTipoClientes()) {
+				SelectItem item = new SelectItem(dto.getIdTipoCliente(),
+						dto.getNombre());
+				listaSelectTiposClientes.add(item);
+			}
+		}
+	}
+
+	public void initListaClientes() {
+		if (CollectionUtils.isEmpty(listaClientes)) {
+			try {
+				listaClientes = fachadaCliente.getAll();
+			} catch (FachadaException e) {
+				super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
+						Constantes.ERROR_OBTENIENDO_LISTA_CATALOGO);
+			}
+		}
+	}
+
+	public void addMessageTest(ActionEvent e){
+		super.addErrorMessage("HOLA MUNDO MENSAJE");
 	}
 	
-	
+	public void initListaTiposClientes() {
+		if (CollectionUtils.isEmpty(listaTipoClientes)) {
+			try {
+				listaTipoClientes = fachadaCliente.getTiposCliente();
+			} catch (FachadaException e) {
+				super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
+						Constantes.ERROR_OBTENIENDO_LISTA_CATALOGO);
+			}
+		}
+	}
+
+	public void cancelDeleteCliente(ActionEvent e) {
+		setSelectedClienteClave("");
+		setSelectedClienteNombre("");
+		setSelectedClienteResponsable("");
+	}
+
+	public void deleteCliente(ActionEvent e) {
+		try {
+			fachadaCliente.remove(clienteSelected);
+			listaClientes.remove(clienteSelected);
+			initSelectClave();
+			cambiaClaveSelected();
+			cambiaNombreSelected();
+		} catch (FachadaException e1) {
+			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
+					Constantes.ERROR_DELETE_REGISTRO);
+			return;
+		}
+		setSelectedClienteClave("");
+		setSelectedClienteNombre("");
+		setSelectedClienteResponsable("");
+		super.addInfoMessage(Constantes.DELETE_REGISTRO_EXITOSO);
+	}
+
+	public void updateCliente(ActionEvent e) {
+		if (clienteSelected.getIdCliente() == 0) {
+			super.addWarningMessage(Constantes.MESSAGE_TITLE_WARNING,
+					Constantes.ERROR_NECESITAS_SELECCIONAR_UN_CLIENTE);
+			return;
+		}
+		if(selectedTipoCliente == 0){
+			super.addWarningMessage(Constantes.MESSAGE_TITLE_WARNING,
+					Constantes.ERROR_NECESITAS_SELECCIONAR_UN_TIPO_CLIENTE);
+			return;
+		}
+		if(selectedClienteNombre != null && !selectedClienteNombre.isEmpty()){
+			clienteSelected.setNombre(selectedClienteNombre);
+		}
+		if(selectedClienteResponsable != null && !selectedClienteResponsable.isEmpty()){
+			clienteSelected.setResponsable(selectedClienteResponsable);
+		}
+		if(selectedClienteTelefono != null && !selectedClienteTelefono.isEmpty()){
+			clienteSelected.setTelefono(selectedClienteTelefono);
+		}
+		if(selectedClienteEmail != null && !selectedClienteEmail.isEmpty()){
+			clienteSelected.setEmail(selectedClienteEmail);
+		}
+		clienteSelected.setTipoCliente(selectedTipoCliente);
+		if(selectedClienteClave != null && !selectedClienteClave.isEmpty()){
+			clienteSelected.setClave(selectedClienteClave);
+		}
+		try {
+			fachadaCliente.update(clienteSelected);
+			int indexListSelected = listaClientes.indexOf(clienteSelected);
+			if(indexListSelected > 0){
+				listaClientes.set(indexListSelected, clienteSelected);
+			}
+			initSelectClave();
+			cambiaClaveSelected();
+			cambiaNombreSelected();
+		} catch (FachadaException e1) {
+			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
+					Constantes.ERROR_UPDATE_REGISTRO);
+			return;
+		}
+		//refreshClientes();
+		super.addInfoMessage(Constantes.UPDATE_REGISTRO_EXITOSO);
+		
+	}
+
+	public void saveCliente(ActionEvent e) {
+		if (idTipoCliente == 0) {
+			super.addWarningMessage(Constantes.MESSAGE_TITLE_WARNING,
+					Constantes.ERROR_NECESITAS_SELECCIONAR_UN_TIPO_CLIENTE);
+			return;
+		}
+		clienteNuevo.setTipoCliente(idTipoCliente);
+		try {
+			fachadaCliente.save(clienteNuevo);
+			listaClientes.add(clienteNuevo);
+			initSelectClave();
+			cambiaClaveSelected();
+			cambiaNombreSelected();
+		} catch (FachadaException e1) {
+			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
+					Constantes.ERROR_NUEVO_REGISTRO);
+			return;
+		}
+		clienteNuevo = new ClienteDTO();
+		super.addInfoMessage(Constantes.NUEVO_REGISTRO_EXITOSO);
+	}
+
+	public void saveClienteCancel(ActionEvent e) {
+		clienteNuevo = new ClienteDTO();
+	}
+
+	public void cambiaClaveSelected() {
+		listaSelectNombres = new ArrayList<SelectItem>();
+		if (claveSelected != null && !claveSelected.isEmpty()) {
+			try {
+				List<ClienteDTO> listaClientesNombre = fachadaCliente
+						.getClientesByClave(claveSelected);
+				for (ClienteDTO clienteDTO : listaClientesNombre) {
+					SelectItem item = new SelectItem(clienteDTO.getNombre(),
+							clienteDTO.getNombre());
+					listaSelectNombres.add(item);
+				}
+			} catch (FachadaException e) {
+				super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
+						Constantes.ERROR_OBTENIENDO_LISTA_CATALOGO);
+			}
+		}
+	}
+
+	public void cambiaNombreSelected() {
+		listaSelectReponsable = new ArrayList<SelectItem>();
+		if (nombreSelected != null && !nombreSelected.isEmpty()) {
+			try {
+				List<ClienteDTO> listaClientesResponsable = fachadaCliente
+						.getClientesByClaveAndNombre(claveSelected,
+								nombreSelected);
+				for (ClienteDTO clienteDTO : listaClientesResponsable) {
+					SelectItem item = new SelectItem(
+							clienteDTO.getResponsable(),
+							clienteDTO.getResponsable());
+					listaSelectReponsable.add(item);
+				}
+			} catch (FachadaException e) {
+				super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
+						Constantes.ERROR_OBTENIENDO_LISTA_CATALOGO);
+			}
+		}
+	}
+
+	public void limpiarFiltrado(ActionEvent e) {
+		listaClientes = null;
+		listaSelectClientes = null;
+		listaSelectClave = null;
+		initListaClientes();
+		initSelectClientes();
+		initSelectClave();
+		cambiaClaveSelected();
+		cambiaNombreSelected();
+	}
+
+	public void buscarFiltrado(ActionEvent e) {
+		try {
+			if (responsableSelected != null && !responsableSelected.isEmpty()) {
+				listaClientes = fachadaCliente.getClientesByClaveAndNombre(
+						claveSelected, nombreSelected);
+			} else if (nombreSelected != null && !nombreSelected.isEmpty()) {
+				listaClientes = fachadaCliente
+						.getClientesByClave(claveSelected);
+			} else {
+				listaClientes = fachadaCliente.getAll();
+			}
+		} catch (FachadaException ex) {
+			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
+					Constantes.ERROR_OBTENIENDO_LISTA_CATALOGO);
+		}
+
+	}
+
+	// --------------- GETTERS & SETTERS ---------------//
+
+	/**
+	 * @return the clienteSelected
+	 */
+	public ClienteDTO getClienteSelected() {
+		return clienteSelected;
+	}
+
+	/**
+	 * @param clienteSelected
+	 *            the clienteSelected to set
+	 */
+	public void setClienteSelected(ClienteDTO clienteSelected) {
+		this.clienteSelected = clienteSelected;
+	}
+
+	/**
+	 * @return the clienteNuevo
+	 */
+	public ClienteDTO getClienteNuevo() {
+		return clienteNuevo;
+	}
+
+	/**
+	 * @param clienteNuevo
+	 *            the clienteNuevo to set
+	 */
+	public void setClienteNuevo(ClienteDTO clienteNuevo) {
+		this.clienteNuevo = clienteNuevo;
+	}
+
+	/**
+	 * @return the tipoClienteSelected
+	 */
+	public TipoClienteDTO getTipoClienteSelected() {
+		return tipoClienteSelected;
+	}
+
+	/**
+	 * @param tipoClienteSelected
+	 *            the tipoClienteSelected to set
+	 */
+	public void setTipoClienteSelected(TipoClienteDTO tipoClienteSelected) {
+		this.tipoClienteSelected = tipoClienteSelected;
+	}
+
 	/**
 	 * @return the listaClientes
 	 */
 	public List<ClienteDTO> getListaClientes() {
-		try {
-			initListaClientes();
-		} catch (FachadaException e) {
-			super.addErrorMessage(Constantes.ERROR_OBTENIENDO_LISTA_CATALOGO);
-		}
+		initListaClientes();
 		return listaClientes;
 	}
 
 	/**
-	 * @param listaClientes the listaClientes to set
+	 * @param listaClientes
+	 *            the listaClientes to set
 	 */
 	public void setListaClientes(List<ClienteDTO> listaClientes) {
 		this.listaClientes = listaClientes;
 	}
 
 	/**
-	 * @param clienteFachada the clienteFachada to set
-	 */
-	public void setClienteFachada(ClienteFachada clienteFachada) {
-		this.clienteFachada = clienteFachada;
-	}
-
-	/**
 	 * @return the listaTipoClientes
 	 */
 	public List<TipoClienteDTO> getListaTipoClientes() {
-		try {
-			initListaTipoClientes();
-		} catch (FachadaException e) {
-			super.addErrorMessage(Constantes.ERROR_OBTENIENDO_LISTA_CATALOGO);
-		}
+		initListaTiposClientes();
 		return listaTipoClientes;
 	}
 
 	/**
-	 * @param listaTipoClientes the listaTipoClientes to set
+	 * @param listaTipoClientes
+	 *            the listaTipoClientes to set
 	 */
 	public void setListaTipoClientes(List<TipoClienteDTO> listaTipoClientes) {
 		this.listaTipoClientes = listaTipoClientes;
 	}
 
 	/**
-	 * @return the nuevoClienteTipo
+	 * @return the listaSelectTiposClientes
 	 */
-	public short getNuevoClienteTipo() {
-		return nuevoClienteTipo;
+	public List<SelectItem> getListaSelectTiposClientes() {
+		initSelectTiposClientes();
+		return listaSelectTiposClientes;
 	}
 
 	/**
-	 * @param nuevoClienteTipo the nuevoClienteTipo to set
+	 * @param listaSelectTiposClientes
+	 *            the listaSelectTiposClientes to set
 	 */
-	public void setNuevoClienteTipo(short nuevoClienteTipo) {
-		this.nuevoClienteTipo = nuevoClienteTipo;
+	public void setListaSelectTiposClientes(
+			List<SelectItem> listaSelectTiposClientes) {
+		this.listaSelectTiposClientes = listaSelectTiposClientes;
 	}
 
 	/**
-	 * @return the nuevoClienteClave
+	 * @return the idTipoCliente
 	 */
-	public String getNuevoClienteClave() {
-		return nuevoClienteClave;
+	public int getIdTipoCliente() {
+		return idTipoCliente;
 	}
 
 	/**
-	 * @param nuevoClienteClave the nuevoClienteClave to set
+	 * @param idTipoCliente
+	 *            the idTipoCliente to set
 	 */
-	public void setNuevoClienteClave(String nuevoClienteClave) {
-		this.nuevoClienteClave = nuevoClienteClave;
+	public void setIdTipoCliente(int idTipoCliente) {
+		this.idTipoCliente = idTipoCliente;
 	}
 
 	/**
-	 * @return the nuevoClienteNombre
+	 * @return the idTipoClienteFilter
 	 */
-	public String getNuevoClienteNombre() {
-		return nuevoClienteNombre;
+	public int getIdTipoClienteFilter() {
+		return idTipoClienteFilter;
 	}
 
 	/**
-	 * @param nuevoClienteNombre the nuevoClienteNombre to set
+	 * @param idTipoClienteFilter
+	 *            the idTipoClienteFilter to set
 	 */
-	public void setNuevoClienteNombre(String nuevoClienteNombre) {
-		this.nuevoClienteNombre = nuevoClienteNombre;
+	public void setIdTipoClienteFilter(int idTipoClienteFilter) {
+		this.idTipoClienteFilter = idTipoClienteFilter;
 	}
 
 	/**
-	 * @return the nuevoClienteResponsable
+	 * @return the idClienteFilter
 	 */
-	public String getNuevoClienteResponsable() {
-		return nuevoClienteResponsable;
+	public int getIdClienteFilter() {
+		return idClienteFilter;
 	}
 
 	/**
-	 * @param nuevoClienteResponsable the nuevoClienteResponsable to set
+	 * @param idClienteFilter
+	 *            the idClienteFilter to set
 	 */
-	public void setNuevoClienteResponsable(String nuevoClienteResponsable) {
-		this.nuevoClienteResponsable = nuevoClienteResponsable;
+	public void setIdClienteFilter(int idClienteFilter) {
+		this.idClienteFilter = idClienteFilter;
 	}
 
 	/**
-	 * @return the nuevoClienteTelefono
+	 * @return the selectedClienteNombre
 	 */
-	public String getNuevoClienteTelefono() {
-		return nuevoClienteTelefono;
+	public String getSelectedClienteNombre() {
+		return selectedClienteNombre;
 	}
 
 	/**
-	 * @param nuevoClienteTelefono the nuevoClienteTelefono to set
+	 * @param selectedClienteNombre
+	 *            the selectedClienteNombre to set
 	 */
-	public void setNuevoClienteTelefono(String nuevoClienteTelefono) {
-		this.nuevoClienteTelefono = nuevoClienteTelefono;
+	public void setSelectedClienteNombre(String selectedClienteNombre) {
+		this.selectedClienteNombre = selectedClienteNombre;
 	}
 
 	/**
-	 * @return the nuevoClienteEmail
+	 * @return the selectedClienteClave
 	 */
-	public String getNuevoClienteEmail() {
-		return nuevoClienteEmail;
+	public String getSelectedClienteClave() {
+		return selectedClienteClave;
 	}
 
 	/**
-	 * @param nuevoClienteEmail the nuevoClienteEmail to set
+	 * @param selectedClienteClave
+	 *            the selectedClienteClave to set
 	 */
-	public void setNuevoClienteEmail(String nuevoClienteEmail) {
-		this.nuevoClienteEmail = nuevoClienteEmail;
+	public void setSelectedClienteClave(String selectedClienteClave) {
+		this.selectedClienteClave = selectedClienteClave;
 	}
 
-	
+	/**
+	 * @return the selectedClienteResponsable
+	 */
+	public String getSelectedClienteResponsable() {
+		return selectedClienteResponsable;
+	}
+
+	/**
+	 * @param selectedClienteResponsable
+	 *            the selectedClienteResponsable to set
+	 */
+	public void setSelectedClienteResponsable(String selectedClienteResponsable) {
+		this.selectedClienteResponsable = selectedClienteResponsable;
+	}
+
+	/**
+	 * @param fachadaCliente
+	 *            the fachadaCliente to set
+	 */
+	public void setFachadaCliente(ClienteFachada fachadaCliente) {
+		this.fachadaCliente = fachadaCliente;
+	}
+
+	/**
+	 * @return the listaSelectClientes
+	 */
+	public List<SelectItem> getListaSelectClientes() {
+		initSelectClientes();
+		return listaSelectClientes;
+	}
+
+	/**
+	 * @param listaSelectClientes
+	 *            the listaSelectClientes to set
+	 */
+	public void setListaSelectClientes(List<SelectItem> listaSelectClientes) {
+		this.listaSelectClientes = listaSelectClientes;
+	}
+
+	/**
+	 * @return the idCliente
+	 */
+	public int getIdCliente() {
+		return idCliente;
+	}
+
+	/**
+	 * @param idCliente
+	 *            the idCliente to set
+	 */
+	public void setIdCliente(int idCliente) {
+		this.idCliente = idCliente;
+	}
+
+	/**
+	 * @return the selecteClienteTelefono
+	 */
+	public String getSelectedClienteTelefono() {
+		return selectedClienteTelefono;
+	}
+
+	/**
+	 * @param selecteClienteTelefono
+	 *            the selecteClienteTelefono to set
+	 */
+	public void setSelectedClienteTelefono(String selecteClienteTelefono) {
+		this.selectedClienteTelefono = selecteClienteTelefono;
+	}
+
+	/**
+	 * @return the selectedClienteEmail
+	 */
+	public String getSelectedClienteEmail() {
+		return selectedClienteEmail;
+	}
+
+	/**
+	 * @param selectedClienteEmail
+	 *            the selectedClienteEmail to set
+	 */
+	public void setSelectedClienteEmail(String selectedClienteEmail) {
+		this.selectedClienteEmail = selectedClienteEmail;
+	}
+
+	/**
+	 * @return the selectedTipoCliente
+	 */
+	public int getSelectedTipoCliente() {
+		return selectedTipoCliente;
+	}
+
+	/**
+	 * @param selectedTipoCliente
+	 *            the selectedTipoCliente to set
+	 */
+	public void setSelectedTipoCliente(int selectedTipoCliente) {
+		this.selectedTipoCliente = selectedTipoCliente;
+	}
+
+	/**
+	 * @return the selectedIdCliente
+	 */
+	public int getSelectedIdCliente() {
+		return selectedIdCliente;
+	}
+
+	/**
+	 * @param selectedIdCliente
+	 *            the selectedIdCliente to set
+	 */
+	public void setSelectedIdCliente(int selectedIdCliente) {
+		this.selectedIdCliente = selectedIdCliente;
+	}
+
+	/**
+	 * @return the claveSelected
+	 */
+	public String getClaveSelected() {
+		return claveSelected;
+	}
+
+	/**
+	 * @param claveSelected
+	 *            the claveSelected to set
+	 */
+	public void setClaveSelected(String claveSelected) {
+		this.claveSelected = claveSelected;
+	}
+
+	/**
+	 * @return the nombreSelected
+	 */
+	public String getNombreSelected() {
+		return nombreSelected;
+	}
+
+	/**
+	 * @param nombreSelected
+	 *            the nombreSelected to set
+	 */
+	public void setNombreSelected(String nombreSelected) {
+		this.nombreSelected = nombreSelected;
+	}
+
+	/**
+	 * @return the responsableSelected
+	 */
+	public String getResponsableSelected() {
+		return responsableSelected;
+	}
+
+	/**
+	 * @param responsableSelected
+	 *            the responsableSelected to set
+	 */
+	public void setResponsableSelected(String responsableSelected) {
+		this.responsableSelected = responsableSelected;
+	}
+
+	public List<SelectItem> getListaSelectNombres() {
+		return listaSelectNombres;
+	}
+
+	public void setListaSelectNombres(List<SelectItem> listaSelectNombres) {
+		this.listaSelectNombres = listaSelectNombres;
+	}
+
+	public List<SelectItem> getListaSelectReponsable() {
+		return listaSelectReponsable;
+	}
+
+	public void setListaSelectReponsable(List<SelectItem> listaSelectReponsable) {
+		this.listaSelectReponsable = listaSelectReponsable;
+	}
+
+	public List<SelectItem> getListaSelectClave() {
+		initSelectClave();
+		return listaSelectClave;
+	}
+
+	public void setListaSelectClave(List<SelectItem> listaSelectClave) {
+		this.listaSelectClave = listaSelectClave;
+	}
+
+	public List<ClienteDTO> getFilteredClientes() {
+		return filteredClientes;
+	}
+
+	public void setFilteredClientes(List<ClienteDTO> filteredClientes) {
+		this.filteredClientes = filteredClientes;
+	}
+
 }

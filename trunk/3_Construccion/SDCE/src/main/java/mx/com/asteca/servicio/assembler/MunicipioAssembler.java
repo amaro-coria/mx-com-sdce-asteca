@@ -28,6 +28,8 @@ public class MunicipioAssembler extends Assembler<MunicipioDTO, Municipios> {
 			dto.setNombre(mapping.getNombre());
 			dto.setIdMunicipio(mapping.getId().getIdMunicipio());
 			dto.setIdEstado(mapping.getId().getIdEstado());
+			dto.setIdPais(mapping.getEstados().getPaises().getIdPais());
+			dto.setPais(mapping.getEstados().getPaises().getNombrePais());
 		return dto;
 	}
 
