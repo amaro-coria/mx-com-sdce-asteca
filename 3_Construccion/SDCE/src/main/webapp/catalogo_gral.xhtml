@@ -6,85 +6,183 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:ace="http://www.icefaces.org/icefaces/components"
-	xmlns:ice="http://www.icesoft.com/icefaces/component">
+	xmlns:p="http://primefaces.org/ui">
 	<ui:define name="body">
-		<h:panelGroup id="messagePanel" layout="block">
-			<h:messages errorStyle="color: red" infoStyle="color: green"
-				layout="list" />
-		</h:panelGroup>
-		<h:form styleClass="login">
-			<ace:panel id="panel" header="Buscar" closable="false"
+		<h:form id="form">
+			<p:growl id="growl" showDetail="true" sticky="true" />			
+			<p:panel id="panel" header="Buscar" closable="false"
 				toggleable="false" style="text-align:center;">
 				<h:panelGrid columns="2" style="text-align:left;">
 					<h:outputText value="#{msg.clave} :" />
-					<ace:simpleSelectOneMenu id="selectProvince1" label=""
-						labelPosition="top">
-						<f:selectItem itemValue="" itemLabel="" />
-					</ace:simpleSelectOneMenu>
+					<p:selectOneMenu id="cveFilter"
+						value="#{beanCatGral.catalogoCveFilter }" style="min-width: 480px">
+						<f:selectItem itemLabel="#{msg.seleccionarCve }" itemValue="" />
+						<f:selectItems value="#{beanCatGral.listaSelectCatalogosCve}" />
+						<p:ajax update="selectDscFilter"
+							listener="#{beanCatGral.cambiaDescSelect}" />
+					</p:selectOneMenu>
 					<h:outputText value="#{msg.descripcion} :" />
-					<ace:simpleSelectOneMenu id="selectProvince2" label=""
-						labelPosition="top">
-						<f:selectItem itemValue="" itemLabel="" />
-					</ace:simpleSelectOneMenu>
+					<p:selectOneMenu id="selectDscFilter" style="min-width: 480px"
+						value="#{beanCatGral.catalogoDscFilter }">
+						<f:selectItem itemLabel="#{msg.seleccionarDsc }" itemValue="" />
+						<f:selectItems value="#{beanCatGral.listaSelectCatalogosDsc}" />
+						<p:ajax update="selectEstFilter"
+							listener="#{beanCatGral.cambiaEstatusSelect}" />
+					</p:selectOneMenu>
 					<h:outputText value="#{msg.estatus} :" />
-					<ace:simpleSelectOneMenu id="selectProvince3" label=""
-						labelPosition="top">
-						<f:selectItem itemValue="" itemLabel="" />
-					</ace:simpleSelectOneMenu>
+					<p:selectOneMenu id="selectEstFilter" style="min-width: 480px"
+						value="#{beanCatGral.catalogoEstFilter }">
+						<f:selectItem itemLabel="#{msg.seleccionarEst }" itemValue="" />
+						<f:selectItems value="#{beanCatGral.listaSelectCatalogosEst}" />
+					</p:selectOneMenu>
 				</h:panelGrid>
 				<br />
 				<ul class="buttons">
-					<li><h:commandButton action="#{login.guardar}"
-							value="#{msg.limpiar}" />
-					</li>
-					<li><h:commandButton action="#{login.guardar}"
-							value="#{msg.buscar}" />
-					</li>
+					<li><p:commandButton value="#{msg.limpiar}" icon="ui-icon-arrowrefresh-1-e"
+							onclick=":form:cveFilter.selectValue('')"
+							actionListener="#{beanCatGral.limpiarFiltrado }" update="growl"/></li>
+					<li><p:commandButton icon="ui-icon-search"
+							actionListener="#{beanCatGral.buscarFiltrado}"
+							value="#{msg.buscar}" update="catGralTable,growl"/></li>
 				</ul>
-				</ace:panel>
-				<ul class="buttons">
-					<li><h:commandButton action="#{login.guardar}"
-							value="#{msg.nuevo}" />
-					</li>
-					<li><h:commandButton action="#{login.guardar}"
-							value="#{msg.ver}" />
-					</li>
-					<li><h:commandButton action="#{login.guardar}"
-							value="#{msg.editar}" />
-					</li>
-					<li><h:commandButton action="#{login.guardar}"
-							value="#{msg.eliminar}" />
-					</li>
-				</ul>
-				<ace:panel>
-				<ace:dataTable id="carTable"
-                          value="#{dataTableBean.carsData}"
-                          var="car"
-                          paginator="true"
-                          paginatorPosition="bottom"
-                          rows="5">
-                <ace:column id="id" headerText="#{msg.id}" sortBy="#{car.id}"
-                            >
-                    <ice:rowSelector value="#{car.selected}"
-                                     preStyleOnSelection="true"/>
-                    <h:outputText id="idCell" value="#{car.id}"/>
-                </ace:column>
-                <ace:column id="name" headerText="#{msg.clave}" sortBy="#{car.name}"
-                            >
-                    <h:outputText id="nameCell" value="#{car.name}"/>
-                </ace:column>
-                <ace:column id="chassis" headerText="#{msg.descripcion}" sortBy="#{car.chassis}"
-                            >
-                    <h:outputText id="chassisCell" value="#{car.chassis}"/>
-                </ace:column>
-                <ace:column id="foo" headerText="#{msg.estatus}" sortBy="#{car.chassis}"
-                            >
-                    <h:outputText id="foo2" value="#{car.chassis}"/>
-                </ace:column>
-                </ace:dataTable>
-			</ace:panel>
+			</p:panel>
+			<p:panel>
+				<h:panelGrid columns="4" style="text-align:left;">
+					<p:commandButton id="deleteButton" value="#{msg.eliminar }"
+						icon="ui-icon-trash" onclick="borrarDialog.show()" update="growl"/>
+					<p:commandButton id="editarButton" value="#{msg.editar }"
+						icon="ui-icon-pencil" onclick="editarDialog.show()"
+						update=":form:displayEditar, growl" />
+					<p:commandButton id="viewButton" value="#{msg.ver }"
+						icon="ui-icon-search" oncomplete="verDialog.show()"
+						update=":form:displayVer, growl" />
+					<p:commandButton id="nuevoButton" value="#{msg.nuevo }"
+						icon="ui-icon-plusthick" onclick="nuevoDialog.show()"
+						update=":form:displayNuevo, growl" />					
+				</h:panelGrid>
+			</p:panel>
+			<p:panel>
+				<p:dataTable id="catGralTable" value="#{beanCatGral.listaCatalogos}"
+					var="cat" rowKey="#{cat.idCatGral}" paginator="true"
+					selection="#{beanCatGral.catalogoSelected}" filteredValue="#{beanCatGral.listaFiltered }"
+					paginatorPosition="bottom" rows="10">
+					<p:column selectionMode="single" style="width:2%" />
+					<p:column id="id" headerText="#{msg.id}"  filterBy="#{cat.idCatGral }" 
+						sortBy="#{cat.idCatGral}">
+						<h:outputText id="catIdOutputTbl" value="#{cat.idCatGral}" />
+					</p:column>
+					<p:column id="catCveColumn" headerText="#{msg.clave}"  filterBy="#{cat.cveRegistro }"
+						sortBy="#{cat.cveRegistro}">
+						<h:outputText id="nombreCve" value="#{cat.cveRegistro}" />
+					</p:column>
+					<p:column id="catDscColumn" headerText="#{msg.descripcion}"  filterBy="#{cat.dsc }"
+						sortBy="#{cat.dsc}">
+						<h:outputText id="nombreDscTbl" value="#{cat.dsc}" />
+					</p:column>
+					<p:column id="catEstatusColumn" headerText="#{msg.estatus}"  filterBy="#{cat.estatus }"
+						sortBy="#{cat.estatus}">
+						<h:outputText id="nombreEstatusTbl" value="#{cat.estatus}" />
+					</p:column>
+				</p:dataTable>
+			</p:panel>
+			<!-- Panel de Ver -->
+			<p:dialog id="dialog" header="#{msg.ver}" widgetVar="verDialog" modal="true">
+				<h:panelGrid id="displayVer" columns="2" cellpadding="4">
+					<h:panelGroup id="messagePanelVer" layout="block">
+						<h:messages errorStyle="color: red" infoStyle="color: green"
+							layout="list" style="font-size:12px;font-family:Arial" />
+					</h:panelGroup>
+					<h:outputText />
+					<h:outputText value="#{msg.clave}" />
+					<h:outputText value="#{beanCatGral.catalogoSelected.cveRegistro}"
+						style="font-weight:bold" />
+					<h:outputText value="#{msg.descripcion}" />
+					<h:outputText value="#{beanCatGral.catalogoSelected.dsc}"
+						style="font-weight:bold" />
+					<h:outputText value="#{msg.activo}" />
+					<h:outputText
+						value="#{beanCatGral.catalogoSelected.activo == 1 ? 'Si' : 'No' }"
+						style="font-weight:bold" />
+				</h:panelGrid>
+				<p:commandButton id="aceptarVerBtn" value="#{msg.aceptar }" 
+						icon="ui-icon-check" onclick="verDialog.hide()"
+						/>
+			</p:dialog>
+			<!-- Fin de panel de Ver -->
+			<!--  Inicio panel de Nuevo -->
+			<p:dialog id="dialogNuevo" header="#{msg.frsNuevoRegistro}"
+				widgetVar="nuevoDialog" closable="true" modal="true"
+				draggable="false" width="400">
+				<h:panelGrid columns="2" width="100%" id="displayNuevo">
+					<h:outputText value="#{msg.clave}" />
+					<p:inputText value="#{beanCatGral.catalogoNuevo.cveRegistro}" style="width: 260px; "/>
+					<h:outputText value="#{msg.descripcion}" />
+					<p:inputText id="nombrePopupNuevo"
+						value="#{beanCatGral.catalogoNuevo.dsc}"
+						style="min-width: 260px" />
+					<h:outputText  value="#{msg.pais }" />
+					<h:outputText id="activoPopupNuevoLabel" value="#{msg.activo}" />
+					<h:selectBooleanCheckbox id="activoPopupNuevo"
+						value="#{beanCatGral.nuevoCatalogoActivo}">
+					</h:selectBooleanCheckbox>
+				</h:panelGrid>
+				<h:panelGrid style="float: right;" columns="2">
+					<p:commandButton value="#{msg.aceptar }" icon="ui-icon-check"
+						oncomplete="nuevoDialog.hide()"
+						actionListener="#{beanCatGral.saveCat }"
+						update=":form:catGralTable, growl" />
+					<p:commandButton value="#{msg.cancelar }" icon="ui-icon-closethick"
+						oncomplete="nuevoDialog.hide()" actionListener="#{beanCatGral.saveCatCancel }" />
+				</h:panelGrid>
+			</p:dialog>
+			<!-- Fin de panel de nuevo -->
+			<!-- Inicio de panel de edicion -->
+			<p:dialog id="dialogEditar" header="#{msg.frsNuevoRegistro}"
+				widgetVar="editarDialog" closable="true" modal="true"
+				draggable="false" width="400">
+				<h:panelGrid columns="2" width="100%" id="displayEditar">
+					<h:outputText value="#{msg.clave}" />
+					<h:panelGroup>
+						<p:inputText id="selectedCve" value="#{beanCatGral.selectedClaveCatGral}" style="width: 260px; " />
+						<p:watermark for="selectedCve"
+							value="#{beanCatGral.catalogoSelected.cveRegistro }" />
+					</h:panelGroup>
+					<h:outputText value="#{msg.descripcion}" />
+					<h:panelGroup>
+						<p:inputText id="inputEstadoSelected" style="width: 260px; "
+							value="#{beanCatGral.selectedDscCatGral }" />
+						<p:watermark for="inputEstadoSelected"
+							value="#{beanCatGral.catalogoSelected.dsc }" />
+					</h:panelGroup>
+					<h:outputText value="#{msg.activo}" />
+					<h:selectBooleanCheckbox 
+						value="#{beanCatGral.selectedCatalogoActivo}">
+					</h:selectBooleanCheckbox>
+				</h:panelGrid>
+				<h:panelGrid style="float: right;" columns="2">
+					<p:commandButton value="#{msg.aceptar }" icon="ui-icon-check"
+						oncomplete="editarDialog.hide()"
+						actionListener="#{beanCatGral.updateCat }"
+						update=":form:catGralTable, growl" />
+					<p:commandButton value="#{msg.cancelar }" icon="ui-icon-closethick"
+						oncomplete="editarDialog.hide()" actionListener="#{beanCatGral.cancelDeleteCat }"/>
+				</h:panelGrid>
+			</p:dialog>
+			<!-- Fin de panel de edicion -->
+			<!-- Panel de borrado -->
+			<p:confirmDialog showEffect="fade" widgetVar="borrarDialog"
+				header="#{msg.confirmar }" message="#{msg.frsBorrarConfirmacion }">
+				<p:commandButton value="#{msg.si }"
+					actionListener="#{beanCatGral.deleteCat}" update="catGralTable, growl"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check"
+					oncomplete="borrarDialog.hide()" />
+				<p:commandButton value="#{msg.no }" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close"
+					onclick="borrarDialog.hide()" />
+			</p:confirmDialog>
+			<!-- Fin de panel de borrado -->
 		</h:form>
+
 	</ui:define>
 </ui:composition>
 
