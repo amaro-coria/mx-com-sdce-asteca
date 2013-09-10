@@ -24,6 +24,7 @@ public class Constantes {
 	public static final String BEAN_CLIENTES="beanClientes";
 	public static final String BEAN_ESTADOS="beanEstados";
 	public static final String BEAN_MUNICIPIOS="beanMunicipios";
+	public static final String BEAN_CAT_GRAL="beanCatGral";
 	public static final String ERROR_NO_HAY_SELECCION="Debes seleccionar al menos un elemento.";
 	public static final String ERROR_UPDATE_REGISTRO="Error guardando.";
 	public static final String ERROR_DELETE_REGISTRO="Error borrando.";
