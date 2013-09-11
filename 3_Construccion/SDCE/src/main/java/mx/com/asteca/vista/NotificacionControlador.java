@@ -8,7 +8,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.ActionEvent;
-import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
 import mx.com.asteca.comun.Constantes;
@@ -36,6 +35,7 @@ public class NotificacionControlador extends BaseController implements Serializa
 	private static Logger LOGGER = LoggerFactory.getLogger(NotificacionControlador.class);
 	
 	private List<NotificacionDTO> listaNotificacion;
+	private List<NotificacionDTO> filNotificacion;
 
 	@ManagedProperty("#{notificacionFachadaImpl}")
 	private NotificacionFachada notificacionFachada;
@@ -46,35 +46,29 @@ public class NotificacionControlador extends BaseController implements Serializa
 	@ManagedProperty("#{notificacionTipoFachadaImpl}")
 	private NotificacionTipoFachada notificacionTipoFachada;
 	
-	private Long estadoId;
-	private List<SelectItem> estados;
+	private List<SelectItem> listaSelectEstados;
+	private List<SelectItem> listaSelectTipos;
 	
-	private Long tipoId;
-	private List<SelectItem> tipos;
-	
-	private Long notificacionSel;
+	private NotificacionDTO notificacionSel;
+	private Long estadoSelected;
+	private Long tipoSelected;
 	/**
 	 * 
 	 * @throws FachadaException
 	 */
-	private void initListaNotificacion() throws FachadaException{
+	private void initListaNotificacion() {
 		if(CollectionUtils.isEmpty(listaNotificacion)){		
-			LOGGER.debug("LLAMANDO A NOTIFICACION FACHADA:"+notificacionFachada);
-			if(notificacionFachada == null){
-				LOGGER.debug("NOTIFICACION FACHADA NULO");
-			}
-			listaNotificacion = notificacionFachada.getAll();
-			if(listaNotificacion != null){
-//				for (NotificacionDTO notificacion : listaNotificacion) {
-//					LOGGER.debug("INICIALIZANDO NOTIFICACION: "+notificacion.getMensaje());
-//				}
-			}
-			else{
+			try {
+				if(notificacionFachada != null){	
+					listaNotificacion = notificacionFachada.getAll();
+				}
+				else{
+					listaNotificacion = new ArrayList<NotificacionDTO>();
+				}
+			} catch (FachadaException e) {
 				listaNotificacion = new ArrayList<NotificacionDTO>();
+				LOGGER.error(Constantes.ERROR_OBTENIENDO_LISTA_CATALOGO);
 			}
-		}else{
-//			LOGGER.debug("LISTA YA INICIALIZADA");
-//			LOGGER.debug("REGRESANDO UNA LISTA CON ELEMENTOS:"+listaNotificacion.size());
 		}
 	}
 	
@@ -82,26 +76,23 @@ public class NotificacionControlador extends BaseController implements Serializa
 	 * 
 	 * @throws FachadaException
 	 */
-	private void initNotificacionEstados() throws FachadaException{
-		if(CollectionUtils.isEmpty(estados)){		
-			LOGGER.debug("LLAMANDO A NOTIFICACION ESTADOS FACHADA: " + notificacionEstadoFachada);
-			if(notificacionEstadoFachada == null){
-				LOGGER.debug("NOTIFICACION ESTADO FACHADA NULO");
-			}
-			List<NotificacionEstadoDTO> estadosAux = notificacionEstadoFachada.getAll();
-			if(estadosAux != null){
-				estados = new ArrayList<SelectItem>();
-				for (NotificacionEstadoDTO notificacionEdos : estadosAux) {
-//					LOGGER.debug("INICIALIZANDO NOTIFICACION ESTADOS: "+notificacionEdos.getNombre());
-					estados.add(new SelectItem(notificacionEdos.getIdNotifEdo(), notificacionEdos.getNombre()));
+	private void initNotificacionEstados(){
+		if(CollectionUtils.isEmpty(listaSelectEstados)){		
+			try {
+				List<NotificacionEstadoDTO> estadosAux = notificacionEstadoFachada.getAll();
+				if(estadosAux != null){
+					listaSelectEstados = new ArrayList<SelectItem>();
+					for (NotificacionEstadoDTO notificacionEdos : estadosAux) {
+						listaSelectEstados.add(new SelectItem(notificacionEdos.getIdNotifEdo(), 
+											notificacionEdos.getNombre()));
+					}
 				}
+				else{
+					listaSelectEstados = new ArrayList<SelectItem>();
+				}
+			} catch (FachadaException e) {
+				LOGGER.error(Constantes.ERROR_OBTENIENDO_LISTA_CATALOGO);
 			}
-			else{
-				estados = new ArrayList<SelectItem>();
-			}
-		}else{
-//			LOGGER.debug("LISTA YA INICIALIZADA ESTADOS");
-//			LOGGER.debug("REGRESANDO UNA LISTA CON ELEMENTOS ESTADOS:"+estados.size());
 		}
 	}
 	
@@ -109,63 +100,76 @@ public class NotificacionControlador extends BaseController implements Serializa
 	 * 
 	 * @throws FachadaException
 	 */
-	private void initNotificacionTipos() throws FachadaException{
-		if(CollectionUtils.isEmpty(tipos)){		
-			LOGGER.debug("LLAMANDO A NOTIFICACION TIPOS FACHADA: " + notificacionTipoFachada);
-			if(notificacionTipoFachada == null){
-				LOGGER.debug("NOTIFICACION TIPO FACHADA NULO");
-			}
-			List<NotificacionTipoDTO> tiposAux = notificacionTipoFachada.getAll();
-			if(tiposAux != null){
-				tipos = new ArrayList<SelectItem>();
-				for (NotificacionTipoDTO notificacionTps : tiposAux) {
-//					LOGGER.debug("INICIALIZANDO NOTIFICACION TIPOS: "+notificacionTps.getNombre());
-					tipos.add(new SelectItem(notificacionTps.getIdNotifTipo(), notificacionTps.getNombre()));
+	private void initNotificacionTipos() {
+		if(CollectionUtils.isEmpty(listaSelectTipos)){		
+			try {
+				List<NotificacionTipoDTO> tiposAux = notificacionTipoFachada.getAll();
+				if(tiposAux != null){
+					listaSelectTipos = new ArrayList<SelectItem>();
+					for (NotificacionTipoDTO notificacionTps : tiposAux) {
+						listaSelectTipos.add(new SelectItem(notificacionTps.getIdNotifTipo(), notificacionTps.getNombre()));
+					}
 				}
+				else{
+					listaSelectTipos = new ArrayList<SelectItem>();
+				}
+			} catch (FachadaException e) {
+				LOGGER.error(Constantes.ERROR_OBTENIENDO_LISTA_CATALOGO);
+			}
+		}
+	}
+	/**
+	 * 
+	 * @param e
+	 */
+	public void limpiarFiltrado(ActionEvent e) {
+		listaNotificacion = null;
+		listaSelectEstados = null;
+		listaSelectTipos = null;
+		
+		estadoSelected = null;
+		tipoSelected = null;
+		notificacionSel = null;
+		filNotificacion = null;
+		
+		initListaNotificacion();
+		initNotificacionEstados();
+		initNotificacionTipos();
+	}
+	/**
+	 * 
+	 * @param e
+	 */
+	public void buscarFiltrado(ActionEvent e){
+		try {
+			if(estadoSelected != null && estadoSelected > 0
+					&& tipoSelected != null && tipoSelected > 0){
+				listaNotificacion = notificacionFachada.getNotificacionByEstadoAndTipo(estadoSelected, tipoSelected);
+			}
+			else if(estadoSelected != null && estadoSelected > 0){
+				listaNotificacion = notificacionFachada.getNotificacionByEstado(estadoSelected);
+			}
+			else if(tipoSelected != null && tipoSelected > 0){
+				listaNotificacion = notificacionFachada.getNotificacionByTipo(tipoSelected);
 			}
 			else{
-				tipos = new ArrayList<SelectItem>();
+					listaNotificacion = notificacionFachada.getAll();
 			}
-		}else{
-//			LOGGER.debug("LISTA YA INICIALIZADA TIPOS");
-//			LOGGER.debug("REGRESANDO UNA LISTA CON ELEMENTOS TIPOS:"+tipos.size());
+		}
+		catch (FachadaException e1) {
+			e1.printStackTrace();
 		}
 	}
 	
 	public void ver(ActionEvent e){
-		LOGGER.debug("REGISTRO SELECCIONADO: " + notificacionSel);
-	}
-	
-	/**
-	 * 
-	 * @param e
-	 */
-	public void actualizaEstado(ValueChangeEvent e){
-		estadoId = (Long) e.getNewValue();
-	}
-	
-	/**
-	 * 
-	 * @param e
-	 */
-	public void actualizaTipo(ValueChangeEvent e){
-		tipoId = (Long) e.getNewValue();
-	}
-	
-	public void actualizaSel(ValueChangeEvent e){
-		notificacionSel = (Long) e.getNewValue();
-		LOGGER.debug("REGISTRO : " + notificacionSel);
+		
 	}
 	
 	/**
 	 * @return the listaNotificacion
 	 */
 	public List<NotificacionDTO> getListaNotificacion() {
-		try {
-			initListaNotificacion();
-		} catch (FachadaException e) {
-			super.addErrorMessage(Constantes.ERROR_OBTENIENDO_LISTA_CATALOGO);
-		}
+		initListaNotificacion();
 		return listaNotificacion;
 	}
 	
@@ -198,83 +202,87 @@ public class NotificacionControlador extends BaseController implements Serializa
 	}
 
 	/**
-	 * @return the estadoId
-	 */
-	public Long getEstadoId() {
-		return estadoId;
-	}
-
-	/**
-	 * @param estadoId the estadoId to set
-	 */
-	public void setEstadoId(Long estadoId) {
-		this.estadoId = estadoId;
-	}
-	
-	/**
-	 * @return the tipoId
-	 */
-	public Long getTipoId() {
-		return tipoId;
-	}
-
-	/**
-	 * @param tipoId the tipoId to set
-	 */
-	public void setTipoId(Long tipoId) {
-		this.tipoId = tipoId;
-	}
-
-
-	/**
 	 * @return the estados
 	 */
-	public List<SelectItem> getEstados() {
-		try {
-			initNotificacionEstados();
-		} catch (FachadaException e) {
-			super.addErrorMessage(Constantes.ERROR_OBTENIENDO_LISTA_CATALOGO);
-		}
-		return estados;
+	public List<SelectItem> getListaSelectEstados() {
+		initNotificacionEstados();
+		return listaSelectEstados;
 	}
 
 	/**
 	 * @param estados the estados to set
 	 */
-	public void setEstados(List<SelectItem> estados) {
-		this.estados = estados;
+	public void setListaSelectEstados(List<SelectItem> estados) {
+		this.listaSelectEstados = estados;
 	}	
 	
 	/**
 	 * @return the tipos
 	 */
-	public List<SelectItem> getTipos() {
-		try {
-			initNotificacionTipos();
-		} catch (FachadaException e) {
-			super.addErrorMessage(Constantes.ERROR_OBTENIENDO_LISTA_CATALOGO);
-		}
-		return tipos;
+	public List<SelectItem> getListaSelectTipos() {
+		initNotificacionTipos();
+		return listaSelectTipos;
 	}
 
 	/**
 	 * @param tipos the tipos to set
 	 */
-	public void setTipos(List<SelectItem> tipos) {
-		this.tipos = tipos;
+	public void setListaSelectTipos(List<SelectItem> tipos) {
+		this.listaSelectTipos = tipos;
 	}
 
 	/**
 	 * @return the notificacionSel
 	 */
-	public Long getNotificacionSel() {
+	public NotificacionDTO getNotificacionSel() {
 		return notificacionSel;
 	}
 
 	/**
 	 * @param notificacionSel the notificacionSel to set
 	 */
-	public void setNotificacionSel(Long notificacionSel) {
+	public void setNotificacionSel(NotificacionDTO notificacionSel) {
 		this.notificacionSel = notificacionSel;
+	}
+
+	/**
+	 * @return the filNotificacion
+	 */
+	public List<NotificacionDTO> getFilNotificacion() {
+		return filNotificacion;
+	}
+
+	/**
+	 * @param filNotificacion the filNotificacion to set
+	 */
+	public void setFilNotificacion(List<NotificacionDTO> filNotificacion) {
+		this.filNotificacion = filNotificacion;
 	}	
+	/**
+	 * @return the estadoSelected
+	 */
+	public Long getEstadoSelected() {
+		return estadoSelected;
+	}
+
+	/**
+	 * @param estadoSelected the estadoSelected to set
+	 */
+	public void setEstadoSelected(Long estadoSelected) {
+		this.estadoSelected = estadoSelected;
+	}
+
+	/**
+	 * @return the tipoSelected
+	 */
+	public Long getTipoSelected() {
+		return tipoSelected;
+	}
+
+	/**
+	 * @param tipoSelected the tipoSelected to set
+	 */
+	public void setTipoSelected(Long tipoSelected) {
+		this.tipoSelected = tipoSelected;
+	}
 }
