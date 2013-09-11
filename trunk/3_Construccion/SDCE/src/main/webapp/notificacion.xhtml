@@ -3,91 +3,106 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:ice="http://www.icesoft.com/icefaces/component"
-	xmlns:ace="http://www.icefaces.org/icefaces/components">
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
 
 <h:body>
 	<ui:composition>
 		<h:form styleClass="login">
-			<ace:panel id="panel" header="Buscar" closable="false"
+			<p:growl id="growl" showDetail="true" sticky="true" />
+			<p:panel id="panel" header="Buscar" closable="false"
 				toggleable="false" style="text-align:center;" >
 				<h:panelGrid columns="2" style="text-align:left;">
 					<h:outputText value="#{msg.estado} :" />
-					<ace:simpleSelectOneMenu id="selectEstado" label=""
-						labelPosition="top" size="10"
-						valueChangeListener="#{beanNotificacion.actualizaEstado}"
-						value="#{beanNotificacion.estadoId}"
-						style="min-width: 450px;" >
-
-						<f:selectItem itemLabel="" itemValue="None"
-							noSelectionOption="true" />
-
-						<f:selectItems value="#{beanNotificacion.estados}" />
-
-					</ace:simpleSelectOneMenu>
+					<p:selectOneMenu id="selectEstado" 
+						value="#{beanNotificacion.estadoSelected}" style="min-width: 450px;">
+						<f:selectItem itemLabel="#{msg.seleccionarNotificacionEstado}" itemValue="" noSelectionOption="true" />
+						<f:selectItems value="#{beanNotificacion.listaSelectEstados}" />
+					</p:selectOneMenu>
+					
 					<h:outputText value="#{msg.tipo} :" />
-					<ace:simpleSelectOneMenu id="selectTipo" label=""
-						labelPosition="top" size="10"
-						valueChangeListener="#{beanNotificacion.actualizaTipo}"
-						value="#{beanNotificacion.tipoId}"
-						style="min-width: 450px;">
-
-						<f:selectItem itemLabel="" itemValue="None"
-							noSelectionOption="true" />
-
-						<f:selectItems value="#{beanNotificacion.tipos}" />
-
-					</ace:simpleSelectOneMenu>
+					<p:selectOneMenu id="selectTipo"
+						value="#{beanNotificacion.tipoSelected}" style="min-width: 450px;" >
+						<f:selectItem itemLabel="#{msg.seleccionarNotificacionTipo}" itemValue="" noSelectionOption="true" />
+						<f:selectItems value="#{beanNotificacion.listaSelectTipos}" />
+					</p:selectOneMenu>
 				</h:panelGrid>
+				
 				<h:panelGrid style="text-align:right" width="100%">
 					<h:panelGrid columns="2" style="text-align:right">
-						<h:commandButton type="reset" styleClass="button"
-								value="#{msg.limpiar}" />
-						<h:commandButton action="#{login.guardar}" styleClass="button"
-								value="#{msg.buscar}" />
+						<p:commandButton value="#{msg.limpiar}"
+							icon="ui-icon-arrowrefresh-1-e"
+							onclick=":form:selectEstado.selectValue('')"
+							actionListener="#{beanNotificacion.limpiarFiltrado}" update="growl" />
+						<p:commandButton value="#{msg.buscar}"
+							icon="ui-icon-search"
+							actionListener="#{beanNotificacion.buscarFiltrado}"
+							update="notificacionesTable" />
 					</h:panelGrid>
 				</h:panelGrid>
-			</ace:panel>
-			<h:commandButton immediate="true" actionListener="#{beanNotificacion.ver}" value="#{msg.ver}" styleClass="button"/>
-			<ace:panel>
-				<ace:dataTable id="notificacionesTable"
+			</p:panel>
+			<p:panel>
+				<p:commandButton value="#{msg.ver}" icon="ui-icon-search" 
+								actionListener="#{beanNotificacion.ver}" 
+								oncomplete="verDialog.show()"
+								update="displayVer, growl" />
+			</p:panel>
+			<p:panel>
+				<p:dataTable id="notificacionesTable"
 					value="#{beanNotificacion.listaNotificacion}" var="notif"
-					paginator="true" paginatorPosition="bottom" rows="5"
-					selectionMode="single">
-					<ace:column id="id" headerText="#{msg.id}"
-						sortBy="#{notif.idNotificacion}" rendered="false">
-						<ice:rowSelector value="#{notif.idNotificacion}"
-							preStyleOnSelection="true"/>
+					rowKey="#{notif.idNotificacion}" paginator="true" 
+					selection="#{beanNotificacion.notificacionSel}" filteredValue="#{beanNotificacion.filNotificacion}"
+					paginatorPosition="bottom" rows="5">
+					<p:column selectionMode="single" style="width:2%" />
+					<p:column id="id" headerText="#{msg.id}"
+						sortBy="#{notif.idNotificacion}" filterBy="#{notif.idNotificacion}" rendered="false">
 						<h:outputText id="idCell" value="#{notif.idNotificacion}" />
-					</ace:column>
-					<ace:column id="selectRow" headerText="" >
-						<h:selectOneRadio id="selectRadio" value="#{beanNotificacion.notificacionSel}" 
-										valueChangeListener="#{beanNotificacion.actualizaSel}">
-							<f:selectItem itemLabel="" itemValue="#{notif.idNotificacion}" />
-						</h:selectOneRadio>
-					</ace:column>
-					<ace:column id="name" headerText="#{msg.alta}"
-						sortBy="#{notif.fechaAlta}">
+					</p:column>
+					<p:column id="name" headerText="#{msg.alta}"
+						sortBy="#{notif.fechaAlta}" filterBy="#{notif.fechaAlta}">
 						<h:outputText id="nameCell" value="#{notif.fechaAlta}" />
-					</ace:column>
-					<ace:column id="name2" headerText="#{msg.leidos}"
-						sortBy="#{notif.fechaLeido}">
+					</p:column>
+					<p:column id="name2" headerText="#{msg.leidos}"
+						sortBy="#{notif.fechaLeido}" filterBy="#{notif.fechaLeido}">
 						<h:outputText id="nameCell2" value="#{notif.fechaLeido}" />
-					</ace:column>
-					<ace:column id="name3" headerText="#{msg.tipo}"
-						sortBy="#{notif.notificacionesTiposDesc}">
+					</p:column>
+					<p:column id="name3" headerText="#{msg.tipo}"
+						sortBy="#{notif.notificacionesTiposDesc}" filterBy="#{notif.notificacionesTiposDesc}">
 						<h:outputText id="nameCell3"
 							value="#{notif.notificacionesTiposDesc}" />
-					</ace:column>
-					<ace:column id="name4" headerText="#{msg.mensaje}"
-						sortBy="#{notif.mensaje}">
+					</p:column>
+					<p:column id="name4" headerText="#{msg.mensaje}"
+						sortBy="#{notif.mensaje}" filterBy="#{notif.mensaje}">
 						<h:outputText id="nameCell4" value="#{notif.mensaje}" />
-					</ace:column>
-				</ace:dataTable>
-			</ace:panel>
+					</p:column>
+				</p:dataTable>
+				<!-- Panel de Ver -->
+				<p:dialog id="dialog" header="#{msg.ver}" widgetVar="verDialog"
+					modal="true">
+					<h:panelGrid id="displayVer" columns="2" cellpadding="4">
+						<h:panelGroup id="messagePanelVer" layout="block">
+							<h:messages errorStyle="color: red" infoStyle="color: green"
+								layout="list" style="font-size:12px;font-family:Arial" />
+						</h:panelGroup>
+						<h:outputText />
+						<h:outputText value="#{msg.alta}" />
+						<p:inputText value="#{beanNotificacion.notificacionSel.fechaAlta}"
+							style="font-weight:bold" readonly="true"/>
+						<h:outputText value="#{msg.tipo}" />
+						<p:inputText value="#{beanNotificacion.notificacionSel.notificacionesTiposDesc}"
+							style="font-weight:bold" readonly="true" />
+						
+						<h:outputText value="#{msg.mensaje}" />
+						<p:inputTextarea value="#{beanNotificacion.notificacionSel.mensaje}"
+							style="font-weight:bold"  readonly="true"/>
+						
+					</h:panelGrid>
+					<p:commandButton id="aceptarVerBtn" value="#{msg.aceptar}"
+						icon="ui-icon-check" onclick="verDialog.hide()" />
+				</p:dialog>
+				<!-- Fin de panel de Ver -->
+			</p:panel>
 		</h:form>
 	</ui:composition>
 </h:body>
