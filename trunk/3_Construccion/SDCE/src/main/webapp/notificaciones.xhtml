@@ -5,28 +5,28 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:ace="http://www.icefaces.org/icefaces/components"
-	xmlns:ice="http://www.icesoft.com/icefaces/component">
+	xmlns:ui="http://java.sun.com/jsf/fplets"
+	
+	>
 	<ui:define name="body">
 		<h:panelGroup id="messagePanel" layout="block">
 			<h:messages errorStyle="color: red" infoStyle="color: green"
 				layout="list" />
 		</h:panelGroup>
 		<h:form styleClass="login">
-			<ace:panel id="panel" header="Buscar" closable="false"
+			<p:panel id="panel" header="Buscar" closable="false"
 				toggleable="false" style="text-align:center;">
 				<h:panelGrid columns="2" style="text-align:left;">
 					<h:outputText value="#{msg.estado} :" />
-					<ace:simpleSelectOneMenu id="selectProvince1" label=""
+					<p:simpleSelectOneMenu id="selectProvince1" label=""
 						labelPosition="top" size="10">
 						<f:selectItem itemValue="" itemLabel="" />
-					</ace:simpleSelectOneMenu>
+					</p:simpleSelectOneMenu>
 					<h:outputText value="#{msg.tipo} :" />
-					<ace:simpleSelectOneMenu id="selectProvince2" label=""
+					<p:simpleSelectOneMenu id="selectProvince2" label=""
 						labelPosition="top">
 						<f:selectItem itemValue="" itemLabel="" />
-					</ace:simpleSelectOneMenu>
+					</p:simpleSelectOneMenu>
 				</h:panelGrid>
 				<br />
 				<ul class="buttons">
@@ -37,36 +37,36 @@
 							value="#{msg.buscar}" />
 					</li>
 				</ul>
-				</ace:panel>
+				</p:panel>
 				<h:commandButton action="#{login.guardar}"
 							value="#{msg.ver}" />
-				<ace:panel>
-				<ace:dataTable id="carTable"
+				<p:panel>
+				<p:dataTable id="carTable"
                           value="#{dataTableBean.carsData}"
                           var="car"
                           paginator="true"
                           paginatorPosition="bottom"
                           rows="5">
-                <ace:column id="id" headerText="#{msg.alta}" sortBy="#{car.id}"
+                <p:column id="id" headerText="#{msg.alta}" sortBy="#{car.id}"
                             >
                     <ice:rowSelector value="#{car.selected}"
                                      preStyleOnSelection="true"/>
                     <h:outputText id="idCell" value="#{car.id}"/>
-                </ace:column>
-                <ace:column id="name" headerText="#{msg.leido}" sortBy="#{car.name}"
+                </p:column>
+                <p:column id="name" headerText="#{msg.leido}" sortBy="#{car.name}"
                             >
                     <h:outputText id="nameCell" value="#{car.name}"/>
-                </ace:column>
-                <ace:column id="name2" headerText="#{msg.tipo}" sortBy="#{car.name}"
+                </p:column>
+                <p:column id="name2" headerText="#{msg.tipo}" sortBy="#{car.name}"
                             >
                     <h:outputText id="nameCell2" value="#{car.name}"/>
-                </ace:column>
-                <ace:column id="name3" headerText="#{msg.mensaje}" sortBy="#{car.name}"
+                </p:column>
+                <p:column id="name3" headerText="#{msg.mensaje}" sortBy="#{car.name}"
                             >
                     <h:outputText id="nameCell3" value="#{car.name}"/>
-                </ace:column>
-                </ace:dataTable>
-			</ace:panel>
+                </p:column>
+                </p:dataTable>
+			</p:panel>
 		</h:form>
 	</ui:define>
 </ui:composition>
