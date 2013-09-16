@@ -26,6 +26,8 @@ public class PersonaAssembler extends Assembler<PersonaDTO, Personas> {
 			dto.setPasaporte(mapping.getPasaporte());
 			dto.setRfc(mapping.getRfc());
 			dto.setIdPersona(mapping.getIdPersona());
+			dto.setUsuario(mapping.getUsuario());
+			dto.setPassword(mapping.getPassword());
 		return dto;
 	}
 
@@ -45,6 +47,8 @@ public class PersonaAssembler extends Assembler<PersonaDTO, Personas> {
 		mapping.setNombre(dto.getNombre());
 		mapping.setPasaporte(dto.getPasaporte());
 		mapping.setRfc(dto.getRfc());
+		mapping.setUsuario(dto.getUsuario());
+		mapping.setPassword(dto.getPassword());
 		if(dto.getIdPersona() != 0){
 			mapping.setIdPersona(dto.getIdPersona());
 		}
