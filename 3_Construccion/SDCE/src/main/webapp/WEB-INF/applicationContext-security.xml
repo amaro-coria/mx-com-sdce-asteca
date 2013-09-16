@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+    xmlns:beans="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+    					 http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                         http://www.springframework.org/schema/security
+                         http://www.springframework.org/schema/security/spring-security-3.0.xsd">
+ 
+    <global-method-security secured-annotations="enabled" jsr250-annotations="enabled">
+    </global-method-security>
+
+    <http access-denied-page="/faces/accesoDenegado.xhtml" use-expressions="true">
+        <intercept-url pattern="/faces/secured/**" access="isAuthenticated()"/>
+        <intercept-url pattern="/faces/login*" access="permitAll" />
+		<form-login
+			login-processing-url="/faces/j_spring_security_check"
+			login-page="/faces/login.xhtml"
+			default-target-url="/faces/secured/workarea.xhtml"
+			authentication-failure-url="/faces/login.xhtml" />
+        <logout invalidate-session="true" logout-success-url="/faces/login.xhtml" />
+        <session-management>
+            <concurrency-control max-sessions="1" error-if-maximum-exceeded="false" />
+        </session-management>
+    </http>
+    <authentication-manager  alias="idAuthenticationManager">
+    	<authentication-provider user-service-ref="userDetailsService">
+    		<password-encoder hash="sha"/>
+    	</authentication-provider>
+    </authentication-manager>
+  	<beans:bean id="userDetailsService" class="mx.com.asteca.comun.UserDetailsServiceImpl">
+  		<beans:property name="fachadaPersona" ref="personaFachadaImpl"/>
+  	</beans:bean>  
+    <beans:bean id="loggerListener" class="org.springframework.security.authentication.event.LoggerListener"/>
+</beans:beans>

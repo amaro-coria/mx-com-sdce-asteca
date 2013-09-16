@@ -2,30 +2,28 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:h="http://java.sun.com/jsf/html">
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
     <ui:composition template="/layout.xhtml">
         <ui:define name="body">
             <h:panelGroup id="messagePanel" layout="block">
-                <h:messages errorStyle="color: red" infoStyle="color: green" layout="list"/>
+               <p:growl id="growl" showDetail="true" sticky="true" />
             </h:panelGroup>
             <h:form styleClass="login" >
-                <fieldset>
+                <fieldset style="text-align:center;">
                     <legend>#{msg.login}</legend>
                     <h:panelGrid columns="2" style="text-align:right;" >
-                        <h:outputLabel value="#{msg.usuario} :" for="usuario" />
-                        <h:inputText id="usuario" value="#{login.usuario}" title="#{msg.usuario}" maxlength="20" required="true" requiredMessage="#{msg.usuarioRequerido}" style="width:100%"/>
-                        <h:outputLabel value="#{msg.contrasenia} :" for="contrasenia" />
-                        <h:inputSecret  id="contrasenia" value="#{login.contrasenia}" title="#{msg.contrasenia}" maxlength="20" required="true" requiredMessage="#{msg.contraseniaRequerida}" style="width:100%"/>
+                        <h:outputLabel value="#{msg.usuario} :" for="j_username" />
+                        <h:inputText id="j_username" value="#{beanLogin.userName}" title="#{msg.usuario}" maxlength="20" required="true" requiredMessage="#{msg.usuarioRequerido}" style="width:100%"/>
+                        <h:outputLabel value="#{msg.contrasenia} :" for="j_password" />
+                        <h:inputSecret  id="j_password" value="#{beanLogin.password}" title="#{msg.contrasenia}" maxlength="20" required="true" requiredMessage="#{msg.contraseniaRequerida}" style="width:100%"/>
                         <h:outputLabel value="#{msg.captcha} :"/>
-                        <h:graphicImage id="capimg" value="#{facesContext.externalContext.requestContextPath}/../Captcha.jpg"/>
-                        <h:outputLabel value="#{msg.captchaInput} :"/>
-                        <h:inputText  value="#{login.captcha}"  maxlength="5" required="true" requiredMessage="#{msg.frsErrorCaptcha}" style="width:100%"/>
+                        <p:captcha label="Captcha" />
                     </h:panelGrid>
+                    <p:commandButton ajax="false" action="#{beanLogin.login}" value="#{msg.aceptar}" />
                 </fieldset>
                 <br />
-                <ul class="buttons">
-                    <li><h:commandButton action="#{login.guardar}" value="#{msg.aceptar}" /></li>
-                </ul>
+                
             </h:form>
         </ui:define>
     </ui:composition>

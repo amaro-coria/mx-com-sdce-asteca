@@ -43,6 +43,8 @@ public class Personas  implements java.io.Serializable {
      private String nombre;
      private String apellidoP;
      private String apellidoM;
+     private String usuario;
+     private String password;
      private Set<Instructores> instructoreses = new HashSet<Instructores>(0);
      private Set<RolesModUsuarios> rolesModUsuarioses = new HashSet<RolesModUsuarios>(0);
      private Set<Alumnos> alumnoses = new HashSet<Alumnos>(0);
@@ -176,6 +178,24 @@ public class Personas  implements java.io.Serializable {
     
     public void setApellidoM(String apellidoM) {
         this.apellidoM = apellidoM;
+    }
+    
+    @Column(name="USUARIO" ,length=30)
+    public String getUsuario() {
+    	return this.usuario;
+    }
+    
+    public void setUsuario(String usuario) {
+    	this.usuario = usuario;
+    }
+    
+    @Column(name="PASSWRD" , length=45) 
+    public String getPassword() {
+    	return this.password;
+    }
+    
+    public void setPassword(String password) {
+    	this.password = password;
     }
 @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="personas")
     public Set<Instructores> getInstructoreses() {
