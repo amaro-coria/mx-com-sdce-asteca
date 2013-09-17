@@ -1,87 +1,77 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<ui:composition template="/layout.xhtml"
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:ace="http://www.icefaces.org/icefaces/components"
-	xmlns:ice="http://www.icesoft.com/icefaces/component">
-	<ui:define name="body">
-		<h:panelGroup id="messagePanel" layout="block">
-			<h:messages errorStyle="color: red" infoStyle="color: green"
-				layout="list" />
-		</h:panelGroup>
-		<h:form >
-			<ace:panel id="panel" header="Buscar" closable="false"
-				toggleable="false" style="text-align:center;">
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+<h:body>
+	<ui:composition>
+		<h:form styleClass="login">
+			<p:growl id="growl" showDetail="true" sticky="true" />
+			<p:panel id="panel" header="Buscar" closable="false"
+				toggleable="false" style="text-align:center;" >
 				<h:panelGrid columns="2" style="text-align:left;">
 					<h:outputText value="#{msg.clave} :" />
-					<ace:simpleSelectOneMenu id="selectProvince1" label=""
-						labelPosition="top" size="10">
-						<f:selectItem itemValue="" itemLabel="" />
-					</ace:simpleSelectOneMenu>
+					<p:inputText id="claveEquipo" value="#{beanEquipo.clave}" style="min-width: 450px;" />
+					
 					<h:outputText value="#{msg.descripcion} :" />
-					<ace:simpleSelectOneMenu id="selectProvince2" label=""
-						labelPosition="top">
-						<f:selectItem itemValue="" itemLabel="" />
-					</ace:simpleSelectOneMenu>
+					<p:inputText id="descripcionEquipo" value="#{beanEquipo.descripcion}" style="min-width: 450px;" />
+					
 					<h:outputText value="#{msg.tipoEquipo} :" />
-					<ace:simpleSelectOneMenu id="selectProvince3" label=""
-						labelPosition="top">
-						<f:selectItem itemValue="" itemLabel="" />
-					</ace:simpleSelectOneMenu>
+					<p:selectOneMenu id="selectTipoEquipo"
+						value="#{beanEquipo.tipoEquipo}" style="min-width: 450px;" >
+						<f:selectItem itemLabel="#{msg.seleccionarEquipoTipo}" itemValue="" noSelectionOption="true" />
+						<f:selectItems value="#{beanEquipo.listaSelectTipos}" />
+					</p:selectOneMenu>
 				</h:panelGrid>
-				<br />
-				<ul class="buttons">
-					<li><h:commandButton action="#{login.guardar}"
-							value="#{msg.limpiar}" />
-					</li>
-					<li><h:commandButton action="#{login.guardar}"
-							value="#{msg.buscar}" />
-					</li>
-				</ul>
-				</ace:panel>
-				<ul class="buttons">
-					<li><h:commandButton action="#{login.guardar}"
-							value="#{msg.nuevo}" />
-					</li>
-					<li><h:commandButton action="#{login.guardar}"
-							value="#{msg.ver}" />
-					</li>
-					<li><h:commandButton action="#{login.guardar}"
-							value="#{msg.editar}" />
-					</li>
-					<li><h:commandButton action="#{login.guardar}"
-							value="#{msg.eliminar}" />
-					</li>
-				</ul>
-				<ace:panel>
-				<ace:dataTable id="carTable"
-                          value="#{dataTableBean.carsData}"
-                          var="car"
-                          paginator="true"
-                          paginatorPosition="bottom"
-                          rows="5">
-                <ace:column id="id" headerText="#{msg.tipo}" sortBy="#{car.id}"
-                            >
-                    <ice:rowSelector value="#{car.selected}"
-                                     preStyleOnSelection="true"/>
-                    <h:outputText id="idCell" value="#{car.id}"/>
-                </ace:column>
-                <ace:column id="name" headerText="#{msg.clave}" sortBy="#{car.name}"
-                            >
-                    <h:outputText id="nameCell" value="#{car.name}"/>
-                </ace:column>
-                <ace:column id="chassis" headerText="#{msg.descripcion}" sortBy="#{car.chassis}"
-                            >
-                    <h:outputText id="chassisCell" value="#{car.chassis}"/>
-                </ace:column>
-                </ace:dataTable>
-			</ace:panel>
+				
+				<h:panelGrid style="text-align:right" width="100%">
+					<h:panelGrid columns="2" style="text-align:right">
+						<p:commandButton value="#{msg.limpiar}"
+							icon="ui-icon-arrowrefresh-1-e"
+							onclick=":form:selectTipoEquipo.selectValue('')"
+							actionListener="#{beanEquipo.limpiarFiltrado}" update="growl" />
+						<p:commandButton value="#{msg.buscar}"
+							icon="ui-icon-search"
+							actionListener="#{beanEquipo.buscarFiltrado}"
+							update="equipoTable" />
+					</h:panelGrid>
+				</h:panelGrid>
+			</p:panel>
+			<p:panel>
+				<p:commandButton value="#{msg.ver}" icon="ui-icon-search" 
+								actionListener="#{beanEquipo.ver}" 
+								oncomplete="verDialog.show()" />
+			</p:panel>
+			<p:panel>
+				<p:dataTable id="equipoTable"
+					value="#{beanEquipo.listaEquipo}" var="equipoT"
+					rowKey="#{equipoT.idEquipo}" paginator="true" 
+					selection="#{beanEquipo.equipoSelected}" filteredValue="#{beanEquipo.filterEquipo}"
+					paginatorPosition="bottom" rows="5">
+					<p:column selectionMode="single" style="width:2%" />
+					<p:column id="id" headerText="#{msg.id}"
+						sortBy="#{equipoT.idEquipo}" filterBy="#{equipoT.idEquipo}" rendered="false">
+						<h:outputText id="idCell" value="#{equipoT.idEquipo}" />
+					</p:column>
+					<p:column id="tipo" headerText="#{msg.tipo}"
+						sortBy="#{equipoT.catGralDTO.dsc}" filterBy="#{equipoT.catGralDTO.dsc}">
+						<h:outputText id="tipoCell" value="#{equipoT.catGralDTO.dsc}" />
+					</p:column>
+					<p:column id="clave" headerText="#{msg.clave}"
+						sortBy="#{equipoT.clave}" filterBy="#{equipoT.clave}">
+						<h:outputText id="claveCell" value="#{equipoT.clave}" />
+					</p:column>
+					<p:column id="descn" headerText="#{msg.descripcion}"
+						sortBy="#{equipoT.dsc}" filterBy="#{equipoT.dsc}">
+						<h:outputText id="descCell" value="#{equipoT.dsc}" />
+					</p:column>
+				</p:dataTable>
+			</p:panel>
 		</h:form>
-	</ui:define>
-</ui:composition>
-
+	</ui:composition>
+</h:body>
 </html>

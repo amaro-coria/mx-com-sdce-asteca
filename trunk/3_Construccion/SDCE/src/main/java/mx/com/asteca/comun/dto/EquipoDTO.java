@@ -10,7 +10,7 @@ package mx.com.asteca.comun.dto;
 public class EquipoDTO implements java.io.Serializable {
 
 	private int idEquipo;
-	private CatGralDTO catGralDTO;
+	private long idCatGralDTO;
 	private String clave;
 	private String dsc;
 	private Short activo;
@@ -22,10 +22,10 @@ public class EquipoDTO implements java.io.Serializable {
 		this.idEquipo = idEquipo;
 	}
 
-	public EquipoDTO(int idEquipo, CatGralDTO catGralDTO, String clave,
+	public EquipoDTO(int idEquipo, long idCatGralDTO, String clave,
 			String dsc, Short activo) {
 		this.idEquipo = idEquipo;
-		this.catGralDTO = catGralDTO;
+		this.idCatGralDTO = idCatGralDTO;
 		this.clave = clave;
 		this.dsc = dsc;
 		this.activo = activo;
@@ -39,12 +39,12 @@ public class EquipoDTO implements java.io.Serializable {
 		this.idEquipo = idEquipo;
 	}
 
-	public CatGralDTO getCatGral() {
-		return this.catGralDTO;
+	public long getIdCatGral() {
+		return this.idCatGralDTO;
 	}
 
-	public void setCatGralDTO(CatGralDTO catGralDTO) {
-		this.catGralDTO = catGralDTO;
+	public void setIdCatGralDTO(long idCatGralDTO) {
+		this.idCatGralDTO = idCatGralDTO;
 	}
 
 	public String getClave() {
