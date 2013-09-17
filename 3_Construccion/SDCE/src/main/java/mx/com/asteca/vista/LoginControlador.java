@@ -8,7 +8,6 @@ import javax.faces.bean.RequestScoped;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationDetailsSource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -17,7 +16,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.stereotype.Controller;
 
 import mx.com.asteca.comun.Constantes;
 import mx.com.asteca.comun.dto.PersonaDTO;
@@ -25,7 +23,6 @@ import mx.com.asteca.fachada.FachadaException;
 import mx.com.asteca.fachada.PersonaFachada;
 
 @ManagedBean(name = Constantes.BEAN_LOGIN)
-@Controller
 @RequestScoped
 public class LoginControlador extends BaseController implements Serializable {
 	
@@ -36,8 +33,8 @@ public class LoginControlador extends BaseController implements Serializable {
 	private String userName;
 	private String password;
 	
-	@ManagedProperty("#{authenticationManager}")
-	private transient AuthenticationManager authenticationManager;
+	@ManagedProperty(value = "#{org.springframework.security.authenticationManager}")
+	private AuthenticationManager am;
 	@ManagedProperty("#{personaFachadaImpl}")
 	private transient PersonaFachada fachadaPersona;
 	
@@ -58,7 +55,7 @@ public class LoginControlador extends BaseController implements Serializable {
 			}
 			
 			authRequest.setDetails(authenticationDetailsSource.buildDetails(servletReq));
-			Authentication authResult = authenticationManager.authenticate(authRequest);
+			Authentication authResult = am.authenticate(authRequest);
 			
 			SecurityContextHolder.getContext().setAuthentication(authResult);
 		} catch (BadCredentialsException bce) {
@@ -103,11 +100,11 @@ public class LoginControlador extends BaseController implements Serializable {
 	}
 
 	public AuthenticationManager getAm() {
-		return authenticationManager;
+		return am;
 	}
 
-	public void setAm(AuthenticationManager authenticationManager) {
-		this.authenticationManager = authenticationManager;
+	public void setAm(AuthenticationManager am) {
+		this.am = am;
 	}
 
 	public AuthenticationDetailsSource getAuthenticationDetailsSource() {
