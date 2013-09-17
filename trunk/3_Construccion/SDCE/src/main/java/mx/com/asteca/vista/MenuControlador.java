@@ -6,7 +6,7 @@ import javax.faces.bean.ManagedBean;
 @ManagedBean(name = "menuBean")
 @ApplicationScoped
 public class MenuControlador extends BaseController {
-	private String navegacion = "/equipos.xhtml";
+	private String navegacion = "/equipo.xhtml";
 
 	public void viewPantalla2() {
 		System.out.println("PRUEBA");
@@ -18,7 +18,7 @@ public class MenuControlador extends BaseController {
 	}
 
 	public void viewEquipo() {
-		this.navegacion = "/equipos.xhtml";
+		this.navegacion = "/equipo.xhtml";
 	}
 
 	public String getNavegacion() {
