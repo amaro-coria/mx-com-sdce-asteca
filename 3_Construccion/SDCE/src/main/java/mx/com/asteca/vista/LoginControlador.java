@@ -33,7 +33,7 @@ public class LoginControlador extends BaseController implements Serializable {
 	private String userName;
 	private String password;
 	
-	@ManagedProperty(value = "#{org.springframework.security.authenticationManager}")
+	@ManagedProperty(value = "#{authenticationManager}")
 	private AuthenticationManager am;
 	@ManagedProperty("#{personaFachadaImpl}")
 	private transient PersonaFachada fachadaPersona;

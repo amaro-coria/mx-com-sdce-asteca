@@ -23,7 +23,7 @@
             <concurrency-control max-sessions="1" error-if-maximum-exceeded="false" />
         </session-management>
     </http>
-    <authentication-manager  alias="idAuthenticationManager">
+    <authentication-manager  alias="authenticationManager">
     	<authentication-provider user-service-ref="userDetailsService">
     		<password-encoder hash="sha"/>
     	</authentication-provider>
