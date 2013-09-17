@@ -5,6 +5,7 @@ import mx.com.asteca.comun.dto.EquipoDTO;
 import mx.com.asteca.persistencia.dao.BaseDAO;
 import mx.com.asteca.persistencia.dao.EquipoDAO;
 import mx.com.asteca.persistencia.entidades.Equipos;
+import mx.com.asteca.servicio.EquipoServicio;
 import mx.com.asteca.servicio.assembler.Assembler;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,13 +14,13 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class EquipoServicioImpl extends
-		BaseServiceImpl<EquipoDTO, Integer, Equipos> {
+		BaseServiceImpl<EquipoDTO, Integer, Equipos> implements EquipoServicio{
 
 	@Autowired
 	private EquipoDAO equipoDAO;
-//	@Autowired
-//	@Qualifier(Constantes.ASSEMBLER_EQUIPOS)
-//	private Assembler assembler;
+	@Autowired
+	@Qualifier(Constantes.ASSEMBLER_EQUIPOS)
+	private Assembler assemblerEquipo;
 
 	@Override
 	BaseDAO getDAO() {
@@ -28,8 +29,7 @@ public class EquipoServicioImpl extends
 
 	@Override
 	Assembler getAssembler() {
-//		return assembler;
-		return null;
+		return assemblerEquipo;
 	}
 
 }
