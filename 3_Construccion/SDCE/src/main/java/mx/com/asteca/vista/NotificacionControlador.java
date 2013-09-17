@@ -52,6 +52,7 @@ public class NotificacionControlador extends BaseController implements Serializa
 	private NotificacionDTO notificacionSel;
 	private Long estadoSelected;
 	private Long tipoSelected;
+	private boolean dialogVisible;
 	/**
 	 * 
 	 * @throws FachadaException
@@ -162,7 +163,8 @@ public class NotificacionControlador extends BaseController implements Serializa
 	}
 	
 	public void ver(ActionEvent e){
-		
+		dialogVisible = notificacionSel == null ? false : true; 
+		System.out.println("VISIBLE--->" + dialogVisible);
 	}
 	
 	/**
@@ -284,5 +286,19 @@ public class NotificacionControlador extends BaseController implements Serializa
 	 */
 	public void setTipoSelected(Long tipoSelected) {
 		this.tipoSelected = tipoSelected;
+	}
+
+	/**
+	 * @return the dialogVisible
+	 */
+	public boolean getDialogVisible() {
+		return dialogVisible;
+	}
+
+	/**
+	 * @param dialogVisible the dialogVisible to set
+	 */
+	public void setDialogVisible(boolean dialogVisible) {
+		this.dialogVisible = dialogVisible;
 	}
 }
