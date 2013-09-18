@@ -52,6 +52,12 @@ public class LoginControlador extends BaseController implements Serializable {
 				PersonaDTO usuario = fachadaPersona.getUser(this.getUserName());
 				servletReq.getSession().setAttribute("SPRING_SECURITY_CURRENT_USER", usuario);
 				
+				StringBuffer nombreCompleto=new StringBuffer();
+				nombreCompleto.append(usuario.getNombre()!=null?usuario.getNombre():"").append(" ")
+							  .append(usuario.getApellidoP()!=null?usuario.getApellidoP():"").append(" ")
+							  .append(usuario.getApellidoM()!=null?usuario.getApellidoM():"");
+				servletReq.getSession().setAttribute("nombreUsuario", nombreCompleto.toString());
+				
 			}
 			
 			authRequest.setDetails(authenticationDetailsSource.buildDetails(servletReq));
