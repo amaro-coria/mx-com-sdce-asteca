@@ -16,19 +16,8 @@
 			<div class="leftcolumn_box01_bottom">
 				<h:form id="frmMenu" >
 					<p:menu type="plain" id="exampleMenu">
-						<p:submenu label="Navigations">
-							<p:menuitem ajax="true" process="@this" id="mn_item_real"
-								value="Equipo" actionListener="#{menuBean.viewEquipo}"
-								update="@all" />
-							<p:menuitem ajax="true" process="@this" id="mn_item_barca"
-								value="Pantalla 2" actionListener="#{menuBean.viewPantalla2}"
-								update="@all" />
-							<p:menuitem ajax="true" process="@this" id="mn_item_notificacion"
-								value="Notificaciones" actionListener="#{menuBean.viewNotificacion}"
-								update="@all" />
-							<p:menuitem ajax="true" process="@this" id="mn_item_cliente"
-								value="Clientes" actionListener="#{menuBean.viewPantalla2}"
-								update="@all" />
+						<p:submenu label="Menu" binding="#{menuBean.submenu}">
+							
 						</p:submenu>
 					</p:menu>
 				</h:form>

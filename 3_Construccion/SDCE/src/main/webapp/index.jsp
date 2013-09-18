@@ -1,6 +1,6 @@
 <html>
     <head> </head>
     <body>
-        <jsp:forward page="faces/login.xhtml" />
+    <% response.sendRedirect("faces/secured/workarea.xhtml");%>
     </body>
 </html>
