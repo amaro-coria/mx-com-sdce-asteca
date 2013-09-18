@@ -13,7 +13,7 @@ import org.primefaces.component.submenu.Submenu;
 @ManagedBean(name = "menuBean")
 @ApplicationScoped
 public class MenuControlador extends BaseController {
-	private String navegacion = "/secured/catalogos/equipos.xhtml";
+	private String navegacion = "/secured/catalogos/equipo.xhtml";
 	private Submenu submenu = new Submenu();
 
 	@PostConstruct
