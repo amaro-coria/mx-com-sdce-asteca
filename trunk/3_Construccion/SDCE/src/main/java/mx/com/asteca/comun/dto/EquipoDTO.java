@@ -10,7 +10,8 @@ package mx.com.asteca.comun.dto;
 public class EquipoDTO implements java.io.Serializable {
 
 	private int idEquipo;
-	private long idCatGralDTO;
+	private long idCatGral;
+	private String descCatGral;
 	private String clave;
 	private String dsc;
 	private Short activo;
@@ -22,10 +23,10 @@ public class EquipoDTO implements java.io.Serializable {
 		this.idEquipo = idEquipo;
 	}
 
-	public EquipoDTO(int idEquipo, long idCatGralDTO, String clave,
+	public EquipoDTO(int idEquipo, long idCatGral, String clave,
 			String dsc, Short activo) {
 		this.idEquipo = idEquipo;
-		this.idCatGralDTO = idCatGralDTO;
+		this.idCatGral = idCatGral;
 		this.clave = clave;
 		this.dsc = dsc;
 		this.activo = activo;
@@ -40,11 +41,11 @@ public class EquipoDTO implements java.io.Serializable {
 	}
 
 	public long getIdCatGral() {
-		return this.idCatGralDTO;
+		return this.idCatGral;
 	}
 
-	public void setIdCatGralDTO(long idCatGralDTO) {
-		this.idCatGralDTO = idCatGralDTO;
+	public void setIdCatGralDTO(long idCatGral) {
+		this.idCatGral = idCatGral;
 	}
 
 	public String getClave() {
@@ -69,6 +70,20 @@ public class EquipoDTO implements java.io.Serializable {
 
 	public void setActivo(Short activo) {
 		this.activo = activo;
+	}
+
+	/**
+	 * @return the descCatGral
+	 */
+	public String getDescCatGral() {
+		return descCatGral;
+	}
+
+	/**
+	 * @param descCatGral the descCatGral to set
+	 */
+	public void setDescCatGral(String descCatGral) {
+		this.descCatGral = descCatGral;
 	}
 
 }
