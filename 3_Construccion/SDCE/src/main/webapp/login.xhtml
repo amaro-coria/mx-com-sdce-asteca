@@ -1,31 +1,42 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
-    <ui:composition template="/templates/layout.xhtml">
-        <ui:define name="body">
-            <h:panelGroup id="messagePanel" layout="block">
-               <p:growl id="growl" showDetail="true" sticky="true" />
-            </h:panelGroup>
-            <h:form styleClass="login" >
-                <fieldset style="text-align:center;">
-                    <legend>#{msg.login}</legend>
-                    <h:panelGrid columns="2" style="text-align:right;" >
-                        <h:outputLabel value="#{msg.usuario} :" for="j_username" />
-                        <h:inputText id="j_username" value="#{beanLogin.userName}" title="#{msg.usuario}" maxlength="20" required="true" requiredMessage="#{msg.usuarioRequerido}" style="width:100%"/>
-                        <h:outputLabel value="#{msg.contrasenia} :" for="j_password" />
-                        <h:inputSecret  id="j_password" value="#{beanLogin.password}" title="#{msg.contrasenia}" maxlength="20" required="true" requiredMessage="#{msg.contraseniaRequerida}" style="width:100%"/>
-                        <h:outputLabel value="#{msg.captcha} :"/>
-                        <p:captcha label="Captcha" />
-                    </h:panelGrid>
-                    <p:commandButton ajax="false" action="#{beanLogin.login}" value="#{msg.aceptar}" />
-                </fieldset>
-                <br />
-                
-            </h:form>
-        </ui:define>
-    </ui:composition>
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition template="/templates/layout.xhtml">
+	<ui:define name="body">
+		<h:panelGroup id="messagePanel" layout="block">
+			<p:growl id="growl" showDetail="true" sticky="true" />
+		</h:panelGroup>
+		<h:form styleClass="login" style="margin:auto; border-radius: 5px; margin:auto;">
+			<fieldset
+				style="text-align: center; border: 2px solid black; border-radius: 5px; margin: auto;">
+				<legend>#{msg.login}</legend>
+				<p></p>
+				<h:panelGrid columns="2" style="text-align:right; margin:auto;">
+					<h:outputLabel value="#{msg.usuario}:" for="j_username" />
+					<h:inputText id="j_username" value="#{beanLogin.userName}"
+						title="#{msg.usuario}" maxlength="20" required="true"
+						requiredMessage="#{msg.usuarioRequerido}" />
+					<h:outputLabel value="#{msg.contrasenia}:" for="j_password" />
+					<h:inputSecret id="j_password" value="#{beanLogin.password}"
+						title="#{msg.contrasenia}" maxlength="20" required="true"
+						requiredMessage="#{msg.contraseniaRequerida}"/>
+				</h:panelGrid>
+				<p></p>
+				<h:panelGrid style="text-align:left;height: 50px; width: 100px;	margin:auto;">
+					<h:outputLabel value="#{msg.captcha} :" />
+					<p:captcha label="Captcha" />
+				</h:panelGrid>
+				<p></p>
+				<p:commandButton ajax="false" action="#{beanLogin.login}"
+					value="#{msg.aceptar}" />
+			</fieldset>
+			<br />
+
+		</h:form>
+	</ui:define>
+</ui:composition>
 
 </html>
