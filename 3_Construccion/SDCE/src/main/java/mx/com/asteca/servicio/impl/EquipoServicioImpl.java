@@ -14,7 +14,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class EquipoServicioImpl extends
-		BaseServiceImpl<EquipoDTO, Integer, Equipos> implements EquipoServicio{
+		BaseServiceImpl<EquipoDTO, Integer, Equipos> implements 
+		EquipoServicio{
 
 	@Autowired
 	private EquipoDAO equipoDAO;

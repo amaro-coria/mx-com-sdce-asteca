@@ -22,8 +22,8 @@ public class EquipoAssembler extends Assembler<EquipoDTO, Equipos>{
 		dto.setDsc(mapping.getDsc());
 		
 		CatGral catGral = mapping.getCatGral();
-		dto.setIdCatGralDTO(catGral == null 
-				? null : catGral.getIdCatGral());
+		dto.setIdCatGralDTO(catGral == null  ? null : catGral.getIdCatGral());
+		dto.setDescCatGral(catGral == null  ? null : catGral.getDsc());
 		
 		return dto;
 	}

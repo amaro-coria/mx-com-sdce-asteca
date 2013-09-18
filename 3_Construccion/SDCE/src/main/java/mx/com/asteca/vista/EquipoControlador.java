@@ -39,6 +39,7 @@ public class EquipoControlador extends BaseController implements Serializable{
 	@ManagedProperty("#{equipoFachadaImpl}")
 	private EquipoFachada equipoFachada;
 	
+	@ManagedProperty("#{catGralFachadaImpl}")
 	private CatGralFachada tipoEquipoFachada;
 	
 	private List<SelectItem> listaSelectTipos;
@@ -75,7 +76,6 @@ public class EquipoControlador extends BaseController implements Serializable{
 	private void initTiposEquipos() {
 		if(CollectionUtils.isEmpty(listaSelectTipos)){		
 			try {
-				tipoEquipoFachada = new CatGralFachadaImpl();
 				List<CatGralDTO> tiposAux = tipoEquipoFachada.findByCve("TIPOEQUIPO");
 				if(tiposAux != null){
 					listaSelectTipos = new ArrayList<SelectItem>();
