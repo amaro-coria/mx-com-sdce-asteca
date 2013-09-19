@@ -12,16 +12,18 @@
 <h:body>
 	<ui:composition>
 		<div id="logosection">
-			<div class="sitelogo"></div>
 			<div class="sitename">
-				<p>
+				<p >
 					<span><h:outputText value="Bienvenido: #{sessionScope.nombreUsuario}" /></span>
+				</p>
+				<p>
+					<span><h:outputText value="Fecha: #{sessionScope.fechaHora}" /></span>
 				</p>
 			</div>
 		</div>
 		<div id="header">
 			<div class="title">
-				<br /> <span class="bigtext">Centro de Control Escolar </span><br />
+				 <span class="bigtext">Centro de Control Escolar </span>
 			</div>
 		</div>
 	</ui:composition>

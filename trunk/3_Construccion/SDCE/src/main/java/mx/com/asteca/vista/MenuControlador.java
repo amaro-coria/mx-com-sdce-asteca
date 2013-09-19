@@ -26,7 +26,7 @@ public class MenuControlador extends BaseController {
 		item.setAjax(true);
 		item.setProcess("@this");
 		item.setValue("Intituto");
-		item.setId("mn_item_instituto");
+		item.setId("mn_item_instituto"+"_"+i);
 		item.setUpdate("@all");
 		item.addActionListener(new ActionListener() {
 			

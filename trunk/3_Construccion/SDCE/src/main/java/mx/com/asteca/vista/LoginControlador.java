@@ -1,6 +1,8 @@
 package mx.com.asteca.vista;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.util.Date;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -57,6 +59,7 @@ public class LoginControlador extends BaseController implements Serializable {
 							  .append(usuario.getApellidoP()!=null?usuario.getApellidoP():"").append(" ")
 							  .append(usuario.getApellidoM()!=null?usuario.getApellidoM():"");
 				servletReq.getSession().setAttribute("nombreUsuario", nombreCompleto.toString());
+				servletReq.getSession().setAttribute("fechaHora", DateFormat.getDateInstance(DateFormat.FULL).format(new Date()));
 				
 			}
 			
