@@ -44,5 +44,47 @@ public interface CatGralDAO extends BaseDAO<CatGral, Integer> {
 	 */
 	List<CatGral> findByCveDscAndEstatus(String cve, String dsc, String estatus)
 			throws PersistenciaException;
+	
+	/**
+	 * Obtiene la lista de registros. Tienen que tener el idTipoEquipo=1
+	 * @return
+	 * @throws PersistenciaException
+	 */
+	List<CatGral> findTiposEquipo() throws PersistenciaException;
+
+	/**
+	 * Obtiene la lista de registros. Tienen que tener el idTipoEquipo=3
+	 * @return
+	 * @throws PersistenciaException
+	 */
+	List<CatGral> findSedes() throws PersistenciaException;
+
+	/**
+	 * Obtiene la lista de registros. Tienen que tener el idTipoEquipo=2
+	 * @return
+	 * @throws PersistenciaException
+	 */
+	List<CatGral> findAreas() throws PersistenciaException;
+
+	/**
+	 * Obtiene la lista de registros. Tienen que tener el idTipoEquipo=4
+	 * @return
+	 * @throws PersistenciaException
+	 */
+	List<CatGral> findPaises() throws PersistenciaException;
+
+	/**
+	 * Obtiene la lista de registros. Tienen que tener el idTipoEquipo=5
+	 * @return
+	 * @throws PersistenciaException
+	 */
+	List<CatGral> findClasifCurso() throws PersistenciaException;
+
+	/**
+	 * Obtiene la lista de registros. Tienen que tener el idTipoEquipo=6
+	 * @return
+	 * @throws PersistenciaException
+	 */
+	List<CatGral> findMaterias() throws PersistenciaException;
 
 }

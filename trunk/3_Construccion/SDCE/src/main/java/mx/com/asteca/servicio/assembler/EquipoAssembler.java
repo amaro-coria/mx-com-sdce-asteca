@@ -7,24 +7,21 @@ import mx.com.asteca.persistencia.entidades.Equipos;
 
 import org.springframework.stereotype.Component;
 
-@Component(Constantes.ASSEMBLER_EQUIPOS)
-public class EquipoAssembler extends Assembler<EquipoDTO, Equipos>{
+@Component(Constantes.ASSEMBLER_EQUIPO)
+public class EquipoAssembler extends Assembler<EquipoDTO, Equipos> {
 
 	@Override
 	public EquipoDTO getDTOTransform(Equipos mapping) {
-		if(mapping == null || mapping.getIdEquipo() == 0){
+		if(mapping == null){
 			return null;
 		}
 		EquipoDTO dto = new EquipoDTO();
-		dto.setActivo(mapping.getActivo());
-		dto.setClave(mapping.getClave());
-		dto.setIdEquipo(mapping.getIdEquipo());
-		dto.setDsc(mapping.getDsc());
-		
-		CatGral catGral = mapping.getCatGral();
-		dto.setIdCatGralDTO(catGral == null  ? null : catGral.getIdCatGral());
-		dto.setDescCatGral(catGral == null  ? null : catGral.getDsc());
-		
+			dto.setActivo(mapping.getActivo());
+			dto.setClave(mapping.getClave());
+			dto.setDsc(mapping.getDsc());
+			dto.setIdEquipo(mapping.getIdEquipo());
+			dto.setDscTipo(mapping.getCatGral().getDsc());
+			dto.setIdTipo(mapping.getCatGral().getIdCatGral());
 		return dto;
 	}
 
@@ -34,16 +31,17 @@ public class EquipoAssembler extends Assembler<EquipoDTO, Equipos>{
 			return null;
 		}
 		Equipos mapping = new Equipos();
-		mapping.setActivo(dto.getActivo());
-		mapping.setClave(dto.getClave());
-		mapping.setIdEquipo(dto.getIdEquipo());
-		mapping.setDsc(dto.getDsc());
-
-		if(dto.getIdCatGral() != 0){
-			CatGral catGral = new CatGral((short) dto.getIdCatGral());
-			mapping.setCatGral(catGral);
-		}
-
+			mapping.setActivo(dto.getActivo());
+			mapping.setClave(dto.getClave());
+			mapping.setDsc(dto.getDsc());
+			if(dto.getIdEquipo() != 0){
+				mapping.setIdEquipo(dto.getIdEquipo());
+			}
+			if(dto.getIdTipo() != 0){
+				CatGral catGral = new CatGral();
+				catGral.setIdCatGral(dto.getIdTipo());
+				mapping.setCatGral(catGral);
+			}
 		return mapping;
 	}
 

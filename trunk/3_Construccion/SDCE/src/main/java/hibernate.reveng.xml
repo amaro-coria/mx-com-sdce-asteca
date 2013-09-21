@@ -53,4 +53,5 @@
   <table-filter match-name="programa_est_materias"/>
   <table-filter match-name="clientes"/>
   <table-filter match-name="domicilios"/>
+  <table-filter match-name="paises"/>
 </hibernate-reverse-engineering>

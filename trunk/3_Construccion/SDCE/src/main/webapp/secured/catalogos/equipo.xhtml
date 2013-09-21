@@ -1,77 +1,214 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<ui:composition template="/layout.xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:f="http://java.sun.com/jsf/core">
-
-<h:body>
-	<ui:composition>
-		<h:form styleClass="login">
+	xmlns:p="http://primefaces.org/ui">
+	<ui:define name="body">
+		<h:form id="form">
 			<p:growl id="growl" showDetail="true" sticky="true" />
 			<p:panel id="panel" header="Buscar" closable="false"
-				toggleable="false" style="text-align:center;" >
+				toggleable="false" style="text-align:center;">
 				<h:panelGrid columns="2" style="text-align:left;">
 					<h:outputText value="#{msg.clave} :" />
-					<p:inputText id="claveEquipo" value="#{beanEquipo.clave}" style="min-width: 450px;" />
-					
+					<p:selectOneMenu id="selectCveFilter"
+						value="#{beanEquipo.selectedClave }" style="min-width: 480px">
+						<f:selectItem itemLabel="#{msg.seleccionarClave }" itemValue="" />
+						<f:selectItems value="#{beanEquipo.listaSelectCve}" />
+						<p:ajax update="selectDsc"
+							listener="#{beanEquipo.cambiaDescSelect}" />
+					</p:selectOneMenu>
 					<h:outputText value="#{msg.descripcion} :" />
-					<p:inputText id="descripcionEquipo" value="#{beanEquipo.descripcion}" style="min-width: 450px;" />
-					
+					<p:selectOneMenu id="selectDsc" style="min-width: 480px"
+						value="#{beanEquipo.selectedDsc }">
+						<f:selectItem itemLabel="#{msg.seleccionarDsc }" itemValue="" />
+						<f:selectItems value="#{beanEquipo.listaSelectDsc}" />
+						<p:ajax update="selectTipo"
+							listener="#{beanEquipo.cambiaTipoEquipoSelect}" />
+					</p:selectOneMenu>
 					<h:outputText value="#{msg.tipoEquipo} :" />
-					<p:selectOneMenu id="selectTipoEquipo"
-						value="#{beanEquipo.tipoEquipo}" style="min-width: 450px;" >
-						<f:selectItem itemLabel="#{msg.seleccionarEquipoTipo}" itemValue="" noSelectionOption="true" />
-						<f:selectItems value="#{beanEquipo.listaSelectTipos}" />
+					<p:selectOneMenu id="selectTipo" style="min-width: 480px"
+						value="#{beanEquipo.selectedTipo }">
+						<f:selectItem itemLabel="#{msg.seleccionarTipoEq }"
+							itemValue="" />
+						<f:selectItems value="#{beanEquipo.listaSelectTipo}" />
 					</p:selectOneMenu>
 				</h:panelGrid>
-				
-				<h:panelGrid style="text-align:right" width="100%">
-					<h:panelGrid columns="2" style="text-align:right">
-						<p:commandButton value="#{msg.limpiar}"
+				<br />
+				<ul class="buttons">
+					<li><p:commandButton value="#{msg.limpiar}"
 							icon="ui-icon-arrowrefresh-1-e"
-							onclick=":form:selectTipoEquipo.selectValue('')"
-							actionListener="#{beanEquipo.limpiarFiltrado}" update="growl" />
-						<p:commandButton value="#{msg.buscar}"
-							icon="ui-icon-search"
+							onclick=":form:selectCveFilter.selectValue('')"
+							actionListener="#{beanEquipo.limpiarFiltrado }" update="growl" />
+					</li>
+					<li><p:commandButton icon="ui-icon-search"
 							actionListener="#{beanEquipo.buscarFiltrado}"
-							update="equipoTable" />
-					</h:panelGrid>
+							value="#{msg.buscar}" update="growl, :form:table" />
+					</li>
+				</ul>
+			</p:panel>
+			<p:panel>
+				<h:panelGrid columns="4" style="text-align:left;">
+					<p:commandButton id="deleteButton" value="#{msg.eliminar }"
+						icon="ui-icon-trash" onclick="borrarDialog.show()" update="growl" />
+					<p:commandButton id="editarButton" value="#{msg.editar }"
+						icon="ui-icon-pencil" onclick="editarDialog.show()"
+						update=":form:displayEditar, growl" />
+					<p:commandButton id="viewButton" value="#{msg.ver }"
+						icon="ui-icon-search" oncomplete="verDialog.show()"
+						update=":form:displayVer, growl" />
+					<p:commandButton id="nuevoButton" value="#{msg.nuevo }"
+						icon="ui-icon-plusthick" onclick="nuevoDialog.show()"
+						update=":form:displayNuevo, growl" />					
 				</h:panelGrid>
 			</p:panel>
 			<p:panel>
-				<p:commandButton value="#{msg.ver}" icon="ui-icon-search" 
-								actionListener="#{beanEquipo.ver}" 
-								oncomplete="verDialog.show()" />
-			</p:panel>
-			<p:panel>
-				<p:dataTable id="equipoTable"
-					value="#{beanEquipo.listaEquipo}" var="equipoT"
-					rowKey="#{equipoT.idEquipo}" paginator="true" 
-					selection="#{beanEquipo.equipoSelected}" filteredValue="#{beanEquipo.filterEquipo}"
-					paginatorPosition="bottom" rows="5">
+				<p:dataTable id="table"
+					value="#{beanEquipo.listaEquipos}" var="equipo"
+					rowKey="#{equipo.idEquipo}" paginator="true"
+					selection="#{beanEquipo.equipoSelected}" filteredValue="#{beanEquipo.filteredList }"
+					paginatorPosition="bottom" rows="10">
 					<p:column selectionMode="single" style="width:2%" />
-					<p:column id="id" headerText="#{msg.id}"
-						sortBy="#{equipoT.idEquipo}" filterBy="#{equipoT.idEquipo}" rendered="false">
-						<h:outputText id="idCell" value="#{equipoT.idEquipo}" />
+					<p:column id="eqTipo" headerText="#{msg.tipo}" filterBy="#{equipo.dscTipo }" 
+						sortBy="#{equipo.dscTipo}">
+						<h:outputText 
+							value="#{equipo.dscTipo}" />
 					</p:column>
-					<p:column id="tipo" headerText="#{msg.tipo}"
-						sortBy="#{equipoT.catGralDTO.dsc}" filterBy="#{equipoT.catGralDTO.dsc}">
-						<h:outputText id="tipoCell" value="#{equipoT.catGralDTO.dsc}" />
+					<p:column id="eqCve" headerText="#{msg.clave}"
+						sortBy="#{equipo.clave}" filterBy="#{equipo.clave }" >
+						<h:outputText value="#{equipo.clave}" />
 					</p:column>
-					<p:column id="clave" headerText="#{msg.clave}"
-						sortBy="#{equipoT.clave}" filterBy="#{equipoT.clave}">
-						<h:outputText id="claveCell" value="#{equipoT.clave}" />
+					<p:column id="eqDsc" headerText="#{msg.descripcion}" filterBy="#{equipo.dsc }" 
+						sortBy="#{equipo.dsc}">
+						<h:outputText value="#{equipo.dsc}" />
 					</p:column>
-					<p:column id="descn" headerText="#{msg.descripcion}"
-						sortBy="#{equipoT.dsc}" filterBy="#{equipoT.dsc}">
-						<h:outputText id="descCell" value="#{equipoT.dsc}" />
-					</p:column>
+					
 				</p:dataTable>
 			</p:panel>
+			<!-- Panel de Ver -->
+			<p:dialog id="dialog" header="#{msg.ver}" widgetVar="verDialog"
+				modal="true">
+				<h:panelGrid id="displayVer" columns="2" cellpadding="4">
+					<h:panelGroup id="messagePanelVer" layout="block">
+						<h:messages errorStyle="color: red" infoStyle="color: green"
+							layout="list" style="font-size:12px;font-family:Arial" />
+					</h:panelGroup>
+					<h:outputText />
+					<h:outputText value="#{msg.clave}" />
+					<h:outputText value="#{beanEquipo.equipoSelected.clave}"
+						style="font-weight:bold" />
+					<h:outputText value="#{msg.descripcion}" />
+					<h:outputText value="#{beanEquipo.equipoSelected.dsc}"
+						style="font-weight:bold" />
+					<h:outputText value="#{msg.tipoEquipo}" />
+					<h:outputText value="#{beanEquipo.equipoSelected.dscTipo}"
+						style="font-weight:bold" />
+					<h:outputText value="#{msg.activo}" />
+					<h:outputText
+						value="#{beanEquipo.equipoSelected.activo == 1 ? 'Si' : 'No' }"
+						style="font-weight:bold" />
+				</h:panelGrid>
+				<p:commandButton id="aceptarVerBtn" value="#{msg.aceptar }"
+					icon="ui-icon-check" onclick="verDialog.hide()" />
+			</p:dialog>
+			<!-- Fin de panel de Ver -->
+			<!--  Inicio panel de Nuevo -->
+			<p:dialog id="dialogNuevo" header="#{msg.frsNuevoRegistro}"
+				widgetVar="nuevoDialog" closable="true" modal="true"
+				draggable="false" width="400">
+				<h:panelGrid columns="2" width="100%" id="displayNuevo">
+					<h:outputText value="#{msg.clave}" />
+					<p:inputText value="#{beanEquipo.equipoNuevo.clave}"
+						style="width: 260px; " />
+					<h:outputText id="nombrePopupNuevoLabel" value="#{msg.descripcion}" />
+					<p:inputText id="nombrePopupNuevo"
+						value="#{beanEquipo.equipoNuevo.dsc }"
+						style="min-width: 260px" />
+					<h:outputText id="responsablePopupNuevoLabel"
+						value="#{msg.tipoEquipo }" />
+					<p:selectOneMenu id="selectTipoNuevo" style="min-width: 260px"
+						value="#{beanEquipo.idCatGralNuevo }">
+						<f:selectItem itemLabel="#{msg.seleccionarTipoEq }"
+							itemValue="" />
+						<f:selectItems value="#{beanEquipo.listaSelectTiposEquipoCatGral }" />
+					</p:selectOneMenu>
+					<h:outputText id="activoPopupNuevoLabel" value="#{msg.activo}" />
+					<h:selectBooleanCheckbox id="activoPopupNuevo"
+						value="#{beanEquipo.nuevoActivo}">
+					</h:selectBooleanCheckbox>
+				</h:panelGrid>
+				<h:panelGrid style="float: right;" columns="2">
+					<p:commandButton value="#{msg.aceptar }" icon="ui-icon-check"
+						oncomplete="nuevoDialog.hide()"
+						actionListener="#{beanEquipo.save }"
+						update=":form:table, growl" />
+					<p:commandButton value="#{msg.cancelar }" icon="ui-icon-closethick"
+						oncomplete="nuevoDialog.hide()"
+						actionListener="#{beanEquipo.saveCancel }" />
+				</h:panelGrid>
+			</p:dialog>
+			<!-- Fin de panel de nuevo -->
+			<!-- Inicio de panel de edicion -->
+			<p:dialog id="dialogEditar" header="#{msg.frsNuevoRegistro}"
+				widgetVar="editarDialog" closable="true" modal="true"
+				draggable="false" width="400">
+				<h:panelGrid columns="2" width="100%" id="displayEditar">
+					<h:outputText value="#{msg.clave}" />
+					<h:panelGroup>
+						<h:inputText id="selectedCve"
+							value="#{beanEquipo.selectedClaveEdit}"
+							style="width: 260px; " />
+						<p:watermark for="selectedCve"
+							value="#{beanEquipo.equipoSelected.clave }" />
+					</h:panelGroup>
+					<h:outputText value="#{msg.descripcion}" />
+					<h:panelGroup>
+						<p:inputText id="inputNombreSelected" style="width: 260px; "
+							value="#{beanEquipo.selectedDscEdit }" />
+						<p:watermark for="inputNombreSelected"
+							value="#{beanEquipo.equipoSelected.dsc }" />
+					</h:panelGroup>
+					<h:outputText value="#{msg.tipoEquipo}" />
+					<p:selectOneMenu id="selectTipoSelected" style="min-width: 260px"
+						value="#{beanEquipo.idCatGralSelected }">
+						<f:selectItem itemLabel="#{msg.seleccionarTipoEq }"
+							itemValue="" />
+						<f:selectItems value="#{beanEquipo.listaSelectTiposEquipoCatGral }" />
+					</p:selectOneMenu>
+					<h:outputText id="activoPopupEditLabel" value="#{msg.activo}" />
+					<h:selectBooleanCheckbox id="activoPopupEdit"
+						value="#{beanEquipo.selectedActivo}">
+					</h:selectBooleanCheckbox>
+				</h:panelGrid>
+				<h:panelGrid style="float: right;" columns="2">
+					<p:commandButton value="#{msg.aceptar }" icon="ui-icon-check"
+						oncomplete="editarDialog.hide()"
+						actionListener="#{beanEquipo.update }"
+						update=":form:table, growl" />
+					<p:commandButton value="#{msg.cancelar }" icon="ui-icon-closethick"
+						oncomplete="editarDialog.hide()"
+						actionListener="#{beanEquipo.canceldelete }" />
+				</h:panelGrid>
+			</p:dialog>
+			<!-- Fin de panel de edicion -->
+			<!-- Panel de borrado -->
+			<p:confirmDialog showEffect="fade" widgetVar="borrarDialog"
+				header="#{msg.confirmar }" message="#{msg.frsBorrarConfirmacion }">
+				<p:commandButton value="#{msg.si }"
+					actionListener="#{beanEquipo.delete}"
+					update="table, growl" styleClass="ui-confirmdialog-yes"
+					icon="ui-icon-check" oncomplete="borrarDialog.hide()" />
+				<p:commandButton value="#{msg.no }" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close"
+					onclick="borrarDialog.hide()" />
+			</p:confirmDialog>
+			<!-- Fin de panel de borrado -->
 		</h:form>
-	</ui:composition>
-</h:body>
+
+	</ui:define>
+</ui:composition>
+
 </html>

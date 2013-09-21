@@ -15,8 +15,11 @@ public class DomicilioDTO implements Serializable {
 	private String telefono;
 	private int idDomicilio;
 	private int idAsentamiento;
+	private String asentamiento;
 	private int idMunicipio;
+	private String municipio;
 	private int idEstado;
+	private String estado;
 
 	public String getCalle() {
 		return calle;
@@ -122,6 +125,48 @@ public class DomicilioDTO implements Serializable {
 				+ telefono + ", idDomicilio=" + idDomicilio
 				+ ", idAsentamiento=" + idAsentamiento + ", idMunicipio="
 				+ idMunicipio + ", idEstado=" + idEstado + "]";
+	}
+
+	/**
+	 * @return the asentamiento
+	 */
+	public String getAsentamiento() {
+		return asentamiento;
+	}
+
+	/**
+	 * @param asentamiento the asentamiento to set
+	 */
+	public void setAsentamiento(String asentamiento) {
+		this.asentamiento = asentamiento;
+	}
+
+	/**
+	 * @return the municipio
+	 */
+	public String getMunicipio() {
+		return municipio;
+	}
+
+	/**
+	 * @param municipio the municipio to set
+	 */
+	public void setMunicipio(String municipio) {
+		this.municipio = municipio;
+	}
+
+	/**
+	 * @return the estado
+	 */
+	public String getEstado() {
+		return estado;
+	}
+
+	/**
+	 * @param estado the estado to set
+	 */
+	public void setEstado(String estado) {
+		this.estado = estado;
 	}
 	
 }

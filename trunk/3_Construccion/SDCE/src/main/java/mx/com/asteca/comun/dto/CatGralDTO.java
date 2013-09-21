@@ -56,4 +56,42 @@ public class CatGralDTO implements Serializable {
 	public void setIdTipoCatGral(int idTipoCatGral) {
 		this.idTipoCatGral = idTipoCatGral;
 	}
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + idCatGral;
+		return result;
+	}
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		CatGralDTO other = (CatGralDTO) obj;
+		if (idCatGral != other.idCatGral)
+			return false;
+		return true;
+	}
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "CatGralDTO [cveRegistro=" + cveRegistro + ", dsc=" + dsc
+				+ ", estatus=" + estatus + ", activo=" + activo
+				+ ", idCatGral=" + idCatGral + ", idTipoCatGral="
+				+ idTipoCatGral + "]";
+	}
+	
+	
 }

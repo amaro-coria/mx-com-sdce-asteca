@@ -60,5 +60,6 @@
     <mapping class="mx.com.asteca.persistencia.entidades.Permisos"/>
     <mapping class="mx.com.asteca.persistencia.entidades.Estudios"/>
     <mapping class="mx.com.asteca.persistencia.entidades.Municipios"/>
+
   </session-factory>
 </hibernate-configuration>
