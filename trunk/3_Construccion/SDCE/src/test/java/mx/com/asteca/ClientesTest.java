@@ -6,11 +6,14 @@
  */
 package mx.com.asteca;
 
+import static org.junit.Assert.assertNotNull;
+
 import java.util.List;
-import java.util.logging.Level;
+
 import mx.com.asteca.persistencia.PersistenciaException;
 import mx.com.asteca.persistencia.dao.ClienteDAO;
 import mx.com.asteca.persistencia.entidades.Clientes;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -18,7 +21,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import static org.junit.Assert.*;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * {Insert class description here}
@@ -36,6 +39,7 @@ public class ClientesTest {
     private ClienteDAO clienteDAO;
     
     @Test
+    @Transactional(readOnly=true)
     public void testClientes(){
         try {
             List<Clientes> listaClientes =  clienteDAO.getAll();
