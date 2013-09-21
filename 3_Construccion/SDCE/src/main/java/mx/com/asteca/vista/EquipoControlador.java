@@ -13,254 +13,634 @@ import javax.faces.model.SelectItem;
 import mx.com.asteca.comun.Constantes;
 import mx.com.asteca.comun.dto.CatGralDTO;
 import mx.com.asteca.comun.dto.EquipoDTO;
-import mx.com.asteca.fachada.CatGralFachada;
 import mx.com.asteca.fachada.EquipoFachada;
 import mx.com.asteca.fachada.FachadaException;
-import mx.com.asteca.fachada.impl.CatGralFachadaImpl;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @ManagedBean(name = Constantes.BEAN_EQUIPO)
 @ViewScoped
-public class EquipoControlador extends BaseController implements Serializable{
+public class EquipoControlador extends BaseController implements Serializable {
 
 	/**
-	 * 
+	 * Declara ID serializable
 	 */
 	private static final long serialVersionUID = 1L;
-
-	private static Logger LOGGER = LoggerFactory.getLogger(EquipoControlador.class);
-	
-	private List<EquipoDTO> listaEquipo;
-	private List<EquipoDTO> filterEquipo;
-
+	/*
+	 * Tiene que ser transient para no generar excepcion de no serializacion
+	 */
 	@ManagedProperty("#{equipoFachadaImpl}")
-	private EquipoFachada equipoFachada;
-	
-	@ManagedProperty("#{catGralFachadaImpl}")
-	private CatGralFachada tipoEquipoFachada;
-	
-	private List<SelectItem> listaSelectTipos;
-	
+	private transient EquipoFachada fachadaEquipo;
 	private EquipoDTO equipoSelected;
-	private String clave;
-	private String descripcion;
-	private Long tipoEquipo;
-	private boolean dialogVisible;
+	private EquipoDTO equipoNuevo;
+	private CatGralDTO catGralSelected;
+	private CatGralDTO catGralNuevo;
+	private List<EquipoDTO> listaEquipos;
+	private List<CatGralDTO> listaCatGral;
+	private List<SelectItem> listaSelectCve;
+	private List<SelectItem> listaSelectDsc;
+	private List<SelectItem> listaSelectTipo;
+	private List<SelectItem> listaSelectTiposEquipoCatGral;
+	private int idCatGralSelected;
+	private int idCatGralNuevo;
+	private String selectedDsc;
+	private String selectedClave;
+	private String selectedTipo;
+	private String selectedDscEdit;
+	private String selectedClaveEdit;
+	private String selectedTipoEdit;
+	private List<EquipoDTO> filteredList;
+	private boolean selectedActivo;
+	private boolean nuevoActivo;
+
+	public EquipoControlador() {
+		equipoSelected = new EquipoDTO();
+		equipoNuevo = new EquipoDTO();
+		catGralSelected = new CatGralDTO();
+		catGralNuevo = new CatGralDTO();
+	}
+
 	/**
-	 * 
-	 * @throws FachadaException
+	 * Inicializa la lista de equipos
 	 */
-	private void initListaEquipo() {
-		if(CollectionUtils.isEmpty(listaEquipo)){		
+	private void initListaEquipos() {
+		if (CollectionUtils.isEmpty(listaEquipos)) {
 			try {
-				if(equipoFachada != null){	
-					listaEquipo = equipoFachada.getAll();
-				}
-				else{
-					listaEquipo = new ArrayList<EquipoDTO>();
-				}
+				listaEquipos = fachadaEquipo.getAll();
 			} catch (FachadaException e) {
-				listaEquipo = new ArrayList<EquipoDTO>();
-				LOGGER.error(Constantes.ERROR_OBTENIENDO_LISTA_CATALOGO);
+				super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
+						Constantes.ERROR_OBTENIENDO_LISTA_CATALOGO);
+			}
+		}
+	}
+
+	/**
+	 * Inicializa la lista de catalogoGeneral con la lista de tipos de equipos
+	 */
+	private void initListaCatGral() {
+		if (CollectionUtils.isEmpty(listaCatGral)) {
+			try {
+				listaCatGral = fachadaEquipo.getListaTipoEquipos();
+			} catch (FachadaException e) {
+				super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
+						Constantes.ERROR_OBTENIENDO_LISTA_CATALOGO);
+			}
+		}
+	}
+
+	/**
+	 * Inicializa la lista de <code>SelecItem</code> para la seleccion de items en combo
+	 */
+	private void initListaSelectTiposEquipoCatGral(){
+		if(CollectionUtils.isEmpty(listaSelectTiposEquipoCatGral)){
+			listaSelectTiposEquipoCatGral = new ArrayList<SelectItem>();
+			for(CatGralDTO dto : getListaCatGral()){
+				SelectItem item = new SelectItem(dto.getIdCatGral(), dto.getDsc());
+				listaSelectTiposEquipoCatGral.add(item);
 			}
 		}
 	}
 	
 	/**
-	 * 
-	 * @throws FachadaException
+	 * Inicializa la lista de <code>SelecItem</code> para la seleccion de items en combo
 	 */
-	private void initTiposEquipos() {
-		if(CollectionUtils.isEmpty(listaSelectTipos)){		
-			try {
-				List<CatGralDTO> tiposAux = tipoEquipoFachada.findByCve("TIPOEQUIPO");
-				if(tiposAux != null){
-					listaSelectTipos = new ArrayList<SelectItem>();
-					for (CatGralDTO tiposEquipo : tiposAux) {
-						listaSelectTipos.add(new SelectItem(tiposEquipo.getIdCatGral(), tiposEquipo.getDsc()));
-					}
-				}
-				else{
-					listaSelectTipos = new ArrayList<SelectItem>();
-				}
-			} catch (FachadaException e) {
-				LOGGER.error(Constantes.ERROR_OBTENIENDO_LISTA_CATALOGO);
+	private void initListaSelectCve() {
+		if (CollectionUtils.isEmpty(listaSelectCve)) {
+			listaSelectCve = new ArrayList<SelectItem>();
+			for (EquipoDTO dto : getListaEquipos()) {
+				SelectItem item = new SelectItem(dto.getClave(), dto.getClave());
+				listaSelectCve.add(item);
 			}
 		}
 	}
+
 	/**
+	 * Cambia el valor de la lista de descripciones dependiendo de la clave
+	 * seleccionada
+	 */
+	public void cambiaDescSelect() {
+		if (selectedClave != null && !selectedClave.isEmpty()) {
+			listaSelectDsc = new ArrayList<SelectItem>();
+			List<EquipoDTO> listaDTOs;
+			try {
+				listaDTOs = fachadaEquipo.findByClave(selectedClave);
+				for (EquipoDTO dto : listaDTOs) {
+					SelectItem item = new SelectItem(dto.getDsc(), dto.getDsc());
+					listaSelectDsc.add(item);
+				}
+			} catch (FachadaException e) {
+				super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
+						Constantes.ERROR_OBTENIENDO_LISTA_CATALOGO);
+			}
+		} else {
+			listaSelectDsc = new ArrayList<SelectItem>();
+		}
+	}
+
+	/**
+	 * Cambia el valor de la lista de descripciones dependiendo de la clave y descripcion
+	 * seleccionada
+	 */
+	public void cambiaTipoEquipoSelect() {
+		if (selectedClave != null && !selectedClave.isEmpty()
+				&& selectedDsc != null && !selectedDsc.isEmpty()) {
+			listaSelectTipo = new ArrayList<SelectItem>();
+			List<EquipoDTO> listaDTOs;
+			try {
+				listaDTOs = fachadaEquipo.findByClaveAndDsc(
+						selectedClave, selectedDsc);
+				for (EquipoDTO dto : listaDTOs) {
+					SelectItem item = new SelectItem(dto.getDscTipo(),
+							dto.getDscTipo());
+					listaSelectTipo.add(item);
+				}
+			} catch (FachadaException e) {
+				super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
+						Constantes.ERROR_OBTENIENDO_LISTA_CATALOGO);
+			}
+		} else {
+			listaSelectTipo = new ArrayList<SelectItem>();
+		}
+	}
+
+	/**
+	 * Limpia los valores de busqueda
 	 * 
 	 * @param e
 	 */
 	public void limpiarFiltrado(ActionEvent e) {
-		listaEquipo = null;
-		listaSelectTipos = null;
-		
-		clave = null;
-		descripcion = null;
-		tipoEquipo = null;
-		equipoSelected = null;
-		filterEquipo = null;
-		
-		initListaEquipo();
-		initTiposEquipos();
+		listaEquipos = null;
+		initListaEquipos();
+		listaSelectCve = null;
+		initListaSelectCve();
 	}
+
 	/**
+	 * Realiza la busqueda y actualiza valores para el datatable
 	 * 
 	 * @param e
 	 */
-	public void buscarFiltrado(ActionEvent e){
+	public void buscarFiltrado(ActionEvent e) {
 		try {
-			if(clave != null && clave.trim().length() > 0
-					&& tipoEquipo != null && tipoEquipo > 0){
-//				listaNotificacion = notificacionFachada.getNotificacionByEstadoAndTipo(Selected, tipoSelected);
+			if (selectedClave == null || selectedClave.isEmpty()) {
+				listaEquipos = null;
+				listaSelectCve = null;
+				initListaEquipos();
+				initListaSelectCve();
+			} else if (selectedDsc == null || selectedDsc.isEmpty()) {
+				listaEquipos = fachadaEquipo.findByClave(selectedClave);
+			} else if (selectedTipo == null
+					|| selectedTipo.isEmpty()) {
+				listaEquipos = fachadaEquipo.findByClaveAndDsc(
+						selectedClave, selectedDsc);
+			} else {
+				listaEquipos = fachadaEquipo.findByClaveDscAndTipo(
+						selectedClave, selectedDsc,
+						selectedTipo);
 			}
-			else if(clave != null && clave.trim().length() > 0){
-//				listaNotificacion = notificacionFachada.getNotificacionByEstado(clave);
-			}
-			else if(tipoEquipo != null && tipoEquipo > 0){
-//				listaEquipo = equipoFachada.getNotificacionByTipo(tipoEquipo);
-			}
-			else{
-					listaEquipo = equipoFachada.getAll();
-			}
+		} catch (FachadaException ex) {
+			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
+					Constantes.ERROR_OBTENIENDO_LISTA_CATALOGO);
 		}
-		catch (FachadaException e1) {
-			e1.printStackTrace();
+
+	}
+	
+	/**
+	 * Cancela el borrado del registro seleccionado. 
+	 * @param e
+	 */
+	public void cancelDelete(ActionEvent e){
+		setSelectedClave("");
+		setSelectedDsc("");
+		setSelectedTipo("");
+	}
+	
+	/**
+	 * Borra el estado seleccionado
+	 * @param e
+	 */
+	public void delete(ActionEvent e) {
+		try {
+			fachadaEquipo.remove(equipoSelected);
+			listaEquipos.remove(equipoSelected);
+			cambiaDescSelect();
+		} catch (FachadaException e1) {
+			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR, Constantes.ERROR_DELETE_REGISTRO);
+			return;
 		}
-	}
-	
-	public void ver(ActionEvent e){
-		dialogVisible = equipoSelected == null ? false : true; 
-	}
-	
-	/**
-	 * @return the listaEquipo
-	 */
-	public List<EquipoDTO> getListaEquipo() {
-		initListaEquipo();
-		return listaEquipo;
+		setSelectedClave("");
+		setSelectedDsc("");
+		setSelectedTipo("");
+		super.addInfoMessage(Constantes.DELETE_REGISTRO_EXITOSO);
 	}
 	
 	/**
-	 * @param listaEquipo the listaEquipo to set
+	 * Actualiza el registro seleccionado
+	 * @param e
 	 */
-	public void setListaEquipo(List<EquipoDTO> listaEquipo) {
-		this.listaEquipo = listaEquipo;
+	public void update(ActionEvent e) {
+		equipoSelected.setActivo(selectedActivo == true ? (short) 1
+				: (short) 0);
+		if(selectedClaveEdit != null && !selectedClaveEdit.isEmpty()){
+			equipoSelected.setClave(selectedClaveEdit);
+		}
+		if(selectedDscEdit != null && !selectedDscEdit.isEmpty()){
+			equipoSelected.setDsc(selectedDscEdit);
+		}
+		if(idCatGralSelected ==0){
+			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR, Constantes.ERROR_NECESITAS_SELECCIONAR_UN_TIPO_EQUIPO);
+			return;
+		}else{
+			equipoSelected.setIdTipo(idCatGralSelected);
+		}
+		try {
+			fachadaEquipo.update(equipoSelected);
+				CatGralDTO temp = new CatGralDTO();
+				temp.setIdCatGral(idCatGralSelected);
+				int index = listaCatGral.indexOf(temp);
+				CatGralDTO temp2 = listaCatGral.get(index);
+				equipoSelected.setDscTipo(temp2.getDsc());				
+			int indexListFilter = listaEquipos.indexOf(equipoSelected);
+			if(indexListFilter > 0){
+				listaEquipos.set(indexListFilter, equipoSelected);
+			}
+			cambiaDescSelect();
+			setSelectedClaveEdit("");
+			setSelectedDscEdit("");
+			setSelectedTipoEdit("");
+		} catch (FachadaException e1) {
+			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR, Constantes.ERROR_UPDATE_REGISTRO);
+			return;
+		}
+		super.addInfoMessage(Constantes.UPDATE_REGISTRO_EXITOSO);
 	}
+	
+	/**
+	 * Guarda el nuevo registro en BD
+	 * @param e
+	 */
+	public void save(ActionEvent e) {
+		equipoNuevo
+				.setActivo(nuevoActivo == true ? (short) 1 : (short) 0);
+		if(idCatGralNuevo ==0){
+			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR, Constantes.ERROR_NECESITAS_SELECCIONAR_UN_TIPO_EQUIPO);
+			return;
+		}else{
+			equipoNuevo.setIdTipo(idCatGralNuevo);
+		}
+		try {
+			int pk = fachadaEquipo.save(equipoNuevo);
+			//TODO propagar este cambio a los controladores anteriores, estado, municipio, ctes, catGral
+			CatGralDTO temp = new CatGralDTO();
+			temp.setIdCatGral(idCatGralNuevo);
+			int index = listaCatGral.indexOf(temp);
+			CatGralDTO temp2 = listaCatGral.get(index);
+			equipoNuevo.setDscTipo(temp2.getDsc());
+			equipoNuevo.setIdEquipo(pk);
+			listaEquipos.add(equipoNuevo);
+			cambiaDescSelect();
+			//refreshEstados();
+		} catch (FachadaException e1) {
+			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR, Constantes.ERROR_NUEVO_REGISTRO);
+			return;
+		}
+		equipoNuevo = new EquipoDTO();
+		super.addInfoMessage(Constantes.NUEVO_REGISTRO_EXITOSO);
+	}
+	
+	/**
+	 * Cancela el guardar nuevo registro
+	 * @param e
+	 */
+	public void saveCancel(ActionEvent e){
+		equipoNuevo = new  EquipoDTO();
+	}	
 
-	/**
-	 * @param equipoFachada the equipoFachada to set
-	 */
-	public void setEquipoFachada(EquipoFachada equipoFachada) {
-		this.equipoFachada = equipoFachada;
-	}
+	//  ---------------------- GETTERS AND SETTERS -------------------------   //
 	
 	/**
-	 * @param tipoEquipoFachada the tipoEquipoFachada to set
-	 */
-	public void setTipoEquipoFachada(CatGralFachada tipoEquipoFachada) {
-		this.tipoEquipoFachada = tipoEquipoFachada;
-	}
-	
-	/**
-	 * @return the tipos
-	 */
-	public List<SelectItem> getListaSelectTipos() {
-		initTiposEquipos();
-		return listaSelectTipos;
-	}
-
-	/**
-	 * @param tipos the tipos to set
-	 */
-	public void setListaSelectTipos(List<SelectItem> tipos) {
-		this.listaSelectTipos = tipos;
-	}
-
-	/**
-	 * @return the equipocacionSelected
+	 * @return the equipoSelected
 	 */
 	public EquipoDTO getEquipoSelected() {
 		return equipoSelected;
 	}
 
 	/**
-	 * @param setEquipoSelected the equipoSelected to set
+	 * @param equipoSelected
+	 *            the equipoSelected to set
 	 */
 	public void setEquipoSelected(EquipoDTO equipoSelected) {
 		this.equipoSelected = equipoSelected;
 	}
 
 	/**
-	 * @return the filterEquipo
+	 * @return the equipoNuevo
 	 */
-	public List<EquipoDTO> getFilterEquipo() {
-		return filterEquipo;
+	public EquipoDTO getEquipoNuevo() {
+		return equipoNuevo;
 	}
 
 	/**
-	 * @param filterEquipo the filterEquipo to set
+	 * @param equipoNuevo
+	 *            the equipoNuevo to set
 	 */
-	public void setFilterEquipo(List<EquipoDTO> filterEquipo) {
-		this.filterEquipo = filterEquipo;
-	}	
-	/**
-	 * @return the getClave
-	 */
-	public String getClave() {
-		return clave;
+	public void setEquipoNuevo(EquipoDTO equipoNuevo) {
+		this.equipoNuevo = equipoNuevo;
 	}
 
 	/**
-	 * @param setClave the clave to set
+	 * @return the catGralSelected
 	 */
-	public void setClave(String clave) {
-		this.clave = clave;
+	public CatGralDTO getCatGralSelected() {
+		return catGralSelected;
 	}
 
 	/**
-	 * @return the tipoEquipo
+	 * @param catGralSelected
+	 *            the catGralSelected to set
 	 */
-	public Long getTipoEquipo() {
-		return tipoEquipo;
+	public void setCatGralSelected(CatGralDTO catGralSelected) {
+		this.catGralSelected = catGralSelected;
 	}
 
 	/**
-	 * @param setTipoEquipo the tipoEquipo to set
+	 * @return the listaEquipos
 	 */
-	public void setTipoEquipo(Long tipoEquipo) {
-		this.tipoEquipo = tipoEquipo;
+	public List<EquipoDTO> getListaEquipos() {
+		initListaEquipos();
+		return listaEquipos;
 	}
 
 	/**
-	 * @return the dialogVisible
+	 * @param listaEquipos
+	 *            the listaEquipos to set
 	 */
-	public boolean getDialogVisible() {
-		return dialogVisible;
+	public void setListaEquipos(List<EquipoDTO> listaEquipos) {
+		this.listaEquipos = listaEquipos;
 	}
 
 	/**
-	 * @param dialogVisible the dialogVisible to set
+	 * @return the listaCatGral
 	 */
-	public void setDialogVisible(boolean dialogVisible) {
-		this.dialogVisible = dialogVisible;
+	public List<CatGralDTO> getListaCatGral() {
+		initListaCatGral();
+		return listaCatGral;
 	}
 
 	/**
-	 * @return the descripcion
+	 * @param listaCatGral
+	 *            the listaCatGral to set
 	 */
-	public String getDescripcion() {
-		return descripcion;
+	public void setListaCatGral(List<CatGralDTO> listaCatGral) {
+		this.listaCatGral = listaCatGral;
 	}
 
 	/**
-	 * @param descripcion the descripcion to set
+	 * @return the listaSelectEquiposCve
 	 */
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
+	public List<SelectItem> getListaSelectCve() {
+		initListaSelectCve();
+		return listaSelectCve;
 	}
+
+	/**
+	 * @param listaSelectEquiposCve
+	 *            the listaSelectEquiposCve to set
+	 */
+	public void setListaSelectCve(List<SelectItem> listaSelectEquiposCve) {
+		this.listaSelectCve = listaSelectEquiposCve;
+	}
+
+	/**
+	 * @return the listaSelectEquiposDsc
+	 */
+	public List<SelectItem> getListaSelectDsc() {
+		return listaSelectDsc;
+	}
+
+	/**
+	 * @param listaSelectEquiposDsc
+	 *            the listaSelectEquiposDsc to set
+	 */
+	public void setListaSelectDsc(List<SelectItem> listaSelectEquiposDsc) {
+		this.listaSelectDsc = listaSelectEquiposDsc;
+	}
+
+	/**
+	 * @return the listaSelectEquiposTipo
+	 */
+	public List<SelectItem> getListaSelectTipo() {
+		return listaSelectTipo;
+	}
+
+	/**
+	 * @param listaSelectEquiposTipo
+	 *            the listaSelectEquiposTipo to set
+	 */
+	public void setListaSelectTipo(
+			List<SelectItem> listaSelectEquiposTipo) {
+		this.listaSelectTipo = listaSelectEquiposTipo;
+	}
+
+	/**
+	 * @return the idCatGralSelected
+	 */
+	public int getIdCatGralSelected() {
+		return idCatGralSelected;
+	}
+
+	/**
+	 * @param idCatGralSelected
+	 *            the idCatGralSelected to set
+	 */
+	public void setIdCatGralSelected(int idCatGralSelected) {
+		this.idCatGralSelected = idCatGralSelected;
+	}
+
+	/**
+	 * @return the idCatGralNuevo
+	 */
+	public int getIdCatGralNuevo() {
+		return idCatGralNuevo;
+	}
+
+	/**
+	 * @param idCatGralNuevo
+	 *            the idCatGralNuevo to set
+	 */
+	public void setIdCatGralNuevo(int idCatGralNuevo) {
+		this.idCatGralNuevo = idCatGralNuevo;
+	}
+
+	/**
+	 * @return the selectedEquipoDsc
+	 */
+	public String getSelectedDsc() {
+		return selectedDsc;
+	}
+
+	/**
+	 * @param selectedEquipoDsc
+	 *            the selectedEquipoDsc to set
+	 */
+	public void setSelectedDsc(String selectedEquipoDsc) {
+		this.selectedDsc = selectedEquipoDsc;
+	}
+
+	/**
+	 * @return the selectedEquipoClave
+	 */
+	public String getSelectedClave() {
+		return selectedClave;
+	}
+
+	/**
+	 * @param selectedEquipoClave
+	 *            the selectedEquipoClave to set
+	 */
+	public void setSelectedClave(String selectedEquipoClave) {
+		this.selectedClave = selectedEquipoClave;
+	}
+
+
+	/**
+	 * @param fachadaEquipo
+	 *            the fachadaEquipo to set
+	 */
+	public void setFachadaEquipo(EquipoFachada fachadaEquipo) {
+		this.fachadaEquipo = fachadaEquipo;
+	}
+
+	/**
+	 * @return the catGralNuevo
+	 */
+	public CatGralDTO getCatGralNuevo() {
+		return catGralNuevo;
+	}
+
+	/**
+	 * @param catGralNuevo
+	 *            the catGralNuevo to set
+	 */
+	public void setCatGralNuevo(CatGralDTO catGralNuevo) {
+		this.catGralNuevo = catGralNuevo;
+	}
+
+	/**
+	 * @return the equipoSelectedActivo
+	 */
+	public boolean isSelectedActivo() {
+		return selectedActivo;
+	}
+
+	/**
+	 * @param equipoSelectedActivo
+	 *            the equipoSelectedActivo to set
+	 */
+	public void setSelectedActivo(boolean equipoSelectedActivo) {
+		this.selectedActivo = equipoSelectedActivo;
+	}
+
+	/**
+	 * @return the equipoNuevoActivo
+	 */
+	public boolean isNuevoActivo() {
+		return nuevoActivo;
+	}
+
+	/**
+	 * @param equipoNuevoActivo
+	 *            the equipoNuevoActivo to set
+	 */
+	public void setNuevoActivo(boolean equipoNuevoActivo) {
+		this.nuevoActivo = equipoNuevoActivo;
+	}
+
+	/**
+	 * @return the selectedEquipoTipo
+	 */
+	public String getSelectedTipo() {
+		return selectedTipo;
+	}
+
+	/**
+	 * @param selectedEquipoTipo
+	 *            the selectedEquipoTipo to set
+	 */
+	public void setSelectedTipo(String selectedEquipoTipo) {
+		this.selectedTipo = selectedEquipoTipo;
+	}
+
+	/**
+	 * @return the filteredList
+	 */
+	public List<EquipoDTO> getFilteredList() {
+		return filteredList;
+	}
+
+	/**
+	 * @param filteredList the filteredList to set
+	 */
+	public void setFilteredList(List<EquipoDTO> filteredList) {
+		this.filteredList = filteredList;
+	}
+
+	/**
+	 * @return the listaSelectTiposEquipoCatGral
+	 */
+	public List<SelectItem> getListaSelectTiposEquipoCatGral() {
+		initListaSelectTiposEquipoCatGral();
+		return listaSelectTiposEquipoCatGral;
+	}
+
+	/**
+	 * @param listaSelectTiposEquipoCatGral the listaSelectTiposEquipoCatGral to set
+	 */
+	public void setListaSelectTiposEquipoCatGral(
+			List<SelectItem> listaSelectTiposEquipoCatGral) {
+		this.listaSelectTiposEquipoCatGral = listaSelectTiposEquipoCatGral;
+	}
+
+	/**
+	 * @return the selectedDscEdit
+	 */
+	public String getSelectedDscEdit() {
+		return selectedDscEdit;
+	}
+
+	/**
+	 * @param selectedDscEdit the selectedDscEdit to set
+	 */
+	public void setSelectedDscEdit(String selectedDscEdit) {
+		this.selectedDscEdit = selectedDscEdit;
+	}
+
+	/**
+	 * @return the selectedClaveEdit
+	 */
+	public String getSelectedClaveEdit() {
+		return selectedClaveEdit;
+	}
+
+	/**
+	 * @param selectedClaveEdit the selectedClaveEdit to set
+	 */
+	public void setSelectedClaveEdit(String selectedClaveEdit) {
+		this.selectedClaveEdit = selectedClaveEdit;
+	}
+
+	/**
+	 * @return the selectedTipoEdit
+	 */
+	public String getSelectedTipoEdit() {
+		return selectedTipoEdit;
+	}
+
+	/**
+	 * @param selectedTipoEdit the selectedTipoEdit to set
+	 */
+	public void setSelectedTipoEdit(String selectedTipoEdit) {
+		this.selectedTipoEdit = selectedTipoEdit;
+	}
+
 }
