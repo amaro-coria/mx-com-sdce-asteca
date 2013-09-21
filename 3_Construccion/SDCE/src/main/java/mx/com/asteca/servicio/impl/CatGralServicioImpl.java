@@ -94,4 +94,76 @@ public class CatGralServicioImpl extends
 		}
 	}
 
+	@Override
+	@Transactional(readOnly=true)
+	public List<CatGralDTO> findTiposEquipo() throws ServicioException {
+		try {
+			List<CatGral> listMapping = catGralDAO.findTiposEquipo();
+			List<CatGralDTO> listaDTOs = assemblerCatGral.getDTOListTransform(listMapping);
+			return listaDTOs;
+		} catch (PersistenciaException e) {
+			throw new ServicioException("Error obteniendo la lista del dao"+e.getMessage(), e);
+		}
+	}
+	
+	@Override
+	@Transactional(readOnly=true)
+	public List<CatGralDTO> findTiposArea() throws ServicioException {
+		try {
+			List<CatGral> listMapping = catGralDAO.findAreas();
+			List<CatGralDTO> listaDTOs = assemblerCatGral.getDTOListTransform(listMapping);
+			return listaDTOs;
+		} catch (PersistenciaException e) {
+			throw new ServicioException("Error obteniendo la lista del dao"+e.getMessage(), e);
+		}
+	}
+	
+	@Override
+	@Transactional(readOnly=true)
+	public List<CatGralDTO> findTiposSede() throws ServicioException {
+		try {
+			List<CatGral> listMapping = catGralDAO.findSedes();
+			List<CatGralDTO> listaDTOs = assemblerCatGral.getDTOListTransform(listMapping);
+			return listaDTOs;
+		} catch (PersistenciaException e) {
+			throw new ServicioException("Error obteniendo la lista del dao"+e.getMessage(), e);
+		}
+	}
+	
+	@Override
+	@Transactional(readOnly=true)
+	public List<CatGralDTO> findTiposPais() throws ServicioException {
+		try {
+			List<CatGral> listMapping = catGralDAO.findPaises();
+			List<CatGralDTO> listaDTOs = assemblerCatGral.getDTOListTransform(listMapping);
+			return listaDTOs;
+		} catch (PersistenciaException e) {
+			throw new ServicioException("Error obteniendo la lista del dao"+e.getMessage(), e);
+		}
+	}
+	
+	@Override
+	@Transactional(readOnly=true)
+	public List<CatGralDTO> findTiposClasifCurso() throws ServicioException {
+		try {
+			List<CatGral> listMapping = catGralDAO.findClasifCurso();
+			List<CatGralDTO> listaDTOs = assemblerCatGral.getDTOListTransform(listMapping);
+			return listaDTOs;
+		} catch (PersistenciaException e) {
+			throw new ServicioException("Error obteniendo la lista del dao"+e.getMessage(), e);
+		}
+	}
+	
+	@Override
+	@Transactional(readOnly=true)
+	public List<CatGralDTO> findTiposMaterias() throws ServicioException {
+		try {
+			List<CatGral> listMapping = catGralDAO.findMaterias();
+			List<CatGralDTO> listaDTOs = assemblerCatGral.getDTOListTransform(listMapping);
+			return listaDTOs;
+		} catch (PersistenciaException e) {
+			throw new ServicioException("Error obteniendo la lista del dao"+e.getMessage(), e);
+		}
+	}
+
 }

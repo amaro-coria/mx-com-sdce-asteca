@@ -6,15 +6,18 @@ package mx.com.asteca.comun.dto;
  * @author Rabelt Ibarra Godinez.
  * 
  */
-@SuppressWarnings("serial")
 public class EquipoDTO implements java.io.Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int idEquipo;
-	private long idCatGral;
-	private String descCatGral;
 	private String clave;
 	private String dsc;
 	private Short activo;
+	private String dscTipo;
+	private int idTipo;
 
 	public EquipoDTO() {
 	}
@@ -23,10 +26,8 @@ public class EquipoDTO implements java.io.Serializable {
 		this.idEquipo = idEquipo;
 	}
 
-	public EquipoDTO(int idEquipo, long idCatGral, String clave,
-			String dsc, Short activo) {
+	public EquipoDTO(int idEquipo, String clave, String dsc, Short activo) {
 		this.idEquipo = idEquipo;
-		this.idCatGral = idCatGral;
 		this.clave = clave;
 		this.dsc = dsc;
 		this.activo = activo;
@@ -38,14 +39,6 @@ public class EquipoDTO implements java.io.Serializable {
 
 	public void setIdEquipo(int idEquipo) {
 		this.idEquipo = idEquipo;
-	}
-
-	public long getIdCatGral() {
-		return this.idCatGral;
-	}
-
-	public void setIdCatGralDTO(long idCatGral) {
-		this.idCatGral = idCatGral;
 	}
 
 	public String getClave() {
@@ -73,17 +66,76 @@ public class EquipoDTO implements java.io.Serializable {
 	}
 
 	/**
-	 * @return the descCatGral
+	 * @return the dscTipo
 	 */
-	public String getDescCatGral() {
-		return descCatGral;
+	public String getDscTipo() {
+		return dscTipo;
 	}
 
 	/**
-	 * @param descCatGral the descCatGral to set
+	 * @param dscTipo
+	 *            the dscTipo to set
 	 */
-	public void setDescCatGral(String descCatGral) {
-		this.descCatGral = descCatGral;
+	public void setDscTipo(String dscTipo) {
+		this.dscTipo = dscTipo;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + idEquipo;
+		return result;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		EquipoDTO other = (EquipoDTO) obj;
+		if (idEquipo != other.idEquipo)
+			return false;
+		return true;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "EquipoDTO [idEquipo=" + idEquipo + ", clave=" + clave
+				+ ", dsc=" + dsc + ", activo=" + activo + ", dscTipo="
+				+ dscTipo + "]";
+	}
+
+	/**
+	 * @return the idTipo
+	 */
+	public int getIdTipo() {
+		return idTipo;
+	}
+
+	/**
+	 * @param idTipo the idTipo to set
+	 */
+	public void setIdTipo(int idTipo) {
+		this.idTipo = idTipo;
 	}
 
 }

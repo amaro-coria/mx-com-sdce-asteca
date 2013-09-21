@@ -3,6 +3,8 @@ package mx.com.asteca.comun.dto;
 import java.io.Serializable;
 import java.util.Date;
 
+import mx.com.asteca.util.FechaUtil;
+
 public class FamiliaDTO implements Serializable{
 
 	 /**
@@ -12,14 +14,19 @@ public class FamiliaDTO implements Serializable{
 	private int idFam;
      private String conyugueNombre;
      private Date conyugueFechaNac;
+     private String conyugueFechaNacStr;
      private String hijo1Nombre;
      private Date hijo1FechaNac;
+     private String hijo1FechaNacStr;
      private String hijo2Nombre;
      private Date hijo2FechaNac;
+     private String hijo2FechaNacStr;
      private String padreNombre;
      private Date padreFechaNac;
+     private String padreFechaNacStr;
      private String madreNombre;
      private Date madreFechaNac;
+     private String madreFechaNacStr;
 	/**
 	 * @return the idFam
 	 */
@@ -191,6 +198,71 @@ public class FamiliaDTO implements Serializable{
 				+ padreNombre + ", padreFechaNac=" + padreFechaNac
 				+ ", madreNombre=" + madreNombre + ", madreFechaNac="
 				+ madreFechaNac + "]";
+	}
+	/**
+	 * @return the conyugueFechaNacStr
+	 */
+	public String getConyugueFechaNacStr() {
+		String conyugueFechaNacStr = FechaUtil.getInstance().parseDateMM_dd_yy(conyugueFechaNac);
+		return conyugueFechaNacStr;
+	}
+	/**
+	 * @param conyugueFechaNacStr the conyugueFechaNacStr to set
+	 */
+	public void setConyugueFechaNacStr(String conyugueFechaNacStr) {
+		this.conyugueFechaNacStr = conyugueFechaNacStr;
+	}
+	/**
+	 * @return the hijo1FechaNacStr
+	 */
+	public String getHijo1FechaNacStr() {
+		String hijo1FechaNacStr = FechaUtil.getInstance().parseDateMM_dd_yy(hijo1FechaNac);
+		return hijo1FechaNacStr;
+	}
+	/**
+	 * @param hijo1FechaNacStr the hijo1FechaNacStr to set
+	 */
+	public void setHijo1FechaNacStr(String hijo1FechaNacStr) {
+		this.hijo1FechaNacStr = hijo1FechaNacStr;
+	}
+	/**
+	 * @return the hijo2FechaNacStr
+	 */
+	public String getHijo2FechaNacStr() {
+		String hijo2FechaNacStr = FechaUtil.getInstance().parseDateMM_dd_yy(hijo2FechaNac);
+		return hijo2FechaNacStr;
+	}
+	/**
+	 * @param hijo2FechaNacStr the hijo2FechaNacStr to set
+	 */
+	public void setHijo2FechaNacStr(String hijo2FechaNacStr) {
+		this.hijo2FechaNacStr = hijo2FechaNacStr;
+	}
+	/**
+	 * @return the padreFechaNacStr
+	 */
+	public String getPadreFechaNacStr() {
+		String padreFechaNacStr = FechaUtil.getInstance().parseDateMM_dd_yy(padreFechaNac);
+		return padreFechaNacStr;
+	}
+	/**
+	 * @param padreFechaNacStr the padreFechaNacStr to set
+	 */
+	public void setPadreFechaNacStr(String padreFechaNacStr) {
+		this.padreFechaNacStr = padreFechaNacStr;
+	}
+	/**
+	 * @return the madreFechaNacStr
+	 */
+	public String getMadreFechaNacStr() {
+		String madreFechaNacStr = FechaUtil.getInstance().parseDateMM_dd_yy(madreFechaNac);
+		return madreFechaNacStr;
+	}
+	/**
+	 * @param madreFechaNacStr the madreFechaNacStr to set
+	 */
+	public void setMadreFechaNacStr(String madreFechaNacStr) {
+		this.madreFechaNacStr = madreFechaNacStr;
 	}
 	
 	

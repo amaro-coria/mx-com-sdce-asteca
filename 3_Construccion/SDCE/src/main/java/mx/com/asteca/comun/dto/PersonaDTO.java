@@ -3,6 +3,8 @@ package mx.com.asteca.comun.dto;
 import java.io.Serializable;
 import java.util.Date;
 
+import mx.com.asteca.util.FechaUtil;
+
 public class PersonaDTO implements Serializable{
 
 	 /**
@@ -20,9 +22,9 @@ public class PersonaDTO implements Serializable{
      private String nombre;
      private String apellidoP;
      private String apellidoM;
+     private String fechaNacStr;
      private String usuario;
      private String password;
-     
 	/**
 	 * @return the idPersona
 	 */
@@ -155,18 +157,6 @@ public class PersonaDTO implements Serializable{
 	public void setApellidoM(String apellidoM) {
 		this.apellidoM = apellidoM;
 	}
-	public String getUsuario() {
-		return usuario;
-	}
-	public void setUsuario(String usuario) {
-		this.usuario = usuario;
-	}
-	public String getPassword() {
-		return password;
-	}
-	public void setPassword(String password) {
-		this.password = password;
-	}
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
 	 */
@@ -193,14 +183,52 @@ public class PersonaDTO implements Serializable{
 			return false;
 		return true;
 	}
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
 		return "PersonaDTO [idPersona=" + idPersona + ", fechaNac=" + fechaNac
 				+ ", lugarNac=" + lugarNac + ", curp=" + curp + ", rfc=" + rfc
 				+ ", ife=" + ife + ", pasaporte=" + pasaporte + ", email="
 				+ email + ", nombre=" + nombre + ", apellidoP=" + apellidoP
-				+ ", apellidoM=" + apellidoM + ", usuario=" + usuario
-				+ ", password=" + password + "]";
+				+ ", apellidoM=" + apellidoM + "]";
 	}
-	     
+	public String getFechaNacStr() {
+		if(fechaNac != null){
+			String fecha = FechaUtil.getInstance().parseDateMM_dd_yy(fechaNac);
+			return fecha;
+		}
+		return "N/A";
+	}
+	public void setFechaNacStr(String fechaNacStr) {
+		this.fechaNacStr = fechaNacStr;
+	}
+	/**
+	 * @return the usuario
+	 */
+	public String getUsuario() {
+		return usuario;
+	}
+	/**
+	 * @param usuario the usuario to set
+	 */
+	public void setUsuario(String usuario) {
+		this.usuario = usuario;
+	}
+	/**
+	 * @return the password
+	 */
+	public String getPassword() {
+		return password;
+	}
+	/**
+	 * @param password the password to set
+	 */
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	
+	
+     
 }

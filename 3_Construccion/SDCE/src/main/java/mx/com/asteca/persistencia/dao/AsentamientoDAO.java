@@ -18,4 +18,9 @@ public interface AsentamientoDAO extends
 		BaseDAO<Asentamientos, AsentamientosId> {
 
 	public List<Asentamientos> findByMunicipio(Municipios municipio) throws PersistenciaException;
+
+	List<Short> getDistinctCPs() throws PersistenciaException;
+
+	List<Asentamientos> findAsentamientosByCp(short idCp)
+			throws PersistenciaException;
 }

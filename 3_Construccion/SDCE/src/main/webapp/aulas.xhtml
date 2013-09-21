@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<ui:composition template="/layout.xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	<ui:define name="body">
+		<h:form id="form">
+			<p:growl id="growl" showDetail="true" sticky="true" />
+			<p:panel id="panel" header="Buscar" closable="false"
+				toggleable="false" style="text-align:center;">
+				<h:panelGrid columns="2" style="text-align:left;">
+					<h:outputText value="#{msg.sede} :" />
+					<p:selectOneMenu id="selectCveFilter"
+						value="#{beanAulas.selectedItemFilter }" style="min-width: 480px">
+						<f:selectItem itemLabel="#{msg.seleccionarSede }" itemValue="" />
+						<f:selectItems value="#{beanAulas.listaSelectItems}" />
+					</p:selectOneMenu>
+				</h:panelGrid>
+				<br />
+				<ul class="buttons">
+					<li><p:commandButton value="#{msg.limpiar}"
+							icon="ui-icon-arrowrefresh-1-e"
+							onclick=":form:selectCveFilter.selectValue('')"
+							actionListener="#{beanAulas.limpiarFiltrado }" update="growl" />
+					</li>
+					<li><p:commandButton icon="ui-icon-search"
+							actionListener="#{beanAulas.buscarFiltrado}"
+							value="#{msg.buscar}" update="growl, table" /></li>
+				</ul>
+			</p:panel>
+			<p:panel>
+				<h:panelGrid columns="4" style="text-align:left;">
+					<p:commandButton id="deleteButton" value="#{msg.eliminar }"
+						icon="ui-icon-trash" onclick="borrarDialog.show()" update="growl" />
+					<p:commandButton id="editarButton" value="#{msg.editar }"
+						icon="ui-icon-pencil" onclick="editarDialog.show()"
+						update=":form:displayEditar, growl" />
+					<p:commandButton id="viewButton" value="#{msg.ver }"
+						icon="ui-icon-search" oncomplete="verDialog.show()"
+						update=":form:displayVer, growl" />
+					<p:commandButton id="nuevoButton" value="#{msg.nuevo }"
+						icon="ui-icon-plusthick" onclick="nuevoDialog.show()"
+						update=":form:displayNuevo, growl" />
+				</h:panelGrid>
+			</p:panel>
+			<p:panel>
+				<p:dataTable id="table" value="#{beanAulas.listaItems}" var="item"
+					rowKey="#{item.idAula}" paginator="true"
+					selection="#{beanAulas.itemSelected}"
+					filteredValue="#{beanAulas.filteredList }"
+					paginatorPosition="bottom" rows="10">
+					<p:column selectionMode="single" style="width:2%" />
+					<p:column  headerText="#{msg.sede}"
+						filterBy="#{item.sede }" sortBy="#{item.sede}">
+						<h:outputText value="#{item.sede}" />
+					</p:column>
+					<p:column  headerText="#{msg.aula}" sortBy="#{item.dsc}"
+						filterBy="#{item.dsc}">
+						<h:outputText value="#{item.dsc}" />
+					</p:column>
+					<p:column headerText="#{msg.capacidad}"
+						filterBy="#{item.capacidad }" sortBy="#{item.capacidad}">
+						<h:outputText value="#{item.capacidad}" />
+					</p:column>
+
+				</p:dataTable>
+			</p:panel>
+			<!-- Panel de Ver -->
+			<p:dialog id="dialog" header="#{msg.ver}" widgetVar="verDialog"
+				modal="true">
+				<h:panelGrid id="displayVer" columns="2" cellpadding="4">
+					<h:panelGroup id="messagePanelVer" layout="block">
+						<h:messages errorStyle="color: red" infoStyle="color: green"
+							layout="list" style="font-size:12px;font-family:Arial" />
+					</h:panelGroup>
+					<h:outputText />
+					<h:outputText value="#{msg.clave}" />
+					<h:outputText value="#{beanAulas.itemSelected.clave}"
+						style="font-weight:bold" />
+					<h:outputText value="#{msg.descripcion}" />
+					<h:outputText value="#{beanAulas.itemSelected.dsc}"
+						style="font-weight:bold" />
+					<h:outputText value="#{msg.sede}" />
+					<h:outputText value="#{beanAulas.itemSelected.sede}"
+						style="font-weight:bold" />
+					<h:outputText value="#{msg.capacidad}" />
+					<h:outputText value="#{beanAulas.itemSelected.capacidad}"
+						style="font-weight:bold" />
+					<h:outputText value="#{msg.activo}" />
+					<h:outputText
+						value="#{beanAulas.itemSelected.activo == 1 ? 'Si' : 'No' }"
+						style="font-weight:bold" />
+				</h:panelGrid>
+				<p:commandButton id="aceptarVerBtn" value="#{msg.aceptar }"
+					icon="ui-icon-check" onclick="verDialog.hide()" />
+			</p:dialog>
+			<!-- Fin de panel de Ver -->
+			<!--  Inicio panel de Nuevo -->
+			<p:dialog id="dialogNuevo" header="#{msg.frsNuevoRegistro}"
+				widgetVar="nuevoDialog" closable="true" modal="true"
+				draggable="false" width="400">
+				<h:panelGrid columns="2" width="100%" id="displayNuevo">
+					<h:outputText value="#{msg.clave}" />
+					<p:inputText value="#{beanAulas.itemNuevo.clave}"
+						style="width: 260px; " />
+					<h:outputText value="#{msg.descripcion}" />
+					<p:inputText id="nombrePopupNuevo"
+						value="#{beanAulas.itemNuevo.dsc }" style="min-width: 260px" />
+					<h:outputText value="#{msg.sede}" />
+					<p:selectOneMenu id="selectSedeTipoNuevo" style="min-width: 260px"
+						value="#{beanAulas.idCatGralNuevo }">
+						<f:selectItem itemLabel="#{msg.seleccionarSede }" itemValue="" />
+						<f:selectItems value="#{beanAulas.listaSelectTiposItemsCatGral }" />
+					</p:selectOneMenu>
+					<h:outputText value="#{msg.capacidad}" />
+					<p:inputText id="capacidadPopupNuevo"
+						value="#{beanAulas.capacidadNuevo }" style="min-width: 260px" />
+					<h:outputText id="activoPopupNuevoLabel" value="#{msg.activo}" />
+					<h:selectBooleanCheckbox id="activoPopupNuevo"
+						value="#{beanAulas.nuevoActivo}">
+					</h:selectBooleanCheckbox>
+				</h:panelGrid>
+				<h:panelGrid style="float: right;" columns="2">
+					<p:commandButton value="#{msg.aceptar }" icon="ui-icon-check"
+						oncomplete="nuevoDialog.hide()"
+						actionListener="#{beanAulas.save }" update=":form:table, growl" />
+					<p:commandButton value="#{msg.cancelar }" icon="ui-icon-closethick"
+						oncomplete="nuevoDialog.hide()"
+						actionListener="#{beanAulas.saveCancel }" />
+				</h:panelGrid>
+			</p:dialog>
+			<!-- Fin de panel de nuevo -->
+			<!-- Inicio de panel de edicion -->
+			<p:dialog id="dialogEditar" header="#{msg.frsNuevoRegistro}"
+				widgetVar="editarDialog" closable="true" modal="true"
+				draggable="false" width="400">
+				<h:panelGrid columns="2" width="100%" id="displayEditar">
+					<h:outputText value="#{msg.clave}" />
+					<h:panelGroup>
+						<h:inputText id="selectedCve"
+							value="#{beanAulas.selectedClaveEdit}" style="width: 260px; " />
+						<p:watermark for="selectedCve"
+							value="#{beanAulas.itemSelected.clave }" />
+					</h:panelGroup>
+					<h:outputText value="#{msg.descripcion}" />
+					<h:panelGroup>
+						<p:inputText id="inputNombreSelected" style="width: 260px; "
+							value="#{beanAulas.selectedDscEdit }" />
+						<p:watermark for="inputNombreSelected"
+							value="#{beanAulas.itemSelected.dsc }" />
+					</h:panelGroup>
+					<h:outputText value="#{msg.sede}" />
+					<p:selectOneMenu id="selectTipoSelected" style="min-width: 260px"
+						value="#{beanAulas.idCatGralSelected }">
+						<f:selectItem itemLabel="#{msg.seleccionarSede }" itemValue="" />
+						<f:selectItems value="#{beanAulas.listaSelectTiposItemsCatGral }" />
+					</p:selectOneMenu>
+					<h:outputText value="#{msg.capacidad}" />
+					<h:panelGroup>
+						<p:inputText id="inputCapacidaqdSelected" style="width: 260px; "
+							value="#{beanAulas.selectedCapacidadEdit }" />
+						<p:watermark for="inputCapacidaqdSelected"
+							value="#{beanAulas.itemSelected.capacidad }" />
+					</h:panelGroup>
+					<h:outputText id="activoPopupEditLabel" value="#{msg.activo}" />
+					<h:selectBooleanCheckbox id="activoPopupEdit"
+						value="#{beanAulas.selectedActivo}">
+					</h:selectBooleanCheckbox>
+				</h:panelGrid>
+				<h:panelGrid style="float: right;" columns="2">
+					<p:commandButton value="#{msg.aceptar }" icon="ui-icon-check"
+						oncomplete="editarDialog.hide()"
+						actionListener="#{beanAulas.update }" update=":form:table, growl" />
+					<p:commandButton value="#{msg.cancelar }" icon="ui-icon-closethick"
+						oncomplete="editarDialog.hide()"
+						actionListener="#{beanAulas.canceldelete }" />
+				</h:panelGrid>
+			</p:dialog>
+			<!-- Fin de panel de edicion -->
+			<!-- Panel de borrado -->
+			<p:confirmDialog showEffect="fade" widgetVar="borrarDialog"
+				header="#{msg.confirmar }" message="#{msg.frsBorrarConfirmacion }">
+				<p:commandButton value="#{msg.si }"
+					actionListener="#{beanAulas.delete}" update="table, growl"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check"
+					oncomplete="borrarDialog.hide()" />
+				<p:commandButton value="#{msg.no }" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close"
+					onclick="borrarDialog.hide()" />
+			</p:confirmDialog>
+			<!-- Fin de panel de borrado -->
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+
+</html>
