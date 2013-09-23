@@ -1,15 +1,13 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<ui:composition template="/templates/layout.xhtml"
+<html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui">
-	<ui:define name="body">
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+<h:body>
+	<ui:composition>
 		<h:form id="form">
-			<p:growl id="growl" showDetail="true" sticky="true" />			
+			<p:growl id="growl" showDetail="true" sticky="true" />
 			<p:panel id="panel" header="Buscar" closable="false"
 				toggleable="false" style="text-align:center;">
 				<h:panelGrid columns="2" style="text-align:left;">
@@ -32,24 +30,29 @@
 					<h:outputText value="#{msg.municipios} :" />
 					<p:selectOneMenu id="selectMpioFilter" style="min-width: 500px"
 						value="#{beanMunicipios.idMunicipioFilter }">
-						<f:selectItem itemLabel="#{msg.seleccionarMuninicipio }" itemValue="" />
+						<f:selectItem itemLabel="#{msg.seleccionarMuninicipio }"
+							itemValue="" />
 						<f:selectItems value="#{beanMunicipios.listaSelectMunicipios}" />
 					</p:selectOneMenu>
 				</h:panelGrid>
 				<br />
-				<ul class="buttons">
-					<li><p:commandButton value="#{msg.limpiar}" icon="ui-icon-arrowrefresh-1-e"
+				<h:panelGrid style="text-align:right" width="100%">
+					<h:panelGrid columns="2" style="text-align:right">
+						<p:commandButton value="#{msg.limpiar}"
+							icon="ui-icon-arrowrefresh-1-e"
 							onclick=":form:selectPaisFilter.selectValue('')"
-							actionListener="#{beanMunicipios.limpiarFiltrado }" update="growl"/></li>
-					<li><p:commandButton icon="ui-icon-search"
+							actionListener="#{beanMunicipios.limpiarFiltrado }"
+							update="growl" />
+					<p:commandButton icon="ui-icon-search"
 							actionListener="#{beanMunicipios.buscarFiltrado}"
-							value="#{msg.buscar}" update="municipiosTable, growl"/></li>
-				</ul>
+							value="#{msg.buscar}" update="municipiosTable, growl" />
+					</h:panelGrid>
+				</h:panelGrid>
 			</p:panel>
 			<p:panel>
 				<h:panelGrid columns="4" style="text-align:left;">
 					<p:commandButton id="deleteButton" value="#{msg.eliminar }"
-						icon="ui-icon-trash" onclick="borrarDialog.show()" update="growl"/>
+						icon="ui-icon-trash" onclick="borrarDialog.show()" update="growl" />
 					<p:commandButton id="editarButton" value="#{msg.editar }"
 						icon="ui-icon-pencil" onclick="editarDialog.show()"
 						update=":form:displayEditar, growl" />
@@ -58,31 +61,34 @@
 						update=":form:displayVer, growl" />
 					<p:commandButton id="nuevoButton" value="#{msg.nuevo }"
 						icon="ui-icon-plusthick" onclick="nuevoDialog.show()"
-						update=":form:displayNuevo, growl" />					
+						update=":form:displayNuevo, growl" />
 				</h:panelGrid>
 			</p:panel>
 			<p:panel>
-				<p:dataTable id="municipiosTable" value="#{beanMunicipios.listaMunicipios}"
-					var="mpio" rowKey="#{mpio.idUnico}" paginator="true"
-					selection="#{beanMunicipios.municipioSelected}" filteredValue="#{beanMunicipios.listaMunicipioFiltered }"
+				<p:dataTable id="municipiosTable"
+					value="#{beanMunicipios.listaMunicipios}" var="mpio"
+					rowKey="#{mpio.idUnico}" paginator="true"
+					selection="#{beanMunicipios.municipioSelected}"
+					filteredValue="#{beanMunicipios.listaMunicipioFiltered }"
 					paginatorPosition="bottom" rows="10">
 					<p:column selectionMode="single" style="width:2%" />
-					<p:column id="pais" headerText="#{msg.pais}"  filterBy="#{mpio.pais }" 
-						sortBy="#{mpio.pais}">
+					<p:column id="pais" headerText="#{msg.pais}"
+						filterBy="#{mpio.pais }" sortBy="#{mpio.pais}">
 						<h:outputText id="estadoPais" value="#{mpio.pais}" />
 					</p:column>
-					<p:column id="mpioEdoColumn" headerText="#{msg.estado}"  filterBy="#{mpio.estado }"
-						sortBy="#{mpio.estado}">
+					<p:column id="mpioEdoColumn" headerText="#{msg.estado}"
+						filterBy="#{mpio.estado }" sortBy="#{mpio.estado}">
 						<h:outputText id="nombreEstado" value="#{mpio.estado}" />
 					</p:column>
-					<p:column id="mpioNombreColumn" headerText="#{msg.municipio}"  filterBy="#{mpio.nombre }"
-						sortBy="#{mpio.nombre}">
+					<p:column id="mpioNombreColumn" headerText="#{msg.municipio}"
+						filterBy="#{mpio.nombre }" sortBy="#{mpio.nombre}">
 						<h:outputText id="nombreMpio" value="#{mpio.nombre}" />
 					</p:column>
 				</p:dataTable>
 			</p:panel>
 			<!-- Panel de Ver -->
-			<p:dialog id="dialog" header="#{msg.ver}" widgetVar="verDialog" modal="true">
+			<p:dialog id="dialog" header="#{msg.ver}" widgetVar="verDialog"
+				modal="true">
 				<h:panelGrid id="displayVer" columns="2" cellpadding="4">
 					<h:panelGroup id="messagePanelVer" layout="block">
 						<h:messages errorStyle="color: red" infoStyle="color: green"
@@ -98,7 +104,7 @@
 					<h:outputText value="#{msg.pais}" />
 					<h:outputText value="#{beanMunicipios.municipioSelected.pais}"
 						style="font-weight:bold" />
-						<h:outputText value="#{msg.pais}" />
+					<h:outputText value="#{msg.pais}" />
 					<h:outputText value="#{beanMunicipios.municipioSelected.estado}"
 						style="font-weight:bold" />
 					<h:outputText value="#{msg.activo}" />
@@ -106,9 +112,8 @@
 						value="#{beanMunicipios.municipioSelected.activo == 1 ? 'Si' : 'No' }"
 						style="font-weight:bold" />
 				</h:panelGrid>
-				<p:commandButton id="aceptarVerBtn" value="#{msg.aceptar }" 
-						icon="ui-icon-check" onclick="verDialog.hide()"
-						/>
+				<p:commandButton id="aceptarVerBtn" value="#{msg.aceptar }"
+					icon="ui-icon-check" onclick="verDialog.hide()" />
 			</p:dialog>
 			<!-- Fin de panel de Ver -->
 			<!--  Inicio panel de Nuevo -->
@@ -117,7 +122,8 @@
 				draggable="false" width="400">
 				<h:panelGrid columns="2" width="100%" id="displayNuevo">
 					<h:outputText value="#{msg.clave}" />
-					<p:inputText value="#{beanMunicipios.municipioNuevo.clave}" style="width: 260px; "/>
+					<p:inputText value="#{beanMunicipios.municipioNuevo.clave}"
+						style="width: 260px; " />
 					<h:outputText id="nombrePopupNuevoLabel" value="#{msg.nombre}" />
 					<p:inputText id="nombrePopupNuevo"
 						value="#{beanMunicipios.municipioNuevo.nombre }"
@@ -145,7 +151,8 @@
 						actionListener="#{beanMunicipios.saveMunicipio }"
 						update=":form:municipiosTable, growl" />
 					<p:commandButton value="#{msg.cancelar }" icon="ui-icon-closethick"
-						oncomplete="nuevoDialog.hide()" actionListener="#{beanMunicipios.saveMunicipioCancel }" />
+						oncomplete="nuevoDialog.hide()"
+						actionListener="#{beanMunicipios.saveMunicipioCancel }" />
 				</h:panelGrid>
 			</p:dialog>
 			<!-- Fin de panel de nuevo -->
@@ -156,7 +163,9 @@
 				<h:panelGrid columns="2" width="100%" id="displayEditar">
 					<h:outputText value="#{msg.clave}" />
 					<h:panelGroup>
-						<p:inputText id="selectedCve" value="#{beanMunicipios.selectedMunicipioClave}" style="width: 260px; " />
+						<p:inputText id="selectedCve"
+							value="#{beanMunicipios.selectedMunicipioClave}"
+							style="width: 260px; " />
 						<p:watermark for="selectedCve"
 							value="#{beanMunicipios.municipioSelected.clave }" />
 					</h:panelGroup>
@@ -180,7 +189,7 @@
 						<f:selectItems value="#{beanMunicipios.listaSelectEstados}" />
 					</p:selectOneMenu>
 					<h:outputText value="#{msg.activo}" />
-					<h:selectBooleanCheckbox 
+					<h:selectBooleanCheckbox
 						value="#{beanMunicipios.selectedMunicipioActivo}">
 					</h:selectBooleanCheckbox>
 				</h:panelGrid>
@@ -190,7 +199,8 @@
 						actionListener="#{beanMunicipios.updateMunicipio }"
 						update=":form:municipiosTable, growl" />
 					<p:commandButton value="#{msg.cancelar }" icon="ui-icon-closethick"
-						oncomplete="editarDialog.hide()" actionListener="#{beanMunicipios.canceldeleteMunicipio }"/>
+						oncomplete="editarDialog.hide()"
+						actionListener="#{beanMunicipios.canceldeleteMunicipio }" />
 				</h:panelGrid>
 			</p:dialog>
 			<!-- Fin de panel de edicion -->
@@ -198,9 +208,9 @@
 			<p:confirmDialog showEffect="fade" widgetVar="borrarDialog"
 				header="#{msg.confirmar }" message="#{msg.frsBorrarConfirmacion }">
 				<p:commandButton value="#{msg.si }"
-					actionListener="#{beanMunicipios.deleteMunicipio}" update="municipiosTable, growl"
-					styleClass="ui-confirmdialog-yes" icon="ui-icon-check"
-					oncomplete="borrarDialog.hide()" />
+					actionListener="#{beanMunicipios.deleteMunicipio}"
+					update="municipiosTable, growl" styleClass="ui-confirmdialog-yes"
+					icon="ui-icon-check" oncomplete="borrarDialog.hide()" />
 				<p:commandButton value="#{msg.no }" type="button"
 					styleClass="ui-confirmdialog-no" icon="ui-icon-close"
 					onclick="borrarDialog.hide()" />
@@ -208,7 +218,7 @@
 			<!-- Fin de panel de borrado -->
 		</h:form>
 
-	</ui:define>
-</ui:composition>
 
+	</ui:composition>
+</h:body>
 </html>

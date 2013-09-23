@@ -1,15 +1,13 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<ui:composition template="/templates/layout.xhtml"
+<html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui">
-	<ui:define name="body">
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+<h:body>
+	<ui:composition>
 		<h:form id="form">
-			<p:growl id="growl" showDetail="true" sticky="true" />			
+			<p:growl id="growl" showDetail="true" sticky="true" />
 			<p:panel id="panel" header="Buscar" closable="false"
 				toggleable="false" style="text-align:center;">
 				<h:panelGrid columns="2" style="text-align:left;">
@@ -37,19 +35,22 @@
 					</p:selectOneMenu>
 				</h:panelGrid>
 				<br />
-				<ul class="buttons">
-					<li><p:commandButton value="#{msg.limpiar}" icon="ui-icon-arrowrefresh-1-e"
+				<h:panelGrid style="text-align:right" width="100%">
+					<h:panelGrid columns="2" style="text-align:right">
+						<p:commandButton value="#{msg.limpiar}"
+							icon="ui-icon-arrowrefresh-1-e"
 							onclick=":form:cveFilter.selectValue('')"
-							actionListener="#{beanCatGral.limpiarFiltrado }" update="growl"/></li>
-					<li><p:commandButton icon="ui-icon-search"
+							actionListener="#{beanCatGral.limpiarFiltrado }" update="growl" />
+						<p:commandButton icon="ui-icon-search"
 							actionListener="#{beanCatGral.buscarFiltrado}"
-							value="#{msg.buscar}" update="catGralTable,growl"/></li>
-				</ul>
+							value="#{msg.buscar}" update="catGralTable,growl" />
+					</h:panelGrid>
+				</h:panelGrid>
 			</p:panel>
 			<p:panel>
 				<h:panelGrid columns="4" style="text-align:left;">
 					<p:commandButton id="deleteButton" value="#{msg.eliminar }"
-						icon="ui-icon-trash" onclick="borrarDialog.show()" update="growl"/>
+						icon="ui-icon-trash" onclick="borrarDialog.show()" update="growl" />
 					<p:commandButton id="editarButton" value="#{msg.editar }"
 						icon="ui-icon-pencil" onclick="editarDialog.show()"
 						update=":form:displayEditar, growl" />
@@ -58,35 +59,37 @@
 						update=":form:displayVer, growl" />
 					<p:commandButton id="nuevoButton" value="#{msg.nuevo }"
 						icon="ui-icon-plusthick" onclick="nuevoDialog.show()"
-						update=":form:displayNuevo, growl" />					
+						update=":form:displayNuevo, growl" />
 				</h:panelGrid>
 			</p:panel>
 			<p:panel>
 				<p:dataTable id="catGralTable" value="#{beanCatGral.listaCatalogos}"
 					var="cat" rowKey="#{cat.idCatGral}" paginator="true"
-					selection="#{beanCatGral.catalogoSelected}" filteredValue="#{beanCatGral.listaFiltered }"
+					selection="#{beanCatGral.catalogoSelected}"
+					filteredValue="#{beanCatGral.listaFiltered }"
 					paginatorPosition="bottom" rows="10">
 					<p:column selectionMode="single" style="width:2%" />
-					<p:column id="id" headerText="#{msg.id}"  filterBy="#{cat.idCatGral }" 
-						sortBy="#{cat.idCatGral}">
+					<p:column id="id" headerText="#{msg.id}"
+						filterBy="#{cat.idCatGral }" sortBy="#{cat.idCatGral}">
 						<h:outputText id="catIdOutputTbl" value="#{cat.idCatGral}" />
 					</p:column>
-					<p:column id="catCveColumn" headerText="#{msg.clave}"  filterBy="#{cat.cveRegistro }"
-						sortBy="#{cat.cveRegistro}">
+					<p:column id="catCveColumn" headerText="#{msg.clave}"
+						filterBy="#{cat.cveRegistro }" sortBy="#{cat.cveRegistro}">
 						<h:outputText id="nombreCve" value="#{cat.cveRegistro}" />
 					</p:column>
-					<p:column id="catDscColumn" headerText="#{msg.descripcion}"  filterBy="#{cat.dsc }"
-						sortBy="#{cat.dsc}">
+					<p:column id="catDscColumn" headerText="#{msg.descripcion}"
+						filterBy="#{cat.dsc }" sortBy="#{cat.dsc}">
 						<h:outputText id="nombreDscTbl" value="#{cat.dsc}" />
 					</p:column>
-					<p:column id="catEstatusColumn" headerText="#{msg.estatus}"  filterBy="#{cat.estatus }"
-						sortBy="#{cat.estatus}">
+					<p:column id="catEstatusColumn" headerText="#{msg.estatus}"
+						filterBy="#{cat.estatus }" sortBy="#{cat.estatus}">
 						<h:outputText id="nombreEstatusTbl" value="#{cat.estatus}" />
 					</p:column>
 				</p:dataTable>
 			</p:panel>
 			<!-- Panel de Ver -->
-			<p:dialog id="dialog" header="#{msg.ver}" widgetVar="verDialog" modal="true">
+			<p:dialog id="dialog" header="#{msg.ver}" widgetVar="verDialog"
+				modal="true">
 				<h:panelGrid id="displayVer" columns="2" cellpadding="4">
 					<h:panelGroup id="messagePanelVer" layout="block">
 						<h:messages errorStyle="color: red" infoStyle="color: green"
@@ -104,9 +107,8 @@
 						value="#{beanCatGral.catalogoSelected.activo == 1 ? 'Si' : 'No' }"
 						style="font-weight:bold" />
 				</h:panelGrid>
-				<p:commandButton id="aceptarVerBtn" value="#{msg.aceptar }" 
-						icon="ui-icon-check" onclick="verDialog.hide()"
-						/>
+				<p:commandButton id="aceptarVerBtn" value="#{msg.aceptar }"
+					icon="ui-icon-check" onclick="verDialog.hide()" />
 			</p:dialog>
 			<!-- Fin de panel de Ver -->
 			<!--  Inicio panel de Nuevo -->
@@ -115,12 +117,12 @@
 				draggable="false" width="400">
 				<h:panelGrid columns="2" width="100%" id="displayNuevo">
 					<h:outputText value="#{msg.clave}" />
-					<p:inputText value="#{beanCatGral.catalogoNuevo.cveRegistro}" style="width: 260px; "/>
+					<p:inputText value="#{beanCatGral.catalogoNuevo.cveRegistro}"
+						style="width: 260px; " />
 					<h:outputText value="#{msg.descripcion}" />
 					<p:inputText id="nombrePopupNuevo"
-						value="#{beanCatGral.catalogoNuevo.dsc}"
-						style="min-width: 260px" />
-					<h:outputText  value="#{msg.pais }" />
+						value="#{beanCatGral.catalogoNuevo.dsc}" style="min-width: 260px" />
+					<h:outputText value="#{msg.pais }" />
 					<h:outputText id="activoPopupNuevoLabel" value="#{msg.activo}" />
 					<h:selectBooleanCheckbox id="activoPopupNuevo"
 						value="#{beanCatGral.nuevoCatalogoActivo}">
@@ -132,7 +134,8 @@
 						actionListener="#{beanCatGral.saveCat }"
 						update=":form:catGralTable, growl" />
 					<p:commandButton value="#{msg.cancelar }" icon="ui-icon-closethick"
-						oncomplete="nuevoDialog.hide()" actionListener="#{beanCatGral.saveCatCancel }" />
+						oncomplete="nuevoDialog.hide()"
+						actionListener="#{beanCatGral.saveCatCancel }" />
 				</h:panelGrid>
 			</p:dialog>
 			<!-- Fin de panel de nuevo -->
@@ -143,7 +146,9 @@
 				<h:panelGrid columns="2" width="100%" id="displayEditar">
 					<h:outputText value="#{msg.clave}" />
 					<h:panelGroup>
-						<p:inputText id="selectedCve" value="#{beanCatGral.selectedClaveCatGral}" style="width: 260px; " />
+						<p:inputText id="selectedCve"
+							value="#{beanCatGral.selectedClaveCatGral}"
+							style="width: 260px; " />
 						<p:watermark for="selectedCve"
 							value="#{beanCatGral.catalogoSelected.cveRegistro }" />
 					</h:panelGroup>
@@ -155,7 +160,7 @@
 							value="#{beanCatGral.catalogoSelected.dsc }" />
 					</h:panelGroup>
 					<h:outputText value="#{msg.activo}" />
-					<h:selectBooleanCheckbox 
+					<h:selectBooleanCheckbox
 						value="#{beanCatGral.selectedCatalogoActivo}">
 					</h:selectBooleanCheckbox>
 				</h:panelGrid>
@@ -165,7 +170,8 @@
 						actionListener="#{beanCatGral.updateCat }"
 						update=":form:catGralTable, growl" />
 					<p:commandButton value="#{msg.cancelar }" icon="ui-icon-closethick"
-						oncomplete="editarDialog.hide()" actionListener="#{beanCatGral.cancelDeleteCat }"/>
+						oncomplete="editarDialog.hide()"
+						actionListener="#{beanCatGral.cancelDeleteCat }" />
 				</h:panelGrid>
 			</p:dialog>
 			<!-- Fin de panel de edicion -->
@@ -173,9 +179,9 @@
 			<p:confirmDialog showEffect="fade" widgetVar="borrarDialog"
 				header="#{msg.confirmar }" message="#{msg.frsBorrarConfirmacion }">
 				<p:commandButton value="#{msg.si }"
-					actionListener="#{beanCatGral.deleteCat}" update="catGralTable, growl"
-					styleClass="ui-confirmdialog-yes" icon="ui-icon-check"
-					oncomplete="borrarDialog.hide()" />
+					actionListener="#{beanCatGral.deleteCat}"
+					update="catGralTable, growl" styleClass="ui-confirmdialog-yes"
+					icon="ui-icon-check" oncomplete="borrarDialog.hide()" />
 				<p:commandButton value="#{msg.no }" type="button"
 					styleClass="ui-confirmdialog-no" icon="ui-icon-close"
 					onclick="borrarDialog.hide()" />
@@ -183,7 +189,7 @@
 			<!-- Fin de panel de borrado -->
 		</h:form>
 
-	</ui:define>
-</ui:composition>
 
+	</ui:composition>
+</h:body>
 </html>

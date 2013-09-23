@@ -1,6 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
@@ -9,7 +6,7 @@
 
 <h:body>
 	<ui:composition>
-		<h:form id="form">
+		<h:form id="form" styleClass="login">
 			<p:growl id="growl" showDetail="true" sticky="true" />
 			<p:panel id="panel" header="Buscar" closable="false"
 				toggleable="false" style="text-align:center;">
@@ -33,23 +30,22 @@
 					<h:outputText value="#{msg.tipoEquipo} :" />
 					<p:selectOneMenu id="selectTipo" style="min-width: 480px"
 						value="#{beanEquipo.selectedTipo }">
-						<f:selectItem itemLabel="#{msg.seleccionarTipoEq }"
-							itemValue="" />
+						<f:selectItem itemLabel="#{msg.seleccionarTipoEq }" itemValue="" />
 						<f:selectItems value="#{beanEquipo.listaSelectTipo}" />
 					</p:selectOneMenu>
 				</h:panelGrid>
 				<br />
-				<ul class="buttons">
-					<li><p:commandButton value="#{msg.limpiar}"
+				<h:panelGrid style="text-align:right" width="100%">
+					<h:panelGrid columns="2" style="text-align:right">
+						<p:commandButton value="#{msg.limpiar}"
 							icon="ui-icon-arrowrefresh-1-e"
 							onclick=":form:selectCveFilter.selectValue('')"
 							actionListener="#{beanEquipo.limpiarFiltrado }" update="growl" />
-					</li>
-					<li><p:commandButton icon="ui-icon-search"
+						<p:commandButton icon="ui-icon-search"
 							actionListener="#{beanEquipo.buscarFiltrado}"
 							value="#{msg.buscar}" update="growl, :form:table" />
-					</li>
-				</ul>
+					</h:panelGrid>
+				</h:panelGrid>
 			</p:panel>
 			<p:panel>
 				<h:panelGrid columns="4" style="text-align:left;">
@@ -63,30 +59,29 @@
 						update=":form:displayVer, growl" />
 					<p:commandButton id="nuevoButton" value="#{msg.nuevo }"
 						icon="ui-icon-plusthick" onclick="nuevoDialog.show()"
-						update=":form:displayNuevo, growl" />					
+						update=":form:displayNuevo, growl" />
 				</h:panelGrid>
 			</p:panel>
 			<p:panel>
-				<p:dataTable id="table"
-					value="#{beanEquipo.listaEquipos}" var="equipo"
-					rowKey="#{equipo.idEquipo}" paginator="true"
-					selection="#{beanEquipo.equipoSelected}" filteredValue="#{beanEquipo.filteredList }"
+				<p:dataTable id="table" value="#{beanEquipo.listaEquipos}"
+					var="equipo" rowKey="#{equipo.idEquipo}" paginator="true"
+					selection="#{beanEquipo.equipoSelected}"
+					filteredValue="#{beanEquipo.filteredList }"
 					paginatorPosition="bottom" rows="10">
 					<p:column selectionMode="single" style="width:2%" />
-					<p:column id="eqTipo" headerText="#{msg.tipo}" filterBy="#{equipo.dscTipo }" 
-						sortBy="#{equipo.dscTipo}">
-						<h:outputText 
-							value="#{equipo.dscTipo}" />
+					<p:column id="eqTipo" headerText="#{msg.tipo}"
+						filterBy="#{equipo.dscTipo }" sortBy="#{equipo.dscTipo}">
+						<h:outputText value="#{equipo.dscTipo}" />
 					</p:column>
 					<p:column id="eqCve" headerText="#{msg.clave}"
-						sortBy="#{equipo.clave}" filterBy="#{equipo.clave }" >
+						sortBy="#{equipo.clave}" filterBy="#{equipo.clave }">
 						<h:outputText value="#{equipo.clave}" />
 					</p:column>
-					<p:column id="eqDsc" headerText="#{msg.descripcion}" filterBy="#{equipo.dsc }" 
-						sortBy="#{equipo.dsc}">
+					<p:column id="eqDsc" headerText="#{msg.descripcion}"
+						filterBy="#{equipo.dsc }" sortBy="#{equipo.dsc}">
 						<h:outputText value="#{equipo.dsc}" />
 					</p:column>
-					
+
 				</p:dataTable>
 			</p:panel>
 			<!-- Panel de Ver -->
@@ -126,15 +121,14 @@
 						style="width: 260px; " />
 					<h:outputText id="nombrePopupNuevoLabel" value="#{msg.descripcion}" />
 					<p:inputText id="nombrePopupNuevo"
-						value="#{beanEquipo.equipoNuevo.dsc }"
-						style="min-width: 260px" />
+						value="#{beanEquipo.equipoNuevo.dsc }" style="min-width: 260px" />
 					<h:outputText id="responsablePopupNuevoLabel"
 						value="#{msg.tipoEquipo }" />
 					<p:selectOneMenu id="selectTipoNuevo" style="min-width: 260px"
 						value="#{beanEquipo.idCatGralNuevo }">
-						<f:selectItem itemLabel="#{msg.seleccionarTipoEq }"
-							itemValue="" />
-						<f:selectItems value="#{beanEquipo.listaSelectTiposEquipoCatGral }" />
+						<f:selectItem itemLabel="#{msg.seleccionarTipoEq }" itemValue="" />
+						<f:selectItems
+							value="#{beanEquipo.listaSelectTiposEquipoCatGral }" />
 					</p:selectOneMenu>
 					<h:outputText id="activoPopupNuevoLabel" value="#{msg.activo}" />
 					<h:selectBooleanCheckbox id="activoPopupNuevo"
@@ -144,8 +138,7 @@
 				<h:panelGrid style="float: right;" columns="2">
 					<p:commandButton value="#{msg.aceptar }" icon="ui-icon-check"
 						oncomplete="nuevoDialog.hide()"
-						actionListener="#{beanEquipo.save }"
-						update=":form:table, growl" />
+						actionListener="#{beanEquipo.save }" update=":form:table, growl" />
 					<p:commandButton value="#{msg.cancelar }" icon="ui-icon-closethick"
 						oncomplete="nuevoDialog.hide()"
 						actionListener="#{beanEquipo.saveCancel }" />
@@ -160,8 +153,7 @@
 					<h:outputText value="#{msg.clave}" />
 					<h:panelGroup>
 						<h:inputText id="selectedCve"
-							value="#{beanEquipo.selectedClaveEdit}"
-							style="width: 260px; " />
+							value="#{beanEquipo.selectedClaveEdit}" style="width: 260px; " />
 						<p:watermark for="selectedCve"
 							value="#{beanEquipo.equipoSelected.clave }" />
 					</h:panelGroup>
@@ -175,9 +167,9 @@
 					<h:outputText value="#{msg.tipoEquipo}" />
 					<p:selectOneMenu id="selectTipoSelected" style="min-width: 260px"
 						value="#{beanEquipo.idCatGralSelected }">
-						<f:selectItem itemLabel="#{msg.seleccionarTipoEq }"
-							itemValue="" />
-						<f:selectItems value="#{beanEquipo.listaSelectTiposEquipoCatGral }" />
+						<f:selectItem itemLabel="#{msg.seleccionarTipoEq }" itemValue="" />
+						<f:selectItems
+							value="#{beanEquipo.listaSelectTiposEquipoCatGral }" />
 					</p:selectOneMenu>
 					<h:outputText id="activoPopupEditLabel" value="#{msg.activo}" />
 					<h:selectBooleanCheckbox id="activoPopupEdit"
@@ -187,8 +179,7 @@
 				<h:panelGrid style="float: right;" columns="2">
 					<p:commandButton value="#{msg.aceptar }" icon="ui-icon-check"
 						oncomplete="editarDialog.hide()"
-						actionListener="#{beanEquipo.update }"
-						update=":form:table, growl" />
+						actionListener="#{beanEquipo.update }" update=":form:table, growl" />
 					<p:commandButton value="#{msg.cancelar }" icon="ui-icon-closethick"
 						oncomplete="editarDialog.hide()"
 						actionListener="#{beanEquipo.canceldelete }" />
@@ -199,15 +190,16 @@
 			<p:confirmDialog showEffect="fade" widgetVar="borrarDialog"
 				header="#{msg.confirmar }" message="#{msg.frsBorrarConfirmacion }">
 				<p:commandButton value="#{msg.si }"
-					actionListener="#{beanEquipo.delete}"
-					update="table, growl" styleClass="ui-confirmdialog-yes"
-					icon="ui-icon-check" oncomplete="borrarDialog.hide()" />
+					actionListener="#{beanEquipo.delete}" update="table, growl"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check"
+					oncomplete="borrarDialog.hide()" />
 				<p:commandButton value="#{msg.no }" type="button"
 					styleClass="ui-confirmdialog-no" icon="ui-icon-close"
 					onclick="borrarDialog.hide()" />
 			</p:confirmDialog>
 			<!-- Fin de panel de borrado -->
 		</h:form>
+
 	</ui:composition>
 </h:body>
 </html>
