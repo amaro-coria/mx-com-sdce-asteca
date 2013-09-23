@@ -267,7 +267,7 @@ public class AlumnoFachadaImpl extends BaseFachadaImpl<AlumnoDTO, Integer>
 	}
 
 	@Override
-	public List<AsentamientoDTO> findAsentamientosByCp(short cp)
+	public List<AsentamientoDTO> findAsentamientosByCp(int cp)
 			throws FachadaException {
 		try {
 			List<AsentamientoDTO> listaAsentamientos = servicioAsentamiento
@@ -281,9 +281,9 @@ public class AlumnoFachadaImpl extends BaseFachadaImpl<AlumnoDTO, Integer>
 	}
 
 	@Override
-	public List<Short> getDistincCPs() throws FachadaException {
+	public List<Integer> getDistincCPs() throws FachadaException {
 		try {
-			List<Short> listaAsentamientos = servicioAsentamiento
+			List<Integer> listaAsentamientos = servicioAsentamiento
 					.getDistinctCPs();
 			return listaAsentamientos;
 		} catch (ServicioException e) {
