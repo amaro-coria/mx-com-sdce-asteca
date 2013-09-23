@@ -106,12 +106,20 @@
 
 	<!-- ReCaptcha -->
 	<context-param>
+		<!-- reCaptcha public key for localhost domain -->
 		<param-name>primefaces.PUBLIC_CAPTCHA_KEY</param-name>
 		<param-value>6Le3WOcSAAAAAOiPrVgvcVvpmRx1goixJ-L6F7Qz</param-value>
+		<!-- reCaptcha public key for 201.150.38.106 domain
+		<param-value>6Lew2ucSAAAAAPW6trGARXAMntS5UW9xDWpJ-MHp</param-value>
+		-->
 	</context-param>
 
 	<context-param>
+		<!-- reCaptcha private key for localhost domain -->
 		<param-name>primefaces.PRIVATE_CAPTCHA_KEY</param-name>
 		<param-value>6Le3WOcSAAAAACfgyNG2PQj_Nh0HEDzkjLU4_2OB</param-value>
+		<!-- reCaptcha private key for 201.150.38.106 domain
+		<param-value>6Lew2ucSAAAAADSrRXdafBFXGSLMrcVPJTIJ7tAa</param-value>
+		 -->
 	</context-param>
 </web-app>
