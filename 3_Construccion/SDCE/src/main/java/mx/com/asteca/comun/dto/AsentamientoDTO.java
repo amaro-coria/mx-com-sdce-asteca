@@ -8,17 +8,17 @@ public class AsentamientoDTO implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private Short idCp;
+	private int idCp;
      private String nombre;
-     private Short activo;
+     private short activo;
      private String clave;
      private int idAsentamiento;
      private int idMunicipio;
      private int idEstado;
-	public Short getIdCp() {
+	public int getIdCp() {
 		return idCp;
 	}
-	public void setIdCp(Short idCp) {
+	public void setIdCp(int idCp) {
 		this.idCp = idCp;
 	}
 	public String getNombre() {
@@ -27,10 +27,10 @@ public class AsentamientoDTO implements Serializable{
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
-	public Short getActivo() {
+	public short getActivo() {
 		return activo;
 	}
-	public void setActivo(Short activo) {
+	public void setActivo(short activo) {
 		this.activo = activo;
 	}
 	public String getClave() {
