@@ -22,12 +22,12 @@
 			<url>http://repository.primefaces.org</url>
 			<layout>default</layout>
 		</repository>
-		
+
 		<repository>
 			<id>org.springframework.security.taglibs.facelets</id>
 			<url>http://spring-security-facelets-taglib.googlecode.com/svn/repo/</url>
 		</repository>
-		
+
 	</repositories>
 
 	<properties>
@@ -180,13 +180,13 @@
 			<artifactId>spring-security-acl</artifactId>
 			<version>3.0.5.RELEASE</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>facelets-taglib-jsf20-spring-3</artifactId>
 			<version>0.5</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
@@ -226,6 +226,13 @@
 			<version>4.10</version>
 			<scope>test</scope>
 		</dependency>
+		<!-- JasperReports -->
+		<dependency>
+			<groupId>jasperreports</groupId>
+			<artifactId>jasperreports</artifactId>
+			<version>3.5.3</version>
+		</dependency>
+
 		<!-- Inicio Dependencias ICEFACES -->
 		<dependency>
 			<groupId>org.primefaces</groupId>
