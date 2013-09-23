@@ -30,6 +30,7 @@ public class Constantes {
 	public static final String ASSEMBLER_ALUMNO="assemblerAlumno";
 	public static final String ASSEMBLER_DOCS="assemblerDocs";
 	public static final String ASSEMBLER_REFERENCIAS="assemblerReferencias";
+	public static final String ASSEMBLER_MODULOS="assemblerModulos";
 	public static final String ERROR_OBTENIENDO_LISTA_CATALOGO="No se pudo obtener el catalogo.";
 	public static final String ERROR_NUEVO_REGISTRO="No se pudo completar el nuevo registro.";
 	public static final String BEAN_EQUIPO="beanEquipo";
@@ -40,6 +41,7 @@ public class Constantes {
 	public static final String BEAN_CAT_GRAL="beanCatGral";
 	public static final String BEAN_AULAS="beanAulas";
 	public static final String BEAN_ALUMNO="beanAlumno";
+	public static final String BEAN_MENU="menuBean";
 	public static final String ERROR_NO_HAY_SELECCION="Debes seleccionar al menos un elemento.";
 	public static final String ERROR_UPDATE_REGISTRO="Error guardando.";
 	public static final String ERROR_DELETE_REGISTRO="Error borrando.";
@@ -61,5 +63,8 @@ public class Constantes {
 	public static final String ERROR_LOGIN="Usuario y/o Contraseña no validos";
 	public static final String ERROR_AUTENTICACION="Falló Autenticación";
 	public static final String BEAN_LOGIN="beanLogin";
+	public static final String MENU_ITEM_PREFIX="mn_item_";
+	public static final String MENU_ITEM_PROCESS="@this";
+	public static final String MENU_ITEM_UPDATE="@all";
 
 }
