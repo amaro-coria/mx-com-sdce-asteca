@@ -98,9 +98,9 @@ public interface AlumnoFachada extends BaseFachada<AlumnoDTO, Integer> {
 	
 	AlumnoDTO populate(int alumnoID) throws FachadaException;
 
-	List<Short> getDistincCPs() throws FachadaException;
+	List<Integer> getDistincCPs() throws FachadaException;
 
-	List<AsentamientoDTO> findAsentamientosByCp(short cp)
+	List<AsentamientoDTO> findAsentamientosByCp(int cp)
 			throws FachadaException;
 
 	MunicipioDTO findMunicipio(int idMunicipio, int idEstado)
