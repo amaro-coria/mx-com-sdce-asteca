@@ -11,7 +11,7 @@ public class DomicilioDTO implements Serializable {
 	private String calle;
 	private String noExterior;
 	private String noInterior;
-	private Short cp;
+	private int cp;
 	private String telefono;
 	private int idDomicilio;
 	private int idAsentamiento;
@@ -45,11 +45,11 @@ public class DomicilioDTO implements Serializable {
 		this.noInterior = noInterior;
 	}
 
-	public Short getCp() {
+	public int getCp() {
 		return cp;
 	}
 
-	public void setCp(Short cp) {
+	public void setCp(int cp) {
 		this.cp = cp;
 	}
 
