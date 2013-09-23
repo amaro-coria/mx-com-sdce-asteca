@@ -114,12 +114,42 @@ public class AlumnoControlador extends BaseController implements Serializable {
 	private String nuevoAlumnoTelefono;
 	private String nuevoAlumnoNoInt;
 	private String nuevoAlumnoCp;
-	private short nuevoAlumnoCpIdAsentamiento;
+	private int nuevoAlumnoCpIdAsentamiento;
 	private List<SelectItem> nuevoAlumnoSelectListColonias;
 	private String nuevoAlumnoIdAsentamientoMunicipioEstado;
+	
+	private String editarAlumnoNombre;
+	private String editarAlumnoMatricula;
+	private String editarAlumnoApellidoP;
+	private String editarAlumnoApellidoM;
+	private Date editarAlumnoFechaNac;
+	private String editarAlumnoLugarNac;
+	private String editarAlumnoCurp;
+	private String editarAlumnoRfc;
+	private String editarAlumnoPasaporte;
+	private String editarAlumnoIfe;
+	private String editarAlumnoEmail;
+	private String editarAlumnoCalle;
+	private String editarAlumnoNoExt;
+	private String editarAlumnoColonia;
+	private int editarAlumnoColoniaId;
+	private String editarAlumnoDelegacion;
+	private int editarAlumnoDelegacionId;
+	private String editarAlumnoCiudad;
+	private String editarAlumnoCiudadId;
+	private String editarAlumnoEntidadFederativa;
+	private int editarAlumnoEntidadFederetivaId;
+	private String editarAlumnoTelefono;
+	private String editarAlumnoNoInt;
+	private String editarAlumnoCp;
+	private int editarAlumnoCpIdAsentamiento;
+	private List<SelectItem> editarAlumnoSelectListColonias;
+	private String editarAlumnoIdAsentamientoMunicipioEstado;
+	private short editarAlumnoIdEstatusSelected;
+	
 	private List<SelectItem> listaCP;
 	private List<AsentamientoDTO> listaAsentamientos;
-	private List<Short> listaCPs;
+	private List<Integer> listaCPs;
 
 	private int nuevoAlumnoTipoLicenciaSelected;
 	private List<SelectItem> nuevoAlumnoListSelectTipoLicencia;
@@ -148,7 +178,7 @@ public class AlumnoControlador extends BaseController implements Serializable {
 	private String nuevoAlumnoReferenciaNuevaNombre;
 	private String nuevoAlumnoReferenciaNuevaApellidoP;
 	private String nuevoAlumnoReferenciaNuevaApellidoM;
-	private short nuevoAlumnoCpIdAsentamientoReferenciaNueva;
+	private int nuevoAlumnoCpIdAsentamientoReferenciaNueva;
 	private String nuevoAlumnoIdAsentamientoMunicipioEstadoReferenciaNueva;
 	private List<SelectItem> nuevoAlumnoSelectListColoniasReferenciaNueva;
 	private String nuevoAlumnoReferenciaNuevaDelegacion;
@@ -169,6 +199,10 @@ public class AlumnoControlador extends BaseController implements Serializable {
 	private DocumentoDTO documentoTempDownload;
 	private short nuevoAlumnoIdEstatusSelected;
 	
+	private String nuevoAlumnoCPAutoComplete;
+	private String nuevoAlumnoReferenciaCPAutoComplete;
+	
+	private List<String> listCPString;
 	
 	public AlumnoControlador() {
 		referenciaSelected = new ReferenciaDTO();
@@ -176,6 +210,16 @@ public class AlumnoControlador extends BaseController implements Serializable {
 		itemSelected = new AlumnoDTO();
 		itemNuevo = new AlumnoDTO();
 		documentoSelected = new DocumentoDTO();
+	}
+	
+	private void initListaCPString(){
+		if(CollectionUtils.isEmpty(listCPString)){
+			listCPString = new ArrayList<String>();
+			for(Integer i : getListaCPs()){
+				String s = String.valueOf(i);
+				listCPString.add(s);
+			}
+		}
 	}
 	
 	private void initListaEstatus(){
@@ -265,7 +309,7 @@ public class AlumnoControlador extends BaseController implements Serializable {
 	private void initListaCP() {
 		if (CollectionUtils.isEmpty(listaCP)) {
 			listaCP = new ArrayList<SelectItem>();
-			for (Short dto : getListaCPs()) {
+			for (Integer dto : getListaCPs()) {
 				SelectItem item = new SelectItem(dto, String.valueOf(dto));
 				listaCP.add(item);
 			}
@@ -326,6 +370,16 @@ public class AlumnoControlador extends BaseController implements Serializable {
 				listaSelect3.add(item);
 			}
 		}
+	}
+	
+	public List<String> complete(String cp){
+		List<String> results = new ArrayList<String>();
+		for(String s : getListCPString()){
+			if(s.startsWith(cp)){
+				results.add(s);
+			}
+		}
+		return results;
 	}
 	
 	public void addAlumno(){
@@ -404,7 +458,25 @@ public class AlumnoControlador extends BaseController implements Serializable {
         }
 	}
 
+	public void handleSelectCambiaCp(SelectEvent e){
+		String selection = e.getObject().toString();
+		nuevoAlumnoCPAutoComplete = selection;
+		handlerCambiaCp();
+	}
+	
+	public void handleSelectCambiaCPReferenciaNueva(SelectEvent e){
+		String selection = e.getObject().toString();
+		nuevoAlumnoReferenciaCPAutoComplete = selection;
+		handlerCambiaCpReferenciaNueva();
+	}
+	
 	public void handlerCambiaCp() {
+		try{
+			nuevoAlumnoCpIdAsentamiento = Integer.parseInt(nuevoAlumnoCPAutoComplete);
+		}catch(NumberFormatException nex){
+			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR, Constantes.ERROR_FORMATO_NUMERO);
+			return;
+		}
 		if (nuevoAlumnoCpIdAsentamiento != 0) {
 			// nuevoAlumnoSelectListColonias
 			try {
@@ -436,6 +508,11 @@ public class AlumnoControlador extends BaseController implements Serializable {
 	}
 	
 	public void handlerCambiaCpReferenciaNueva() {
+		try{
+			nuevoAlumnoCpIdAsentamientoReferenciaNueva = Integer.parseInt(nuevoAlumnoReferenciaCPAutoComplete);
+		}catch(NumberFormatException nex){
+			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR, Constantes.ERROR_FORMATO_NUMERO);
+		}
 		if (nuevoAlumnoCpIdAsentamientoReferenciaNueva != 0) {
 			// nuevoAlumnoSelectListColonias
 			try {
@@ -1335,7 +1412,7 @@ public class AlumnoControlador extends BaseController implements Serializable {
 	/**
 	 * @return the nuevoAlumnoCpIdAsentamiento
 	 */
-	public short getNuevoAlumnoCpIdAsentamiento() {
+	public int getNuevoAlumnoCpIdAsentamiento() {
 		return nuevoAlumnoCpIdAsentamiento;
 	}
 
@@ -1343,7 +1420,7 @@ public class AlumnoControlador extends BaseController implements Serializable {
 	 * @param nuevoAlumnoCpIdAsentamiento
 	 *            the nuevoAlumnoCpIdAsentamiento to set
 	 */
-	public void setNuevoAlumnoCpIdAsentamiento(short nuevoAlumnoCpIdAsentamiento) {
+	public void setNuevoAlumnoCpIdAsentamiento(int nuevoAlumnoCpIdAsentamiento) {
 		this.nuevoAlumnoCpIdAsentamiento = nuevoAlumnoCpIdAsentamiento;
 	}
 
@@ -1379,12 +1456,12 @@ public class AlumnoControlador extends BaseController implements Serializable {
 		this.nuevoAlumnoIdAsentamientoMunicipioEstado = nuevoAlumnoIdAsentamientoMunicipioEstado;
 	}
 
-	public List<Short> getListaCPs() {
+	public List<Integer> getListaCPs() {
 		initListaCPs();
 		return listaCPs;
 	}
 
-	public void setListaCPs(List<Short> listaCPs) {
+	public void setListaCPs(List<Integer> listaCPs) {
 		this.listaCPs = listaCPs;
 	}
 
@@ -1630,12 +1707,12 @@ public class AlumnoControlador extends BaseController implements Serializable {
 		this.nuevoAlumnoReferenciaNuevaApellidoM = nuevoAlumnoReferenciaNuevaApellidoM;
 	}
 
-	public short getNuevoAlumnoCpIdAsentamientoReferenciaNueva() {
+	public int getNuevoAlumnoCpIdAsentamientoReferenciaNueva() {
 		return nuevoAlumnoCpIdAsentamientoReferenciaNueva;
 	}
 
 	public void setNuevoAlumnoCpIdAsentamientoReferenciaNueva(
-			short nuevoAlumnoCpIdAsentamientoReferenciaNueva) {
+			int nuevoAlumnoCpIdAsentamientoReferenciaNueva) {
 		this.nuevoAlumnoCpIdAsentamientoReferenciaNueva = nuevoAlumnoCpIdAsentamientoReferenciaNueva;
 	}
 
@@ -1866,6 +1943,446 @@ public class AlumnoControlador extends BaseController implements Serializable {
 	 */
 	public void setDocumentoTempDownload(DocumentoDTO documentoTempDownload) {
 		this.documentoTempDownload = documentoTempDownload;
+	}
+
+	/**
+	 * @return the nuevoAlumnoCPAutoComplete
+	 */
+	public String getNuevoAlumnoCPAutoComplete() {
+		return nuevoAlumnoCPAutoComplete;
+	}
+
+	/**
+	 * @param nuevoAlumnoCPAutoComplete the nuevoAlumnoCPAutoComplete to set
+	 */
+	public void setNuevoAlumnoCPAutoComplete(String nuevoAlumnoCPAutoComplete) {
+		this.nuevoAlumnoCPAutoComplete = nuevoAlumnoCPAutoComplete;
+	}
+
+	/**
+	 * @return the nuevoAlumnoReferenciaCPAutoComplete
+	 */
+	public String getNuevoAlumnoReferenciaCPAutoComplete() {
+		return nuevoAlumnoReferenciaCPAutoComplete;
+	}
+
+	/**
+	 * @param nuevoAlumnoReferenciaCPAutoComplete the nuevoAlumnoReferenciaCPAutoComplete to set
+	 */
+	public void setNuevoAlumnoReferenciaCPAutoComplete(
+			String nuevoAlumnoReferenciaCPAutoComplete) {
+		this.nuevoAlumnoReferenciaCPAutoComplete = nuevoAlumnoReferenciaCPAutoComplete;
+	}
+
+	/**
+	 * @return the listCPString
+	 */
+	public List<String> getListCPString() {
+		initListaCPString();
+		return listCPString;
+	}
+
+	/**
+	 * @param listCPString the listCPString to set
+	 */
+	public void setListCPString(List<String> listCPString) {
+		this.listCPString = listCPString;
+	}
+
+	/**
+	 * @return the editarAlumnoNombre
+	 */
+	public String getEditarAlumnoNombre() {
+		return editarAlumnoNombre;
+	}
+
+	/**
+	 * @param editarAlumnoNombre the editarAlumnoNombre to set
+	 */
+	public void setEditarAlumnoNombre(String editarAlumnoNombre) {
+		this.editarAlumnoNombre = editarAlumnoNombre;
+	}
+
+	/**
+	 * @return the editarAlumnoMatricula
+	 */
+	public String getEditarAlumnoMatricula() {
+		return editarAlumnoMatricula;
+	}
+
+	/**
+	 * @param editarAlumnoMatricula the editarAlumnoMatricula to set
+	 */
+	public void setEditarAlumnoMatricula(String editarAlumnoMatricula) {
+		this.editarAlumnoMatricula = editarAlumnoMatricula;
+	}
+
+	/**
+	 * @return the editarAlumnoApellidoP
+	 */
+	public String getEditarAlumnoApellidoP() {
+		return editarAlumnoApellidoP;
+	}
+
+	/**
+	 * @param editarAlumnoApellidoP the editarAlumnoApellidoP to set
+	 */
+	public void setEditarAlumnoApellidoP(String editarAlumnoApellidoP) {
+		this.editarAlumnoApellidoP = editarAlumnoApellidoP;
+	}
+
+	/**
+	 * @return the editarAlumnoApellidoM
+	 */
+	public String getEditarAlumnoApellidoM() {
+		return editarAlumnoApellidoM;
+	}
+
+	/**
+	 * @param editarAlumnoApellidoM the editarAlumnoApellidoM to set
+	 */
+	public void setEditarAlumnoApellidoM(String editarAlumnoApellidoM) {
+		this.editarAlumnoApellidoM = editarAlumnoApellidoM;
+	}
+
+	/**
+	 * @return the editarAlumnoFechaNac
+	 */
+	public Date getEditarAlumnoFechaNac() {
+		return editarAlumnoFechaNac;
+	}
+
+	/**
+	 * @param editarAlumnoFechaNac the editarAlumnoFechaNac to set
+	 */
+	public void setEditarAlumnoFechaNac(Date editarAlumnoFechaNac) {
+		this.editarAlumnoFechaNac = editarAlumnoFechaNac;
+	}
+
+	/**
+	 * @return the editarAlumnoLugarNac
+	 */
+	public String getEditarAlumnoLugarNac() {
+		return editarAlumnoLugarNac;
+	}
+
+	/**
+	 * @param editarAlumnoLugarNac the editarAlumnoLugarNac to set
+	 */
+	public void setEditarAlumnoLugarNac(String editarAlumnoLugarNac) {
+		this.editarAlumnoLugarNac = editarAlumnoLugarNac;
+	}
+
+	/**
+	 * @return the editarAlumnoCurp
+	 */
+	public String getEditarAlumnoCurp() {
+		return editarAlumnoCurp;
+	}
+
+	/**
+	 * @param editarAlumnoCurp the editarAlumnoCurp to set
+	 */
+	public void setEditarAlumnoCurp(String editarAlumnoCurp) {
+		this.editarAlumnoCurp = editarAlumnoCurp;
+	}
+
+	/**
+	 * @return the editarAlumnoRfc
+	 */
+	public String getEditarAlumnoRfc() {
+		return editarAlumnoRfc;
+	}
+
+	/**
+	 * @param editarAlumnoRfc the editarAlumnoRfc to set
+	 */
+	public void setEditarAlumnoRfc(String editarAlumnoRfc) {
+		this.editarAlumnoRfc = editarAlumnoRfc;
+	}
+
+	/**
+	 * @return the editarAlumnoPasaporte
+	 */
+	public String getEditarAlumnoPasaporte() {
+		return editarAlumnoPasaporte;
+	}
+
+	/**
+	 * @param editarAlumnoPasaporte the editarAlumnoPasaporte to set
+	 */
+	public void setEditarAlumnoPasaporte(String editarAlumnoPasaporte) {
+		this.editarAlumnoPasaporte = editarAlumnoPasaporte;
+	}
+
+	/**
+	 * @return the editarAlumnoIfe
+	 */
+	public String getEditarAlumnoIfe() {
+		return editarAlumnoIfe;
+	}
+
+	/**
+	 * @param editarAlumnoIfe the editarAlumnoIfe to set
+	 */
+	public void setEditarAlumnoIfe(String editarAlumnoIfe) {
+		this.editarAlumnoIfe = editarAlumnoIfe;
+	}
+
+	/**
+	 * @return the editarAlumnoEmail
+	 */
+	public String getEditarAlumnoEmail() {
+		return editarAlumnoEmail;
+	}
+
+	/**
+	 * @param editarAlumnoEmail the editarAlumnoEmail to set
+	 */
+	public void setEditarAlumnoEmail(String editarAlumnoEmail) {
+		this.editarAlumnoEmail = editarAlumnoEmail;
+	}
+
+	/**
+	 * @return the editarAlumnoCalle
+	 */
+	public String getEditarAlumnoCalle() {
+		return editarAlumnoCalle;
+	}
+
+	/**
+	 * @param editarAlumnoCalle the editarAlumnoCalle to set
+	 */
+	public void setEditarAlumnoCalle(String editarAlumnoCalle) {
+		this.editarAlumnoCalle = editarAlumnoCalle;
+	}
+
+	/**
+	 * @return the editarAlumnoNoExt
+	 */
+	public String getEditarAlumnoNoExt() {
+		return editarAlumnoNoExt;
+	}
+
+	/**
+	 * @param editarAlumnoNoExt the editarAlumnoNoExt to set
+	 */
+	public void setEditarAlumnoNoExt(String editarAlumnoNoExt) {
+		this.editarAlumnoNoExt = editarAlumnoNoExt;
+	}
+
+	/**
+	 * @return the editarAlumnoColonia
+	 */
+	public String getEditarAlumnoColonia() {
+		return editarAlumnoColonia;
+	}
+
+	/**
+	 * @param editarAlumnoColonia the editarAlumnoColonia to set
+	 */
+	public void setEditarAlumnoColonia(String editarAlumnoColonia) {
+		this.editarAlumnoColonia = editarAlumnoColonia;
+	}
+
+	/**
+	 * @return the editarAlumnoColoniaId
+	 */
+	public int getEditarAlumnoColoniaId() {
+		return editarAlumnoColoniaId;
+	}
+
+	/**
+	 * @param editarAlumnoColoniaId the editarAlumnoColoniaId to set
+	 */
+	public void setEditarAlumnoColoniaId(int editarAlumnoColoniaId) {
+		this.editarAlumnoColoniaId = editarAlumnoColoniaId;
+	}
+
+	/**
+	 * @return the editarAlumnoDelegacion
+	 */
+	public String getEditarAlumnoDelegacion() {
+		return editarAlumnoDelegacion;
+	}
+
+	/**
+	 * @param editarAlumnoDelegacion the editarAlumnoDelegacion to set
+	 */
+	public void setEditarAlumnoDelegacion(String editarAlumnoDelegacion) {
+		this.editarAlumnoDelegacion = editarAlumnoDelegacion;
+	}
+
+	/**
+	 * @return the editarAlumnoDelegacionId
+	 */
+	public int getEditarAlumnoDelegacionId() {
+		return editarAlumnoDelegacionId;
+	}
+
+	/**
+	 * @param editarAlumnoDelegacionId the editarAlumnoDelegacionId to set
+	 */
+	public void setEditarAlumnoDelegacionId(int editarAlumnoDelegacionId) {
+		this.editarAlumnoDelegacionId = editarAlumnoDelegacionId;
+	}
+
+	/**
+	 * @return the editarAlumnoCiudad
+	 */
+	public String getEditarAlumnoCiudad() {
+		return editarAlumnoCiudad;
+	}
+
+	/**
+	 * @param editarAlumnoCiudad the editarAlumnoCiudad to set
+	 */
+	public void setEditarAlumnoCiudad(String editarAlumnoCiudad) {
+		this.editarAlumnoCiudad = editarAlumnoCiudad;
+	}
+
+	/**
+	 * @return the editarAlumnoCiudadId
+	 */
+	public String getEditarAlumnoCiudadId() {
+		return editarAlumnoCiudadId;
+	}
+
+	/**
+	 * @param editarAlumnoCiudadId the editarAlumnoCiudadId to set
+	 */
+	public void setEditarAlumnoCiudadId(String editarAlumnoCiudadId) {
+		this.editarAlumnoCiudadId = editarAlumnoCiudadId;
+	}
+
+	/**
+	 * @return the editarAlumnoEntidadFederativa
+	 */
+	public String getEditarAlumnoEntidadFederativa() {
+		return editarAlumnoEntidadFederativa;
+	}
+
+	/**
+	 * @param editarAlumnoEntidadFederativa the editarAlumnoEntidadFederativa to set
+	 */
+	public void setEditarAlumnoEntidadFederativa(
+			String editarAlumnoEntidadFederativa) {
+		this.editarAlumnoEntidadFederativa = editarAlumnoEntidadFederativa;
+	}
+
+	/**
+	 * @return the editarAlumnoEntidadFederetivaId
+	 */
+	public int getEditarAlumnoEntidadFederetivaId() {
+		return editarAlumnoEntidadFederetivaId;
+	}
+
+	/**
+	 * @param editarAlumnoEntidadFederetivaId the editarAlumnoEntidadFederetivaId to set
+	 */
+	public void setEditarAlumnoEntidadFederetivaId(
+			int editarAlumnoEntidadFederetivaId) {
+		this.editarAlumnoEntidadFederetivaId = editarAlumnoEntidadFederetivaId;
+	}
+
+	/**
+	 * @return the editarAlumnoTelefono
+	 */
+	public String getEditarAlumnoTelefono() {
+		return editarAlumnoTelefono;
+	}
+
+	/**
+	 * @param editarAlumnoTelefono the editarAlumnoTelefono to set
+	 */
+	public void setEditarAlumnoTelefono(String editarAlumnoTelefono) {
+		this.editarAlumnoTelefono = editarAlumnoTelefono;
+	}
+
+	/**
+	 * @return the editarAlumnoNoInt
+	 */
+	public String getEditarAlumnoNoInt() {
+		return editarAlumnoNoInt;
+	}
+
+	/**
+	 * @param editarAlumnoNoInt the editarAlumnoNoInt to set
+	 */
+	public void setEditarAlumnoNoInt(String editarAlumnoNoInt) {
+		this.editarAlumnoNoInt = editarAlumnoNoInt;
+	}
+
+	/**
+	 * @return the editarAlumnoCp
+	 */
+	public String getEditarAlumnoCp() {
+		return editarAlumnoCp;
+	}
+
+	/**
+	 * @param editarAlumnoCp the editarAlumnoCp to set
+	 */
+	public void setEditarAlumnoCp(String editarAlumnoCp) {
+		this.editarAlumnoCp = editarAlumnoCp;
+	}
+
+	/**
+	 * @return the editarAlumnoCpIdAsentamiento
+	 */
+	public int getEditarAlumnoCpIdAsentamiento() {
+		return editarAlumnoCpIdAsentamiento;
+	}
+
+	/**
+	 * @param editarAlumnoCpIdAsentamiento the editarAlumnoCpIdAsentamiento to set
+	 */
+	public void setEditarAlumnoCpIdAsentamiento(int editarAlumnoCpIdAsentamiento) {
+		this.editarAlumnoCpIdAsentamiento = editarAlumnoCpIdAsentamiento;
+	}
+
+	/**
+	 * @return the editarAlumnoSelectListColonias
+	 */
+	public List<SelectItem> getEditarAlumnoSelectListColonias() {
+		return editarAlumnoSelectListColonias;
+	}
+
+	/**
+	 * @param editarAlumnoSelectListColonias the editarAlumnoSelectListColonias to set
+	 */
+	public void setEditarAlumnoSelectListColonias(
+			List<SelectItem> editarAlumnoSelectListColonias) {
+		this.editarAlumnoSelectListColonias = editarAlumnoSelectListColonias;
+	}
+
+	/**
+	 * @return the editarAlumnoIdAsentamientoMunicipioEstado
+	 */
+	public String getEditarAlumnoIdAsentamientoMunicipioEstado() {
+		return editarAlumnoIdAsentamientoMunicipioEstado;
+	}
+
+	/**
+	 * @param editarAlumnoIdAsentamientoMunicipioEstado the editarAlumnoIdAsentamientoMunicipioEstado to set
+	 */
+	public void setEditarAlumnoIdAsentamientoMunicipioEstado(
+			String editarAlumnoIdAsentamientoMunicipioEstado) {
+		this.editarAlumnoIdAsentamientoMunicipioEstado = editarAlumnoIdAsentamientoMunicipioEstado;
+	}
+
+	/**
+	 * @return the editarAlumnoIdEstatusSelected
+	 */
+	public short getEditarAlumnoIdEstatusSelected() {
+		return editarAlumnoIdEstatusSelected;
+	}
+
+	/**
+	 * @param editarAlumnoIdEstatusSelected the editarAlumnoIdEstatusSelected to set
+	 */
+	public void setEditarAlumnoIdEstatusSelected(short editarAlumnoIdEstatusSelected) {
+		this.editarAlumnoIdEstatusSelected = editarAlumnoIdEstatusSelected;
 	}
 
 }
