@@ -30,6 +30,7 @@ public class Constantes {
 	public static final String ASSEMBLER_ALUMNO="assemblerAlumno";
 	public static final String ASSEMBLER_DOCS="assemblerDocs";
 	public static final String ASSEMBLER_REFERENCIAS="assemblerReferencias";
+	public static final String ASSEMBLER_MODULO="assemblerModulo";
 	public static final String ASSEMBLER_MODULOS="assemblerModulos";
 	public static final String ERROR_OBTENIENDO_LISTA_CATALOGO="No se pudo obtener el catalogo.";
 	public static final String ERROR_NUEVO_REGISTRO="No se pudo completar el nuevo registro.";
