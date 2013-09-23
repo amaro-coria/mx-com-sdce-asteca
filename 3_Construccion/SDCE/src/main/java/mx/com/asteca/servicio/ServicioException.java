@@ -1,24 +1,33 @@
 package mx.com.asteca.servicio;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class ServicioException extends Exception {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private static Logger LOGGER = LoggerFactory.getLogger(ServicioException.class);
+	
 	public ServicioException() {
-		// TODO Auto-generated constructor stub
+		LOGGER.error("Error en Servicio sin descripcion");
 	}
 
 	public ServicioException(String message) {
 		super(message);
-		// TODO Auto-generated constructor stub
+		LOGGER.error("Error en Servicio::"+message);
 	}
 
 	public ServicioException(Throwable cause) {
 		super(cause);
-		// TODO Auto-generated constructor stub
+		LOGGER.error("Error en servicio solo con causa::"+cause.getMessage(), cause);
 	}
 
 	public ServicioException(String message, Throwable cause) {
 		super(message, cause);
-		// TODO Auto-generated constructor stub
+		LOGGER.error("Error en Servicio::"+message, cause);
 	}
 
 }

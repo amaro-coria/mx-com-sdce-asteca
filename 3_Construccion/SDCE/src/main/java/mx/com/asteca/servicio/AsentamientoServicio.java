@@ -16,9 +16,9 @@ import mx.com.asteca.persistencia.entidades.AsentamientosId;
 public interface AsentamientoServicio extends
 		BaseService<AsentamientoDTO, AsentamientosId, Asentamientos> {
 
-	List<Short> getDistinctCPs() throws ServicioException;
+	List<Integer> getDistinctCPs() throws ServicioException;
 
-	List<AsentamientoDTO> findAsentamientosByCp(short cp)
+	List<AsentamientoDTO> findAsentamientosByCp(int cp)
 			throws ServicioException;
 
 	AsentamientoDTO findAsentamiento(int idAsentamiento, int idMunicipio,
