@@ -38,7 +38,7 @@ public class NotificacionControlador extends BaseController implements Serializa
 	private List<NotificacionDTO> filNotificacion;
 
 	@ManagedProperty("#{notificacionFachadaImpl}")
-	private NotificacionFachada notificacionFachada;
+	private transient NotificacionFachada notificacionFachada;
 	
 	@ManagedProperty("#{notificacionEstadoFachadaImpl}")
 	private NotificacionEstadoFachada notificacionEstadoFachada;
