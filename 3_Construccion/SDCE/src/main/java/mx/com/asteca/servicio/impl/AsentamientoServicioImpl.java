@@ -48,9 +48,9 @@ public class AsentamientoServicioImpl extends
 	
 	@Override
 	@Transactional(readOnly=true)
-	public List<Short> getDistinctCPs() throws ServicioException{
+	public List<Integer> getDistinctCPs() throws ServicioException{
 		try {
-			List<Short> listMapping = daoAsentamiento.getDistinctCPs();
+			List<Integer> listMapping = daoAsentamiento.getDistinctCPs();
 			return listMapping;
 		} catch (PersistenciaException e) {
 			throw new ServicioException("Error en getDistinctCPs Servicio :"+e.getMessage(), e);
@@ -59,7 +59,7 @@ public class AsentamientoServicioImpl extends
 	
 	@Override
 	@Transactional(readOnly=true)
-	public List<AsentamientoDTO> findAsentamientosByCp(short cp) throws ServicioException{
+	public List<AsentamientoDTO> findAsentamientosByCp(int cp) throws ServicioException{
 		try{
 			List<Asentamientos> listMapping = daoAsentamiento.findAsentamientosByCp(cp);
 			List<AsentamientoDTO> listaDTOs = assembler.getDTOListTransform(listMapping);
