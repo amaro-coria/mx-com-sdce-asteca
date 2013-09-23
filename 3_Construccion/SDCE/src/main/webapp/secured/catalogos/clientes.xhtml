@@ -1,13 +1,11 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<ui:composition template="/templates/layout.xhtml"
+<html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui">
-	<ui:define name="body">
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+<h:body>
+	<ui:composition>
 		<h:form id="form">
 			<p:growl id="growl" showDetail="true" sticky="true" />
 			<p:panel id="panel" header="Buscar" closable="false"
@@ -38,17 +36,17 @@
 					</p:selectOneMenu>
 				</h:panelGrid>
 				<br />
-				<ul class="buttons">
-					<li><p:commandButton value="#{msg.limpiar}"
+				<h:panelGrid style="text-align:right" width="100%">
+					<h:panelGrid columns="2" style="text-align:right">
+						<p:commandButton value="#{msg.limpiar}"
 							icon="ui-icon-arrowrefresh-1-e"
 							onclick=":form:selectCteCveFilter.selectValue('')"
 							actionListener="#{beanClientes.limpiarFiltrado }" update="growl" />
-					</li>
-					<li><p:commandButton icon="ui-icon-search"
+						<p:commandButton icon="ui-icon-search"
 							actionListener="#{beanClientes.buscarFiltrado}"
 							value="#{msg.buscar}" update="growl, :form:clientesTable" />
-					</li>
-				</ul>
+					</h:panelGrid>
+				</h:panelGrid>
 			</p:panel>
 			<p:panel>
 				<h:panelGrid columns="4" style="text-align:left;">
@@ -62,26 +60,27 @@
 						update=":form:displayVer, growl" />
 					<p:commandButton id="nuevoButton" value="#{msg.nuevo }"
 						icon="ui-icon-plusthick" onclick="nuevoDialog.show()"
-						update=":form:displayNuevo, growl" />					
+						update=":form:displayNuevo, growl" />
 				</h:panelGrid>
 			</p:panel>
 			<p:panel>
 				<p:dataTable id="clientesTable"
 					value="#{beanClientes.listaClientes}" var="cliente"
 					rowKey="#{cliente.idCliente}" paginator="true"
-					selection="#{beanClientes.clienteSelected}" filteredValue="#{beanClientes.filteredClientes }"
+					selection="#{beanClientes.clienteSelected}"
+					filteredValue="#{beanClientes.filteredClientes }"
 					paginatorPosition="bottom" rows="10">
 					<p:column selectionMode="single" style="width:2%" />
 					<p:column id="cteCve" headerText="#{msg.clave}"
-						sortBy="#{cliente.clave}" filterBy="#{cliente.clave }" >
+						sortBy="#{cliente.clave}" filterBy="#{cliente.clave }">
 						<h:outputText id="cveCte" value="#{cliente.clave}" />
 					</p:column>
-					<p:column id="clienteNombre" headerText="#{msg.nombre}" filterBy="#{cliente.nombre }" 
-						sortBy="#{cliente.nombre}">
+					<p:column id="clienteNombre" headerText="#{msg.nombre}"
+						filterBy="#{cliente.nombre }" sortBy="#{cliente.nombre}">
 						<h:outputText id="nombreCliente" value="#{cliente.nombre}" />
 					</p:column>
-					<p:column id="clienteResponsable" headerText="#{msg.responsable}" filterBy="#{cliente.responsable }" 
-						sortBy="#{cliente.responsable}">
+					<p:column id="clienteResponsable" headerText="#{msg.responsable}"
+						filterBy="#{cliente.responsable }" sortBy="#{cliente.responsable}">
 						<h:outputText id="responsableCliente"
 							value="#{cliente.responsable}" />
 					</p:column>
@@ -234,7 +233,7 @@
 			<!-- Fin de panel de borrado -->
 		</h:form>
 
-	</ui:define>
-</ui:composition>
 
+	</ui:composition>
+</h:body>
 </html>
