@@ -1,13 +1,10 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<ui:composition template="/templates/layout.xhtml"
+<html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui">
-	<ui:define name="body">
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+<h:body>
+	<ui:composition>
 		<h:form id="form">
 			<p:growl id="growl" showDetail="true" sticky="true" />
 			<p:panel id="panel" header="Buscar" closable="false"
@@ -36,17 +33,18 @@
 					</p:selectOneMenu>
 				</h:panelGrid>
 				<br />
-				<ul class="buttons">
-					<li><p:commandButton value="#{msg.limpiar}"
+				<h:panelGrid style="text-align:right" width="100%">
+					<h:panelGrid columns="2" style="text-align:right">
+						<p:commandButton value="#{msg.limpiar}"
 							icon="ui-icon-arrowrefresh-1-e"
 							onclick=":form:selectCveFilter.selectValue('')"
 							actionListener="#{beanAlumno.limpiarFiltrado }"
 							update="growl, table" />
-					</li>
-					<li><p:commandButton icon="ui-icon-search"
+						<p:commandButton icon="ui-icon-search"
 							actionListener="#{beanAlumno.buscarFiltrado}"
-							value="#{msg.buscar}" update="growl, table" /></li>
-				</ul>
+							value="#{msg.buscar}" update="growl, table" />
+					</h:panelGrid>
+				</h:panelGrid>
 			</p:panel>
 			<p:panel>
 				<h:panelGrid columns="4" style="text-align:left;">
@@ -105,7 +103,7 @@
 						<h:outputText
 							value="#{beanAlumno.itemSelected.dtoPersona.apellidoM}" />
 					</h:panelGrid>
-					
+
 					<p:tabView id="tabVer">
 						<p:tab title="#{msg.personales }">
 							<h:panelGrid columns="2">
@@ -380,8 +378,9 @@
 						<p:inputText value="#{beanAlumno.nuevoAlumnoApellidoP}" />
 						<h:outputText value="#{msg.apellidoM }" />
 						<p:inputText value="#{beanAlumno.nuevoAlumnoApellidoM}" />
-						<h:outputText value="#{msg.estatus }"/>
-						<p:selectOneMenu value="#{beanAlumno.nuevoAlumnoIdEstatusSelected }">
+						<h:outputText value="#{msg.estatus }" />
+						<p:selectOneMenu
+							value="#{beanAlumno.nuevoAlumnoIdEstatusSelected }">
 							<f:selectItems value="#{beanAlumno.listaSelectEstatus }" />
 						</p:selectOneMenu>
 					</h:panelGrid>
@@ -433,14 +432,14 @@
 									<h:outputText value="#{msg.noInterior }" />
 									<p:inputText value="#{beanAlumno.nuevoAlumnoNoInt }" />
 									<h:outputText value="#{msg.codigoPostal }" />
-									<p:selectOneMenu id="nuevoAlumnoSelectCPs" style="width:180px"
-										value="#{beanAlumno.nuevoAlumnoCpIdAsentamiento}">
-										<f:selectItem itemLabel="#{msg.seleccionarCP }" itemValue="0" />
-										<f:selectItems value="#{beanAlumno.listaCP }" />
+									<p:autoComplete id="autoCompleteCPNuevo"
+										value="#{beanAlumno.nuevoAlumnoCPAutoComplete}"
+										completeMethod="#{beanAlumno.complete}" forceSelection="true">
 										<p:ajax
 											update="nuevoAlumnoSelectColonias nuevoAlumnoEntidadF nuevoAlumnoDelegacion"
-											listener="#{beanAlumno.handlerCambiaCp}" />
-									</p:selectOneMenu>
+											listener="#{beanAlumno.handleSelectCambiaCp}"
+											event="itemSelect" />
+									</p:autoComplete>
 								</h:panelGrid>
 							</h:panelGrid>
 						</p:tab>
@@ -703,15 +702,14 @@
 											value="#{beanAlumno.nuevoAlumnoReferenciaNuevaNoInt }" />
 									</h:panelGroup>
 									<h:outputText value="#{msg.codigoPostal }" />
-									<p:selectOneMenu id="nuevoAlumnoReferenciaSelectCPs"
-										style="width:180px"
-										value="#{beanAlumno.nuevoAlumnoCpIdAsentamientoReferenciaNueva}">
-										<f:selectItem itemLabel="#{msg.seleccionarCP }" itemValue="0" />
-										<f:selectItems value="#{beanAlumno.listaCP }" />
+									<p:autoComplete id="autoCompleteCPReferenciaNuevo"
+										value="#{beanAlumno.nuevoAlumnoReferenciaCPAutoComplete}"
+										completeMethod="#{beanAlumno.complete}" forceSelection="true">
 										<p:ajax
 											update="nuevoAlumnoSelectColoniasReferenciaNueva nuevoAlumnoEntidadFNuevaRef nuevoAlumnoDelegacionRefNueva"
-											listener="#{beanAlumno.handlerCambiaCpReferenciaNueva}" />
-									</p:selectOneMenu>
+											listener="#{beanAlumno.handleSelectCambiaCPReferenciaNueva}"
+											event="itemSelect" />
+									</p:autoComplete>
 									<h:outputText value="#{msg.telefono }" />
 									<p:inputText
 										value="#{beanAlumno.nuevoAlumnoReferenciaNuevaTel }" />
@@ -727,7 +725,8 @@
 						</p:tab>
 						<p:tab title="#{msg.anexos }">
 							<h:panelGrid columns="2" style="width:300px">
-								<h:panelGrid id="panelNuevoDocNombre" style="width:300px; vertical-align:top;">
+								<h:panelGrid id="panelNuevoDocNombre"
+									style="width:300px; vertical-align:top;">
 									<p:dataTable id="tableDocumentosNuevo"
 										value="#{beanAlumno.itemNuevo.listaDocumentos}" var="item"
 										selection="#{beanAlumno.documentoSelected}"
@@ -752,8 +751,9 @@
 												value="#{beanAlumno.nuevoAlumnoDocListaSelectEstatus }" />
 										</p:selectOneMenu>
 									</h:panelGrid>
-									<p:fileUpload label="#{msg.frsSeleccionar }" fileLimit="1" showButtons="false"
-										uploadLabel="#{msg.cargar }" cancelLabel="#{msg.cancelar }"
+									<p:fileUpload label="#{msg.frsSeleccionar }" fileLimit="1"
+										showButtons="false" uploadLabel="#{msg.cargar }"
+										cancelLabel="#{msg.cancelar }"
 										fileUploadListener="#{beanAlumno.handlerNuevoAlumnoFileUpload}"
 										mode="advanced" update=":form:growl" />
 									<p:commandButton icon="ui-icon-plusthick" style="float: right"
@@ -771,12 +771,43 @@
 			</p:dialog>
 			<!-- Fin de panel de Nuevo -->
 			<!-- Inicio de panel de edicion -->
-			<p:dialog id="dialogEditar" header="#{msg.frsNuevoRegistro}"
-				widgetVar="editarDialog" closable="true" modal="true"
-				draggable="false" width="400">
-				<h:panelGrid columns="2" width="100%" id="displayEditar">
-					<h:outputText value="#{msg.clave}" />
-					<h:outputText value="#{msg.clave}" />
+			<p:dialog id="dialogEditar" header="#{msg.nuevo}"
+				widgetVar="editarDialog" modal="true" maximizable="true">
+				<h:panelGrid id="displayEditar" columns="1" cellpadding="4">
+					<h:panelGroup id="messagePanelEditar" layout="block">
+						<h:messages errorStyle="color: red" infoStyle="color: green"
+							layout="list" style="font-size:12px;font-family:Arial" />
+					</h:panelGroup>
+					<h:panelGrid columns="2">
+						<h:outputText value="#{msg.matricula }" />
+						<h:panelGroup>
+							<p:inputText value="#{beanAlumno.editarAlumnoMatricula }" id="editarAlumnoMatriculaInput"/>
+							<p:watermark value="#{beanAlumno.itemSelected.matricula}" for="editarAlumnoMatriculaInput"/>
+						</h:panelGroup>
+						<h:outputText value="#{msg.nombre }" />
+						<h:panelGroup>
+							<p:inputText value="#{beanAlumno.editarAlumnoNombre}" id="editarAlumnoNombreInput"/>
+							<p:watermark value="#{beanAlumno.itemSelected.dtoPersona.nombre}" for="editarAlumnoNombreInput" />
+						</h:panelGroup>
+						<h:outputText value="#{msg.apellidoP }" />
+						<h:panelGroup>
+							<p:inputText value="#{beanAlumno.editarAlumnoApellidoP}" id="editarAlumnoApellidoPInput"/>
+							<p:watermark value="#{beanAlumno.itemSelected.dtoPersona.apellidoP}" for="editarAlumnoApellidoPInput" />
+						</h:panelGroup>
+						<h:outputText value="#{msg.apellidoM }" />
+						<h:panelGroup>
+							<p:inputText value="#{beanAlumno.editarAlumnoApellidoM}" id="editarAlumnoApellidoMInput"/>
+							<p:watermark value="#{beanAlumno.itemSelected.dtoPersona.apellidoM}" for="editarAlumnoApellidoMInput" />
+						</h:panelGroup>
+						<h:outputText value="#{msg.estatus }" />
+						<p:selectOneMenu
+							value="#{beanAlumno.editarAlumnoIdEstatusSelected}">
+							<f:selectItems value="#{beanAlumno.listaSelectEstatus }" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+					<p:commandButton id="aceptarEditarBtn" value="#{msg.aceptar }"
+					icon="ui-icon-check" onclick="editaDialog.hide()"
+					 />
 				</h:panelGrid>
 			</p:dialog>
 			<!-- Fin de panel de edicion -->
@@ -801,7 +832,7 @@
 				statusDownloadDialog.hide();
 			}
 		</script>
-	</ui:define>
-</ui:composition>
 
+	</ui:composition>
+</h:body>
 </html>
