@@ -2,7 +2,10 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:ui="http://java.sun.com/jsf/facelets">
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
 <h:head>
 	<link href="../../css/asteca.css" rel="stylesheet" type="text/css" />
 </h:head>
@@ -25,6 +28,14 @@
 
 			<div id="templatemo_middle_column">
 				<ui:insert name="templatemo_left_column">
+					<p:ajaxStatus style="width:40px; height:40px;" id="ajaxStatusPanel">
+						<f:facet name="start">
+							<h:graphicImage value="../../images/ajax-loader.gif" />
+						</f:facet>
+						<f:facet name="complete">
+							<h:outputText value="" />
+						</f:facet>
+					</p:ajaxStatus>
 					<ui:include src="#{menuBean.navegacion}" />
 				</ui:insert>
 			</div>
