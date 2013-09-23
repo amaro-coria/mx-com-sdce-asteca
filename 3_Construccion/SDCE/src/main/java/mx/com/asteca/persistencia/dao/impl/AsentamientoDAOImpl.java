@@ -42,13 +42,13 @@ public class AsentamientoDAOImpl extends
 	}
 
 	@Override
-	public List<Short> getDistinctCPs() throws PersistenciaException {
+	public List<Integer> getDistinctCPs() throws PersistenciaException {
 		try {
 			Criteria criteria = getSessionFactory().getCurrentSession()
 					.createCriteria(Asentamientos.class);
 			criteria.setProjection(Projections.distinct(Projections
 					.property("idCp")));
-			List<Short> list = criteria.list();
+			List<Integer> list = criteria.list();
 			Collections.sort(list);
 			return list;
 		} catch (Exception ex) {
@@ -58,7 +58,7 @@ public class AsentamientoDAOImpl extends
 	}
 	
 	@Override
-	public List<Asentamientos> findAsentamientosByCp(short idCp) throws PersistenciaException{
+	public List<Asentamientos> findAsentamientosByCp(int idCp) throws PersistenciaException{
 		try{
 			Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(Asentamientos.class);
 			criteria.add(Restrictions.eq("idCp", idCp));
