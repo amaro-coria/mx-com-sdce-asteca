@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Report" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" >
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Report" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a9e0b7f3-da1d-4cec-8671-5ff5e36000a1">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -11,15 +11,15 @@
 	<title>
 		<band height="77" splitType="Stretch">
 			<image>
-				<reportElement  x="0" y="0" width="134" height="77"/>
-				<imageExpression class="java.io.InputStream"><![CDATA[$P{Sct}]]></imageExpression>
+				<reportElement uuid="af138560-7aa4-48a2-920c-885bd9dc96a7" x="0" y="0" width="134" height="77"/>
+				<imageExpression><![CDATA[$P{Sct}]]></imageExpression>
 			</image>
 			<image>
-				<reportElement  x="431" y="0" width="124" height="77"/>
-				<imageExpression class="java.io.InputStream"><![CDATA[$P{Aero}]]></imageExpression>
+				<reportElement uuid="fcb8d04d-1e8f-4ec5-a891-405c137625d3" x="431" y="0" width="124" height="77"/>
+				<imageExpression><![CDATA[$P{Aero}]]></imageExpression>
 			</image>
 			<staticText>
-				<reportElement  x="200" y="0" width="118" height="77"/>
+				<reportElement uuid="4cb00626-864b-4656-a077-30fbf814438f" x="134" y="0" width="297" height="77"/>
 				<box>
 					<pen lineWidth="1.0" lineStyle="Double"/>
 					<topPen lineWidth="1.0" lineStyle="Double"/>
@@ -28,18 +28,273 @@
 					<rightPen lineWidth="1.0" lineStyle="Double"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[CENTER]]></text>
+				<text><![CDATA[DIRECCIÓN GENERAL DE AERONÁUTICA CIVIL
+DIRECCIÓN DE SEGURIDAD AÉREA
+SUBDIRECCIÓN DE CERTIFICACIÓN DE LICENCIAS
+]]></text>
 			</staticText>
 		</band>
 	</title>
-	<pageHeader>
-		<band height="35" splitType="Stretch"/>
-	</pageHeader>
-	<columnHeader>
-		<band height="61" splitType="Stretch"/>
-	</columnHeader>
 	<detail>
-		<band height="125" splitType="Stretch"/>
+		<band height="369" splitType="Stretch">
+			<rectangle>
+				<reportElement uuid="1301b684-659d-4257-83b1-9483ccbb4c60" x="0" y="180" width="555" height="100"/>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="2efa51e3-c0b1-4dcb-ac6f-d49669efe9f3" x="0" y="80" width="555" height="80"/>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="081fef69-d94d-495d-ae23-3902518c94f1" x="227" y="0" width="100" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[CEDULA 5]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="4ee96745-5083-427c-a65f-52783433518d" x="227" y="20" width="100" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[INICIO DE CURSO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a8a25247-9cdf-454a-b793-55f6a0384bb3" x="0" y="40" width="382" height="20"/>
+				<textElement/>
+				<text><![CDATA[UTILIZAR MAQUINA ESCRIBIR O LETRA DE MOLDE PARA SU ELABORACION ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="5473df02-eb1c-475d-915c-8c7dca2d1184" x="385" y="20" width="113" height="40"/>
+				<box>
+					<pen lineWidth="2.0"/>
+					<topPen lineWidth="2.0"/>
+					<leftPen lineWidth="2.0"/>
+					<bottomPen lineWidth="2.0"/>
+					<rightPen lineWidth="2.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[SOLO PARA SER LLENADO POR LA D.G.A.C.
+(SUBDIRECCIÓN DE LICENCIAS)
+]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement uuid="455939f4-fc7d-4c34-b66d-a1c7d6854e0c" x="504" y="30" width="45" height="30"/>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="2dd662d3-d79c-4b5c-b186-7290b28999dc" x="178" y="80" width="199" height="20"/>
+				<textElement/>
+				<text><![CDATA[(1) DATOS DEL CENTRO AUTORIZADO:
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c71e1c71-1c19-4d69-ba0d-2661bfa01df2" x="0" y="100" width="100" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<text><![CDATA[CLAVE CENTRO:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6e8a96ab-ae92-4198-9410-f0be0ea2eec0" x="0" y="120" width="100" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<text><![CDATA[No. AUTORIZACIÓN:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="24e1ac95-1275-4422-b56b-03050f706944" x="100" y="100" width="100" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[L-47]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c4dcb3f3-592e-44fd-8b48-af0a4648aa3a" x="100" y="120" width="100" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[FSOB]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="acddad00-f438-487f-a683-421927a8db60" x="300" y="100" width="255" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[ASTECA, ASESORIA TECNICA AERONAUTICA Y CAPACITACION, S.C.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="74211247-014d-4236-a8b0-4ad119e9136c" x="300" y="120" width="255" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[FORMACION DE SOBRECARGOS DE AVIACION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f2c5c064-ae5c-44ef-b20f-383297c43018" x="200" y="100" width="100" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<text><![CDATA[NOMBRE CENTRO:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="36ec1829-9c39-4bd1-8fa4-584ae0b0c59b" x="200" y="120" width="100" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<text><![CDATA[NOMBRE CURSO:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="9cbbae76-9607-4feb-aaa3-6152a7074fdb" x="200" y="220" width="100" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<text><![CDATA[FECHA DE INICIO:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f3ba1f3b-d710-406f-b0a8-f6ee11a4e294" x="200" y="200" width="100" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<text><![CDATA[NOMBRE GRUPO:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c3f344cf-13c4-45d1-b5e8-0eb01d462674" x="300" y="220" width="53" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[29/04/13]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="0de1e91f-8b33-4c49-85f7-48b8b0fc5fc4" x="300" y="200" width="255" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[FSOB/2949]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="72994a30-de9a-4f36-9d14-046149b345a8" x="0" y="220" width="100" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<text><![CDATA[CLAVE CURSO:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="acffa9a7-6755-4c66-a17f-4a0be7f2bc49" x="0" y="200" width="100" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<text><![CDATA[CLAVE  GRUPO:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="17bdc895-9c2f-40e9-b028-21ce9dc398e3" x="100" y="220" width="100" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[FSOB]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="efebe689-93e4-4ae9-8acb-498b9a515301" x="178" y="180" width="199" height="20"/>
+				<textElement/>
+				<text><![CDATA[(2)   DATOS DEL CURSO POR GRUPO:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e08409ad-ba13-48f7-bf8b-b69a410eb54a" x="100" y="200" width="100" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[L-47]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d4fb16bb-59f9-4c2d-9c90-824522a63703" x="353" y="220" width="116" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<text><![CDATA[FECHA TERMINACION:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="720a6c66-1c2c-4a0e-a809-e70db6117295" x="469" y="220" width="53" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[29/04/13]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f1025451-5e5d-416f-a778-b94a5d6a17b6" x="200" y="240" width="100" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<text><![CDATA[HORA INICIO:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="733cd6ad-e3f2-49c2-adb0-a0febcd7aeff" x="353" y="240" width="116" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<text><![CDATA[HORA TERMINA:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="518ffb75-2d14-4a86-b769-bfa300ca60b2" x="300" y="240" width="53" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[09:00]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="40c077db-096a-42c7-9604-df249c53df2b" x="469" y="240" width="53" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[15:00]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="7b7acf0b-1e5f-4332-a277-b1f60e82610b" x="194" y="300" width="166" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[(3)   PROGRAMA DE ESTUDIOS:]]></text>
+			</staticText>
+		</band>
 	</detail>
 	<columnFooter>
 		<band height="45" splitType="Stretch"/>
