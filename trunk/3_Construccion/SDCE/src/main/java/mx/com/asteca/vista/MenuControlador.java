@@ -45,6 +45,7 @@ public class MenuControlador extends BaseController {
 	public void init() {
 		try {
 			buildMenu(getMenuItems());
+			navegacion = "";
 		} catch (Exception e) {
 			super.addErrorMessage("Ocurrio un error: " + e.getMessage());
 		}
