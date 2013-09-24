@@ -13,14 +13,13 @@
 		<servlet-name>Faces Servlet</servlet-name>
 		<url-pattern>/faces/*</url-pattern>
 	</servlet-mapping>
-
-	<!-- Add Support for Spring -->
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
 	<listener>
 		<listener-class>
-			org.springframework.web.context.request.RequestContextListener</listener-class>
+			org.springframework.web.context.request.RequestContextListener
+		</listener-class>
 	</listener>
 	<context-param>
 		<param-name>javax.faces.STATE_SAVING_METHOD</param-name>
@@ -44,12 +43,10 @@
 		<param-name>javax.faces.VALIDATE_EMPTY_FIELDS</param-name>
 		<param-value>false</param-value>
 	</context-param>
-
 	<context-param>
 		<param-name>javax.faces.FACELETS_LIBRARIES</param-name>
 		<param-value>/WEB-INF/springsecurity.taglib.xml</param-value>
 	</context-param>
-
 	<servlet>
 		<servlet-name>Captcha</servlet-name>
 		<servlet-class>mx.com.asteca.util.Captcha</servlet-class>
@@ -68,10 +65,6 @@
 		<servlet-name>Captcha</servlet-name>
 		<url-pattern>/Captcha.jpg</url-pattern>
 	</servlet-mapping>
-
-	<!-- ############################################# -->
-	<!-- # File upload # -->
-	<!-- ############################################# -->
 	<filter>
 		<filter-name>PrimeFaces FileUpload Filter</filter-name>
 		<filter-class>org.primefaces.webapp.filter.FileUploadFilter</filter-class>
@@ -79,16 +72,11 @@
 			<param-name>thresholdSize</param-name>
 			<param-value>51200</param-value>
 		</init-param>
-		<!-- Optional <init-param> <param-name>uploadDirectory</param-name> <param-value>/var/bcom/temp</param-value> 
-			</init-param> -->
 	</filter>
-	<!-- Spring Security Filter -->
-
 	<filter>
 		<filter-name>springSecurityFilterChain</filter-name>
 		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
 	</filter>
-
 	<filter-mapping>
 		<filter-name>PrimeFaces FileUpload Filter</filter-name>
 		<servlet-name>Faces Servlet</servlet-name>
@@ -103,23 +91,20 @@
 		<res-type>javax.sql.DataSource</res-type>
 		<res-auth>Container</res-auth>
 	</resource-ref>
-
-	<!-- ReCaptcha -->
 	<context-param>
-		<!-- reCaptcha public key for localhost domain -->
 		<param-name>primefaces.PUBLIC_CAPTCHA_KEY</param-name>
 		<param-value>6Le3WOcSAAAAAOiPrVgvcVvpmRx1goixJ-L6F7Qz</param-value>
-		<!-- reCaptcha public key for 201.150.38.106 domain
-		<param-value>6Lew2ucSAAAAAPW6trGARXAMntS5UW9xDWpJ-MHp</param-value>
-		-->
 	</context-param>
-
 	<context-param>
-		<!-- reCaptcha private key for localhost domain -->
 		<param-name>primefaces.PRIVATE_CAPTCHA_KEY</param-name>
 		<param-value>6Le3WOcSAAAAACfgyNG2PQj_Nh0HEDzkjLU4_2OB</param-value>
-		<!-- reCaptcha private key for 201.150.38.106 domain
-		<param-value>6Lew2ucSAAAAADSrRXdafBFXGSLMrcVPJTIJ7tAa</param-value>
-		 -->
 	</context-param>
+	<servlet>
+		<servlet-name>Reportes</servlet-name>
+		<servlet-class>mx.com.asteca.reportes.Reportes</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Reportes</servlet-name>
+		<url-pattern>/Reportes</url-pattern>
+	</servlet-mapping>
 </web-app>
