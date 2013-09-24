@@ -60,7 +60,7 @@ public class RolesModulos  implements java.io.Serializable {
     public void setIdRolMod(int idRolMod) {
         this.idRolMod = idRolMod;
     }
-@ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="ID_PERMISOS")
     public Permisos getPermisos() {
         return this.permisos;
