@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+  <session-factory>
+    <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+    <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+    <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/astecadb?zeroDateTimeBehavior=convertToNull</property>
+    <property name="hibernate.connection.username">asteca</property>
+    <property name="hibernate.connection.password">asteca</property>
+    <mapping class="mx.com.asteca.persistencia.entidades.AutorizacionesProgrEst"/>
+    <mapping class="mx.com.asteca.persistencia.entidades.MunicipiosId"/>
+    <mapping class="mx.com.asteca.persistencia.entidades.RolesModulos"/>
+    <mapping class="mx.com.asteca.persistencia.entidades.Aulas"/>
+    <mapping class="mx.com.asteca.persistencia.entidades.InstitutoContactos"/>
+    <mapping class="mx.com.asteca.persistencia.entidades.ProgramaEstudios"/>
+    <mapping class="mx.com.asteca.persistencia.entidades.Asentamientos"/>
+    <mapping class="mx.com.asteca.persistencia.entidades.CalifCursos"/>
+    <mapping class="mx.com.asteca.persistencia.entidades.Modulos"/>
+    <mapping class="mx.com.asteca.persistencia.entidades.Administrativos"/>
+    <mapping class="mx.com.asteca.persistencia.entidades.Certificados"/>
+    <mapping class="mx.com.asteca.persistencia.entidades.Instructores"/>
+    <mapping class="mx.com.asteca.persistencia.entidades.Notificaciones"/>
+    <mapping class="mx.com.asteca.persistencia.entidades.Alumnos"/>
+    <mapping class="mx.com.asteca.persistencia.entidades.Referencias"/>
+    <mapping class="mx.com.asteca.persistencia.entidades.ProgramaEstMaterias"/>
+    <mapping class="mx.com.asteca.persistencia.entidades.Materias"/>
+    <mapping class="mx.com.asteca.persistencia.entidades.TiposInstructores"/>
+    <mapping class="mx.com.asteca.persistencia.entidades.DocsNecesariosAlumnos"/>
+    <mapping class="mx.com.asteca.persistencia.entidades.CapacidadesAlumnos"/>
+    <mapping class="mx.com.asteca.persistencia.entidades.AsentamientosId"/>
+    <mapping class="mx.com.asteca.persistencia.entidades.Equipos"/>
+    <mapping class="mx.com.asteca.persistencia.entidades.TiposLicencia"/>
+    <mapping class="mx.com.asteca.persistencia.entidades.NotificacionesEstados"/>
+    <mapping class="mx.com.asteca.persistencia.entidades.AlumnosCursos"/>
+    <mapping class="mx.com.asteca.persistencia.entidades.Personas"/>
+    <mapping class="mx.com.asteca.persistencia.entidades.CursosMaterias"/>
+    <mapping class="mx.com.asteca.persistencia.entidades.Capacidades"/>
+    <mapping class="mx.com.asteca.persistencia.entidades.Estados"/>
+    <mapping class="mx.com.asteca.persistencia.entidades.EstudiosAlumno"/>
+    <mapping class="mx.com.asteca.persistencia.entidades.InstitutoPuestos"/>
+    <mapping class="mx.com.asteca.persistencia.entidades.Roles"/>
+    <mapping class="mx.com.asteca.persistencia.entidades.NotificacionesTipos"/>
+    <mapping class="mx.com.asteca.persistencia.entidades.TiposEstudios"/>
+    <mapping class="mx.com.asteca.persistencia.entidades.Familia"/>
+    <mapping class="mx.com.asteca.persistencia.entidades.RolesModPermisosSobre"/>
+    <mapping class="mx.com.asteca.persistencia.entidades.CatGral"/>
+    <mapping class="mx.com.asteca.persistencia.entidades.Domicilios"/>
+    <mapping class="mx.com.asteca.persistencia.entidades.TiposCatGral"/>
+    <mapping class="mx.com.asteca.persistencia.entidades.Estatus"/>
+    <mapping class="mx.com.asteca.persistencia.entidades.TiposClientes"/>
+    <mapping class="mx.com.asteca.persistencia.entidades.RolesModPermisosUsr"/>
+    <mapping class="mx.com.asteca.persistencia.entidades.Bitacora"/>
+    <mapping class="mx.com.asteca.persistencia.entidades.Institutos"/>
+    <mapping class="mx.com.asteca.persistencia.entidades.AsistenciaCurso"/>
+    <mapping class="mx.com.asteca.persistencia.entidades.Docs"/>
+    <mapping class="mx.com.asteca.persistencia.entidades.RolesModUsuarios"/>
+    <mapping class="mx.com.asteca.persistencia.entidades.Clientes"/>
+    <mapping class="mx.com.asteca.persistencia.entidades.DocsAlumnos"/>
+    <mapping class="mx.com.asteca.persistencia.entidades.Cursos"/>
+    <mapping class="mx.com.asteca.persistencia.entidades.Permisos"/>
+    <mapping class="mx.com.asteca.persistencia.entidades.Estudios"/>
+    <mapping class="mx.com.asteca.persistencia.entidades.Municipios"/>
+
+  </session-factory>
+</hibernate-configuration>
