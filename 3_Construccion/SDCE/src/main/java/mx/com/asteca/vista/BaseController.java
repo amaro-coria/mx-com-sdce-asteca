@@ -9,6 +9,12 @@ import javax.faces.application.FacesMessage.Severity;
 import javax.faces.context.FacesContext;
 
 public class BaseController {
+	
+	private short alta;
+	private short cambios;
+	private short borrar;
+	private short consulta;
+	private short impresion; 
 
 	/**
 	 * Devuelve el contexto Faces
@@ -180,6 +186,46 @@ public class BaseController {
 			loader = defaultObject.getClass().getClassLoader();
 		}
 		return loader;
+	}
+
+	public boolean isAlta() {
+		return alta==0?false:true;
+	}
+
+	public boolean isCambios() {
+		return cambios==0?false:true;
+	}
+
+	public boolean isBorrar() {
+		return borrar==0?false:true;
+	}
+
+	public boolean isConsulta() {
+		return consulta==0?false:true;
+	}
+
+	public boolean isImpresion() {
+		return impresion==0?false:true;
+	}
+
+	public void setAlta(short alta) {
+		this.alta = alta;
+	}
+
+	public void setCambios(short cambios) {
+		this.cambios = cambios;
+	}
+
+	public void setBorrar(short borrar) {
+		this.borrar = borrar;
+	}
+
+	public void setConsulta(short consulta) {
+		this.consulta = consulta;
+	}
+
+	public void setImpresion(short impresion) {
+		this.impresion = impresion;
 	}
 
 }
