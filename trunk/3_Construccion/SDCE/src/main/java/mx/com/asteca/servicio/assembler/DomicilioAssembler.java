@@ -29,6 +29,7 @@ public class DomicilioAssembler extends Assembler<DomicilioDTO, Domicilios> {
 		dto.setNoExterior(mapping.getNoExterior());
 		dto.setNoInterior(mapping.getNoInterior());
 		dto.setTelefono(mapping.getTelefono());
+		dto.setCiudad(mapping.getCiudad());
 		if(mapping.getAsentamientos() != null){
 			dto.setIdAsentamiento(mapping.getAsentamientos().getId().getIdAsentamiento());
 			dto.setIdMunicipio(mapping.getAsentamientos().getId().getIdMunicipio());
@@ -36,9 +37,11 @@ public class DomicilioAssembler extends Assembler<DomicilioDTO, Domicilios> {
 			dto.setEstado(mapping.getAsentamientos().getMunicipios().getEstados().getNombre());
 			dto.setMunicipio(mapping.getAsentamientos().getMunicipios().getNombre());
 			dto.setAsentamiento(mapping.getAsentamientos().getNombre());
+			dto.setPais(mapping.getAsentamientos().getMunicipios().getEstados().getPaises().getNombrePais());
+			dto.setIdPais(mapping.getAsentamientos().getMunicipios().getEstados().getPaises().getIdPais());
 		}
 		dto.setIdDomicilio(mapping.getIdDomicilio());
-		
+		dto.setFax(mapping.getFax());
 		return dto;
 	}
 
@@ -53,6 +56,7 @@ public class DomicilioAssembler extends Assembler<DomicilioDTO, Domicilios> {
 		mapping.setNoExterior(dto.getNoExterior());
 		mapping.setNoInterior(dto.getNoInterior());
 		mapping.setTelefono(dto.getTelefono());
+		mapping.setCiudad(dto.getCiudad());
 		if (dto.getIdAsentamiento() != 0) {
 			mapping.setIdDomicilio(dto.getIdDomicilio());
 		}
@@ -65,6 +69,7 @@ public class DomicilioAssembler extends Assembler<DomicilioDTO, Domicilios> {
 			asentamiento.setId(id);
 			mapping.setAsentamientos(asentamiento);
 		}
+		mapping.setFax(dto.getFax());
 		return mapping;
 	}
 

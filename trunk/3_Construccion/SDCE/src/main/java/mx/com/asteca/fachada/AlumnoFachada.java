@@ -121,4 +121,6 @@ public interface AlumnoFachada extends BaseFachada<AlumnoDTO, Integer> {
 
 	List<AlumnoDTO> getAlumnosDatosBasicos() throws FachadaException;
 
+	String getRuta() throws FachadaException;
+
 }

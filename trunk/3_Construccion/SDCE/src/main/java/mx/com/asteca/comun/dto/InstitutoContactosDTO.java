@@ -9,7 +9,7 @@ public class InstitutoContactosDTO implements java.io.Serializable {
 	private int idInstCont;
 	private InstitutoPuestosDTO institutoPuestos;
 	private PersonaDTO PersonasDTO;
-	private InstitutosDTO institutos;
+	private InstitutoDTO institutos;
 
 	public InstitutoContactosDTO() {
 	}
@@ -20,7 +20,7 @@ public class InstitutoContactosDTO implements java.io.Serializable {
 
 	public InstitutoContactosDTO(int idInstCont,
 			InstitutoPuestosDTO institutoPuestos, PersonaDTO PersonasDTO,
-			InstitutosDTO institutos) {
+			InstitutoDTO institutos) {
 		this.idInstCont = idInstCont;
 		this.institutoPuestos = institutoPuestos;
 		this.PersonasDTO = PersonasDTO;
@@ -51,11 +51,11 @@ public class InstitutoContactosDTO implements java.io.Serializable {
 		this.PersonasDTO = PersonasDTO;
 	}
 
-	public InstitutosDTO getInstitutos() {
+	public InstitutoDTO getInstitutos() {
 		return this.institutos;
 	}
 
-	public void setInstitutos(InstitutosDTO institutos) {
+	public void setInstitutos(InstitutoDTO institutos) {
 		this.institutos = institutos;
 	}
 

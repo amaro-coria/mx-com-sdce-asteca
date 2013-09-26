@@ -8,6 +8,7 @@ import java.util.List;
 import mx.com.asteca.comun.dto.AlumnoDTO;
 import mx.com.asteca.comun.dto.AsentamientoDTO;
 import mx.com.asteca.comun.dto.CapacidadDTO;
+import mx.com.asteca.comun.dto.ConfDescargasDTO;
 import mx.com.asteca.comun.dto.DocumentoDTO;
 import mx.com.asteca.comun.dto.DomicilioDTO;
 import mx.com.asteca.comun.dto.EstadoDTO;
@@ -25,6 +26,7 @@ import mx.com.asteca.servicio.AlumnoServicio;
 import mx.com.asteca.servicio.AsentamientoServicio;
 import mx.com.asteca.servicio.BaseService;
 import mx.com.asteca.servicio.CapacidadServicio;
+import mx.com.asteca.servicio.ConfDescargasServicio;
 import mx.com.asteca.servicio.DocsServicio;
 import mx.com.asteca.servicio.DomicilioServicio;
 import mx.com.asteca.servicio.EstadoServicio;
@@ -96,10 +98,30 @@ public class AlumnoFachadaImpl extends BaseFachadaImpl<AlumnoDTO, Integer>
 	@Autowired
 	private DocsServicio servicioDocs;
 	
+	@Autowired
+	private ConfDescargasServicio servicioDescargas;
+	
 	
 	@Override
 	BaseService getBaseService() {
 		return servicioAlumno;
+	}
+	
+	@Override
+	public String getRuta() throws FachadaException{
+		try {
+			List<ConfDescargasDTO> lista = servicioDescargas.getAll();
+			if(!CollectionUtils.isEmpty(lista)){
+				ConfDescargasDTO dto = lista.get(0);
+				return dto.getRuta();
+			}else{
+				return "./";
+			}
+		} catch (ServicioException e) {
+			throw new FachadaException("Error en getAlumnosDatosBasicos Fachada : "
+					+ e.getMessage(), e);
+		}
+		
 	}
 	
 	@Override

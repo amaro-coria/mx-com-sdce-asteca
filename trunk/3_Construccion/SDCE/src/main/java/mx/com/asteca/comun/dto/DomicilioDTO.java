@@ -20,6 +20,10 @@ public class DomicilioDTO implements Serializable {
 	private String municipio;
 	private int idEstado;
 	private String estado;
+	private String ciudad;
+	private String pais;
+	private int idPais;
+	private String fax;
 
 	public String getCalle() {
 		return calle;
@@ -167,6 +171,62 @@ public class DomicilioDTO implements Serializable {
 	 */
 	public void setEstado(String estado) {
 		this.estado = estado;
+	}
+
+	/**
+	 * @return the ciudad
+	 */
+	public String getCiudad() {
+		return ciudad;
+	}
+
+	/**
+	 * @param ciudad the ciudad to set
+	 */
+	public void setCiudad(String ciudad) {
+		this.ciudad = ciudad;
+	}
+
+	/**
+	 * @return the pais
+	 */
+	public String getPais() {
+		return pais;
+	}
+
+	/**
+	 * @param pais the pais to set
+	 */
+	public void setPais(String pais) {
+		this.pais = pais;
+	}
+
+	/**
+	 * @return the idPais
+	 */
+	public int getIdPais() {
+		return idPais;
+	}
+
+	/**
+	 * @param idPais the idPais to set
+	 */
+	public void setIdPais(int idPais) {
+		this.idPais = idPais;
+	}
+
+	/**
+	 * @return the fax
+	 */
+	public String getFax() {
+		return fax;
+	}
+
+	/**
+	 * @param fax the fax to set
+	 */
+	public void setFax(String fax) {
+		this.fax = fax;
 	}
 	
 }

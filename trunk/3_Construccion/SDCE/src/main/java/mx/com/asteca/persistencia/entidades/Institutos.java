@@ -12,6 +12,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -29,7 +31,7 @@ public class Institutos  implements java.io.Serializable {
      private String nombre;
      private String razonSocial;
      private String rfc;
-     private Integer idDomicilio;
+     private Domicilios domicilios;
      private String fax;
      private Set<InstitutoContactos> institutoContactoses = new HashSet<InstitutoContactos>(0);
 
@@ -40,12 +42,12 @@ public class Institutos  implements java.io.Serializable {
     public Institutos(int idInstituto) {
         this.idInstituto = idInstituto;
     }
-    public Institutos(int idInstituto, String nombre, String razonSocial, String rfc, Integer idDomicilio, String fax, Set<InstitutoContactos> institutoContactoses) {
+    public Institutos(int idInstituto, String nombre, String razonSocial, String rfc,  Domicilios domicilios, String fax, Set<InstitutoContactos> institutoContactoses) {
        this.idInstituto = idInstituto;
        this.nombre = nombre;
        this.razonSocial = razonSocial;
        this.rfc = rfc;
-       this.idDomicilio = idDomicilio;
+       this.domicilios = domicilios;
        this.fax = fax;
        this.institutoContactoses = institutoContactoses;
     }
@@ -88,13 +90,14 @@ public class Institutos  implements java.io.Serializable {
         this.rfc = rfc;
     }
     
-    @Column(name="ID_DOMICILIO")
-    public Integer getIdDomicilio() {
-        return this.idDomicilio;
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="ID_DOMICILIO")
+    public Domicilios getDomicilios() {
+        return this.domicilios;
     }
     
-    public void setIdDomicilio(Integer idDomicilio) {
-        this.idDomicilio = idDomicilio;
+    public void setDomicilios(Domicilios domicilios) {
+        this.domicilios = domicilios;
     }
     
     @Column(name="FAX", length=20)

@@ -39,6 +39,8 @@ public class Domicilios  implements java.io.Serializable {
      private Set<Referencias> referenciases = new HashSet<Referencias>(0);
      private Set<Instructores> instructoreses = new HashSet<Instructores>(0);
      private Set<Alumnos> alumnoses = new HashSet<Alumnos>(0);
+     private String ciudad;
+     private String fax;
 
     public Domicilios() {
     }
@@ -160,6 +162,40 @@ public class Domicilios  implements java.io.Serializable {
     public void setAlumnoses(Set<Alumnos> alumnoses) {
         this.alumnoses = alumnoses;
     }
+
+
+	/**
+	 * @return the ciudad
+	 */
+    @Column(name="CIUDAD", length=100)
+	public String getCiudad() {
+		return ciudad;
+	}
+
+
+	/**
+	 * @param ciudad the ciudad to set
+	 */
+	public void setCiudad(String ciudad) {
+		this.ciudad = ciudad;
+	}
+
+
+	/**
+	 * @return the fax
+	 */
+	@Column(name="FAX", length=50)
+	public String getFax() {
+		return fax;
+	}
+
+
+	/**
+	 * @param fax the fax to set
+	 */
+	public void setFax(String fax) {
+		this.fax = fax;
+	}
 
 
 
