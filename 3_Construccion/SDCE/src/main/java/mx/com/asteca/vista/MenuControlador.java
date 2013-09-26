@@ -1,5 +1,6 @@
 package mx.com.asteca.vista;
 
+import java.io.Serializable;
 import java.io.IOException;
 import java.util.List;
 
@@ -22,7 +23,7 @@ import org.primefaces.component.submenu.Submenu;
 
 @ManagedBean(name = Constantes.BEAN_MENU)
 @ApplicationScoped
-public class MenuControlador extends BaseController {
+public class MenuControlador extends BaseController implements Serializable{
 
 	@ManagedProperty("#{modulosFachadaImpl}")
 	private transient ModulosFachada fachadaModulos;

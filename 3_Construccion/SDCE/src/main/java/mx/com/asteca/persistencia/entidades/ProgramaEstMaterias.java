@@ -24,7 +24,7 @@ public class ProgramaEstMaterias  implements java.io.Serializable {
 
      private int idProgrEstMat;
      private ProgramaEstudios programaEstudios;
-     private Materias materias;
+     private MateriasRegistros materias;
      private Integer horasTeoria;
      private Integer horasPractica;
 
@@ -35,7 +35,7 @@ public class ProgramaEstMaterias  implements java.io.Serializable {
     public ProgramaEstMaterias(int idProgrEstMat) {
         this.idProgrEstMat = idProgrEstMat;
     }
-    public ProgramaEstMaterias(int idProgrEstMat, ProgramaEstudios programaEstudios, Materias materias, Integer horasTeoria, Integer horasPractica) {
+    public ProgramaEstMaterias(int idProgrEstMat, ProgramaEstudios programaEstudios, MateriasRegistros materias, Integer horasTeoria, Integer horasPractica) {
        this.idProgrEstMat = idProgrEstMat;
        this.programaEstudios = programaEstudios;
        this.materias = materias;
@@ -64,11 +64,11 @@ public class ProgramaEstMaterias  implements java.io.Serializable {
     }
 @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="ID_MATERIA")
-    public Materias getMaterias() {
+    public MateriasRegistros getMaterias() {
         return this.materias;
     }
     
-    public void setMaterias(Materias materias) {
+    public void setMaterias(MateriasRegistros materias) {
         this.materias = materias;
     }
     

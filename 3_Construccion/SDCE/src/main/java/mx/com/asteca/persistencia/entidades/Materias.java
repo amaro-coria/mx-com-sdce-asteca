@@ -34,12 +34,12 @@ public class Materias  implements java.io.Serializable {
      private Instructores instructores;
      private CatGral catGral;
      private Aulas aulas;
-     private String nombre;
      private Date fhInicial;
      private Date fhFinal;
      private Set<CalifCursos> califCursoses = new HashSet<CalifCursos>(0);
      private Set<ProgramaEstMaterias> programaEstMateriases = new HashSet<ProgramaEstMaterias>(0);
      private Set<CursosMaterias> cursosMateriases = new HashSet<CursosMaterias>(0);
+     private MateriasRegistros materiasRegistros;
 
     public Materias() {
     }
@@ -48,12 +48,11 @@ public class Materias  implements java.io.Serializable {
     public Materias(int idMateria) {
         this.idMateria = idMateria;
     }
-    public Materias(int idMateria, Instructores instructores, CatGral catGral, Aulas aulas, String nombre, Date fhInicial, Date fhFinal, Set<CalifCursos> califCursoses, Set<ProgramaEstMaterias> programaEstMateriases, Set<CursosMaterias> cursosMateriases) {
+    public Materias(int idMateria, Instructores instructores, CatGral catGral, Aulas aulas,  Date fhInicial, Date fhFinal, Set<CalifCursos> califCursoses, Set<ProgramaEstMaterias> programaEstMateriases, Set<CursosMaterias> cursosMateriases) {
        this.idMateria = idMateria;
        this.instructores = instructores;
        this.catGral = catGral;
        this.aulas = aulas;
-       this.nombre = nombre;
        this.fhInicial = fhInicial;
        this.fhFinal = fhFinal;
        this.califCursoses = califCursoses;
@@ -99,14 +98,6 @@ public class Materias  implements java.io.Serializable {
         this.aulas = aulas;
     }
     
-    @Column(name="NOMBRE", length=30)
-    public String getNombre() {
-        return this.nombre;
-    }
-    
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="FH_INICIAL", length=19)
     public Date getFhInicial() {
@@ -149,6 +140,24 @@ public class Materias  implements java.io.Serializable {
     public void setCursosMateriases(Set<CursosMaterias> cursosMateriases) {
         this.cursosMateriases = cursosMateriases;
     }
+
+
+	/**
+	 * @return the materiasRegistros
+	 */
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="ID_MATERIA_REGISTRO")
+	public MateriasRegistros getMateriasRegistros() {
+		return materiasRegistros;
+	}
+
+
+	/**
+	 * @param materiasRegistros the materiasRegistros to set
+	 */
+	public void setMateriasRegistros(MateriasRegistros materiasRegistros) {
+		this.materiasRegistros = materiasRegistros;
+	}
 
 
 
