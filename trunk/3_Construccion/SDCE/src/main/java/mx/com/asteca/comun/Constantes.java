@@ -73,5 +73,9 @@ public class Constantes {
 	public static final String MENU_ITEM_PREFIX="mn_item_";
 	public static final String MENU_ITEM_PROCESS="@this";
 	public static final String MENU_ITEM_UPDATE="@all";
-
+	public static final String BEAN_REPORTE_ALUMNO="beanReporteAlumno";
+	public static final String BEAN_REPORTE_AULA="beanReporteAula";
+	public static final String BEAN_REPORTE_CURSOS="beanReporteCursos";
+	public static final String BEAN_REPORTE_MENSUAL="beanReporteMensual";
+	public static final String BEAN_REPORTE_INSTRUCTOR="beanReporteInstructor";
 }
