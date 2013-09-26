@@ -1,88 +1,389 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<ui:composition template="/templates/layout.xhtml"
+<html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:ace="http://www.icefaces.org/icefaces/components"
-	xmlns:ice="http://www.icesoft.com/icefaces/component">
-	<ui:define name="body">
-		<h:panelGroup id="messagePanel" layout="block">
-			<h:messages errorStyle="color: red" infoStyle="color: green"
-				layout="list" />
-		</h:panelGroup>
-		<h:form styleClass="login">
-			<ace:panel id="panel" header="Buscar" closable="false"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+<h:body>
+	<ui:composition>
+		<h:form id="form" >
+			<p:growl id="growl" showDetail="true" sticky="true" />
+			<p:panel id="panel" header="Buscar" closable="false"
 				toggleable="false" style="text-align:center;">
 				<h:panelGrid columns="2" style="text-align:left;">
 					<h:outputText value="#{msg.clave} :" />
-					<ace:simpleSelectOneMenu id="selectProvince1" label=""
-						labelPosition="top">
-						<f:selectItem itemValue="" itemLabel="" />
-					</ace:simpleSelectOneMenu>
+					<p:selectOneMenu id="selectCveFilter"
+						value="#{beanAdmin.selectedClave }" style="min-width: 480px">
+						<f:selectItem itemLabel="#{msg.seleccionarClave }" itemValue="" />
+						<f:selectItems value="#{beanAdmin.listSelectItems1}" />
+					</p:selectOneMenu>
 					<h:outputText value="#{msg.nombre} :" />
-					<ace:simpleSelectOneMenu id="selectProvince2" label=""
-						labelPosition="top">
-						<f:selectItem itemValue="" itemLabel="" />
-					</ace:simpleSelectOneMenu>
-					<h:outputText value="#{msg.usuario} :" />
-					<ace:simpleSelectOneMenu id="selectProvince3" label=""
-						labelPosition="top">
-						<f:selectItem itemValue="" itemLabel="" />
-					</ace:simpleSelectOneMenu>
+					<p:selectOneMenu id="selectDsc" style="min-width: 480px"
+						value="#{beanAdmin.selectedNombre }">
+						<f:selectItem itemLabel="#{msg.seleccionarNombre }" itemValue="" />
+						<f:selectItems value="#{beanAdmin.listSelectItems2}" />
+					</p:selectOneMenu>
 				</h:panelGrid>
 				<br />
-				<ul class="buttons">
-					<li><h:commandButton action="#{login.guardar}"
-							value="#{msg.limpiar}" />
-					</li>
-					<li><h:commandButton action="#{login.guardar}"
-							value="#{msg.buscar}" />
-					</li>
-				</ul>
-				</ace:panel>
-				<ul class="buttons">
-					<li><h:commandButton action="#{login.guardar}"
-							value="#{msg.nuevo}" />
-					</li>
-					<li><h:commandButton action="#{login.guardar}"
-							value="#{msg.ver}" />
-					</li>
-					<li><h:commandButton action="#{login.guardar}"
-							value="#{msg.editar}" />
-					</li>
-					<li><h:commandButton action="#{login.guardar}"
-							value="#{msg.eliminar}" />
-					</li>
-				</ul>
-				<ace:panel>
-				<ace:dataTable id="carTable"
-                          value="#{dataTableBean.carsData}"
-                          var="car"
-                          paginator="true"
-                          paginatorPosition="bottom"
-                          rows="5">
-                <ace:column id="id" headerText="#{msg.noEmpleado}" sortBy="#{car.id}"
-                            >
-                    <ice:rowSelector value="#{car.selected}"
-                                     preStyleOnSelection="true"/>
-                    <h:outputText id="idCell" value="#{car.id}"/>
-                </ace:column>
-                <ace:column id="name" headerText="#{msg.nombre}" sortBy="#{car.name}"
-                            >
-                    <h:outputText id="nameCell" value="#{car.name}"/>
-                </ace:column>
-                <ace:column id="chassis" headerText="#{msg.estatus}" sortBy="#{car.chassis}"
-                            >
-                    <h:outputText id="chassisCell" value="#{car.chassis}"/>
-                </ace:column>
-                
-                </ace:dataTable>
-			</ace:panel>
+				<h:panelGrid style="text-align:right" width="100%">
+					<h:panelGrid columns="2" style="text-align:right">
+						<p:commandButton value="#{msg.limpiar}"
+							icon="ui-icon-arrowrefresh-1-e"
+							onclick=":form:selectCveFilter.selectValue('')"
+							actionListener="#{beanAdmin.limpiarFiltrado }" update="growl" />
+						<p:commandButton icon="ui-icon-search"
+							actionListener="#{beanAdmin.buscarFiltrado}"
+							value="#{msg.buscar}" update="growl, :form:table" />
+					</h:panelGrid>
+				</h:panelGrid>
+			</p:panel>
+			<p:panel>
+				<h:panelGrid columns="4" style="text-align:left;">
+					<p:commandButton id="deleteButton" value="#{msg.eliminar }"
+						icon="ui-icon-trash" onclick="borrarDialog.show()" update="growl" />
+					<p:commandButton id="editarButton" value="#{msg.editar }"
+						icon="ui-icon-pencil" onclick="editarDialog.show()"
+						update=":form:displayEditar, growl" />
+					<p:commandButton id="viewButton" value="#{msg.ver }"
+						icon="ui-icon-search"
+						oncomplete="verDialog.show()" update=":form:displayVer, growl" />
+					<p:commandButton id="nuevoButton" value="#{msg.nuevo }"
+						icon="ui-icon-plusthick" onclick="nuevoDialog.show()"
+						update=":form:displayNuevo, growl" />
+				</h:panelGrid>
+			</p:panel>
+			<p:panel>
+				<p:dataTable id="table" value="#{beanAdmin.listItems}"
+					var="item" rowKey="#{item.idAmin}" paginator="true"
+					selection="#{beanAdmin.itemSelected}"
+					filteredValue="#{beanAdmin.filteredList }"
+					paginatorPosition="bottom" rows="10">
+					<p:column selectionMode="single" style="width:2%" />
+					<p:column id="eqTipo" headerText="#{msg.clave}"
+						filterBy="#{item.noEmpleado }" sortBy="#{item.noEmpleado}">
+						<h:outputText value="#{item.noEmpleado}" />
+					</p:column>
+					<p:column id="eqCve" headerText="#{msg.nombre}"
+						sortBy="#{item.nombreCompleto}" filterBy="#{item.nombreCompleto }">
+						<h:outputText value="#{item.nombreCompleto}" />
+					</p:column>
+				</p:dataTable>
+			</p:panel>
+			<!-- Panel de Ver -->
+			<p:dialog id="dialog" header="#{msg.ver}" widgetVar="verDialog"
+				modal="true">
+				<h:panelGrid id="displayVer" columns="1" cellpadding="4">
+					<h:panelGroup id="messagePanelVer" layout="block">
+						<h:messages errorStyle="color: red" infoStyle="color: green"
+							layout="list" style="font-size:12px;font-family:Arial" />
+					</h:panelGroup>
+					<h:outputText />
+					<p:tabView>
+						<p:tab title="#{msg.datosGenerales }">
+							<h:panelGrid columns="2">
+								<h:outputText value="#{msg.noEmpleado }"/>
+								<h:outputText value="#{beanAdmin.itemSelected.noEmpleado }"/>
+								<h:outputText value="#{msg.nombre }"/>
+								<h:outputText value="#{beanAdmin.itemSelected.dtoPersona.nombre }"/>
+								<h:outputText value="#{msg.apellidoP }"/>
+								<h:outputText value="#{beanAdmin.itemSelected.dtoPersona.apellidoP }"/>
+								<h:outputText value="#{msg.apellidoM }"/>
+								<h:outputText value="#{beanAdmin.itemSelected.dtoPersona.apellidoM }"/>
+								<h:outputText value="#{msg.fechaNacimiento }"/>
+								<h:outputText value="#{beanAdmin.itemSelected.dtoPersona.fechaNacStr }"/>
+								<h:outputText value="#{msg.lugarNacimiento }"/>
+								<h:outputText value="#{beanAdmin.itemSelected.dtoPersona.lugarNac }"/>
+								<h:outputText value="#{msg.curp }"/>
+								<h:outputText value="#{beanAdmin.itemSelected.dtoPersona.curp }"/>
+								<h:outputText value="#{msg.rfc }"/>
+								<h:outputText value="#{beanAdmin.itemSelected.dtoPersona.rfc }"/>
+								<h:outputText value="#{msg.ife }"/>
+								<h:outputText value="#{beanAdmin.itemSelected.dtoPersona.ife }"/>
+								<h:outputText value="#{msg.pasaporte }"/>
+								<h:outputText value="#{beanAdmin.itemSelected.dtoPersona.pasaporte }"/>
+								<h:outputText value="#{msg.email }"/>
+								<h:outputText value="#{beanAdmin.itemSelected.dtoPersona.email }"/>
+							</h:panelGrid>
+						</p:tab>	
+						<p:tab title="#{msg.domicilio }">
+							<h:panelGrid columns="2">
+								<h:outputText value="#{msg.calle }"/>
+								<h:outputText value="#{beanAdmin.itemSelected.dtoDomicilio.calle }"/>
+								<h:outputText value="#{msg.noExterior }"/>
+								<h:outputText value="#{beanAdmin.itemSelected.dtoDomicilio.noExterior }"/>
+								<h:outputText value="#{msg.noInterior }"/>
+								<h:outputText value="#{beanAdmin.itemSelected.dtoDomicilio.noInterior }"/>
+								<h:outputText value="#{msg.colonia }"/>
+								<h:outputText value="#{beanAdmin.itemSelected.dtoDomicilio.asentamiento }"/>
+								<h:outputText value="#{msg.pais }"/>
+								<h:outputText value="#{beanAdmin.itemSelected.dtoDomicilio.pais }"/>
+								<h:outputText value="#{msg.estado }"/>
+								<h:outputText value="#{beanAdmin.itemSelected.dtoDomicilio.estado }"/>
+								<h:outputText value="#{msg.delegacion }"/>
+								<h:outputText value="#{beanAdmin.itemSelected.dtoDomicilio.municipio }"/>
+								<h:outputText value="#{msg.codigoPostal }"/>
+								<h:outputText value="#{beanAdmin.itemSelected.dtoDomicilio.cp }"/>
+							</h:panelGrid>
+						</p:tab>				
+					</p:tabView>
+				</h:panelGrid>
+				<p:commandButton id="aceptarVerBtn" value="#{msg.aceptar }"
+					icon="ui-icon-check" onclick="verDialog.hide()" />
+			</p:dialog>
+			<!-- Fin de panel de Ver -->
+			<!--  Inicio panel de Nuevo -->
+			<p:dialog id="dialogNuevo" header="#{msg.frsNuevoRegistro}"
+				widgetVar="nuevoDialog" closable="true" modal="true"
+				draggable="false" width="400">
+				<h:panelGrid columns="2" width="100%" id="displayNuevo">
+					<p:tabView>
+						<p:tab title="#{msg.datosGenerales }">
+							<h:panelGrid columns="2">
+								<h:outputText value="#{msg.noEmpleado }"/>
+								<h:panelGroup>
+									<p:inputText value="#{beanAdmin.nuevoAdminNoEmpleado }" id="nuevoAdminNoEmpleadoInput" style="height:100%;"/>
+									<p:watermark value="#{msg.noEmpleado }" for="nuevoAdminNoEmpleadoInput"/>
+								</h:panelGroup>
+								<h:outputText value="#{msg.nombre }"/>
+								<h:panelGroup>
+								<p:inputText value="#{beanAdmin.nuevoAdminNombre }" id="nuevoAdminNombreInput" style="height:100%;"/>
+								<p:watermark value="#{msg.nombre }" for="nuevoAdminNombreInput"/>
+								</h:panelGroup>
+								<h:outputText value="#{msg.apellidoP }"/>
+								<h:panelGroup>
+								<p:inputText value="#{beanAdmin.nuevoAdminApaterno }" id="nuevoAdminApaternoInput" style="height:100%;"/>
+								<p:watermark value="#{msg.apellidoP }" for="nuevoAdminApaternoInput"/>
+								</h:panelGroup>
+								<h:outputText value="#{msg.apellidoM }"/>
+								<h:panelGroup>
+								<p:inputText value="#{beanAdmin.nuevoAdminAmaterno }" id="nuevoAdminAMaternoInput" style="height:100%;" />
+								<p:watermark value="#{msg.apellidoM }" for="nuevoAdminAMaternoInput"/>
+								</h:panelGroup>
+								<h:outputText value="#{msg.fechaNacimiento }"/>
+								<h:panelGroup>
+								<p:calendar  value="#{beanAdmin.nuevoAdminFechaNac}" navigator="true" id="nuevoAdminFechaNacimientoInput"/>
+								<p:watermark value="#{msg.fechaNacimiento }" for="nuevoAdminFechaNacimientoInput"/> 
+								</h:panelGroup>
+								<h:outputText value="#{msg.lugarNacimiento }"/>
+								<h:panelGroup>
+								<p:inputText value="#{beanAdmin.nuevoAdminLugarNac }" id="nuevoAdminLugarNac" style="height:100%;"/>
+								<p:watermark value="#{msg.lugarNacimiento }" for="nuevoAdminLugarNac" />
+								</h:panelGroup>
+								<h:outputText value="#{msg.curp }"/>
+								<h:panelGroup>
+								<p:inputText value="#{beanAdmin.nuevoAdminCURP }" id="nuevoAdminCURPInput" style="height:100%;"/>
+								<p:watermark value="#{msg.curp }" for="nuevoAdminCURPInput"/>
+								</h:panelGroup>
+								<h:outputText value="#{msg.rfc }"/>
+								<h:panelGroup>
+								<p:inputText value="#{beanAdmin.nuevoAdminRFC }" id="nuevoAdminRFCInput" style="height:100%;"/>
+								<p:watermark value="#{msg.rfc }" for="nuevoAdminRFCInput"/>
+								</h:panelGroup>
+								<h:outputText value="#{msg.ife }"/>
+								<h:panelGroup>
+								<p:inputText value="#{beanAdmin.nuevoAdminIFE }" id="nuevoAdminIFEInput" style="height:100%;"/>
+								<p:watermark value="#{msg.ife }" for="nuevoAdminIFEInput"/>
+								</h:panelGroup>
+								<h:outputText value="#{msg.pasaporte }"/>
+								<h:panelGroup>
+								<p:inputText value="#{beanAdmin.nuevoAdminPasaporte }" id="nuevoAdminPasaporteInput" style="height:100%;"/>
+								<p:watermark value="#{msg.pasaporte }" for="nuevoAdminPasaporteInput"/>
+								</h:panelGroup>
+								<h:outputText value="#{msg.email }"/>
+								<h:panelGroup>
+								<p:inputText value="#{beanAdmin.nuevoAdminEmail }" id="nuevoAdminEmailInput" style="height:100%;"/>
+								<p:watermark value="#{msg.email }" for="nuevoAdminEmailInput"/>
+								</h:panelGroup>
+							</h:panelGrid>
+						</p:tab>	
+						<p:tab title="#{msg.domicilio }">
+							<h:panelGrid columns="2">
+								<h:outputText value="#{msg.calle }"/>
+								<p:inputText value="#{beanAdmin.nuevoAdminCalle }" style="height:100%;"/>
+								<h:outputText value="#{msg.noExterior }"/>
+								<p:inputText value="#{beanAdmin.nuevoAdminNoExt }" style="height:100%;"/>
+								<h:outputText value="#{msg.noInterior }"/>
+								<p:inputText value="#{beanAdmin.nuevoAdminNoInt }" style="height:100%;"/>
+								<h:outputText value="#{msg.colonia }"/>
+								<p:selectOneMenu style="width:180px"
+										value="#{beanAdmin.nuevoAdminIdAsentamientoMunicipioEstado }"
+										id="nuevoAdminSelectColonias">
+										<f:selectItems
+											value="#{beanAdmin.nuevoAdminSelectListColonias }" />
+									</p:selectOneMenu>
+								<h:outputText value="#{msg.pais }"/>
+								<p:inputText id="nuevoAdminPais" value="#{beanAdmin.nuevoAdminPais }" style="height:100%;"/>
+								<h:outputText value="#{msg.estado }"/>
+								<p:inputText id="nuevoAdminEntidadF" value="#{beanAdmin.nuevoAdminEntidadFederativa }" style="height:100%;"/>
+								<h:outputText value="#{msg.delegacion }"/>
+								<p:inputText id="nuevoAdminDelegacion" value="#{beanAdmin.nuevoAdminDelegacion }" style="height:100%;"/>
+								<h:outputText value="#{msg.codigoPostal }"/>
+								<p:autoComplete id="autoCompleteCPNuevo"
+										value="#{beanAdmin.nuevoAdminCPAutoComplete}"
+										completeMethod="#{beanAdmin.complete}" forceSelection="true" style="height:100%;">
+										<p:ajax
+											update="nuevoAdminSelectColonias nuevoAdminEntidadF nuevoAdminDelegacion nuevoAdminPais"
+											listener="#{beanAdmin.handleSelectCambiaCp}"
+											event="itemSelect" />
+									</p:autoComplete>
+							</h:panelGrid>
+						</p:tab>				
+					</p:tabView>
+				</h:panelGrid>
+				<h:panelGrid style="float: right;" columns="2">
+					<p:commandButton value="#{msg.aceptar }" icon="ui-icon-check"
+						oncomplete="nuevoDialog.hide()"
+						actionListener="#{beanAdmin.save }" update=":form:table, growl" />
+					<p:commandButton value="#{msg.cancelar }" icon="ui-icon-closethick"
+						oncomplete="nuevoDialog.hide()"
+						actionListener="#{beanAdmin.saveCancel }" />
+				</h:panelGrid>
+			</p:dialog>
+			<!-- Fin de panel de nuevo -->
+			<!-- Inicio de panel de edicion -->
+			<p:dialog id="dialogEditar" header="#{msg.frsNuevoRegistro}"
+				widgetVar="editarDialog" closable="true" modal="true"
+				draggable="false" width="400">
+				<h:panelGrid columns="2" width="100%" id="displayEditar">
+					<p:tabView>
+						<p:tab title="#{msg.datosGenerales }">
+							<h:panelGrid columns="2">
+								<h:outputText value="#{msg.noEmpleado }"/>
+								<h:panelGroup>
+								<p:inputText value="#{beanAdmin.editarAdminNoEmpleado }" id="editarAminNoEmpleadoInput" style="height:100%;"/>
+								<p:watermark value="#{beanAdmin.itemSelected.noEmpleado }" for="editarAminNoEmpleadoInput" />
+								</h:panelGroup>
+								<h:outputText value="#{msg.nombre }"/>
+								<h:panelGroup>
+								<p:inputText value="#{beanAdmin.editarAdminNombre }" style="height:100%;" id="editarAdminNombreInput"/>
+								<p:watermark value="#{beanAdmin.itemSelected.dtoPersona.nombre }" for="editarAdminNombreInput"/>
+								</h:panelGroup>
+								<h:outputText value="#{msg.apellidoP }"/>
+								<h:panelGroup>
+								<p:inputText value="#{beanAdmin.editarAdminApaterno }" id="editarAdminApaternoInput" style="height:100%;"/>
+								<p:watermark value="#{beanAdmin.itemSelected.dtoPersona.apellidoP }" for="editarAdminApaternoInput"/>
+								</h:panelGroup>
+								<h:outputText value="#{msg.apellidoM }"/>
+								<h:panelGroup>
+								<p:inputText value="#{beanAdmin.editarAdminAmaterno }" id="editarAdminAmaternoInput" style="height:100%;"/>
+								<p:watermark value="#{beanAdmin.itemSelected.dtoPersona.apellidoM }" for="editarAdminAmaternoInput"/>
+								</h:panelGroup>
+								<h:outputText value="#{msg.fechaNacimiento }"/>
+								<h:panelGroup>
+								<p:inputText value="#{beanAdmin.editarAdminFechaNac }" id="editarAdminFechaNacInput" />
+								<p:watermark value="#{beanAdmin.itemSelected.dtoPersona.fechaNacStr }" for="editarAdminFechaNacInput"/>
+								</h:panelGroup>
+								<h:outputText value="#{msg.lugarNacimiento }"/>
+								<h:panelGroup>
+								<p:inputText value="#{beanAdmin.editarAdminLugarNac }" id="editarAdminLugarNacInput" style="height:100%;"/>
+								<p:watermark value="#{beanAdmin.itemSelected.dtoPersona.lugarNac }" for="editarAdminLugarNacInput"/>
+								</h:panelGroup>
+								<h:outputText value="#{msg.curp }"/>
+								<h:panelGroup>
+								<p:inputText value="#{beanAdmin.editarAdminCURP }" id="editarAdminCURPInput" style="height:100%;"/>
+								<p:watermark value="#{beanAdmin.itemSelected.dtoPersona.curp }" for="editarAdminCURPInput"/>
+								</h:panelGroup>
+								<h:outputText value="#{msg.rfc }"/>
+								<h:panelGroup>
+								<p:inputText value="#{beanAdmin.editarAdminRFC }" id="editarAdminRFCInput" style="height:100%;"/>
+								<p:watermark value="#{beanAdmin.itemSelected.dtoPersona.curp }" for="editarAdminRFCInput"/>
+								</h:panelGroup>
+								<h:outputText value="#{msg.ife }"/>
+								<h:panelGroup>
+								<p:inputText value="#{beanAdmin.editarAdminIFE }" id="editarAdminIFEInput" style="height:100%;"/>
+								<p:watermark value="#{beanAdmin.itemSelected.dtoPersona.ife }" for="editarAdminIFEInput"/>
+								</h:panelGroup>
+								<h:outputText value="#{msg.pasaporte }"/>
+								<h:panelGroup>
+								<p:inputText value="#{beanAdmin.editarAdminPasaporte }" id="editarAdminPasaporteInput" style="height:100%;"/>
+								<p:watermark value="#{beanAdmin.itemSelected.dtoPersona.pasaporte }" for="editarAdminPasaporteInput"/>
+								</h:panelGroup>
+								<h:outputText value="#{msg.email }"/>
+								<h:panelGroup>
+								<p:inputText value="#{beanAdmin.editarAdminEmail }" id="editarAdminEmailInput" style="height:100%;"/>
+								<p:watermark value="#{beanAdmin.itemSelected.dtoPersona.email }" for="editarAdminEmailInput"/>
+								</h:panelGroup>
+							</h:panelGrid>
+						</p:tab>	
+						<p:tab title="#{msg.domicilio }">
+							<h:panelGrid columns="2">
+								<h:outputText value="#{msg.calle }"/>
+								<h:panelGroup>
+								<p:inputText value="#{beanAdmin.editarAdminCalle }" id="editarAdminCalleInput" style="height:100%;"/>
+								<p:watermark value="#{beanAdmin.itemSelected.dtoDomicilio.calle }" for="editarAdminCalleInput"/>
+								</h:panelGroup>
+								<h:outputText value="#{msg.noExterior }"/>
+								<h:panelGroup>
+								<p:inputText value="#{beanAdmin.editarAdminNoExt }" id="editarAdminNoExtInput" style="height:100%;"/>
+								<p:watermark value="#{beanAdmin.itemSelected.dtoDomicilio.noExterior }" for="editarAdminNoExtInput"/>
+								</h:panelGroup>
+								<h:outputText value="#{msg.noInterior }"/>
+								<h:panelGroup>
+								<p:inputText value="#{beanAdmin.editarAdminNoInt }" id="editarAdminNoIntInput" style="height:100%;"/>
+								<p:watermark value="#{beanAdmin.itemSelected.dtoDomicilio.noInterior }" for="editarAdminNoIntInput"/>
+								</h:panelGroup>
+								<h:outputText value="#{msg.colonia }"/>
+								<p:selectOneMenu style="width:180px" 
+										value="#{beanAdmin.editarAdminIdAsentamientoMunicipioEstado }"
+										id="editarAdminSelectColonias">
+										<f:selectItems
+											value="#{beanAdmin.editarAdminSelectListColonias }" />
+									</p:selectOneMenu>
+								<h:outputText value="#{msg.pais }"/>
+								<h:panelGroup>
+								<p:inputText value="#{beanAdmin.editarAdminPais }" id="editarAdminPais" style="height:100%;"/>
+								<p:watermark value="#{beanAdmin.itemSelected.dtoDomicilio.pais }" for="editarAdminPais"/>
+								</h:panelGroup>
+								<h:outputText value="#{msg.estado }"/>
+								<h:panelGroup>
+								<p:inputText value="#{beanAdmin.editarAdminEntidadFederativa }" id="editarAdminEntidadF" style="height:100%;"/>
+								<p:watermark value="#{beanAdmin.itemSelected.dtoDomicilio.estado }" for="editarAdminEntidadF"/>
+								</h:panelGroup>
+								<h:outputText value="#{msg.delegacion }"/>
+								<h:panelGroup>
+								<p:inputText value="#{beanAdmin.editarAdminDelegacion }" id="editarAdminDelegacion" style="height:100%;"/>
+								<p:watermark value="#{beanAdmin.itemSelected.dtoDomicilio.municipio }" for="editarAdminDelegacion"/>
+								</h:panelGroup>
+								<h:outputText value="#{msg.codigoPostal }"/>
+								<h:panelGroup>
+								<p:autoComplete id="autoCompleteCPEditar" style="height:100%;"
+										value="#{beanAdmin.editarAdminCPAutoComplete}"
+										completeMethod="#{beanAdmin.complete}" forceSelection="true">
+										<p:ajax
+											update="editarAdminSelectColonias editarAdminEntidadF editarAdminDelegacion editarAdminPais"
+											listener="#{beanAdmin.handleSelectCambiaCpEditar}"
+											event="itemSelect" />
+									</p:autoComplete>
+									<p:watermark value="#{beanAdmin.itemSelected.dtoDomicilio.cp }" for="autoCompleteCPEditar"/>
+									</h:panelGroup>
+							</h:panelGrid>
+						</p:tab>				
+					</p:tabView>
+				</h:panelGrid>
+				<h:panelGrid style="float: right;" columns="2">
+					<p:commandButton value="#{msg.aceptar }" icon="ui-icon-check"
+						oncomplete="editarDialog.hide()"
+						actionListener="#{beanAdmin.update }" update=":form:table, growl" />
+					<p:commandButton value="#{msg.cancelar }" icon="ui-icon-closethick"
+						oncomplete="editarDialog.hide()"
+						actionListener="#{beanAdmin.canceldelete }" />
+				</h:panelGrid>
+			</p:dialog>
+			<!-- Fin de panel de edicion -->
+			<!-- Panel de borrado -->
+			<p:confirmDialog showEffect="fade" widgetVar="borrarDialog"
+				header="#{msg.confirmar }" message="#{msg.frsBorrarConfirmacion }">
+				<p:commandButton value="#{msg.si }"
+					actionListener="#{beanAdmin.delete}" update="table, growl"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check"
+					oncomplete="borrarDialog.hide()" />
+				<p:commandButton value="#{msg.no }" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close"
+					onclick="borrarDialog.hide()" />
+			</p:confirmDialog>
+			<!-- Fin de panel de borrado -->
 		</h:form>
-	</ui:define>
-</ui:composition>
 
+	</ui:composition>
+</h:body>
 </html>
