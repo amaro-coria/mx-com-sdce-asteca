@@ -1,33 +1,38 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<ui:composition template="/templates/layout.xhtml"
+<html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:ace="http://www.icefaces.org/icefaces/components"
-	xmlns:ice="http://www.icesoft.com/icefaces/component">
-	<ui:define name="body">
-		<h:panelGroup id="messagePanel" layout="block">
-			<h:messages errorStyle="color: red" infoStyle="color: green"
-				layout="list" />
-		</h:panelGroup>
-		<h:form styleClass="login">
-			<ace:panel id="panel" header="Reporte de Alumnos" closable="false"
-				toggleable="false" style="text-align:center;">
-				<h:panelGrid columns="3" style="text-align:left;">
-					<h:outputText value="#{msg.area} :" />
-					<ace:simpleSelectOneMenu id="selectProvince1" label=""
-						labelPosition="top" size="10">
-						<f:selectItem itemValue="" itemLabel="" />
-					</ace:simpleSelectOneMenu>
-					<h:commandButton action="#{login.guardar}"
-							value="#{msg.imprimir}" />
-				</h:panelGrid>
-				</ace:panel>
-		</h:form>
-	</ui:define>
-</ui:composition>
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
 
+<h:body>
+	<ui:composition>
+		<h:form id="frmlAlumnos">
+			<p:growl id="msg" />
+			<p:panel id="pnlAlumnos" header="Reporte Alumnos" closable="false">
+				<p:outputLabel>Area:</p:outputLabel>
+				<p:selectOneMenu>
+					<f:selectItem itemLabel="Select One" itemValue="" />
+					<f:selectItem itemLabel="Option 1" itemValue="1" />
+					<f:selectItem itemLabel="Option 2" itemValue="2" />
+					<f:selectItem itemLabel="Option 3" itemValue="3" />
+				</p:selectOneMenu>
+			</p:panel>
+			<h:panelGrid>
+				<p:commandButton value="Imprimir" icon="ui-icon-print"
+					onclick="window.open('#{beanReporteAlumno.url}Reportes?name=Cedula_5');"
+					type="button" />
+				<p:commandButton value="Ajax Submit" update="@all"
+					actionListener="#{beanReporteAlumno.mostrarReporte}"
+					styleClass="ui-priority-primary" />
+
+			</h:panelGrid>
+			<p:dialog id="modalDialog" header="Modal Dialog" widgetVar="dlg"
+				modal="true" height="100">
+				<h:outputText value="This is a Modal Dialog." />
+			</p:dialog>
+		</h:form>
+	</ui:composition>
+</h:body>
 </html>
+
+
