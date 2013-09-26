@@ -1,207 +1,71 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<ui:composition template="/templates/layout.xhtml"
+<html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:ace="http://www.icefaces.org/icefaces/components"
-	xmlns:ice="http://www.icesoft.com/icefaces/component">
-	<ui:define name="body">
-		<h:panelGroup id="messagePanel" layout="block">
-			<h:messages errorStyle="color: red" infoStyle="color: green"
-				layout="list" />
-		</h:panelGroup>
-		<h:form styleClass="login">
-			<ace:panel id="panel" header="Cursos" closable="false"
-				toggleable="false" style="text-align:center;">
-				<h:panelGrid columns="3" style="text-align:left;">
-					<h:outputText value="#{msg.cliente} :" />
-					<ace:simpleSelectOneMenu id="selectProvince1" label=""
-						labelPosition="top">
-						<f:selectItem itemValue="" itemLabel="" />
-					</ace:simpleSelectOneMenu>
-					<ace:textEntry id="grupoInput"  label="#{msg.grupo}" labelPosition="left"/>
-                        
-					<h:outputText value="#{msg.area} :" />
-					<ace:simpleSelectOneMenu id="selectProvince2" label=""
-						labelPosition="top">
-						<f:selectItem itemValue="" itemLabel="" />
-					</ace:simpleSelectOneMenu>
-					<ace:textEntry id="grupoInput2"  label="#{msg.referencia}" labelPosition="left"/>
-				</h:panelGrid>
-				<h:panelGrid columns="2" style="text-align:left;">
-					<h:outputText value="#{msg.curso} :" />
-					<ace:simpleSelectOneMenu id="selectProvince3" label=""
-						labelPosition="top">
-						<f:selectItem itemValue="" itemLabel="" />
-					</ace:simpleSelectOneMenu>
-				</h:panelGrid>
-				<h:panelGrid columns="2" style="text-align:left;">
-					<ace:textEntry id="grupoInput3"  label="#{msg.periodo}" labelPosition="left"/>
-					<ace:textEntry id="grupoInput4"  label="#{msg.al}" labelPosition="left"/>
-				</h:panelGrid>
-				<h:panelGrid columns="2" style="text-align:left;">
-					<h:outputText value="#{msg.sede} :" />
-					<ace:simpleSelectOneMenu id="selectProvince4" label=""
-						labelPosition="top">
-						<f:selectItem itemValue="" itemLabel="" />
-					</ace:simpleSelectOneMenu>
-				</h:panelGrid>
-				<h:panelGrid columns="2" style="text-align:left;">
-					<ace:textEntry id="grupoInput5"  label="#{msg.horarioDe}" labelPosition="left"/>
-					<ace:textEntry id="grupoInput6"  label="#{msg.a}" labelPosition="left"/>
-				</h:panelGrid>
-				<br />
-				<ace:tabSet id="sampleTabSet" clientSide="false">
-					<ace:tabPane id="materias" label="#{msg.materias}">
-					    <h:panelGrid columns="3" style="text-align:left;">
-							<h:outputText value="#{msg.responsable} :" />
-							<ace:simpleSelectOneMenu id="selectProvince10" label=""
-								labelPosition="top">
-								<f:selectItem itemValue="" itemLabel="" />
-							</ace:simpleSelectOneMenu>
-							<h:outputText value="#{msg.sede} :" />
-							<ace:simpleSelectOneMenu id="selectProvince11" label=""
-								labelPosition="top">
-								<f:selectItem itemValue="" itemLabel="" />
-							</ace:simpleSelectOneMenu>
-						</h:panelGrid>
-						<ace:dataTable id="carTable"
-                          value="#{dataTableBean.carsData}"
-                          var="car"
-                          paginator="true"
-                          paginatorPosition="bottom"
-                          rows="5">
-                			<ace:column id="id" headerText="#{msg.materia}" sortBy="#{car.id}"
-                            	>
-                    			<ice:rowSelector value="#{car.selected}"
-                                     preStyleOnSelection="true"/>
-                    			<h:outputText id="idCell" value="#{car.id}"/>
-                			</ace:column>
-                			<ace:column id="name" headerText="#{msg.aula}" sortBy="#{car.name}"
-                            	>
-                    			<h:outputText id="nameCell" value="#{car.name}"/>
-                			</ace:column>
-                			<ace:column id="chassis" headerText="#{msg.instructor}" sortBy="#{car.chassis}"
-                           		>
-                    			<h:outputText id="chassisCell" value="#{car.chassis}"/>
-                			</ace:column>
-                			<ace:column id="chassis2" headerText="#{msg.fechaHoraInicial}" sortBy="#{car.chassis}"
-                           		>
-                    			<h:outputText id="chassisCell2" value="#{car.chassis}"/>
-                			</ace:column>
-                			<ace:column id="chassis3" headerText="#{msg.fechaHoraFinal}" sortBy="#{car.chassis}"
-                           		>
-                    			<h:outputText id="chassisCell3" value="#{car.chassis}"/>
-                			</ace:column>
-                			<ace:column id="chassis4" headerText="#{msg.tipo}" sortBy="#{car.chassis}"
-                           		>
-                    			<h:outputText id="chassisCell14" value="#{car.chassis}"/>
-                			</ace:column>
-                		</ace:dataTable>
-					</ace:tabPane>
-					<ace:tabPane id="alumnos" label="#{msg.alumnos}">
-						<h:commandButton action="#{login.guardar}"
-							value="#{msg.agregar}" />
-						<ace:dataTable id="carTable2"
-                          value="#{dataTableBean.carsData}"
-                          var="car"
-                          paginator="true"
-                          paginatorPosition="bottom"
-                          rows="5">
-                			<ace:column id="id" headerText="#{msg.matricula}" sortBy="#{car.id}"
-                            	>
-                    			<ice:rowSelector value="#{car.selected}"
-                                     preStyleOnSelection="true"/>
-                    			<h:outputText id="idCell" value="#{car.id}"/>
-                			</ace:column>
-                			<ace:column id="name" headerText="#{msg.alumno}" sortBy="#{car.name}"
-                            	>
-                    			<h:outputText id="nameCell" value="#{car.name}"/>
-                			</ace:column>
-                			<ace:column id="chassis" headerText="#{msg.estatus}" sortBy="#{car.chassis}"
-                           		>
-                    			<h:outputText id="chassisCell" value="#{car.chassis}"/>
-                			</ace:column>
-                			
-                		</ace:dataTable>
-					</ace:tabPane>
-					<ace:tabPane id="asistencia" label="#{msg.asistencia}">
-						<h:commandButton action="#{login.guardar}"
-							value="#{msg.imprimir}" />
-						<h:commandButton action="#{login.guardar}"
-							value="#{msg.asistencia}" />
-						<ace:dataTable id="carTable3"
-                          value="#{dataTableBean.carsData}"
-                          var="car"
-                          paginator="true"
-                          paginatorPosition="bottom"
-                          rows="5">
-                			<ace:column id="id" headerText="#{msg.matricula}" sortBy="#{car.id}"
-                            	>
-                    			<ice:rowSelector value="#{car.selected}"
-                                     preStyleOnSelection="true"/>
-                    			<h:outputText id="idCell" value="#{car.id}"/>
-                			</ace:column>
-                			<ace:column id="name" headerText="#{msg.alumno}" sortBy="#{car.name}"
-                            	>
-                    			<h:outputText id="nameCell" value="#{car.name}"/>
-                			</ace:column>
-                			<ace:column id="chassis2" headerText="#{msg.d1}" sortBy="#{car.chassis}"
-                           		>
-                    			<h:outputText id="chassisCell2" value="#{car.chassis}"/>
-                			</ace:column>
-                			<ace:column id="chassis3" headerText="#{msg.d2}" sortBy="#{car.chassis}"
-                           		>
-                    			<h:outputText id="chassisCell3" value="#{car.chassis}"/>
-                			</ace:column>
-                			<ace:column id="chassis4" headerText="#{msg.d3}" sortBy="#{car.chassis}"
-                           		>
-                    			<h:outputText id="chassisCell4" value="#{car.chassis}"/>
-                			</ace:column>
-                		</ace:dataTable>
-					</ace:tabPane>
-					<ace:tabPane id="calificaciones" label="#{msg.calificaciones}">
-						<h:commandButton action="#{login.guardar}"
-							value="#{msg.calificaciones}" />
-						<ace:dataTable id="carTable4"
-                          value="#{dataTableBean.carsData}"
-                          var="car"
-                          paginator="true"
-                          paginatorPosition="bottom"
-                          rows="5">
-                			<ace:column id="id" headerText="#{msg.matricula}" sortBy="#{car.id}"
-                            	>
-                    			<ice:rowSelector value="#{car.selected}"
-                                     preStyleOnSelection="true"/>
-                    			<h:outputText id="idCell" value="#{car.id}"/>
-                			</ace:column>
-                			<ace:column id="name" headerText="#{msg.alumno}" sortBy="#{car.name}"
-                            	>
-                    			<h:outputText id="nameCell" value="#{car.name}"/>
-                			</ace:column>
-                			<ace:column id="chassis2" headerText="#{msg.mat1}" sortBy="#{car.chassis}"
-                           		>
-                    			<h:outputText id="chassisCell2" value="#{car.chassis}"/>
-                			</ace:column>
-                			<ace:column id="chassis3" headerText="#{msg.mat2}" sortBy="#{car.chassis}"
-                           		>
-                    			<h:outputText id="chassisCell3" value="#{car.chassis}"/>
-                			</ace:column>
-                			<ace:column id="chassis4" headerText="#{msg.mat3}" sortBy="#{car.chassis}"
-                           		>
-                    			<h:outputText id="chassisCell4" value="#{car.chassis}"/>
-                			</ace:column>
-                		</ace:dataTable>
-					</ace:tabPane>
-				</ace:tabSet>
-				
-				
-			</ace:panel>
-		</h:form>
-	</ui:define>
-</ui:composition>
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
 
+<h:body>
+	<ui:composition>
+		<h:form id="form" styleClass="login">
+			<p:growl id="growl" showDetail="true" sticky="true" />			
+				<h:panelGrid columns="2" style="text-align:left;">
+					<h:panelGrid columns="2">
+						<h:outputText value="#{msg.cliente }"/>
+						<p:selectOneMenu>
+							<f:selectItem itemLabel="Selecciona" itemValue="0"/>
+						</p:selectOneMenu>
+						<h:outputText value="#{msg.area }"/>
+						<p:selectOneMenu>
+							<f:selectItem itemLabel="Selecciona" itemValue="0"/>
+						</p:selectOneMenu>
+						<h:outputText value="#{msg.curso }"/>
+						<p:selectOneMenu>
+							<f:selectItem itemLabel="Selecciona" itemValue="0"/>
+						</p:selectOneMenu>
+						<h:outputText value="#{msg.periodo }"/>
+						<h:panelGroup>
+							<p:calendar navigator="true" /> #{msg.al } <p:calendar navigator="true" />
+						</h:panelGroup>
+						<h:outputText value="#{msg.sede }"/>
+						<p:selectOneMenu>
+							<f:selectItem itemLabel="Selecciona" itemValue="0"/>
+						</p:selectOneMenu>
+						<h:outputText value="#{msg.horarioDe }"/>
+						<h:panelGroup>
+							<p:inputText /> #{msg.a } <p:inputText />
+						</h:panelGroup>
+						<h:outputText value="#{msg.a }"/>
+					</h:panelGrid>
+					<h:panelGrid columns="2">
+						<h:outputText value="#{msg.grupo }"/>
+						<p:inputText />
+						<h:outputText value="#{msg.referencia }"/>
+						<p:inputText />
+					</h:panelGrid>
+				</h:panelGrid>
+				<p:separator />
+				<p:tabView>
+					<p:tab title="#{msg.materias }">
+						<h:panelGrid columns="2">
+							<h:outputText value="#{msg.responsable }"/>
+								<p:selectOneMenu>
+							<f:selectItem itemLabel="Selecciona" itemValue="0"/>
+						</p:selectOneMenu>
+							<h:outputText value="#{msg.sede }"/>
+								<p:selectOneMenu>
+							<f:selectItem itemLabel="Selecciona" itemValue="0"/>
+						</p:selectOneMenu>
+						</h:panelGrid>
+					</p:tab>
+					<p:tab title="#{msg.alumnos }">
+					</p:tab>
+					<p:tab title="#{msg.asistencia }">
+					</p:tab>
+					<p:tab title="#{msg.calificaciones }">
+					</p:tab>
+				</p:tabView>
+		</h:form>
+
+	</ui:composition>
+</h:body>
 </html>
