@@ -1,100 +1,275 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<ui:composition template="/templates/layout.xhtml"
+<html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:ace="http://www.icefaces.org/icefaces/components"
-	xmlns:ice="http://www.icesoft.com/icefaces/component">
-	<ui:define name="body">
-		<h:panelGroup id="messagePanel" layout="block">
-			<h:messages errorStyle="color: red" infoStyle="color: green"
-				layout="list" />
-		</h:panelGroup>
-		<h:form styleClass="login">
-			<ace:panel id="panel" header="Buscar" closable="false"
-				toggleable="false" style="text-align:center;">
-				<h:panelGrid columns="2" style="text-align:left;">
-					<h:outputText value="#{msg.rol} :" />
-					<ace:simpleSelectOneMenu id="selectProvince1" label=""
-						labelPosition="top" size="10">
-						<f:selectItem itemValue="" itemLabel="" />
-					</ace:simpleSelectOneMenu>
-					<h:outputText value="#{msg.clave} :" />
-					<ace:simpleSelectOneMenu id="selectProvince2" label=""
-						labelPosition="top">
-						<f:selectItem itemValue="" itemLabel="" />
-					</ace:simpleSelectOneMenu>
-					<h:outputText value="#{msg.nombre} :" />
-					<ace:simpleSelectOneMenu id="selectProvince3" label=""
-						labelPosition="top">
-						<f:selectItem itemValue="" itemLabel="" />
-					</ace:simpleSelectOneMenu>
-					<h:outputText value="#{msg.estatus} :" />
-					<ace:simpleSelectOneMenu id="selectProvince4" label=""
-						labelPosition="top">
-						<f:selectItem itemValue="" itemLabel="" />
-					</ace:simpleSelectOneMenu>
-				</h:panelGrid>
-				<br />
-				<ul class="buttons">
-					<li><h:commandButton action="#{login.guardar}"
-							value="#{msg.limpiar}" />
-					</li>
-					<li><h:commandButton action="#{login.guardar}"
-							value="#{msg.buscar}" />
-					</li>
-				</ul>
-				</ace:panel>
-				<ul class="buttons">
-					<li><h:commandButton action="#{login.guardar}"
-							value="#{msg.nuevo}" />
-					</li>
-					<li><h:commandButton action="#{login.guardar}"
-							value="#{msg.ver}" />
-					</li>
-					<li><h:commandButton action="#{login.guardar}"
-							value="#{msg.editar}" />
-					</li>
-					<li><h:commandButton action="#{login.guardar}"
-							value="#{msg.eliminar}" />
-					</li>
-				</ul>
-				<ace:panel>
-				<ace:dataTable id="carTable"
-                          value="#{dataTableBean.carsData}"
-                          var="car"
-                          paginator="true"
-                          paginatorPosition="bottom"
-                          rows="5">
-                <ace:column id="id" headerText="#{msg.id}" sortBy="#{car.id}"
-                            >
-                    <ice:rowSelector value="#{car.selected}"
-                                     preStyleOnSelection="true"/>
-                    <h:outputText id="idCell" value="#{car.id}"/>
-                </ace:column>
-                <ace:column id="name" headerText="#{msg.clave}" sortBy="#{car.name}"
-                            >
-                    <h:outputText id="nameCell" value="#{car.name}"/>
-                </ace:column>
-                <ace:column id="name2" headerText="#{msg.nombre}" sortBy="#{car.name}"
-                            >
-                    <h:outputText id="nameCell2" value="#{car.name}"/>
-                </ace:column>
-                <ace:column id="name3" headerText="#{msg.rol}" sortBy="#{car.name}"
-                            >
-                    <h:outputText id="nameCell3" value="#{car.name}"/>
-                </ace:column>
-                <ace:column id="name4" headerText="#{msg.estatus}" sortBy="#{car.name}"
-                            >
-                    <h:outputText id="nameCell4" value="#{car.name}"/>
-                </ace:column>
-                </ace:dataTable>
-			</ace:panel>
-		</h:form>
-	</ui:define>
-</ui:composition>
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
 
+<h:body>
+	<ui:composition>
+		<h:form id="form">
+			<p:growl id="growl" showDetail="true" sticky="true" />
+			<p:panel>
+				<h:panelGrid columns="4" style="text-align:left;">
+					<p:commandButton id="deleteButton" value="#{msg.eliminar }"
+						icon="ui-icon-trash" onclick="borrarDialog.show()" update="growl" />
+					<p:commandButton id="editarButton" value="#{msg.editar }"
+						icon="ui-icon-pencil" onclick="editarDialog.show()"
+						update=":form:displayEditar, growl" actionListener="#{perfilBean.editar}" />
+					<p:commandButton id="viewButton" value="#{msg.ver }"
+						icon="ui-icon-search" oncomplete="verDialog.show()"
+						update=":form:displayVer, growl" actionListener="#{perfilBean.editar}" />
+					<p:commandButton id="nuevoButton" value="#{msg.nuevo }"
+						icon="ui-icon-plusthick" onclick="nuevoDialog.show()"
+						update=":form:displayNuevo, growl" />
+				</h:panelGrid>
+			</p:panel>
+			<p:panel>
+				<p:dataTable id="rolesTable" value="#{perfilBean.listaRoles}"
+					var="rol" rowKey="#{rol.idRol}" paginator="true"
+					selection="#{perfilBean.rolSelected}"
+					filteredValue="#{perfilBean.listaFiltered }"
+					paginatorPosition="bottom" rows="10">
+					<p:column selectionMode="single" style="width:2%" />
+					<p:column id="id" headerText="#{msg.id}"
+						filterBy="#{rol.idRol }" sortBy="#{rol.idRol}">
+						<h:outputText id="catIdOutputTbl" value="#{rol.idRol}" />
+					</p:column>
+					<p:column id="rolCveColumn" headerText="#{msg.clave}"
+						filterBy="#{rol.clave }" sortBy="#{rol.clave}">
+						<h:outputText id="nombreCve" value="#{rol.clave}" />
+					</p:column>
+					<p:column id="rolNombreColumn" headerText="#{msg.nombre}"
+						filterBy="#{rol.nombre }" sortBy="#{rol.nombre}">
+						<h:outputText id="nombreDscTbl" value="#{rol.nombre}" />
+					</p:column>
+					<p:column id="rolEstatusColumn" headerText="#{msg.estatus}"
+						filterBy="#{rol.activo }" sortBy="#{rol.activo}">
+						<h:outputText id="nombreEstatusTbl" value="#{rol.activo}" />
+					</p:column>
+				</p:dataTable>
+			</p:panel>
+			<!-- Panel de Ver -->
+			<p:dialog id="dialog" header="#{msg.ver}" widgetVar="verDialog"
+				modal="true">
+				<h:panelGrid id="displayVer" columns="1" >
+					<h:panelGrid columns="2" cellpadding="4">
+					<h:panelGroup id="messagePanelVer" layout="block">
+						<h:messages errorStyle="color: red" infoStyle="color: green"
+							layout="list" style="font-size:12px;font-family:Arial" />
+					</h:panelGroup>
+					<h:outputText />
+					<h:outputText value="#{msg.clave}" />
+					<h:outputText value="#{perfilBean.rolSelected.clave}"
+						style="font-weight:bold" />
+					<h:outputText value="#{msg.nombre}" />
+					<h:outputText value="#{perfilBean.rolSelected.nombre}"
+						style="font-weight:bold" />
+					<h:outputText value="#{msg.activo}" />
+					<h:outputText
+						value="#{perfilBean.rolSelected.activo == 1 ? 'Si' : 'No' }"
+						style="font-weight:bold" />
+						</h:panelGrid>
+				<!-- Inicion Tabla de Modulos  -->
+				<p:dataTable id="modulosTableVer" value="#{perfilBean.listaModulos}"
+					var="modulo" rowKey="#{modulo.idModulo}" paginator="true"
+					paginatorPosition="bottom" rows="10">
+					<p:column id="id2" headerText="#{msg.id}"
+						filterBy="#{modulo.idModulo }" sortBy="#{modulo.idModulo}">
+						<h:outputText id="catIdOutputTbl2" value="#{modulo.idModulo}" />
+					</p:column>
+					<p:column id="rolNombreColumn2" headerText="#{msg.nombre}"
+						filterBy="#{modulo.nombre }" sortBy="#{modulo.nombre}">
+						<h:outputText id="nombre2" value="#{modulo.nombre}" />
+					</p:column>
+					<p:column id="rolAltaColumn2" headerText="#{msg.alta}"
+						filterBy="#{modulo.alta }" sortBy="#{modulo.alta}">
+						<h:outputText
+						value="#{modulo.alta ? 'Si' : 'No'}" />
+					</p:column>
+					<p:column id="rolBorrarColumn2" headerText="#{msg.borrar}"
+						filterBy="#{modulo.borrar }" sortBy="#{modulo.borrar}">
+						<h:outputText
+						value="#{modulo.borrar  ? 'Si' : 'No'}" />
+					</p:column>
+					<p:column id="rolEditarColumn2" headerText="#{msg.edicion}"
+						filterBy="#{modulo.editar}" sortBy="#{modulo.editar }">
+						<h:outputText
+						value="#{modulo.editar ? 'Si' : 'No'}" />
+					</p:column>
+					<p:column id="rolConsultaColumn2" headerText="#{msg.consulta}"
+						filterBy="#{modulo.consulta}" sortBy="#{modulo.consulta}">
+						<h:outputText
+						value="#{modulo.consulta ? 'Si' : 'No'}" />
+					</p:column>
+					<p:column id="rolImprimirColumn2" headerText="#{msg.impresion}"
+						filterBy="#{modulo.imprimir}" sortBy="#{modulo.imprimir}">
+						<h:outputText
+						value="#{modulo.imprimir  ? 'Si' : 'No'}" />
+					</p:column>
+				</p:dataTable>
+				<!-- Fin tabla de Modulos -->
+				</h:panelGrid>
+				<p:commandButton id="aceptarVerBtn" value="#{msg.aceptar }"
+					icon="ui-icon-check" onclick="verDialog.hide()" />
+			</p:dialog>
+			<!-- Fin de panel de Ver -->
+			<!--  Inicio panel de Nuevo -->
+			<p:dialog id="dialogNuevo" header="#{msg.frsNuevoRegistro}"
+				widgetVar="nuevoDialog" closable="true" modal="true"
+				draggable="false" width="400">
+				<h:panelGrid columns="2" width="100%" id="displayNuevo">
+					<h:outputText value="#{msg.clave}" />
+					<p:inputText value="#{perfilBean.rolNuevo.clave}"
+						style="width: 260px; " />
+					<h:outputText value="#{msg.descripcion}" />
+					<p:inputText id="nombrePopupNuevo"
+						value="#{perfilBean.rolNuevo.nombre}" style="min-width: 260px" />
+					<h:outputText id="activoPopupNuevoLabel" value="#{msg.activo}" />
+					<h:selectBooleanCheckbox id="activoPopupNuevo"
+						value="#{perfilBean.nuevoRolActivo}">
+					</h:selectBooleanCheckbox>
+				</h:panelGrid>
+				<!-- Inicion Tabla de Modulos  -->
+				<p:dataTable id="modulosTable" value="#{perfilBean.listaModulos}"
+					var="modulo" rowKey="#{modulo.idModulo}" paginator="true"
+					paginatorPosition="bottom" rows="10">
+					<p:column id="id" headerText="#{msg.id}"
+						filterBy="#{modulo.idModulo }" sortBy="#{modulo.idModulo}">
+						<h:outputText id="catIdOutputTbl" value="#{modulo.idModulo}" />
+					</p:column>
+					<p:column id="rolNombreColumn" headerText="#{msg.nombre}"
+						filterBy="#{modulo.nombre }" sortBy="#{modulo.nombre}">
+						<h:outputText id="nombre" value="#{modulo.nombre}" />
+					</p:column>
+					<p:column id="rolAltaColumn" headerText="#{msg.alta}"
+						filterBy="#{modulo.alta }" sortBy="#{modulo.alta}">
+						<h:selectBooleanCheckbox id="moduloAlta"
+												value="#{modulo.alta}" />
+					</p:column>
+					<p:column id="rolBorrarColumn" headerText="#{msg.borrar}"
+						filterBy="#{modulo.borrar }" sortBy="#{modulo.borrar}">
+						<h:selectBooleanCheckbox id="moduloBorrar"
+												value="#{modulo.borrar}" />
+					</p:column>
+					<p:column id="rolEditarColumn" headerText="#{msg.edicion}"
+						filterBy="#{modulo.editar}" sortBy="#{modulo.editar}">
+						<h:selectBooleanCheckbox id="moduloEditar"
+												value="#{modulo.editar}" />
+					</p:column>
+					<p:column id="rolConsultaColumn" headerText="#{msg.consulta}"
+						filterBy="#{modulo.consulta}" sortBy="#{modulo.consulta}">
+						<h:selectBooleanCheckbox id="moduloConsulta"
+												value="#{modulo.consulta}" />
+					</p:column>
+					<p:column id="rolImprimirColumn" headerText="#{msg.impresion}"
+						filterBy="#{modulo.imprimir}" sortBy="#{modulo.imprimir}">
+						<h:selectBooleanCheckbox id="moduloImprimir"
+												value="#{modulo.imprimir}" />
+					</p:column>
+				</p:dataTable>
+				<!-- Fin tabla de Modulos -->
+				
+				<h:panelGrid style="float: right;" columns="2">
+					<p:commandButton value="#{msg.aceptar }" icon="ui-icon-check"
+						oncomplete="nuevoDialog.hide()"
+						actionListener="#{perfilBean.saveRol }"
+						update=":form:rolesTable, growl" />
+					<p:commandButton value="#{msg.cancelar }" icon="ui-icon-closethick"
+						oncomplete="nuevoDialog.hide()"
+						actionListener="#{perfilBean.saveRolCancel }" />
+				</h:panelGrid>
+			</p:dialog>
+			<!-- Fin de panel de nuevo -->
+			<!-- Inicio de panel de edicion -->
+			<p:dialog id="dialogEditar" header="#{msg.frsNuevoRegistro}"
+				widgetVar="editarDialog" closable="true" modal="true"
+				draggable="false" width="400">
+				<h:panelGrid columns="2" width="100%" id="displayEditar">
+					<h:outputText value="#{msg.clave}" />
+					<h:panelGroup>
+						<p:inputText id="selectedCve"
+							value="#{perfilBean.selectedClave}"
+							style="width: 260px; " />
+						<p:watermark for="selectedCve"
+							value="#{perfilBean.rolSelected.clave }" />
+					</h:panelGroup>
+					<h:outputText value="#{msg.nombre}" />
+					<h:panelGroup>
+						<p:inputText id="inputEstadoSelected" style="width: 260px; "
+							value="#{perfilBean.selectedNombre }" />
+						<p:watermark for="inputEstadoSelected"
+							value="#{perfilBean.rolSelected.nombre }" />
+					</h:panelGroup>
+					<h:outputText value="#{msg.activo}" />
+					<h:selectBooleanCheckbox
+						value="#{perfilBean.selectedRolActivo}">
+					</h:selectBooleanCheckbox>
+				</h:panelGrid>
+				<!-- Inicion Tabla de Modulos  -->
+				<p:dataTable id="modulosTableEdit" value="#{perfilBean.listaModulos}"
+					var="modulo" rowKey="#{modulo.idModulo}" paginator="true"
+					paginatorPosition="bottom" rows="10">
+					<p:column id="id1" headerText="#{msg.id}"
+						filterBy="#{modulo.idModulo }" sortBy="#{modulo.idModulo}">
+						<h:outputText id="catIdOutputTbl1" value="#{modulo.idModulo}" />
+					</p:column>
+					<p:column id="rolNombreColumn1" headerText="#{msg.nombre}"
+						filterBy="#{modulo.nombre }" sortBy="#{modulo.nombre}">
+						<h:outputText id="nombre1" value="#{modulo.nombre}" />
+					</p:column>
+					<p:column id="rolAltaColumn1" headerText="#{msg.alta}"
+						filterBy="#{modulo.alta }" sortBy="#{modulo.alta}">
+						<h:selectBooleanCheckbox id="moduloAlta1"
+												value="#{modulo.alta}" />
+					</p:column>
+					<p:column id="rolBorrarColumn1" headerText="#{msg.borrar}"
+						filterBy="#{modulo.borrar }" sortBy="#{modulo.borrar}">
+						<h:selectBooleanCheckbox id="moduloBorrar1"
+												value="#{modulo.borrar}" />
+					</p:column>
+					<p:column id="rolEditarColumn1" headerText="#{msg.edicion}"
+						filterBy="#{modulo.editar}" sortBy="#{modulo.editar}">
+						<h:selectBooleanCheckbox id="moduloEditar1"
+												value="#{modulo.editar}" />
+					</p:column>
+					<p:column id="rolConsultaColumn1" headerText="#{msg.consulta}"
+						filterBy="#{modulo.consulta}" sortBy="#{modulo.consulta}">
+						<h:selectBooleanCheckbox id="moduloConsulta1"
+												value="#{modulo.consulta}" />
+					</p:column>
+					<p:column id="rolImprimirColumn1" headerText="#{msg.impresion}"
+						filterBy="#{modulo.imprimir}" sortBy="#{modulo.imprimir}">
+						<h:selectBooleanCheckbox id="moduloImprimir1"
+												value="#{modulo.imprimir}" />
+					</p:column>
+				</p:dataTable>
+				<!-- Fin tabla de Modulos -->
+				<h:panelGrid style="float: right;" columns="2">
+					<p:commandButton value="#{msg.aceptar }" icon="ui-icon-check"
+						oncomplete="editarDialog.hide()"
+						actionListener="#{perfilBean.updateRol }"
+						update=":form:rolesTable, growl" />
+					<p:commandButton value="#{msg.cancelar }" icon="ui-icon-closethick"
+						oncomplete="editarDialog.hide()"
+						actionListener="#{perfilBean.cancelDeleteRol }" />
+				</h:panelGrid>
+			</p:dialog>
+			<!-- Fin de panel de edicion -->
+			<!-- Panel de borrado -->
+			<p:confirmDialog showEffect="fade" widgetVar="borrarDialog"
+				header="#{msg.confirmar }" message="#{msg.frsBorrarConfirmacion }">
+				<p:commandButton value="#{msg.si }"
+					actionListener="#{perfilBean.deleteRol}"
+					update="rolesTable, growl" styleClass="ui-confirmdialog-yes"
+					icon="ui-icon-check" oncomplete="borrarDialog.hide()" />
+				<p:commandButton value="#{msg.no }" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close"
+					onclick="borrarDialog.hide()" />
+			</p:confirmDialog>
+			<!-- Fin de panel de borrado -->
+		</h:form>
+
+
+	</ui:composition>
+</h:body>
 </html>
