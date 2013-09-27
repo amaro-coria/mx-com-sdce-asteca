@@ -12,6 +12,11 @@ public class ModulosDTO implements Serializable {
 	private int idModulo;
     private String nombre;
     private String dsc;
+    private boolean alta;
+    private boolean editar;
+    private boolean borrar;
+    private boolean consulta;
+    private boolean imprimir;
     
     
 	public int getIdModulo() {
@@ -31,6 +36,36 @@ public class ModulosDTO implements Serializable {
 	}
 	public void setDsc(String dsc) {
 		this.dsc = dsc;
+	}
+	public boolean isAlta() {
+		return alta;
+	}
+	public void setAlta(boolean alta) {
+		this.alta = alta;
+	}
+	public boolean isEditar() {
+		return editar;
+	}
+	public void setEditar(boolean editar) {
+		this.editar = editar;
+	}
+	public boolean isBorrar() {
+		return borrar;
+	}
+	public void setBorrar(boolean borrar) {
+		this.borrar = borrar;
+	}
+	public boolean isConsulta() {
+		return consulta;
+	}
+	public void setConsulta(boolean consulta) {
+		this.consulta = consulta;
+	}
+	public boolean isImprimir() {
+		return imprimir;
+	}
+	public void setImprimir(boolean imprimir) {
+		this.imprimir = imprimir;
 	}
     
 }
