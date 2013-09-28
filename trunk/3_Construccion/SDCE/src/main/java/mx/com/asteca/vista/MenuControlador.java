@@ -31,18 +31,16 @@ public class MenuControlador extends BaseController implements Serializable{
 	private String navegacion = "";
 	private Submenu submenu = new Submenu();
 
-	@PostConstruct
-	public void init() {
+	public void initMenu() {
 		try {
 			buildMenu(getMenuItems());
-			navegacion = "";
 		} catch (Exception e) {
 			super.addErrorMessage("Ocurrio un error: " + e.getMessage());
 		}
-		navegacion = "";
 	}
 
 	public String getNavegacion() {
+		initMenu();
 		return navegacion;
 	}
 
