@@ -450,6 +450,18 @@ public class AlumnoFachadaImpl extends BaseFachadaImpl<AlumnoDTO, Integer>
 							+ e.getMessage(), e);
 		}
 	}
+	
+	@Override
+	public List<AlumnoDTO> findByArea(Integer idArea) throws FachadaException {
+			try {
+				List<AlumnoDTO> lista = servicioAlumno.findByArea(idArea);
+				return lista;
+			} catch (ServicioException e) {
+				throw new FachadaException(
+						"Error en findByArea Fachada : "
+								+ e.getMessage(), e);
+			}
+	}
 
 	@Override
 	public AlumnoDTO populate(int alumnoID) throws FachadaException {
@@ -461,5 +473,4 @@ public class AlumnoFachadaImpl extends BaseFachadaImpl<AlumnoDTO, Integer>
 					+ e.getMessage(), e);
 		}
 	}
-
 }
