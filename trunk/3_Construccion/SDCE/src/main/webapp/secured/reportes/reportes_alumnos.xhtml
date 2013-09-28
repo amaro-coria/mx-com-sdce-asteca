@@ -10,11 +10,10 @@
 			<p:growl id="msg" />
 			<p:panel id="pnlAlumnos" header="Reporte Alumnos" closable="false">
 				<p:outputLabel>Area:</p:outputLabel>
-				<p:selectOneMenu>
-					<f:selectItem itemLabel="Select One" itemValue="" />
-					<f:selectItem itemLabel="Option 1" itemValue="1" />
-					<f:selectItem itemLabel="Option 2" itemValue="2" />
-					<f:selectItem itemLabel="Option 3" itemValue="3" />
+				<p:selectOneMenu id="selectArea" 
+					value="#{beanReporteAlumno.areaSelected}" style="min-width: 250px;">
+					<f:selectItem itemLabel="SELECCIONA AREA" itemValue="" noSelectionOption="true" />
+					<f:selectItems value="#{beanReporteAlumno.listaSelectArea}" />
 				</p:selectOneMenu>
 			</p:panel>
 			<h:panelGrid>
