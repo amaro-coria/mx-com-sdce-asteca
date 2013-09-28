@@ -79,6 +79,16 @@ public interface AlumnoServicio extends
 	 */
 	List<AlumnoDTO> findByNombreAndStatus(String nombreCompleto, String estatus)
 			throws ServicioException;
+	
+	/**
+	 * Obtiene la lista de AlumnosDTO filtrada por area
+	 * 
+	 * @param area
+	 * @param estatus
+	 * @return
+	 * @throws ServicioException
+	 */
+	List<AlumnoDTO> findByArea(Integer area) throws ServicioException;
 
 	/**
 	 * Obtiene la lista de AlumnosDTO filtrada por matricula, nombreCompleto y

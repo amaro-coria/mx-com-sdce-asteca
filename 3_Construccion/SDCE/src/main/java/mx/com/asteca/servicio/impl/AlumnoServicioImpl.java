@@ -209,6 +209,20 @@ public class AlumnoServicioImpl extends
 							+ e.getMessage(), e);
 		}
 	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public List<AlumnoDTO> findByArea(Integer area) throws ServicioException {
+		try {
+			List<Alumnos> listMapping = daoAlumno.findByArea(area);
+			List<AlumnoDTO> listDTOs = assemblerAlumno.getDTOListTransform(listMapping);
+			return listDTOs;
+		} catch (PersistenciaException e) {
+			throw new ServicioException(
+					"Error en findByArea Servicio : "
+							+ e.getMessage(), e);
+		}
+	}
 
 	@Override
 	@Transactional(readOnly = true)
@@ -243,5 +257,4 @@ public class AlumnoServicioImpl extends
 					+ e.getMessage(), e);
 		}
 	}
-
 }
