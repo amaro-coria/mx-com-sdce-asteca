@@ -234,6 +234,21 @@ public class AlumnoDAOImpl extends BaseDAOImpl<Alumnos, Integer> implements
 							+ ex.getMessage(), ex);
 		}
 	}
+	
+	@Override
+	public List<Alumnos> findByArea(Integer area) throws PersistenciaException {
+		try {
+			Criteria criteria = getSessionFactory().getCurrentSession() .createCriteria(Alumnos.class);
+			if(area != null && area > 0){
+				criteria.add(Restrictions.eq("catGral.idCatGral", area));
+			}
+			List<Alumnos> lista = criteria.list();
+			return lista;
+		} catch (Exception ex) {
+			throw new PersistenciaException(
+					"Error en findByArea DAO:" + ex.getMessage(), ex);
+		}
+	}
 
 	@Override
 	public Alumnos populate(int idAlumno) throws PersistenciaException {
@@ -249,5 +264,4 @@ public class AlumnoDAOImpl extends BaseDAOImpl<Alumnos, Integer> implements
 					+ ex.getMessage(), ex);
 		}
 	}
-
 }

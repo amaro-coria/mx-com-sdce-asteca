@@ -83,6 +83,14 @@ public interface AlumnoDAO extends BaseDAO<Alumnos, Integer> {
 	 */
 	List<Alumnos> findByMatriculaNombreAndStatus(String matricula,
 			String nombreCompleto, String estatus) throws PersistenciaException;
+	
+	/**
+	 * Obtiene la lista de alumnos filtrada por area
+	 * @param area
+	 * @return
+	 * @throws PersistenciaException
+	 */
+	List<Alumnos> findByArea(Integer area) throws PersistenciaException;
 
 	Alumnos populate(int idAlumno) throws PersistenciaException;
 
