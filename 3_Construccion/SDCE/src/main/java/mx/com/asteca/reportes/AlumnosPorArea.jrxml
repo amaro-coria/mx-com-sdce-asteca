@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="AlumnosPorArea" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" >
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	
+	<field name="alumnosCursoses" class="java.util.Set">
+		<fieldDescription><![CDATA[alumnosCursoses]]></fieldDescription>
+	</field>
+	<field name="asistenciaCursos" class="java.util.Set">
+		<fieldDescription><![CDATA[asistenciaCursos]]></fieldDescription>
+	</field>
+	<field name="califCursoses" class="java.util.Set">
+		<fieldDescription><![CDATA[califCursoses]]></fieldDescription>
+	</field>
+	<field name="capacidadesAlumnoses" class="java.util.Set">
+		<fieldDescription><![CDATA[capacidadesAlumnoses]]></fieldDescription>
+	</field>
+	<field name="certificadoses" class="java.util.Set">
+		<fieldDescription><![CDATA[certificadoses]]></fieldDescription>
+	</field>
+	<field name="class" class="java.lang.Class">
+		<fieldDescription><![CDATA[class]]></fieldDescription>
+	</field>
+	<field name="docsAlumnoses" class="java.util.Set">
+		<fieldDescription><![CDATA[docsAlumnoses]]></fieldDescription>
+	</field>
+	<field name="domicilios" class="mx.com.asteca.persistencia.entidades.Domicilios">
+		<fieldDescription><![CDATA[domicilios]]></fieldDescription>
+	</field>
+	<field name="estatus" class="mx.com.asteca.persistencia.entidades.Estatus">
+		<fieldDescription><![CDATA[estatus]]></fieldDescription>
+	</field>
+	<field name="estudiosAlumnos" class="java.util.Set">
+		<fieldDescription><![CDATA[estudiosAlumnos]]></fieldDescription>
+	</field>
+	<field name="familia" class="mx.com.asteca.persistencia.entidades.Familia">
+		<fieldDescription><![CDATA[familia]]></fieldDescription>
+	</field>
+	<field name="idAlumno" class="java.lang.Integer">
+		<fieldDescription><![CDATA[idAlumno]]></fieldDescription>
+	</field>
+	<field name="matricula" class="java.lang.String">
+		<fieldDescription><![CDATA[matricula]]></fieldDescription>
+	</field>
+	<field name="personas" class="mx.com.asteca.persistencia.entidades.Personas">
+		<fieldDescription><![CDATA[personas]]></fieldDescription>
+	</field>
+	<field name="referenciases" class="java.util.Set">
+		<fieldDescription><![CDATA[referenciases]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement  x="134" y="0" width="297" height="77"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Double"/>
+					<topPen lineWidth="1.0" lineStyle="Double"/>
+					<leftPen lineWidth="1.0" lineStyle="Double"/>
+					<bottomPen lineWidth="1.0" lineStyle="Double"/>
+					<rightPen lineWidth="1.0" lineStyle="Double"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[DIRECCIÓN GENERAL DE AERONÃ�UTICA CIVIL
+DIRECCIÃ“N DE SEGURIDAD AÃ‰REA
+SUBDIRECCIÃ“N DE CERTIFICACIÃ“N DE LICENCIAS
+]]></text>
+			</staticText>
+			<image>
+				<reportElement  x="0" y="0" width="134" height="77"/>
+				<imageExpression><![CDATA[$P{Sct}]]></imageExpression>
+			</image>
+			<image>
+				<reportElement  x="431" y="2" width="124" height="75"/>
+				<imageExpression><![CDATA[$P{Aero}]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<detail>
+		<band height="125" splitType="Stretch">
+			<textField>
+				<reportElement  x="227" y="56" width="100" height="20"/>
+				<textElement/>
+			</textField>
+			<staticText>
+				<reportElement  x="227" y="36" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Apellido Paterno]]></text>
+			</staticText>
+			<textField>
+				<reportElement  x="127" y="56" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{personas}.getNombre()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement  x="127" y="36" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Nombre]]></text>
+			</staticText>
+			<textField>
+				<reportElement  x="327" y="56" width="100" height="20"/>
+				<textElement/>
+			</textField>
+			<staticText>
+				<reportElement  x="327" y="36" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Apellido Materno]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  x="174" y="2" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[AREA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  x="274" y="2" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[AREA]]></text>
+			</staticText>
+		</band>
+	</detail>
+</jasperReport>

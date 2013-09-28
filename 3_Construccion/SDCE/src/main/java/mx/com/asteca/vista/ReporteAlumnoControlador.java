@@ -6,39 +6,47 @@ package mx.com.asteca.vista;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.logging.Logger;
+import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
-import javax.faces.FacesException;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.servlet.ServletContextEvent;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import mx.com.asteca.comun.Constantes;
-import mx.com.asteca.reportes.Reportes;
+import mx.com.asteca.comun.dto.AlumnoDTO;
+import mx.com.asteca.fachada.AlumnoFachada;
+import mx.com.asteca.persistencia.entidades.Alumnos;
 import mx.com.asteca.reportes.UtilReporte;
+import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRExporter;
-import net.sf.jasperreports.engine.JRExporterParameter;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.export.JRHtmlExporter;
-import net.sf.jasperreports.engine.export.JRHtmlExporterParameter;
-import net.sf.jasperreports.engine.export.JRPdfExporter;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 @ManagedBean(name = Constantes.BEAN_REPORTE_ALUMNO)
 @ViewScoped
 public class ReporteAlumnoControlador extends BaseController implements
 		Serializable {
+	@ManagedProperty("#{alumnoFachadaImpl}")
+	private transient AlumnoFachada fachada;
+	private List<AlumnoDTO> listaItems;
 	private String url;
+	private FacesContext context;
 
 	@PostConstruct
 	public void init() {
-		FacesContext context = FacesContext.getCurrentInstance();
+		context = FacesContext.getCurrentInstance();
 		HttpServletRequest request = (HttpServletRequest) context
 				.getExternalContext().getRequest();
 		String requestURL = request.getRequestURL().toString();
@@ -52,59 +60,23 @@ public class ReporteAlumnoControlador extends BaseController implements
 
 	public void mostrarReporte() throws JRException, IOException,
 			ClassNotFoundException {
-		String tipo = "text/html";
-		ExternalContext econtext = this.getFacesContext().getExternalContext();
-
-		InputStream inputStream = Reportes.class
-				.getResourceAsStream("Cedula_5.jasper");
-		if (inputStream == null) {
-			throw new ClassNotFoundException(
-					"Archivo datos_jugador.jasper no se encontró");
-		}
-		FacesContext fcontext = FacesContext.getCurrentInstance();
-		try {
-			JRExporter exporter = null;
-			// Context ctx = new InitialContext();
-			// DataSource ds = (DataSource) ctx.lookup(dataSourceName);
-			// Connection conn = ds.getConnection();
-			HashMap<String, InputStream> param = new HashMap<String, InputStream>();
-			param.put("Sct",
-					UtilReporte.class.getResourceAsStream("img_sct.jpg"));
-			param.put("Aero",
-					UtilReporte.class.getResourceAsStream("img_aero.jpg"));
-
-			JasperPrint jasperPrint = JasperFillManager.fillReport(inputStream,
-					param);
-			HttpServletResponse response = (HttpServletResponse) econtext
-					.getResponse();
-			HttpServletRequest request = (HttpServletRequest) econtext
-					.getRequest();
-			response.setContentType(tipo);
-			if ("application/pdf".equals(tipo)) {
-				exporter = new JRPdfExporter();
-				exporter.setParameter(JRExporterParameter.JASPER_PRINT,
-						jasperPrint);
-				exporter.setParameter(JRExporterParameter.OUTPUT_STREAM,
-						response.getOutputStream());
-			} else if ("text/html".equals(tipo)) {
-				exporter = new JRHtmlExporter();
-				exporter.setParameter(JRExporterParameter.JASPER_PRINT,
-						jasperPrint);
-				exporter.setParameter(JRExporterParameter.OUTPUT_WRITER,
-						response.getWriter());
-				exporter.setParameter(JRHtmlExporterParameter.IMAGES_URI,
-						request.getContextPath() + "/image?image=");
-
-			}
-			if (exporter != null) {
-				exporter.exportReport();
-			}
-		} catch (Exception ex) {
-			Logger.getLogger(Reportes.class.getName()).log(
-					java.util.logging.Level.SEVERE, null, ex);
-			throw new FacesException(ex);
-		}
-		fcontext.responseComplete();
+		
+	}
+	public void enviarPdf() throws JRException {
+		
+		final List<String> empleados = 
+		        Arrays.asList("Jose Manuel Sánchez", "Alfonso Blanco", "Angel García", "Rubén Aguilera");
+		Alumnos alum = new Alumnos();
+		
+		
+		final Map<String,Object> parameters = new HashMap<String,Object>();
+	    parameters.put("Alumnos", empleados);
+	    
+		 InputStream ins = UtilReporte.class.getResourceAsStream("Cedula5.jrxml");
+		 JasperDesign jasDesign = JRXmlLoader.load(ins);
+         JasperReport jasReport = JasperCompileManager.compileReport(jasDesign);
+         JasperPrint jasPrint = JasperFillManager.fillReport(jasReport, parameters,  new JREmptyDataSource());
+         JasperExportManager.exportReportToPdfFile(jasPrint, "NombrePDD.pdf");
 	}
 
 	public String getUrl() {
@@ -113,6 +85,14 @@ public class ReporteAlumnoControlador extends BaseController implements
 
 	public void setUrl(String url) {
 		this.url = url;
+	}
+
+	public List<AlumnoDTO> getListaItems() {
+		return listaItems;
+	}
+
+	public void setListaItems(List<AlumnoDTO> listaItems) {
+		this.listaItems = listaItems;
 	}
 
 }
