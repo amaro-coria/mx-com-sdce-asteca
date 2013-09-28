@@ -82,6 +82,16 @@ public interface AlumnoFachada extends BaseFachada<AlumnoDTO, Integer> {
 	 */
 	List<AlumnoDTO> findByNombreAndStatus(String nombreCompleto, String estatus)
 			throws FachadaException;
+	
+	/**
+	 * Obtiene la lista de AlumnoDTO filtrada por area
+	 * 
+	 * @param area
+	 * @param estatus
+	 * @return
+	 * @throws FachadaException
+	 */
+	List<AlumnoDTO> findByArea(Integer idArea) throws FachadaException;
 
 	/**
 	 * Obtiene la lista de AlumnoDTO filtrada por matricula, nombreCompleto y
