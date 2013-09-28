@@ -19,6 +19,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import mx.com.asteca.comun.Constantes;
 import mx.com.asteca.comun.dto.AlumnoDTO;
@@ -123,25 +124,17 @@ public class ReporteAlumnoControlador extends BaseController implements
 	
 	public void mostrarReporte() throws JRException, IOException,
 			ClassNotFoundException {
+
 		initListaAlumnos();
 		
-		for(AlumnoDTO lista : listaAlumnos){
-			LOGGER.debug(lista.getNombre());
-		}
-	}
-	public void enviarPdf() throws JRException {
+//		Guarada parametro en session
+		HttpSession session = ((HttpServletRequest) context
+				.getExternalContext().getRequest()).getSession();
+		session.setAttribute("alumnosReporte", listaAlumnos);
 		
-		final List<String> empleados = 
-		        Arrays.asList("Jose Manuel Sánchez", "Alfonso Blanco", "Angel García", "Rubén Aguilera");
+//		Obtener parametro de sesion
+		listaAlumnos = (List<AlumnoDTO>) session.getAttribute("alumnosReporte");
 		
-		final Map<String,Object> parameters = new HashMap<String,Object>();
-	    parameters.put("Alumnos", empleados);
-	    
-		 InputStream ins = UtilReporte.class.getResourceAsStream("Cedula5.jrxml");
-		 JasperDesign jasDesign = JRXmlLoader.load(ins);
-         JasperReport jasReport = JasperCompileManager.compileReport(jasDesign);
-         JasperPrint jasPrint = JasperFillManager.fillReport(jasReport, parameters,  new JREmptyDataSource());
-         JasperExportManager.exportReportToPdfFile(jasPrint, "NombrePDD.pdf");
 	}
 
 	public String getUrl() {
