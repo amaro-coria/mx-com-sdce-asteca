@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
@@ -47,7 +48,8 @@ public class PerfilControlador extends BaseController implements Serializable {
 	
 	private List<RolesDTO> listaRoles;
 	private List<ModulosDTO> listaModulos;
-	private List<ModulosDTO> listaModulosTmp;
+	private List<ModulosDTO> listaModulosEdit;
+	private List<ModulosDTO> listaModulosVer;
 	private List<RolesDTO> listaFiltered;
 	private List<PermisosDTO> listaPermisos;
 	private List<RolesModulosDTO> listaRolesModulos;
@@ -60,17 +62,14 @@ public class PerfilControlador extends BaseController implements Serializable {
 		rolNuevo = new RolesDTO();
 		rolSelected = new RolesDTO();
 		listaPermisos = new ArrayList<PermisosDTO>();
-		listaModulosTmp = new ArrayList<ModulosDTO>();
-		initListaModulos();
 	}
-	
-	
+		
 	public void initListaRoles() {
 		if(CollectionUtils.isEmpty(listaRoles)) {
 			try {
 				listaRoles = rolesFachada.getAll();
 			} catch (FachadaException e) {
-				
+				super.addErrorMessage("Error al obtener Roles");
 			}
 		}
 		
@@ -81,7 +80,27 @@ public class PerfilControlador extends BaseController implements Serializable {
 			try {
 				listaModulos = modulosFachada.getAll();
 			} catch (FachadaException e) {
-				
+				super.addErrorMessage("Error al obtener Modulos");
+			}
+		}
+		
+	}
+	public void initListaModulosEdit() {
+		if(CollectionUtils.isEmpty(listaModulosEdit)) {
+			try {
+				listaModulosEdit = modulosFachada.getAll();
+			} catch (FachadaException e) {
+				super.addErrorMessage("Error al obtener Modulos");
+			}
+		}
+		
+	}
+	public void initListaModulosVer() {
+		if(CollectionUtils.isEmpty(listaModulosVer)) {
+			try {
+				listaModulosVer = modulosFachada.getAll();
+			} catch (FachadaException e) {
+				super.addErrorMessage("Error al obtener Modulos");
 			}
 		}
 		
@@ -96,6 +115,10 @@ public class PerfilControlador extends BaseController implements Serializable {
 			PermisosDTO permisos;
 			RolesModulosDTO rolesModulos;
 			idRol = rolesFachada.save(rolNuevo);
+			if(listaRoles == null) {
+				listaRoles = new ArrayList<RolesDTO>();
+			}
+			rolNuevo.setIdRol(idRol);
 			listaRoles.add(rolNuevo);
 			for(ModulosDTO modulo:listaModulos) {
 				if(modulo.isAlta() || modulo .isBorrar() || modulo.isConsulta() || modulo.isEditar() || modulo.isImprimir()) {
@@ -139,7 +162,15 @@ public class PerfilControlador extends BaseController implements Serializable {
 	
 	public void deleteRol(ActionEvent e) {
 		try {
+			listaRolesModulos = rolesModulosFachada.buscarPorRol(rolSelected.getIdRol());
+			for(RolesModulosDTO rolesModulos:listaRolesModulos) {
+				
+				rolesModulosFachada.remove(rolesModulos);
+				
+				permisosFachada.remove(permisosFachada.findByPK(rolesModulos.getIdPermisos()));
+			}
 			rolesFachada.remove(rolSelected);
+			
 			listaRoles.remove(rolSelected);
 		} catch (FachadaException e1) {
 			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR, Constantes.ERROR_DELETE_REGISTRO);
@@ -149,6 +180,10 @@ public class PerfilControlador extends BaseController implements Serializable {
 	}
 	
 	public void updateRol(ActionEvent e) {
+		int idPermiso = 0;
+		int index = 0;
+		PermisosDTO permisos;
+		RolesModulosDTO rolModulo;
 		rolSelected.setActivo(selectedRolActivo == true ? (short) 1
 				: (short) 0);
 		if(selectedClave != null && !selectedClave.isEmpty()){
@@ -163,9 +198,10 @@ public class PerfilControlador extends BaseController implements Serializable {
 			if(indexListFilter > 0){
 				listaRoles.set(indexListFilter, rolSelected);
 			}
-			for(ModulosDTO modulo:listaModulos) {
+			for(ModulosDTO modulo:listaModulosEdit) {
 				for(RolesModulosDTO rolesModulos:listaRolesModulos) {
 					if(rolesModulos.getIdModulo().equals(modulo.getIdModulo())) {
+						index+=1;
 						for(PermisosDTO permiso:listaPermisos) {
 							if(permiso.getIdPermiso() == rolesModulos.getIdPermisos()) {
 								permiso.setAlta(modulo.isAlta()?(short)1:(short)0);
@@ -180,6 +216,28 @@ public class PerfilControlador extends BaseController implements Serializable {
 							
 					}
 				}
+				if(index == 0) {
+					if(modulo.isAlta() || modulo .isBorrar() || modulo.isConsulta() || modulo.isEditar() || modulo.isImprimir()) {
+						permisos = new PermisosDTO();
+						permisos.setAlta(modulo.isAlta()?(short)1:(short)0);
+						permisos.setBorrar(modulo.isBorrar()?(short)1:(short)0);
+						permisos.setCambios(modulo.isEditar()?(short)1:(short)0);
+						permisos.setConsulta(modulo.isConsulta()?(short)1:(short)0);
+						permisos.setImpresion(modulo.isImprimir()?(short)1:(short)0);
+						
+						idPermiso = permisosFachada.save(permisos);
+						
+						rolModulo = new RolesModulosDTO();
+						
+						rolModulo.setIdModulo(modulo.getIdModulo());
+						rolModulo.setIdPermisos(idPermiso);
+						rolModulo.setIdRol(rolSelected.getIdRol());
+						rolModulo.setActivo((short)1);
+						
+						rolesModulosFachada.save(rolModulo);
+					}
+				}
+				index = 0;
 				
 			}
 		} catch (FachadaException e1) {
@@ -198,16 +256,14 @@ public class PerfilControlador extends BaseController implements Serializable {
 		if(listaPermisos.size() > 0) {
 			listaPermisos.clear();
 		}
-		if(listaModulosTmp.size() > 0) {
-			listaModulosTmp.clear();
-		}
 		for(RolesModulosDTO rolesModulos:listaRolesModulos) {
 			try {
 				listaPermisos.add(permisosFachada.findByPK(rolesModulos.getIdPermisos()));
 			} catch (FachadaException e1) {
 				e1.printStackTrace();
 			}
-			for(ModulosDTO modulo:listaModulos) {
+			initListaModulosEdit();
+			for(ModulosDTO modulo:listaModulosEdit) {
 				if(rolesModulos.getIdModulo().equals(modulo.getIdModulo())) {
 					for(PermisosDTO permiso:listaPermisos) {
 						if(permiso.getIdPermiso() == rolesModulos.getIdPermisos()) {
@@ -217,13 +273,41 @@ public class PerfilControlador extends BaseController implements Serializable {
 							modulo.setEditar(permiso.getCambios().equals((short)0)?false:true);
 							modulo.setImprimir(permiso.getImpresion().equals((short)0)?false:true);
 							
-							listaModulosTmp.add(modulo);
 						}
 					}
 				}
 			}
-			listaModulos.clear();
-			listaModulos.addAll(listaModulosTmp);
+		}
+		
+	}
+	
+	public void ver(ActionEvent e) {
+		initListaModulos();
+		listaRolesModulos = rolesModulosFachada.buscarPorRol(rolSelected.getIdRol());
+		if(listaPermisos.size() > 0) {
+			listaPermisos.clear();
+		}
+		initListaModulosVer();
+		for(RolesModulosDTO rolesModulos:listaRolesModulos) {
+			try {
+				listaPermisos.add(permisosFachada.findByPK(rolesModulos.getIdPermisos()));
+			} catch (FachadaException e1) {
+				e1.printStackTrace();
+			}
+			for(ModulosDTO modulo:listaModulosVer) {
+				if(rolesModulos.getIdModulo().equals(modulo.getIdModulo())) {
+					for(PermisosDTO permiso:listaPermisos) {
+						if(permiso.getIdPermiso() == rolesModulos.getIdPermisos()) {
+							modulo.setAlta(permiso.getAlta().equals((short)0)?false:true);
+							modulo.setBorrar(permiso.getBorrar().equals((short)0)?false:true);
+							modulo.setConsulta(permiso.getConsulta().equals((short)0)?false:true);
+							modulo.setEditar(permiso.getCambios().equals((short)0)?false:true);
+							modulo.setImprimir(permiso.getImpresion().equals((short)0)?false:true);
+							
+						}
+					}
+				}
+			}
 		}
 		
 	}
@@ -233,8 +317,8 @@ public class PerfilControlador extends BaseController implements Serializable {
 		setSelectedNombre("");
 	}
 	private void limpiarModulos() {
-		if(listaModulosTmp.size() > 0) {
-			listaModulosTmp.clear();
+		if(listaModulosEdit.size() > 0) {
+			listaModulosEdit.clear();
 		}
 		for(ModulosDTO modulo:listaModulos) {
 			modulo.setAlta(false);
@@ -242,11 +326,7 @@ public class PerfilControlador extends BaseController implements Serializable {
 			modulo.setConsulta(false);
 			modulo.setEditar(false);
 			modulo.setImprimir(false);
-			
-			listaModulosTmp.add(modulo);
 		}
-		listaModulos.clear();
-		listaModulos.addAll(listaModulosTmp);
 	}
 	public RolesDTO getRolSelected() {
 		return rolSelected;
@@ -274,6 +354,7 @@ public class PerfilControlador extends BaseController implements Serializable {
 	}
 
 	public List<ModulosDTO> getListaModulos() {
+		initListaModulos();
 		return listaModulos;
 	}
 
@@ -351,5 +432,39 @@ public class PerfilControlador extends BaseController implements Serializable {
 
 	public void setPermisosFachada(PermisosFachada permisosFachada) {
 		this.permisosFachada = permisosFachada;
+	}
+
+	public List<ModulosDTO> getListaModulosEdit() {
+		initListaModulosEdit();
+		return listaModulosEdit;
+	}
+
+	public void setListaModulosEdit(List<ModulosDTO> listaModulosEdit) {
+		this.listaModulosEdit = listaModulosEdit;
+	}
+
+	public List<ModulosDTO> getListaModulosVer() {
+		initListaModulosVer();
+		return listaModulosVer;
+	}
+
+	public void setListaModulosVer(List<ModulosDTO> listaModulosVer) {
+		this.listaModulosVer = listaModulosVer;
+	}
+
+	public List<PermisosDTO> getListaPermisos() {
+		return listaPermisos;
+	}
+
+	public void setListaPermisos(List<PermisosDTO> listaPermisos) {
+		this.listaPermisos = listaPermisos;
+	}
+
+	public List<RolesModulosDTO> getListaRolesModulos() {
+		return listaRolesModulos;
+	}
+
+	public void setListaRolesModulos(List<RolesModulosDTO> listaRolesModulos) {
+		this.listaRolesModulos = listaRolesModulos;
 	}
 }

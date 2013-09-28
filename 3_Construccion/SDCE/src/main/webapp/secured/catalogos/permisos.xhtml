@@ -17,7 +17,7 @@
 						update=":form:displayEditar, growl" actionListener="#{perfilBean.editar}" />
 					<p:commandButton id="viewButton" value="#{msg.ver }"
 						icon="ui-icon-search" oncomplete="verDialog.show()"
-						update=":form:displayVer, growl" actionListener="#{perfilBean.editar}" />
+						update=":form:displayVer, growl" actionListener="#{perfilBean.ver}" />
 					<p:commandButton id="nuevoButton" value="#{msg.nuevo }"
 						icon="ui-icon-plusthick" onclick="nuevoDialog.show()"
 						update=":form:displayNuevo, growl" />
@@ -70,7 +70,7 @@
 						style="font-weight:bold" />
 						</h:panelGrid>
 				<!-- Inicion Tabla de Modulos  -->
-				<p:dataTable id="modulosTableVer" value="#{perfilBean.listaModulos}"
+				<p:dataTable id="modulosTableVer" value="#{perfilBean.listaModulosVer}"
 					var="modulo" rowKey="#{modulo.idModulo}" paginator="true"
 					paginatorPosition="bottom" rows="10">
 					<p:column id="id2" headerText="#{msg.id}"
@@ -184,7 +184,8 @@
 			<p:dialog id="dialogEditar" header="#{msg.frsNuevoRegistro}"
 				widgetVar="editarDialog" closable="true" modal="true"
 				draggable="false" width="400">
-				<h:panelGrid columns="2" width="100%" id="displayEditar">
+				<h:panelGrid columns="1" id="displayEditar">
+				<h:panelGrid columns="2" width="100%">
 					<h:outputText value="#{msg.clave}" />
 					<h:panelGroup>
 						<p:inputText id="selectedCve"
@@ -204,9 +205,9 @@
 					<h:selectBooleanCheckbox
 						value="#{perfilBean.selectedRolActivo}">
 					</h:selectBooleanCheckbox>
-				</h:panelGrid>
+					</h:panelGrid>
 				<!-- Inicion Tabla de Modulos  -->
-				<p:dataTable id="modulosTableEdit" value="#{perfilBean.listaModulos}"
+				<p:dataTable id="modulosTableEdit" value="#{perfilBean.listaModulosEdit}"
 					var="modulo" rowKey="#{modulo.idModulo}" paginator="true"
 					paginatorPosition="bottom" rows="10">
 					<p:column id="id1" headerText="#{msg.id}"
@@ -244,6 +245,7 @@
 					</p:column>
 				</p:dataTable>
 				<!-- Fin tabla de Modulos -->
+				</h:panelGrid>
 				<h:panelGrid style="float: right;" columns="2">
 					<p:commandButton value="#{msg.aceptar }" icon="ui-icon-check"
 						oncomplete="editarDialog.hide()"
@@ -257,7 +259,7 @@
 			<!-- Fin de panel de edicion -->
 			<!-- Panel de borrado -->
 			<p:confirmDialog showEffect="fade" widgetVar="borrarDialog"
-				header="#{msg.confirmar }" message="#{msg.frsBorrarConfirmacion }">
+				header="#{msg.confirmar }"  style="color:#000000" message="#{msg.frsBorrarConfirmacion }">
 				<p:commandButton value="#{msg.si }"
 					actionListener="#{perfilBean.deleteRol}"
 					update="rolesTable, growl" styleClass="ui-confirmdialog-yes"

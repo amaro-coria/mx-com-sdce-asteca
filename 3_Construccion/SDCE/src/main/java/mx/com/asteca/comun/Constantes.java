@@ -57,6 +57,7 @@ public class Constantes {
 	public static final String BEAN_ALUMNO="beanAlumno";
 	public static final String BEAN_MENU="menuBean";
 	public static final String BEAN_PERFIL="perfilBean";
+	public static final String BEAN_PERMISO_ROL="permisoRolBean";
 	public static final String BEAN_CURSO="beanCurso";
 	public static final String ERROR_NO_HAY_SELECCION="Debes seleccionar al menos un elemento.";
 	public static final String ERROR_UPDATE_REGISTRO="Error guardando.";
