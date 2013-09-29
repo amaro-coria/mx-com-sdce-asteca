@@ -11,39 +11,39 @@
 				<h:panelGrid columns="2">
 					<p:outputLabel>Instructures</p:outputLabel>
 					<p:selectOneMenu>
-						<f:selectItem itemLabel="Select One" itemValue="" />
-						<f:selectItem itemLabel="Option 1" itemValue="1" />
-						<f:selectItem itemLabel="Option 2" itemValue="2" />
-						<f:selectItem itemLabel="Option 3" itemValue="3" />
+						<f:selectItem itemLabel="SELECCIONA INSTRUCTOR" itemValue="" />
+						<f:selectItem itemLabel="INSTRUCTOR 1" itemValue="1" />
+						<f:selectItem itemLabel="INSTRUCTOR 2" itemValue="2" />
+						<f:selectItem itemLabel="INSTRUCTOR 3" itemValue="3" />
 					</p:selectOneMenu>
 					<p:outputLabel>Sede</p:outputLabel>
-					<p:selectOneMenu>
-						<f:selectItem itemLabel="Select One" itemValue="" />
-						<f:selectItem itemLabel="Option 1" itemValue="1" />
-						<f:selectItem itemLabel="Option 2" itemValue="2" />
-						<f:selectItem itemLabel="Option 3" itemValue="3" />
+					<p:selectOneMenu id="selectSede" 
+						value="#{beanReporteCursos.sedeSelected}" style="min-width: 250px;">
+						<f:selectItem itemLabel="SELECCIONA SEDE" itemValue="" noSelectionOption="true" />
+						<f:selectItems value="#{beanReporteCursos.listaSelectSede}" />
 					</p:selectOneMenu>
 					<p:outputLabel>Área</p:outputLabel>
-					<p:selectOneMenu>
-						<f:selectItem itemLabel="Select One" itemValue="" />
-						<f:selectItem itemLabel="Option 1" itemValue="1" />
-						<f:selectItem itemLabel="Option 2" itemValue="2" />
-						<f:selectItem itemLabel="Option 3" itemValue="3" />
+					<p:selectOneMenu id="selectArea" 
+						value="#{beanReporteCursos.areaSelected}" style="min-width: 250px;">
+						<f:selectItem itemLabel="SELECCIONA AREA" itemValue="" noSelectionOption="true" />
+						<f:selectItems value="#{beanReporteCursos.listaSelectArea}" />
 					</p:selectOneMenu>
+				</h:panelGrid>
+				<h:panelGrid columns="3">
 					<p:outputLabel>Período</p:outputLabel>
-					<p:selectOneMenu>
-						<f:selectItem itemLabel="Select One" itemValue="" />
-						<f:selectItem itemLabel="Option 1" itemValue="1" />
-						<f:selectItem itemLabel="Option 2" itemValue="2" />
-						<f:selectItem itemLabel="Option 3" itemValue="3" />
-					</p:selectOneMenu>
+					<p:calendar id="periodoIni" value="#{beanReporteCursos.fechaIni}"
+								>
+					</p:calendar>
+					
+					<p:calendar id="periodoFin" value="#{beanReporteCursos.fechaFin}">
+					</p:calendar>
 				</h:panelGrid>
 				<h:panelGroup>
 					<p:commandButton value="Limpiar" icon="ui-icon-arrowrefresh-1-e"
-						onclick="window.open('#{beanReporteAlumno.url}Reportes?name=Cedula_5');"
+						onclick="window.open('#{beanReporteCursos.url}Reportes?name=Cedula_5');"
 						type="button" />
 					<p:commandButton value="Buscar" update="@all" icon="ui-icon-search"
-						actionListener="#{beanReporteAlumno.mostrarReporte}"
+						actionListener="#{beanReporteCursos.mostrarReporte}"
 						styleClass="ui-priority-primary" />
 
 				</h:panelGroup>
