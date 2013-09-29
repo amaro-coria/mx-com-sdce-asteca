@@ -42,13 +42,17 @@ public interface CatGralFachada extends BaseFachada<CatGralDTO, Integer>{
 			String estatus) throws FachadaException;
 	
 	/**
-	 * Obtiene la lista filtrada por clave, descripcion y estatus
-	 * @param cve
-	 * @param dsc
-	 * @param estatus
+	 * Obtiene la lista de tipos area
 	 * @return
 	 * @throws FachadaException
 	 */
-	List<CatGralDTO> findTiposArea() throws FachadaException;
+	List<CatGralDTO> findByTiposArea() throws FachadaException;
+	
+	/**
+	 * Obtiene la lista tipos sede
+	 * @return
+	 * @throws FachadaException
+	 */
+	List<CatGralDTO> findByTiposSede() throws FachadaException;
 	
 }

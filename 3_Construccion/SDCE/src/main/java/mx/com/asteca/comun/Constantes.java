@@ -45,6 +45,7 @@ public class Constantes {
 	public static final String ASSEMBLER_ROLES_MOD_USUARIOS="assmblerRolesModUsuarios";
 	public static final String ASSEMBLER_ROLES_MOD_PERMISOS_SOBRE="assemblerRolesModPermisosSobre";
 	public static final String ASSEMBLER_ROLES_MOD_PERMISOS_USR="assemblerRolesModPermisosUsr";
+	public static final String ASSEMBLER_CURSO="assemblerCurso";
 	public static final String ERROR_OBTENIENDO_LISTA_CATALOGO="No se pudo obtener el catalogo.";
 	public static final String ERROR_NUEVO_REGISTRO="No se pudo completar el nuevo registro.";
 	public static final String BEAN_EQUIPO="beanEquipo";

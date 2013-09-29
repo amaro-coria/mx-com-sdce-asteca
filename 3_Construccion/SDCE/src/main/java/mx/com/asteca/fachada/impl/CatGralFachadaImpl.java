@@ -72,9 +72,20 @@ public class CatGralFachadaImpl extends BaseFachadaImpl<CatGralDTO, Integer> imp
 
 
 	@Override
-	public List<CatGralDTO> findTiposArea() throws FachadaException {
+	public List<CatGralDTO> findByTiposArea() throws FachadaException {
 		try {
 			List<CatGralDTO> listaDTOs = servicio.findTiposArea();
+			return listaDTOs;
+		} catch (ServicioException e) {
+			throw new FachadaException("Error del servicio:"+ e.getMessage(), e);
+		}
+	}
+
+
+	@Override
+	public List<CatGralDTO> findByTiposSede() throws FachadaException {
+		try {
+			List<CatGralDTO> listaDTOs = servicio.findTiposSede();
 			return listaDTOs;
 		} catch (ServicioException e) {
 			throw new FachadaException("Error del servicio:"+ e.getMessage(), e);
