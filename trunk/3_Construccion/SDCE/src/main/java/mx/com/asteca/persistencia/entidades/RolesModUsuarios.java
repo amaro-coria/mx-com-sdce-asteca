@@ -55,9 +55,9 @@ public class RolesModUsuarios  implements java.io.Serializable {
        this.rolesModPermisosUsrs = rolesModPermisosUsrs;
     }
    
-     @Id 
+     @Id
      @GeneratedValue(strategy=GenerationType.IDENTITY)
-    @Column(name="ID_ROL_MOD_USR", unique=true, nullable=false)
+     @Column(name="ID_ROL_MOD_USR", unique=true, nullable=false)
     public int getIdRolModUsr() {
         return this.idRolModUsr;
     }

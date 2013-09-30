@@ -25,4 +25,9 @@ public class RolesModUsuariosFachadaImpl extends
 		return servicio;
 	}
 
+	@Override
+	public RolesModUsuariosDTO buscarPorUsuario(int idUsuario) {
+		return servicio.buscarPorUsuario(idUsuario);
+	}
+
 }

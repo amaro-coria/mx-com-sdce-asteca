@@ -1,5 +1,7 @@
 package mx.com.asteca.servicio.impl;
 
+import java.util.List;
+
 import mx.com.asteca.comun.Constantes;
 import mx.com.asteca.comun.dto.RolesModPermisosSobreDTO;
 import mx.com.asteca.persistencia.dao.BaseDAO;
@@ -32,6 +34,12 @@ public class RolesModPermisosSobreServicioImpl
 	@Override
 	Assembler getAssembler() {
 		return assemblerRolesModPermisosSobre;
+	}
+
+	@Override
+	public List<RolesModPermisosSobreDTO> buscarPorRolesModUsr(int idRolModUsr) {
+		return assemblerRolesModPermisosSobre.getDTOListTransform(
+				rolesModPermisosSobreDAO.findByModPermisosUsr(idRolModUsr));
 	}
 
 }

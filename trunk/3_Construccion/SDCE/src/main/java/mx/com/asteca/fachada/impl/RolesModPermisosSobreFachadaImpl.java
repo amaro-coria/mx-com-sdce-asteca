@@ -26,5 +26,11 @@ public class RolesModPermisosSobreFachadaImpl extends
 		return servicio;
 	}
 
+	@Override
+	public List<RolesModPermisosSobreDTO> buscarPorRolModPermisosUsr(
+			int idRolModPermisosUsr) {
+		return servicio.buscarPorRolesModUsr(idRolModPermisosUsr);
+	}
+
 	
 }

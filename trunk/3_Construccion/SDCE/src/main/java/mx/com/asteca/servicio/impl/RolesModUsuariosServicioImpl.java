@@ -1,6 +1,8 @@
 package mx.com.asteca.servicio.impl;
 
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -32,6 +34,12 @@ public class RolesModUsuariosServicioImpl extends
 	@Override
 	Assembler getAssembler() {
 		return assemblerRolesModUsuarios;
+	}
+
+	@Override
+	public RolesModUsuariosDTO buscarPorUsuario(int idUsuario) {
+		return (RolesModUsuariosDTO) assemblerRolesModUsuarios.getDTOTransform(
+				rolesModUsuariosDAO.findByUser(idUsuario));
 	}
 
 
