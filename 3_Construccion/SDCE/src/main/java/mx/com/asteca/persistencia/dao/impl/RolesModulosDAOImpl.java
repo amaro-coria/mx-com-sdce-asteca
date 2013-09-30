@@ -20,10 +20,14 @@ public class RolesModulosDAOImpl extends BaseDAOImpl<RolesModulos, Integer>
 	public List<RolesModulos> findByIdRol(int idRol)
 			throws PersistenceException {
 		Session session = this.getSessionFactory().openSession();
+		List<RolesModulos> result = null;
 		Criteria criteria = session.createCriteria(RolesModulos.class);
 		criteria.add(Restrictions.eq("idRol",idRol));
+		result = (List<RolesModulos>) criteria.list();
+		if(session.isOpen())
+			session.close();
 		
-		return (List<RolesModulos>) criteria.list();
+		return result;
 	}
 
 

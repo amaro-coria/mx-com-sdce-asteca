@@ -33,6 +33,10 @@ public class RolesModPermisosSobreDAOImpl extends
 			result = (List<RolesModPermisosSobre>) criteria.list();
 		} catch(Exception e) {
 			e.printStackTrace();
+		} finally {
+			if(session.isOpen()) {
+				session.close();
+			}
 		}
 		return result;
 	}
