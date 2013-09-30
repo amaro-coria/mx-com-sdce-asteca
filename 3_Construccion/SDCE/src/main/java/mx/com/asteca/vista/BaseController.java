@@ -244,6 +244,7 @@ public abstract class BaseController {
 			HttpServletRequest request = (HttpServletRequest) this
 					.getFacesContext().getExternalContext().getRequest();
 			HashMap<Integer, ModulosDTO> permisos = (HashMap<Integer, ModulosDTO>) request
+					.getSession()
 					.getAttribute("permisos");
 
 			ModulosDTO permiso = permisos.get(idModulo.getIdModulo());

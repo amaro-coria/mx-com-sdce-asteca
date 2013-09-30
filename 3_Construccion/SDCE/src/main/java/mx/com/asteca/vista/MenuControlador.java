@@ -42,6 +42,7 @@ public class MenuControlador extends BaseController implements Serializable {
 		try {
 			buildMenu(getMenuItems());
 		} catch (Exception e) {
+			e.printStackTrace();
 			super.addErrorMessage("Ocurrio un error: " + e.getMessage());
 		}
 	}
@@ -105,9 +106,9 @@ public class MenuControlador extends BaseController implements Serializable {
 	}
 
 	private HashMap<Integer, ModulosDTO> getMenuItemsSession() {
-		HttpServletRequest request = (HttpServletRequest) this
-				.getFacesContext().getExternalContext().getRequest();
+		HttpServletRequest request = (HttpServletRequest) getFacesContext().getCurrentInstance().getExternalContext().getRequest();
 		HashMap<Integer, ModulosDTO> permisos = (HashMap<Integer, ModulosDTO>) request
+				.getSession()
 				.getAttribute("permisos");
 
 		return permisos;
