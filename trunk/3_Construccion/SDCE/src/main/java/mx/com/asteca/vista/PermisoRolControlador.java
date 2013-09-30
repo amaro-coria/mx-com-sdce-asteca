@@ -255,7 +255,7 @@ public class PermisoRolControlador extends BaseController implements
 			int idRolesModUsuarios = 0;
 			int idRolesModPermisosUsr = 0;
 			int idPermisos = 0;
-			if (userSelected.getUsuario().equals("*")
+			if ((userSelected.getUsuario() == null || userSelected.getUsuario().length() == 0)
 					&& personaFachada.getUser(selectedUsuario) == null) {
 				userSelected.setUsuario(selectedUsuario);
 				if (userSelected.getPassword().equals(confirmarPassword)) {
@@ -332,7 +332,7 @@ public class PermisoRolControlador extends BaseController implements
 				: (short) 0);
 		try {
 			
-			if (!userSelected.getUsuario().equals("*")
+			if ((userSelected.getUsuario() != null || userSelected.getUsuario().length() > 0)
 					&& personaFachada.getUser(selectedUsuario) == null) {
 				if (userSelected.getPassword().equals(confirmarPassword)) {
 					personaFachada.update(userSelected);
@@ -441,7 +441,7 @@ public class PermisoRolControlador extends BaseController implements
 			rolesModPermisosUsrFachada.remove(rolesModPermisosUsr);
 		}
 		rolesModUsuariosFachada.remove(rolesModUsuarios);
-		userSelected.setUsuario("*");
+		userSelected.setUsuario("");
 		personaFachada.update(userSelected);
 		
 		int indexListFilter = listaPersonas.indexOf(userSelected);
