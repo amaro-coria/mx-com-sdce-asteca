@@ -36,7 +36,9 @@ import mx.com.asteca.comun.dto.ReferenciaDTO;
 import mx.com.asteca.comun.dto.TipoEstudioDTO;
 import mx.com.asteca.comun.dto.TipoLicenciaDTO;
 import mx.com.asteca.fachada.AlumnoFachada;
+import mx.com.asteca.fachada.BaseFachada;
 import mx.com.asteca.fachada.FachadaException;
+import mx.com.asteca.fachada.ModulosFachada;
 import mx.com.asteca.util.FechaUtil;
 import mx.com.asteca.util.FileExtensionUtil;
 
@@ -65,6 +67,7 @@ public class AlumnoControlador extends BaseController implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private static final String modulo = Constantes.MODULO_ALUMNO;
 	@ManagedProperty("#{alumnoFachadaImpl}")
 	private transient AlumnoFachada fachada;
 	private AlumnoDTO itemSelected;
@@ -3247,6 +3250,11 @@ public class AlumnoControlador extends BaseController implements Serializable {
 	public void setEditarAlumnoDocEstatusSelected(
 			short editarAlumnoDocEstatusSelected) {
 		this.editarAlumnoDocEstatusSelected = editarAlumnoDocEstatusSelected;
+	}
+
+	@Override
+	String getModulo() {
+		return modulo;
 	}
 
 }

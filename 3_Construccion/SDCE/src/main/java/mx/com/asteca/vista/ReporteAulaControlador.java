@@ -17,5 +17,12 @@ public class ReporteAulaControlador extends BaseController implements Serializab
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+
+	private static final String modulo = Constantes.MODULO_REPORTE_AULA;
+
+	@Override
+	String getModulo() {
+		return modulo;
+	}
 	
 }

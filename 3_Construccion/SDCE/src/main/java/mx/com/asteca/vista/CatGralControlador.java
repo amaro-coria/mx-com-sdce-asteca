@@ -33,6 +33,7 @@ public class CatGralControlador extends BaseController implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private static final String modulo = Constantes.MODULO_CAT_GRAL;
 	@ManagedProperty("#{catGralFachadaImpl}")
 	private transient CatGralFachada catGralFachada;
 	private CatGralDTO catalogoSelected;
@@ -528,6 +529,11 @@ public class CatGralControlador extends BaseController implements Serializable {
 	 */
 	public void setSelectedEstatusCatGral(String selectedEstatusCatGral) {
 		this.selectedEstatusCatGral = selectedEstatusCatGral;
+	}
+
+	@Override
+	String getModulo() {
+		return modulo;
 	}
 
 }

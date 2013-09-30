@@ -35,6 +35,7 @@ public class ReporteAlumnoControlador extends BaseController implements
 		Serializable {
 
 	private static final long serialVersionUID = 1L;
+	private static final String modulo = Constantes.MODULO_REPORTE_ALUMNO;
 	private String url;
 	private FacesContext context;
 	
@@ -205,5 +206,9 @@ public class ReporteAlumnoControlador extends BaseController implements
 	 */
 	public void setListaSelectArea(List<SelectItem> listaSelectArea) {
 		this.listaSelectArea = listaSelectArea;
+	}
+	@Override
+	String getModulo() {
+		return modulo;
 	}
 }

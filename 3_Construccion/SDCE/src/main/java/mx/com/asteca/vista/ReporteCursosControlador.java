@@ -33,6 +33,7 @@ import org.slf4j.LoggerFactory;
 public class ReporteCursosControlador extends BaseController implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+	private static final String modulo = Constantes.MODULO_REPORTE_CURSOS;
 	private String url;
 	private FacesContext context;
 	
@@ -274,5 +275,10 @@ public class ReporteCursosControlador extends BaseController implements Serializ
 	 */
 	public void setFechaFin(Date fechaFin) {
 		this.fechaFin = fechaFin;
+	}
+
+	@Override
+	String getModulo() {
+		return modulo;
 	}
 }

@@ -14,5 +14,6 @@ import mx.com.asteca.persistencia.entidades.Modulos;
  *
  */
 public interface ModulosDAO extends BaseDAO<Modulos, Integer> {
-
+	
+	Modulos findByNombre(String nombre) throws PersistenceException;
 }

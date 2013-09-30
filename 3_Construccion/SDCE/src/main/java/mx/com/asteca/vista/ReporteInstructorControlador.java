@@ -17,5 +17,12 @@ public class ReporteInstructorControlador extends BaseController implements Seri
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private static final String modulo = Constantes.MODULO_REPORTE_INSTRUCTOR;
+	
+	
+	@Override
+	String getModulo() {
+		return modulo;
+	}
 	
 }

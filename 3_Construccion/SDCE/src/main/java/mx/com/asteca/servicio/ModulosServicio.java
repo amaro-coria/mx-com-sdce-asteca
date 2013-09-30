@@ -6,4 +6,5 @@ import mx.com.asteca.persistencia.entidades.Modulos;
 public interface ModulosServicio extends
 		BaseService<ModulosDTO, Integer, Modulos> {
 
+	ModulosDTO buscarPorNombre(String nombre) throws ServicioException;
 }

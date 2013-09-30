@@ -40,6 +40,8 @@ import org.springframework.util.CollectionUtils;
 @ViewScoped
 public class ProgramaEstudiosControlador extends BaseController implements
 		Serializable {
+	
+	private static final String modulo = Constantes.MODULO_PROGRAMA_ESTUDIOS; 
 
 	@ManagedProperty("#{programaEstudiosFachadaImpl}")
 	private transient ProgramaEstudiosFachada fachada;
@@ -1170,6 +1172,11 @@ public class ProgramaEstudiosControlador extends BaseController implements
 	 */
 	public void setEditarDocNombre(String editarDocNombre) {
 		this.editarDocNombre = editarDocNombre;
+	}
+
+	@Override
+	String getModulo() {
+		return modulo;
 	}
 
 }

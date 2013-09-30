@@ -26,6 +26,7 @@ public class ClienteControlador extends BaseController implements Serializable {
 	 * Declara ID serializable
 	 */
 	private static final long serialVersionUID = 1L;
+	private static final String modulo=Constantes.MODULO_CLIENTE;
 	/*
 	 * Tiene que ser transient para no generar excepcion de no serializacion
 	 */
@@ -662,6 +663,11 @@ public class ClienteControlador extends BaseController implements Serializable {
 
 	public void setFilteredClientes(List<ClienteDTO> filteredClientes) {
 		this.filteredClientes = filteredClientes;
+	}
+
+	@Override
+	String getModulo() {
+		return modulo;
 	}
 
 }

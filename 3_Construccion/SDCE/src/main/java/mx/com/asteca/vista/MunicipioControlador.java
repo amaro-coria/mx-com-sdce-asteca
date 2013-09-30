@@ -32,6 +32,7 @@ public class MunicipioControlador extends BaseController implements Serializable
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private static final String modulo = Constantes.MODULO_MUNICIPIO;
 
 	@ManagedProperty("#{municipioFachadaImpl}")
 	private transient MunicipioFachada fachadaMunicipio;
@@ -795,5 +796,11 @@ public class MunicipioControlador extends BaseController implements Serializable
 	 */
 	public void setNuevoMunicipioActivo(boolean nuevoMunicipioActivo) {
 		this.nuevoMunicipioActivo = nuevoMunicipioActivo;
+	}
+
+
+	@Override
+	String getModulo() {
+		return modulo;
 	}
 }

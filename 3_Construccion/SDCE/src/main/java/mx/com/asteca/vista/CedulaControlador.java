@@ -30,6 +30,7 @@ public class CedulaControlador extends BaseController implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private static final String modulo=Constantes.MODULO_CEDULAS;
 
 	private void reporteAlumnos() {
 		try {
@@ -46,5 +47,10 @@ public class CedulaControlador extends BaseController implements Serializable {
 
 	public void setListaItems(List<AlumnoDTO> listaItems) {
 		this.listaItems = listaItems;
+	}
+
+	@Override
+	String getModulo() {
+		return modulo;
 	}
 }

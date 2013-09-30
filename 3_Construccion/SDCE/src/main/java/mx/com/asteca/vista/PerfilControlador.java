@@ -33,6 +33,7 @@ public class PerfilControlador extends BaseController implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private static final String modulo = Constantes.MODULO_PERFIL;
 	@ManagedProperty("#{rolesFachadaImpl}")
 	private RolesFachada rolesFachada;
 	@ManagedProperty("#{modulosFachadaImpl}")
@@ -466,5 +467,10 @@ public class PerfilControlador extends BaseController implements Serializable {
 
 	public void setListaRolesModulos(List<RolesModulosDTO> listaRolesModulos) {
 		this.listaRolesModulos = listaRolesModulos;
+	}
+
+	@Override
+	String getModulo() {
+		return modulo;
 	}
 }

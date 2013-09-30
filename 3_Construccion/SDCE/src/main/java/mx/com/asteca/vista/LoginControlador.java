@@ -21,6 +21,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 
 import mx.com.asteca.comun.Constantes;
 import mx.com.asteca.comun.dto.PersonaDTO;
+import mx.com.asteca.fachada.BaseFachada;
 import mx.com.asteca.fachada.FachadaException;
 import mx.com.asteca.fachada.PersonaFachada;
 
@@ -123,5 +124,11 @@ public class LoginControlador extends BaseController implements Serializable {
 	public void setAuthenticationDetailsSource(
 			AuthenticationDetailsSource authenticationDetailsSource) {
 		this.authenticationDetailsSource = authenticationDetailsSource;
+	}
+
+	@Override
+	String getModulo() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

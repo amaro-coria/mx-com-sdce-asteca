@@ -31,6 +31,7 @@ public class NotificacionControlador extends BaseController implements Serializa
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private static final String modulo = Constantes.MODULO_NOTIFICACION;
 
 	private static Logger LOGGER = LoggerFactory.getLogger(NotificacionControlador.class);
 	
@@ -300,5 +301,10 @@ public class NotificacionControlador extends BaseController implements Serializa
 	 */
 	public void setDialogVisible(boolean dialogVisible) {
 		this.dialogVisible = dialogVisible;
+	}
+
+	@Override
+	String getModulo() {
+		return modulo;
 	}
 }

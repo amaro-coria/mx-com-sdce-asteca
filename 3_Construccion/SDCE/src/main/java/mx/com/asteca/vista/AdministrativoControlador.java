@@ -20,7 +20,9 @@ import mx.com.asteca.comun.dto.AsentamientoDTO;
 import mx.com.asteca.comun.dto.EstadoDTO;
 import mx.com.asteca.comun.dto.MunicipioDTO;
 import mx.com.asteca.fachada.AdministrativoFachada;
+import mx.com.asteca.fachada.BaseFachada;
 import mx.com.asteca.fachada.FachadaException;
+import mx.com.asteca.fachada.ModulosFachada;
 
 import org.primefaces.event.SelectEvent;
 import org.springframework.util.CollectionUtils;
@@ -38,6 +40,8 @@ public class AdministrativoControlador extends BaseController implements
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private static final String modulo = Constantes.MODULO_ADMIN;
+
 
 	@ManagedProperty("#{administrativoFachadaImpl}")
 	private transient AdministrativoFachada fachada;
@@ -1058,5 +1062,10 @@ public class AdministrativoControlador extends BaseController implements
 	public void setEditarAdminSelectListColonias(
 			List<SelectItem> editarAdminSelectListColonias) {
 		this.editarAdminSelectListColonias = editarAdminSelectListColonias;
+	}
+
+	@Override
+	String getModulo() {
+		return modulo;
 	}
 }
