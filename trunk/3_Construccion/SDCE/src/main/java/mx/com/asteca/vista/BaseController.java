@@ -1,20 +1,75 @@
 package mx.com.asteca.vista;
 
 import java.text.MessageFormat;
+import java.util.HashMap;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.application.FacesMessage.Severity;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 
-public class BaseController {
-	
-	private short alta;
-	private short cambios;
-	private short borrar;
-	private short consulta;
-	private short impresion; 
+import mx.com.asteca.comun.dto.ModulosDTO;
+import mx.com.asteca.fachada.BaseFachada;
+import mx.com.asteca.fachada.FachadaException;
+import mx.com.asteca.fachada.ModulosFachada;
+
+import org.springframework.web.context.request.SessionScope;
+
+public abstract class BaseController {
+
+	@ManagedProperty("#{modulosFachadaImpl}")
+	private ModulosFachada modulosFachada;
+	private boolean alta;
+	private boolean cambios;
+	private boolean borrar;
+	private boolean consulta;
+	private boolean impresion;
+
+	abstract String getModulo();
+
+	public boolean isAlta() {
+		return alta;
+	}
+
+	public void setAlta(boolean alta) {
+		setSessionPermissions();
+		this.alta = alta;
+	}
+
+	public boolean isCambios() {
+		return cambios;
+	}
+
+	public void setCambios(boolean cambios) {
+		this.cambios = cambios;
+	}
+
+	public boolean isBorrar() {
+		return borrar;
+	}
+
+	public void setBorrar(boolean borrar) {
+		this.borrar = borrar;
+	}
+
+	public boolean isConsulta() {
+		return consulta;
+	}
+
+	public void setConsulta(boolean consulta) {
+		this.consulta = consulta;
+	}
+
+	public boolean isImpresion() {
+		return impresion;
+	}
+
+	public void setImpresion(boolean impresion) {
+		this.impresion = impresion;
+	}
 
 	/**
 	 * Devuelve el contexto Faces
@@ -34,7 +89,7 @@ public class BaseController {
 	protected void addInfoMessage(String messageID, Object[] params) {
 		addMessage(FacesMessage.SEVERITY_INFO, messageID, params);
 	}
-	
+
 	/**
 	 * Set an info message in the Faces Context
 	 * 
@@ -44,12 +99,10 @@ public class BaseController {
 	protected void addInfoMessage(String messageID) {
 		addMessage(FacesMessage.SEVERITY_INFO, messageID);
 	}
-	
+
 	protected void addInfoMessage(String summary, String detail) {
 		addMessage(FacesMessage.SEVERITY_INFO, summary, detail);
 	}
-
-	
 
 	/**
 	 * Set an info message in the Faces Context with parameters
@@ -72,14 +125,11 @@ public class BaseController {
 	protected void addWarningMessage(String messageID) {
 		addMessage(FacesMessage.SEVERITY_WARN, messageID);
 	}
-	
+
 	protected void addWarningMessage(String summary, String detail) {
 		addMessage(FacesMessage.SEVERITY_WARN, summary, detail);
 	}
 
-	
-	
-	
 	/**
 	 * Set an error message with parameters in the Faces Context
 	 * 
@@ -93,7 +143,7 @@ public class BaseController {
 	protected void addErrorMessage(String summary, String detail) {
 		addMessage(FacesMessage.SEVERITY_ERROR, summary, detail);
 	}
-	
+
 	/**
 	 * Set an error message without parameters in the Faces Context
 	 * 
@@ -110,14 +160,14 @@ public class BaseController {
 		message.setDetail(detail);
 		getFacesContext().addMessage(null, message);
 	}
-	
+
 	private void addMessage(Severity severidad, String messageID) {
 		FacesMessage message = new FacesMessage();
 		message.setSeverity(severidad);
 		message.setSummary(messageID);
 		getFacesContext().addMessage(null, message);
 	}
-	
+
 	/**
 	 * Add message in Faces Context
 	 * 
@@ -188,44 +238,25 @@ public class BaseController {
 		return loader;
 	}
 
-	public boolean isAlta() {
-		return alta==0?false:true;
-	}
+	private void setSessionPermissions() {
+		try {
+			ModulosDTO idModulo = modulosFachada.buscarPorNombre(getModulo());
+			HttpServletRequest request = (HttpServletRequest) this
+					.getFacesContext().getExternalContext().getRequest();
+			HashMap<Integer, ModulosDTO> permisos = (HashMap<Integer, ModulosDTO>) request
+					.getAttribute("permisos");
 
-	public boolean isCambios() {
-		return cambios==0?false:true;
-	}
+			ModulosDTO permiso = permisos.get(idModulo.getIdModulo());
 
-	public boolean isBorrar() {
-		return borrar==0?false:true;
-	}
+			setAlta(permiso.isAlta());
+			setBorrar(permiso.isBorrar());
+			setCambios(permiso.isEditar());
+			setConsulta(permiso.isConsulta());
+			setImpresion(permiso.isImprimir());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-	public boolean isConsulta() {
-		return consulta==0?false:true;
-	}
-
-	public boolean isImpresion() {
-		return impresion==0?false:true;
-	}
-
-	public void setAlta(short alta) {
-		this.alta = alta;
-	}
-
-	public void setCambios(short cambios) {
-		this.cambios = cambios;
-	}
-
-	public void setBorrar(short borrar) {
-		this.borrar = borrar;
-	}
-
-	public void setConsulta(short consulta) {
-		this.consulta = consulta;
-	}
-
-	public void setImpresion(short impresion) {
-		this.impresion = impresion;
 	}
 
 }

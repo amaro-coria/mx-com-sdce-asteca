@@ -25,6 +25,8 @@ import mx.com.asteca.fachada.InstitutoFachada;
 public class InstitutoControlador extends BaseController implements
 		Serializable {
 	
+	private static final String modulo = Constantes.MODULO_INSTITUTO;
+	
 	@ManagedProperty("#{institutoFachadaImpl}")
 	private transient InstitutoFachada fachada;
 	
@@ -112,6 +114,11 @@ public class InstitutoControlador extends BaseController implements
 	 */
 	public void setFachada(InstitutoFachada fachada) {
 		this.fachada = fachada;
+	}
+
+	@Override
+	String getModulo() {
+		return modulo;
 	}
 
 	

@@ -92,4 +92,24 @@ public class Constantes {
 	public static final String BEAN_REPORTE_CURSOS="beanReporteCursos";
 	public static final String BEAN_REPORTE_MENSUAL="beanReporteMensual";
 	public static final String BEAN_REPORTE_INSTRUCTOR="beanReporteInstructor";
+	public static final String MODULO_ADMIN = "Administrativos";
+	public static final String MODULO_ALUMNO = "Alumnos";
+	public static final String MODULO_AULA = "Aulas";
+	public static final String MODULO_CAT_GRAL = "Catalogo General";
+	public static final String MODULO_CEDULAS = "Cedulas";
+	public static final String MODULO_CLIENTE = "Clientes";
+	public static final String MODULO_CURSO = "Cursos";
+	public static final String MODULO_EQUIPO = "Equipos";
+	public static final String MODULO_ESTADO = "Estados";
+	public static final String MODULO_INSTITUTO = "Instituto";
+	public static final String MODULO_MUNICIPIO = "Municipios";
+	public static final String MODULO_NOTIFICACION = "Notificaciones";
+	public static final String MODULO_PERFIL = "Perfiles";
+	public static final String MODULO_PERMISOS = "Permisos";
+	public static final String MODULO_PROGRAMA_ESTUDIOS = "Programa de Estudios";
+	public static final String MODULO_REPORTE_ALUMNO = "Reporte de Alumnos";
+	public static final String MODULO_REPORTE_AULA = "Reporte de Aulas";
+	public static final String MODULO_REPORTE_CURSOS = "Reporte de Cursos";
+	public static final String MODULO_REPORTE_INSTRUCTOR = "Reporte de Instructores";
+	public static final String MODULO_REPORTE_MENSUAL = "Reporte Mensual";
 }

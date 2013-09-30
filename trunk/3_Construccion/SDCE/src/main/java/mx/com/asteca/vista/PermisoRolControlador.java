@@ -42,6 +42,7 @@ public class PermisoRolControlador extends BaseController implements
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private static final String modulo = Constantes.MODULO_PERMISOS;
 	@ManagedProperty("#{rolesFachadaImpl}")
 	private RolesFachada rolesFachada;
 	@ManagedProperty("#{modulosFachadaImpl}")
@@ -56,6 +57,10 @@ public class PermisoRolControlador extends BaseController implements
 	private RolesModUsuariosFachada rolesModUsuariosFachada;
 	@ManagedProperty("#{rolesModPermisosSobreFachadaImpl}")
 	private RolesModPermisosSobreFachada rolesModPermisosSobreFachada;
+	@Override
+	String getModulo() {
+		return modulo;
+	}
 	@ManagedProperty("#{personaFachadaImpl}")
 	private PersonaFachada personaFachada;
 

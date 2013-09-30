@@ -17,7 +17,9 @@ import mx.com.asteca.comun.Constantes;
 import mx.com.asteca.comun.dto.AulaDTO;
 import mx.com.asteca.comun.dto.CatGralDTO;
 import mx.com.asteca.fachada.AulaFachada;
+import mx.com.asteca.fachada.BaseFachada;
 import mx.com.asteca.fachada.FachadaException;
+import mx.com.asteca.fachada.ModulosFachada;
 
 import org.apache.commons.collections.CollectionUtils;
 
@@ -36,6 +38,7 @@ public class AulaControlador extends BaseController implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private static final String modulo = Constantes.MODULO_AULA;
 	@ManagedProperty("#{aulaFachadaImpl}")
 	private transient AulaFachada fachada;
 	private AulaDTO itemSelected;
@@ -498,6 +501,10 @@ public class AulaControlador extends BaseController implements Serializable{
 	public void setCapacidadNuevo(String capacidadNuevo) {
 		this.capacidadNuevo = capacidadNuevo;
 	}
-	
+
+	@Override
+	String getModulo() {
+		return modulo;
+	}	
 	
 }

@@ -22,9 +22,15 @@ import mx.com.asteca.fachada.MateriaFachada;
 @ViewScoped
 public class CursoControlador extends BaseController implements Serializable{
 
+	private static final String modulo = Constantes.MODULO_CURSO;
 	@ManagedProperty("#{materiaFachadaImpl}")
 	private transient MateriaFachada fachadaMateria;
 	
 	private List<MateriaDTO> listMaterias;
+
+	@Override
+	String getModulo() {
+		return modulo;
+	}
 	
 }

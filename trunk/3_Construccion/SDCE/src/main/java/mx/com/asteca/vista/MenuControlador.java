@@ -2,6 +2,9 @@ package mx.com.asteca.vista;
 
 import java.io.Serializable;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -26,8 +29,11 @@ import org.springframework.util.CollectionUtils;
 @ApplicationScoped
 public class MenuControlador extends BaseController implements Serializable{
 
+	private static final String modulo = "menu";
 	@ManagedProperty("#{modulosFachadaImpl}")
 	private transient ModulosFachada fachadaModulos;
+	
+	private List<ModulosDTO> listaModulos;
 
 	private String navegacion = "";
 	private Submenu submenu = new Submenu();
@@ -86,9 +92,27 @@ public class MenuControlador extends BaseController implements Serializable{
 	}
 
 	private List<ModulosDTO> getMenuItems() throws Exception {
-		return fachadaModulos.getAll();
+		listaModulos = new ArrayList<ModulosDTO>();
+		HashMap<Integer, ModulosDTO> permisos =	getMenuItemsSession();
+		
+		Iterator<Integer> it = permisos.keySet().iterator();
+		Integer index = null;
+		while(it.hasNext()) {
+			index = it.next();
+			listaModulos.add(permisos.get(index));
+		}
+		
+		return listaModulos;
 	}
-
+	
+	private HashMap<Integer, ModulosDTO> getMenuItemsSession() {
+	HttpServletRequest request = (HttpServletRequest) this
+			.getFacesContext().getExternalContext().getRequest();
+	HashMap<Integer, ModulosDTO> permisos = (HashMap<Integer, ModulosDTO>) request
+			.getAttribute("permisos");
+	
+	return permisos;
+	}
 	private String getItemId(String modulo) {
 		modulo = modulo.toLowerCase();
 		modulo = modulo.replace(" ", "_");
@@ -141,6 +165,11 @@ public class MenuControlador extends BaseController implements Serializable{
 
 	public void setFachadaModulos(ModulosFachada fachadaModulos) {
 		this.fachadaModulos = fachadaModulos;
+	}
+
+	@Override
+	String getModulo() {
+		return modulo;
 	}
 
 }

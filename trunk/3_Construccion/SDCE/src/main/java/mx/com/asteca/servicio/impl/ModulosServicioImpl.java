@@ -11,6 +11,7 @@ import mx.com.asteca.persistencia.dao.BaseDAO;
 import mx.com.asteca.persistencia.dao.ModulosDAO;
 import mx.com.asteca.persistencia.entidades.Modulos;
 import mx.com.asteca.servicio.ModulosServicio;
+import mx.com.asteca.servicio.ServicioException;
 import mx.com.asteca.servicio.assembler.Assembler;
 
 @Service
@@ -32,6 +33,12 @@ public class ModulosServicioImpl extends
 	@Override
 	Assembler getAssembler() {
 		return assemblerModulos;
+	}
+
+	@Override
+	public ModulosDTO buscarPorNombre(String nombre) throws ServicioException {
+		return (ModulosDTO) assemblerModulos.getDTOTransform(
+				modulosDAO.findByNombre(nombre));
 	}
 
 }

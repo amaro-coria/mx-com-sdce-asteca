@@ -33,6 +33,7 @@ public class EstadoControlador extends BaseController implements Serializable {
 	 * Declara ID serializable
 	 */
 	private static final long serialVersionUID = 1L;
+	private static final String modulo = Constantes.MODULO_ESTADO;
 	/*
 	 * Tiene que ser transient para no generar excepcion de no serializacion
 	 * */
@@ -517,6 +518,12 @@ public class EstadoControlador extends BaseController implements Serializable {
 
 	public void setFilteredEstados(List<EstadoDTO> filteredEstados) {
 		this.filteredEstados = filteredEstados;
+	}
+
+
+	@Override
+	String getModulo() {
+		return modulo;
 	}
 
 }
