@@ -22,6 +22,11 @@ public class RolesModPermisosUsrFachadaImpl extends
 	BaseService getBaseService() {
 		return servicio;
 	}
+	@Override
+	public List<RolesModPermisosUsrDTO> buscarPorRolModUsuario(
+			int idRolModUsuarios) {
+		return servicio.buscarPorRolModUsuario(idRolModUsuarios);
+	}
 	
 	
 

@@ -1,5 +1,7 @@
 package mx.com.asteca.servicio.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -19,19 +21,26 @@ public class RolesModPermisosUsrServicioImpl extends
 		implements RolesModPermisosUsrServicio{
 
 	@Autowired
-	private RolesModPermisosUsrDAO rolesModPErmisosUsrDAO;
+	private RolesModPermisosUsrDAO rolesModPermisosUsrDAO;
 	@Autowired
 	@Qualifier(Constantes.ASSEMBLER_ROLES_MOD_PERMISOS_USR)
 	private Assembler assemblerRolesModPermisosUsr;
 	
 	@Override
 	BaseDAO getDAO() {
-		return rolesModPErmisosUsrDAO;
+		return rolesModPermisosUsrDAO;
 	}
 
 	@Override
 	Assembler getAssembler() {
 		return assemblerRolesModPermisosUsr;
+	}
+
+	@Override
+	public List<RolesModPermisosUsrDTO> buscarPorRolModUsuario(
+			int idRolModUsuario) {
+		return assemblerRolesModPermisosUsr.getDTOListTransform(
+				rolesModPermisosUsrDAO.findByRolModUsr(idRolModUsuario));
 	}
 
 }

@@ -20,6 +20,7 @@ import mx.com.asteca.fachada.ModulosFachada;
 
 import org.primefaces.component.menuitem.MenuItem;
 import org.primefaces.component.submenu.Submenu;
+import org.springframework.util.CollectionUtils;
 
 @ManagedBean(name = Constantes.BEAN_MENU)
 @ApplicationScoped
@@ -31,15 +32,13 @@ public class MenuControlador extends BaseController implements Serializable{
 	private String navegacion = "";
 	private Submenu submenu = new Submenu();
 
-	@PostConstruct
-	public void init() {
+
+	public void initMenu() {
 		try {
 			buildMenu(getMenuItems());
-			navegacion = "";
 		} catch (Exception e) {
 			super.addErrorMessage("Ocurrio un error: " + e.getMessage());
 		}
-		navegacion = "";
 	}
 
 	public String getNavegacion() {
@@ -51,6 +50,7 @@ public class MenuControlador extends BaseController implements Serializable{
 	}
 
 	public Submenu getSubmenu() {
+		initMenu();
 		return submenu;
 	}
 
@@ -60,7 +60,9 @@ public class MenuControlador extends BaseController implements Serializable{
 
 	private void buildMenu(List<ModulosDTO> items) {
 		MenuItem item = null;
-
+		if(!CollectionUtils.isEmpty(submenu.getChildren())) {
+			submenu.getChildren().clear();
+		}
 		for (ModulosDTO it : items) {
 			item = new MenuItem();
 			final String url = it.getDsc();

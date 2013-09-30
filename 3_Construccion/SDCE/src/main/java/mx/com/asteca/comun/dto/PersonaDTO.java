@@ -25,6 +25,9 @@ public class PersonaDTO implements Serializable{
      private String fechaNacStr;
      private String usuario;
      private String password;
+     private String rol;
+     private short estatus;
+     private short activo;
 	/**
 	 * @return the idPersona
 	 */
@@ -227,6 +230,24 @@ public class PersonaDTO implements Serializable{
 	 */
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	public String getRol() {
+		return rol;
+	}
+	public void setRol(String rol) {
+		this.rol = rol;
+	}
+	public short getEstatus() {
+		return estatus;
+	}
+	public void setEstatus(short estatus) {
+		this.estatus = estatus;
+	}
+	public short getActivo() {
+		return activo;
+	}
+	public void setActivo(short activo) {
+		this.activo = activo;
 	}
 	
 	

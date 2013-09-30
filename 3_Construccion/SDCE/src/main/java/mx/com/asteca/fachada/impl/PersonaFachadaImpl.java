@@ -32,7 +32,7 @@ public class PersonaFachadaImpl extends BaseFachadaImpl<PersonaDTO, Integer>
 	@Override
 	BaseService getBaseService() {
 		// TODO Auto-generated method stub
-		return null;
+		return personaServicio;
 	}
 
 	
