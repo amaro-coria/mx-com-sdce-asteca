@@ -23,6 +23,7 @@ import mx.com.asteca.comun.dto.RolesModPermisosSobreDTO;
 import mx.com.asteca.comun.dto.RolesModPermisosUsrDTO;
 import mx.com.asteca.comun.dto.RolesModUsuariosDTO;
 import mx.com.asteca.comun.dto.RolesModulosDTO;
+import mx.com.asteca.fachada.BaseFachada;
 import mx.com.asteca.fachada.FachadaException;
 import mx.com.asteca.fachada.ModulosFachada;
 import mx.com.asteca.fachada.PermisosFachada;
@@ -57,10 +58,6 @@ public class PermisoRolControlador extends BaseController implements
 	private RolesModUsuariosFachada rolesModUsuariosFachada;
 	@ManagedProperty("#{rolesModPermisosSobreFachadaImpl}")
 	private RolesModPermisosSobreFachada rolesModPermisosSobreFachada;
-	@Override
-	String getModulo() {
-		return modulo;
-	}
 	@ManagedProperty("#{personaFachadaImpl}")
 	private PersonaFachada personaFachada;
 
@@ -877,6 +874,11 @@ public class PermisoRolControlador extends BaseController implements
 
 	public void setListaPermisos(List<PermisosDTO> listaPermisos) {
 		this.listaPermisos = listaPermisos;
+	}
+
+	@Override
+	String getModulo() {
+		return modulo;
 	}
 
 }

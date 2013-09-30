@@ -259,4 +259,12 @@ public abstract class BaseController {
 
 	}
 
+	public ModulosFachada getModulosFachada() {
+		return modulosFachada;
+	}
+
+	public void setModulosFachada(ModulosFachada modulosFachada) {
+		this.modulosFachada = modulosFachada;
+	}
+
 }

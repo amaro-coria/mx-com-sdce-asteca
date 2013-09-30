@@ -27,17 +27,16 @@ import org.springframework.util.CollectionUtils;
 
 @ManagedBean(name = Constantes.BEAN_MENU)
 @ApplicationScoped
-public class MenuControlador extends BaseController implements Serializable{
+public class MenuControlador extends BaseController implements Serializable {
 
 	private static final String modulo = "menu";
 	@ManagedProperty("#{modulosFachadaImpl}")
 	private transient ModulosFachada fachadaModulos;
-	
+
 	private List<ModulosDTO> listaModulos;
 
 	private String navegacion = "";
 	private Submenu submenu = new Submenu();
-
 
 	public void initMenu() {
 		try {
@@ -66,7 +65,7 @@ public class MenuControlador extends BaseController implements Serializable{
 
 	private void buildMenu(List<ModulosDTO> items) {
 		MenuItem item = null;
-		if(!CollectionUtils.isEmpty(submenu.getChildren())) {
+		if (!CollectionUtils.isEmpty(submenu.getChildren())) {
 			submenu.getChildren().clear();
 		}
 		for (ModulosDTO it : items) {
@@ -93,26 +92,27 @@ public class MenuControlador extends BaseController implements Serializable{
 
 	private List<ModulosDTO> getMenuItems() throws Exception {
 		listaModulos = new ArrayList<ModulosDTO>();
-		HashMap<Integer, ModulosDTO> permisos =	getMenuItemsSession();
-		
+		HashMap<Integer, ModulosDTO> permisos = getMenuItemsSession();
+
 		Iterator<Integer> it = permisos.keySet().iterator();
 		Integer index = null;
-		while(it.hasNext()) {
+		while (it.hasNext()) {
 			index = it.next();
 			listaModulos.add(permisos.get(index));
 		}
-		
+
 		return listaModulos;
 	}
-	
+
 	private HashMap<Integer, ModulosDTO> getMenuItemsSession() {
-	HttpServletRequest request = (HttpServletRequest) this
-			.getFacesContext().getExternalContext().getRequest();
-	HashMap<Integer, ModulosDTO> permisos = (HashMap<Integer, ModulosDTO>) request
-			.getAttribute("permisos");
-	
-	return permisos;
+		HttpServletRequest request = (HttpServletRequest) this
+				.getFacesContext().getExternalContext().getRequest();
+		HashMap<Integer, ModulosDTO> permisos = (HashMap<Integer, ModulosDTO>) request
+				.getAttribute("permisos");
+
+		return permisos;
 	}
+
 	private String getItemId(String modulo) {
 		modulo = modulo.toLowerCase();
 		modulo = modulo.replace(" ", "_");
