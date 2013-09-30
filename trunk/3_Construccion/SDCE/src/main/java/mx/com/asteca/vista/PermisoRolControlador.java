@@ -259,6 +259,8 @@ public class PermisoRolControlador extends BaseController implements
 					&& personaFachada.getUser(selectedUsuario) == null) {
 				userSelected.setUsuario(selectedUsuario);
 				if (userSelected.getPassword().equals(confirmarPassword)) {
+					userSelected.setPassword(confirmarPassword);
+					
 					personaFachada.update(userSelected);
 
 					rolesModUsuarios.setIdPersona(userSelected.getIdPersona());
@@ -419,7 +421,10 @@ public class PermisoRolControlador extends BaseController implements
 			listaRolesModPermisosSobre = rolesModPermisosSobreFachada
 					.buscarPorRolModPermisosUsr(rolesModPermisosUsr
 							.getIdRolModPerUsr());
+			rolesModPermisosUsrFachada.remove(rolesModPermisosUsr);
 			for (RolesModPermisosSobreDTO rolesModPermisosSobre : listaRolesModPermisosSobre) {
+				/**Borrar Permisos Sobre **/
+				rolesModPermisosSobreFachada.remove(rolesModPermisosSobre);
 				listaPermisos.add(permisosFachada
 						.findByPK(rolesModPermisosSobre.getIdPermisos()));
 				for (RolesModulosDTO rolesModulos : listaRolesModulos) {
@@ -436,9 +441,7 @@ public class PermisoRolControlador extends BaseController implements
 					}
 					
 				}
-				rolesModPermisosSobreFachada.remove(rolesModPermisosSobre);
 			}
-			rolesModPermisosUsrFachada.remove(rolesModPermisosUsr);
 		}
 		rolesModUsuariosFachada.remove(rolesModUsuarios);
 		userSelected.setUsuario("");
