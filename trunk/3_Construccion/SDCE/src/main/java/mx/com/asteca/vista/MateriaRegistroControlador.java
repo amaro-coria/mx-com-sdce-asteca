@@ -133,12 +133,16 @@ public class MateriaRegistroControlador extends BaseController implements Serial
 	
 	public void save(ActionEvent e){
 		try{
-			itemNuevo.setNombre(nuevoNombre);
-			int pk = fachada.save(itemNuevo);
-			itemNuevo.setIdMateria(pk);
-			listItems.add(itemNuevo);
-			listSelect1 = null;
-			initListSelect1();
+			if (nuevoNombre != null && !nuevoNombre.isEmpty()) {
+				itemNuevo.setNombre(nuevoNombre);
+				int pk = fachada.save(itemNuevo);
+				itemNuevo.setIdMateria(pk);
+				listItems.add(itemNuevo);
+				listSelect1 = null;
+				initListSelect1();
+			} else {
+				super.addWarningMessage(Constantes.WARNING_NECESITAS_LLENAR_CAMPOS_REQUERIDOS);
+			}
 		}catch(FachadaException ex){
 			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR, Constantes.ERROR_NUEVO_REGISTRO);
 		}
