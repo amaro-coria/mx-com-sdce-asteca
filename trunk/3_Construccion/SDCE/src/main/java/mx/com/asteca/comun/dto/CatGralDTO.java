@@ -18,6 +18,7 @@ public class CatGralDTO implements Serializable {
 	private Short activo;
 	private int idCatGral;
 	private int idTipoCatGral;
+	private String tipo;
 	
 	
 	public String getCveRegistro() {
@@ -91,6 +92,18 @@ public class CatGralDTO implements Serializable {
 				+ ", estatus=" + estatus + ", activo=" + activo
 				+ ", idCatGral=" + idCatGral + ", idTipoCatGral="
 				+ idTipoCatGral + "]";
+	}
+	/**
+	 * @return the tipo
+	 */
+	public String getTipo() {
+		return tipo;
+	}
+	/**
+	 * @param tipo the tipo to set
+	 */
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
 	}
 	
 	

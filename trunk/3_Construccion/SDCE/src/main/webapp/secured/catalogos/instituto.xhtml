@@ -29,54 +29,50 @@
 					<p:tab title="#{msg.domicilio }">
 							<h:panelGrid columns="2">
 								<h:outputText value="#{msg.calle }"/>
-								<h:outputText value="#{beanInstituto.item.dtoDomicilio.calle }"/>
+								<h:outputText value="#{beanInstituto.item.dtoDomicilio.calle }" style="font-weight:bold"/>
 								<h:outputText value="#{msg.noExterior }"/>
-								<h:outputText value="#{beanInstituto.item.dtoDomicilio.noExterior }"/>
+								<h:outputText value="#{beanInstituto.item.dtoDomicilio.noExterior }" style="font-weight:bold"/>
 								<h:outputText value="#{msg.noInterior }"/>
-								<h:outputText value="#{beanInstituto.item.dtoDomicilio.noInterior }"/>
+								<h:outputText value="#{beanInstituto.item.dtoDomicilio.noInterior }" style="font-weight:bold"/>
 								<h:outputText value="#{msg.colonia }"/>
-								<h:outputText value="#{beanInstituto.item.dtoDomicilio.asentamiento }"/>
+								<h:outputText value="#{beanInstituto.item.dtoDomicilio.asentamiento }" style="font-weight:bold"/>
 								<h:outputText value="#{msg.codigoPostal }"/>
-								<h:outputText value="#{beanInstituto.item.dtoDomicilio.cp }"/>
+								<h:outputText value="#{beanInstituto.item.dtoDomicilio.cp }" style="font-weight:bold"/>
 								<h:outputText value="#{msg.estado }"/>
-								<h:outputText value="#{beanInstituto.item.dtoDomicilio.estado }"/>
+								<h:outputText value="#{beanInstituto.item.dtoDomicilio.estado }" style="font-weight:bold"/>
 								<h:outputText value="#{msg.delegacion }"/>
-								<h:outputText value="#{beanInstituto.item.dtoDomicilio.municipio }"/>
+								<h:outputText value="#{beanInstituto.item.dtoDomicilio.municipio }" style="font-weight:bold"/>
 								<h:outputText value="#{msg.telefono }"/>
-								<h:outputText value="#{beanInstituto.item.dtoDomicilio.telefono }"/>
+								<h:outputText value="#{beanInstituto.item.dtoDomicilio.telefono }" style="font-weight:bold"/>
 								<h:outputText value="#{msg.fax }"/>
-								<h:outputText value="#{beanInstituto.item.fax }"/>
+								<h:outputText value="#{beanInstituto.item.fax }" style="font-weight:bold"/>
 							</h:panelGrid>
 						</p:tab>	
 					<p:tab title="#{msg.contactos }">
 						<h:outputText value="#{msg.director }" />
 						<h:panelGrid columns="2">
 							<h:outputText value="#{msg.nombre }"/>
-							<h:outputText value="#{beanInstituto.director.dtoPersona.nombre }"/>
+							<h:outputText value="#{beanInstituto.director.dtoPersona.nombre }" style="font-weight:bold"/>
 							<h:outputText value="#{msg.apellidoP }"/>
-							<h:outputText value="#{beanInstituto.director.dtoPersona.apellidoP }"/>
+							<h:outputText value="#{beanInstituto.director.dtoPersona.apellidoP }" style="font-weight:bold"/>
 							<h:outputText value="#{msg.apellidoM }"/>
-							<h:outputText value="#{beanInstituto.director.dtoPersona.apellidoM }"/>
+							<h:outputText value="#{beanInstituto.director.dtoPersona.apellidoM }" style="font-weight:bold"/>
 							<h:outputText value="#{msg.puesto }"/>
-							<h:outputText value="#{beanInstituto.director.puesto }"/>
+							<h:outputText value="#{beanInstituto.director.puesto }" style="font-weight:bold"/>
 						</h:panelGrid> 
 						<h:outputText value="#{msg.representante }" />
 						<h:panelGrid columns="2">
 							<h:outputText value="#{msg.nombre }"/>
-							<h:outputText value="#{beanInstituto.representante.dtoPersona.nombre }"/>
+							<h:outputText value="#{beanInstituto.representante.dtoPersona.nombre }" style="font-weight:bold"/>
 							<h:outputText value="#{msg.apellidoP }"/>
-							<h:outputText value="#{beanInstituto.representante.dtoPersona.apellidoP }"/>
+							<h:outputText value="#{beanInstituto.representante.dtoPersona.apellidoP }" style="font-weight:bold"/>
 							<h:outputText value="#{msg.apellidoM }"/>
-							<h:outputText value="#{beanInstituto.representante.dtoPersona.apellidoM }"/>
+							<h:outputText value="#{beanInstituto.representante.dtoPersona.apellidoM }" style="font-weight:bold"/>
 							<h:outputText value="#{msg.puesto }"/>
-							<h:outputText value="#{beanInstituto.representante.puesto }"/>
+							<h:outputText value="#{beanInstituto.representante.puesto }" style="font-weight:bold"/>
 						</h:panelGrid> 
 					</p:tab>
 				</p:tabView>
-				<p:commandButton id="aceptarVerBtn" value="#{msg.aceptar }"
-					icon="ui-icon-check" onclick="verDialog.hide()" />
-					<p:commandButton id="cancelarVerBtn" value="#{msg.cancelar }"
-					icon="ui-icon-circle-close" onclick="verDialog.hide()" />
 			<!-- Fin de panel de Ver -->
 		</h:form>
 

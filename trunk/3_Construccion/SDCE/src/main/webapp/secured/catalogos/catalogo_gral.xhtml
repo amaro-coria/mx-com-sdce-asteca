@@ -88,7 +88,7 @@
 				</p:dataTable>
 			</p:panel>
 			<!-- Panel de Ver -->
-			<p:dialog id="dialog" header="#{msg.ver}" widgetVar="verDialog"
+			<p:dialog id="dialog" header="#{msg.ver}" widgetVar="verDialog" position="top"
 				modal="true">
 				<h:panelGrid id="displayVer" columns="2" cellpadding="4">
 					<h:panelGroup id="messagePanelVer" layout="block">
@@ -97,32 +97,36 @@
 					</h:panelGroup>
 					<h:outputText />
 					<h:outputText value="#{msg.clave}" />
-					<h:outputText value="#{beanCatGral.catalogoSelected.cveRegistro}"
-						style="font-weight:bold" />
+					<p:inputText readonly="true" value="#{beanCatGral.catalogoSelected.cveRegistro}"
+						style="font-weight:bold; height:100%" />
 					<h:outputText value="#{msg.descripcion}" />
-					<h:outputText value="#{beanCatGral.catalogoSelected.dsc}"
-						style="font-weight:bold" />
+					<p:inputText readonly="true" value="#{beanCatGral.catalogoSelected.dsc}"
+						style="font-weight:bold; height:100%" />
 					<h:outputText value="#{msg.activo}" />
-					<h:outputText
+					<p:inputText readonly="true"
 						value="#{beanCatGral.catalogoSelected.activo == 1 ? 'Si' : 'No' }"
-						style="font-weight:bold" />
+						style="font-weight:bold; height:100%" />
 				</h:panelGrid>
 				<p:commandButton id="aceptarVerBtn" value="#{msg.aceptar }"
 					icon="ui-icon-check" onclick="verDialog.hide()" />
 			</p:dialog>
 			<!-- Fin de panel de Ver -->
 			<!--  Inicio panel de Nuevo -->
-			<p:dialog id="dialogNuevo" header="#{msg.frsNuevoRegistro}"
+			<p:dialog id="dialogNuevo" header="#{msg.frsNuevoRegistro}" position="top"
 				widgetVar="nuevoDialog" closable="true" modal="true"
-				draggable="false" width="400">
+				draggable="true" width="400">
 				<h:panelGrid columns="2" width="100%" id="displayNuevo">
 					<h:outputText value="#{msg.clave}" />
 					<p:inputText value="#{beanCatGral.catalogoNuevo.cveRegistro}"
-						style="width: 260px; " />
+						style="font-weight:bold; height:100%; width:260px" />
 					<h:outputText value="#{msg.descripcion}" />
 					<p:inputText id="nombrePopupNuevo"
-						value="#{beanCatGral.catalogoNuevo.dsc}" style="min-width: 260px" />
-					<h:outputText value="#{msg.pais }" />
+						value="#{beanCatGral.catalogoNuevo.dsc}" style="font-weight:bold; height:100%; width:260px" />
+						<h:outputText value="#{msg.tipo}"/>
+						<p:selectOneMenu value="#{beanCatGral.idTipoCatGralNuevo}" style="width:100%">
+							<f:selectItem itemLabel="#{msg.seleccionarTipo}" itemValue="0"/>
+							<f:selectItems value="#{beanCatGral.listSelectTipoCat}"/>
+						</p:selectOneMenu>
 					<h:outputText id="activoPopupNuevoLabel" value="#{msg.activo}" />
 					<h:selectBooleanCheckbox id="activoPopupNuevo"
 						value="#{beanCatGral.nuevoCatalogoActivo}">
@@ -130,35 +134,40 @@
 				</h:panelGrid>
 				<h:panelGrid style="float: right;" columns="2">
 					<p:commandButton value="#{msg.aceptar }" icon="ui-icon-check"
-						oncomplete="nuevoDialog.hide()"
+						oncomplete="if(!args.validationFailed) nuevoDialog.hide()"
 						actionListener="#{beanCatGral.saveCat }"
 						update=":form:catGralTable, growl" />
 					<p:commandButton value="#{msg.cancelar }" icon="ui-icon-closethick"
-						oncomplete="nuevoDialog.hide()"
+						onclick="nuevoDialog.hide()"
 						actionListener="#{beanCatGral.saveCatCancel }" />
 				</h:panelGrid>
 			</p:dialog>
 			<!-- Fin de panel de nuevo -->
 			<!-- Inicio de panel de edicion -->
 			<p:dialog id="dialogEditar" header="#{msg.frsNuevoRegistro}"
-				widgetVar="editarDialog" closable="true" modal="true"
-				draggable="false" width="400">
+				widgetVar="editarDialog" closable="true" modal="true" position="top"
+				draggable="true" width="400">
 				<h:panelGrid columns="2" width="100%" id="displayEditar">
 					<h:outputText value="#{msg.clave}" />
 					<h:panelGroup>
 						<p:inputText id="selectedCve"
 							value="#{beanCatGral.selectedClaveCatGral}"
-							style="width: 260px; " />
+							style="font-weight:bold; height:100%; width:260px" />
 						<p:watermark for="selectedCve"
 							value="#{beanCatGral.catalogoSelected.cveRegistro }" />
 					</h:panelGroup>
 					<h:outputText value="#{msg.descripcion}" />
 					<h:panelGroup>
-						<p:inputText id="inputEstadoSelected" style="width: 260px; "
+						<p:inputText id="inputEstadoSelected" style="font-weight:bold; height:100%; width:260px"
 							value="#{beanCatGral.selectedDscCatGral }" />
 						<p:watermark for="inputEstadoSelected"
 							value="#{beanCatGral.catalogoSelected.dsc }" />
 					</h:panelGroup>
+					<h:outputText value="#{msg.tipo}"/>
+						<p:selectOneMenu value="#{beanCatGral.idTipoCatGralEdit}" style="width:100%">
+							<f:selectItem itemLabel="#{msg.seleccionarTipo}" itemValue="0"/>
+							<f:selectItems value="#{beanCatGral.listSelectTipoCat}"/>
+						</p:selectOneMenu>
 					<h:outputText value="#{msg.activo}" />
 					<h:selectBooleanCheckbox
 						value="#{beanCatGral.selectedCatalogoActivo}">
@@ -166,11 +175,11 @@
 				</h:panelGrid>
 				<h:panelGrid style="float: right;" columns="2">
 					<p:commandButton value="#{msg.aceptar }" icon="ui-icon-check"
-						oncomplete="editarDialog.hide()"
+						oncomplete="if(!args.validationFailed) editarDialog.hide()"
 						actionListener="#{beanCatGral.updateCat }"
 						update=":form:catGralTable, growl" />
 					<p:commandButton value="#{msg.cancelar }" icon="ui-icon-closethick"
-						oncomplete="editarDialog.hide()"
+						onclick="editarDialog.hide()"
 						actionListener="#{beanCatGral.cancelDeleteCat }" />
 				</h:panelGrid>
 			</p:dialog>

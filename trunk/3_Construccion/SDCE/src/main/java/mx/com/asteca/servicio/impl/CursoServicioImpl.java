@@ -8,7 +8,9 @@ import mx.com.asteca.comun.dto.CursoDTO;
 import mx.com.asteca.persistencia.PersistenciaException;
 import mx.com.asteca.persistencia.dao.BaseDAO;
 import mx.com.asteca.persistencia.dao.CursoDAO;
+import mx.com.asteca.persistencia.entidades.Alumnos;
 import mx.com.asteca.persistencia.entidades.Cursos;
+import mx.com.asteca.persistencia.entidades.Materias;
 import mx.com.asteca.servicio.CursoServicio;
 import mx.com.asteca.servicio.ServicioException;
 import mx.com.asteca.servicio.assembler.Assembler;
@@ -37,6 +39,81 @@ public class CursoServicioImpl extends
 	@Override
 	Assembler getAssembler() {
 		return assemblerCurso;
+	}
+
+	@Override
+	@Transactional(readOnly=true)
+	public CursoDTO findByReferencia(String referencia) throws ServicioException{
+		try{
+			Cursos mapping = cursoDAO.findByReferencia(referencia);
+			CursoDTO dto = (CursoDTO) assemblerCurso.getDTOTransform(mapping);
+			return dto;
+		} catch (PersistenciaException e) {
+			throw new ServicioException(e.getMessage(), e);
+		}
+	}
+	
+	@Override
+	@Transactional
+	public void removeMateriaCurso(int idMateria, int idCurso)
+			throws ServicioException {
+		try{
+			Materias materias = new Materias();
+			Cursos cursos = new Cursos();
+			materias.setIdMateria(idMateria);
+			cursos.setIdCurso(idCurso);
+			cursoDAO.deleteMateriaCurso(materias, cursos);
+		} catch (PersistenciaException e) {
+			throw new ServicioException(e.getMessage(), e);
+		}
+
+	}
+
+	@Override
+	@Transactional
+	public void removeAlumnoCurso(int idAlumno, int idCurso)
+			throws ServicioException {
+		try {
+			Alumnos alumnos = new Alumnos();
+			Cursos cursos = new Cursos();
+			alumnos.setIdAlumno(idAlumno);
+			cursos.setIdCurso(idCurso);
+			cursoDAO.deleteAlumnoCurso(alumnos, cursos);
+		} catch (PersistenciaException e) {
+			throw new ServicioException(e.getMessage(), e);
+		}
+	}
+
+	@Override
+	@Transactional
+	public int saveAlumnoCurso(int idAlumno, int idCurso)
+			throws ServicioException {
+		try {
+			Alumnos alumnos = new Alumnos();
+			alumnos.setIdAlumno(idAlumno);
+			Cursos cursos = new Cursos();
+			cursos.setIdCurso(idCurso);
+			int pk = cursoDAO.saveAlumnoCurso(alumnos, cursos);
+			return pk;
+		} catch (PersistenciaException e) {
+			throw new ServicioException(e.getMessage(), e);
+		}
+	}
+
+	@Override
+	@Transactional
+	public int saveMateriaCurso(int idCurso, int idMateria)
+			throws ServicioException {
+		try {
+			Cursos curso = new Cursos();
+			Materias materias = new Materias();
+			curso.setIdCurso(idCurso);
+			materias.setIdMateria(idMateria);
+			int pk = cursoDAO.saveMateriaCurso(materias, curso);
+			return pk;
+		} catch (PersistenciaException e) {
+			throw new ServicioException(e.getMessage(), e);
+		}
 	}
 
 	@Override

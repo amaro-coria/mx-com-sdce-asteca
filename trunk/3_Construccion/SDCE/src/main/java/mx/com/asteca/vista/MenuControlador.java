@@ -11,6 +11,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ActionEvent;
@@ -26,7 +27,7 @@ import org.primefaces.component.submenu.Submenu;
 import org.springframework.util.CollectionUtils;
 
 @ManagedBean(name = Constantes.BEAN_MENU)
-@ApplicationScoped
+@SessionScoped
 public class MenuControlador extends BaseController implements Serializable {
 
 	private static final String modulo = "menu";

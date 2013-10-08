@@ -45,7 +45,12 @@ public class Constantes {
 	public static final String ASSEMBLER_ROLES_MOD_USUARIOS="assmblerRolesModUsuarios";
 	public static final String ASSEMBLER_ROLES_MOD_PERMISOS_SOBRE="assemblerRolesModPermisosSobre";
 	public static final String ASSEMBLER_ROLES_MOD_PERMISOS_USR="assemblerRolesModPermisosUsr";
+	public static final String ASSEMBLER_INSTRUCTORES_MATERIAS="assemblerInstructoresMaterias";
+	public static final String ASSEMBLER_INSTRUCTORES_DOCUMENTOS="assemblerInstructoresDocumentos";
+	public static final String ASSEMBLER_INSTRUCTORES="assemblerInstructores";
+	public static final String ASSEMBLER_TIPOS_INSTRUCTORES="assemblerTiposInstructores";
 	public static final String ASSEMBLER_CURSO="assemblerCurso";
+	public static final String ASSEMBLER_TIPOS_CAT_GRAL="assemblerTiposCatGral";
 	public static final String ERROR_OBTENIENDO_LISTA_CATALOGO="No se pudo obtener el catalogo.";
 	public static final String ERROR_NUEVO_REGISTRO="No se pudo completar el nuevo registro.";
 	public static final String BEAN_EQUIPO="beanEquipo";
@@ -66,8 +71,12 @@ public class Constantes {
 	public static final String ERROR_SELECT_ITEM="Error al obtener el elemento seleccionado";
 	public static final String BEAN_TREE="beanTree";
 	public static final String BEAN_ADMINISTRATIVOS="beanAdmin";
+	public static final String BEAN_CAT_ADMIN="beanCatAdmin";
 	public static final String BEAN_INSTITUTOS="beanInstituto";
 	public static final String BEAN_PROGRAMA_ESTUDIOS="beanProgramaEstudios";
+	public static final String BEAN_INSTRUCTORES="beanInstructor";
+	public static final String BEAN_MAERIAS_REGISTRO="beanMateria";
+	public static final String BEAN_VER_CURSOS="beanVerCurso";
 	public static final String ERROR_NECESITAS_SELECCIONAR_UN_PAIS="Necesitas seleccionar un pais";
 	public static final String ERROR_NECESITAS_SELECCIONAR_UN_EDO="Necesitas seleccionar un estado";
 	public static final String ERROR_NECESITAS_SELECCIONAR_UN_CLIENTE="Necesitas seleccionar un cliente";
@@ -92,6 +101,7 @@ public class Constantes {
 	public static final String BEAN_REPORTE_CURSOS="beanReporteCursos";
 	public static final String BEAN_REPORTE_MENSUAL="beanReporteMensual";
 	public static final String BEAN_REPORTE_INSTRUCTOR="beanReporteInstructor";
+	public static final String WARNING_NECESITAS_LLENAR_CAMPOS_REQUERIDOS="Necesitas llenar todos los campos requeridos";
 	public static final String MODULO_ADMIN = "Administrativos";
 	public static final String MODULO_ALUMNO = "Alumnos";
 	public static final String MODULO_AULA = "Aulas";
@@ -112,4 +122,8 @@ public class Constantes {
 	public static final String MODULO_REPORTE_CURSOS = "Reporte de Cursos";
 	public static final String MODULO_REPORTE_INSTRUCTOR = "Reporte de Instructores";
 	public static final String MODULO_REPORTE_MENSUAL = "Reporte Mensual";
+	public static final String MODULO_INSTRUCTORES="Instructores";
+	public static final String MODULO_MATERIAS="Materias";
+	public static final String MODULO_VER_CURSO="Ver Cursos";
+	
 }

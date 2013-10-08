@@ -45,6 +45,8 @@ public class AdministrativoServicioImpl extends
 	Assembler getAssembler() {
 		return assemblerAdmin;
 	}
+	
+	
 
 	@Override
 	@Transactional(readOnly = true)

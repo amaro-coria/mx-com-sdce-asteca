@@ -3,11 +3,15 @@
  */
 package mx.com.asteca.persistencia.dao;
 
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 import mx.com.asteca.comun.dto.AlumnoTempDTO;
 import mx.com.asteca.persistencia.PersistenciaException;
 import mx.com.asteca.persistencia.entidades.Alumnos;
+import mx.com.asteca.persistencia.entidades.Cursos;
+import mx.com.asteca.persistencia.entidades.Materias;
 
 /**
  * Interfaz de acceso a datos para Alumnos
@@ -95,5 +99,20 @@ public interface AlumnoDAO extends BaseDAO<Alumnos, Integer> {
 	Alumnos populate(int idAlumno) throws PersistenciaException;
 
 	List<AlumnoTempDTO> getAlumnosDatosBasicos() throws PersistenciaException;
+
+	List<AlumnoTempDTO> getAlumnosPorCurso(Cursos cursos)
+			throws PersistenciaException;
+
+	String findAsistencia(Alumnos alumnos, Cursos cursos, Date fecha)
+			throws PersistenciaException;
+
+	long registraAsistencia(Alumnos alumnos, Cursos cursos, Date fecha,
+			short presente) throws PersistenciaException;
+
+	BigDecimal getCalificacion(Alumnos alumnos, Cursos cursos, Materias materias)
+			throws PersistenciaException;
+
+	long saveCalificacion(Alumnos alumnos, Cursos cursos, Materias materias,
+			BigDecimal calificacion) throws PersistenciaException;
 
 }

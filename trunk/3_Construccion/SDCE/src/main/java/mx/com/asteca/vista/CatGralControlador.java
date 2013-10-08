@@ -18,6 +18,7 @@ import org.apache.commons.collections.CollectionUtils;
 import mx.com.asteca.comun.Constantes;
 import mx.com.asteca.comun.dto.CatGralDTO;
 import mx.com.asteca.comun.dto.EstadoDTO;
+import mx.com.asteca.comun.dto.TipoCatGralDTO;
 import mx.com.asteca.fachada.CatGralFachada;
 import mx.com.asteca.fachada.FachadaException;
 
@@ -54,6 +55,9 @@ public class CatGralControlador extends BaseController implements Serializable {
 	private String selectedClaveCatGral;
 	private String selectedDscCatGral;
 	private String selectedEstatusCatGral;
+	private List<SelectItem> listSelectTipoCat;
+	private short idTipoCatGralNuevo;
+	private short idTipoCatGralEdit;
 
 	/* Constructor default */
 
@@ -61,14 +65,34 @@ public class CatGralControlador extends BaseController implements Serializable {
 		catalogoSelected = new CatGralDTO();
 		catalogoNuevo = new CatGralDTO();
 	}
+	
+	private void initListaSelectTipoCat(){
+		if(CollectionUtils.isEmpty(listSelectTipoCat)){
+			listSelectTipoCat = new ArrayList<SelectItem>();
+			List<TipoCatGralDTO> lista = null;
+			try {
+				lista = catGralFachada.getTiposCatGral();
+			} catch (FachadaException e) {
+				super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR, Constantes.ERROR_OBTENIENDO_LISTA_CATALOGO);
+			}
+			if(!CollectionUtils.isEmpty(lista)){
+				for(TipoCatGralDTO dto : lista){
+					SelectItem item = new SelectItem(dto.getIdCatGral(), dto.getTipo());
+					listSelectTipoCat.add(item);
+				}
+			}
+		}
+	}
 
 	private void initListaSelectCatalogosCve() {
 		if (CollectionUtils.isEmpty(listaSelectCatalogosCve)) {
 			listaSelectCatalogosCve = new ArrayList<SelectItem>();
-			for (CatGralDTO dto : getListaCatalogos()) {
-				SelectItem item = new SelectItem(dto.getCveRegistro(),
-						dto.getCveRegistro());
-				listaSelectCatalogosCve.add(item);
+			if(!CollectionUtils.isEmpty(getListaCatalogos())){
+				for (CatGralDTO dto : getListaCatalogos()) {
+					SelectItem item = new SelectItem(dto.getCveRegistro(),
+							dto.getCveRegistro());
+					listaSelectCatalogosCve.add(item);
+				}
 			}
 		}
 	}
@@ -222,6 +246,9 @@ public class CatGralControlador extends BaseController implements Serializable {
 		if(selectedEstatusCatGral != null && !selectedEstatusCatGral.isEmpty()){
 			catalogoSelected.setEstatus(selectedEstatusCatGral);
 		}
+		if(idTipoCatGralEdit != 0){
+			catalogoSelected.setIdTipoCatGral(idTipoCatGralEdit);
+		}
 		try {
 			catGralFachada.update(catalogoSelected);
 			int indexListFilter = listaCatalogos.indexOf(catalogoSelected);
@@ -241,11 +268,17 @@ public class CatGralControlador extends BaseController implements Serializable {
 	 * @param e
 	 */
 	public void saveCat(ActionEvent e) {
+		catalogoNuevo.setIdTipoCatGral(idTipoCatGralNuevo);
 		catalogoNuevo
 				.setActivo(nuevoCatalogoActivo == true ? (short) 1 : (short) 0);
 		try {
 			catGralFachada.save(catalogoNuevo);
-			listaCatalogos.add(catalogoNuevo);
+			if(!CollectionUtils.isEmpty(listaCatalogos)){
+				listaCatalogos.add(catalogoNuevo);
+			}else{
+				listaCatalogos = new ArrayList<CatGralDTO>();
+				listaCatalogos.add(catalogoNuevo);
+			}
 			cambiaDescSelect();
 			//refreshEstados();
 		} catch (FachadaException e1) {
@@ -534,6 +567,63 @@ public class CatGralControlador extends BaseController implements Serializable {
 	@Override
 	String getModulo() {
 		return modulo;
+	}
+
+	/**
+	 * @return the listSelectTipoCat
+	 */
+	public List<SelectItem> getListSelectTipoCat() {
+		initListaSelectTipoCat();
+		return listSelectTipoCat;
+	}
+
+	/**
+	 * @param listSelectTipoCat the listSelectTipoCat to set
+	 */
+	public void setListSelectTipoCat(List<SelectItem> listSelectTipoCat) {
+		this.listSelectTipoCat = listSelectTipoCat;
+	}
+
+	/**
+	 * @return the serialversionuid
+	 */
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	/**
+	 * @return the catGralFachada
+	 */
+	public CatGralFachada getCatGralFachada() {
+		return catGralFachada;
+	}
+
+	/**
+	 * @return the idTipoCatGralNuevo
+	 */
+	public short getIdTipoCatGralNuevo() {
+		return idTipoCatGralNuevo;
+	}
+
+	/**
+	 * @param idTipoCatGralNuevo the idTipoCatGralNuevo to set
+	 */
+	public void setIdTipoCatGralNuevo(short idTipoCatGralNuevo) {
+		this.idTipoCatGralNuevo = idTipoCatGralNuevo;
+	}
+
+	/**
+	 * @return the idTipoCatGralEdit
+	 */
+	public short getIdTipoCatGralEdit() {
+		return idTipoCatGralEdit;
+	}
+
+	/**
+	 * @param idTipoCatGralEdit the idTipoCatGralEdit to set
+	 */
+	public void setIdTipoCatGralEdit(short idTipoCatGralEdit) {
+		this.idTipoCatGralEdit = idTipoCatGralEdit;
 	}
 
 }

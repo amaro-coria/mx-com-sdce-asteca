@@ -27,9 +27,10 @@ import mx.com.asteca.comun.dto.ProgramaEstudiosDTO;
 import mx.com.asteca.comun.dto.ProgramaEstudiosMateriasDTO;
 import mx.com.asteca.fachada.FachadaException;
 import mx.com.asteca.fachada.ProgramaEstudiosFachada;
-import mx.com.asteca.persistencia.entidades.AutorizacionesProgrEst;
 
 import org.primefaces.event.FileUploadEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
 
 /**
@@ -41,6 +42,7 @@ import org.springframework.util.CollectionUtils;
 public class ProgramaEstudiosControlador extends BaseController implements
 		Serializable {
 	
+	private static final Logger LOGGER = LoggerFactory.getLogger(ProgramaEstudiosControlador.class);
 	private static final String modulo = Constantes.MODULO_PROGRAMA_ESTUDIOS; 
 
 	@ManagedProperty("#{programaEstudiosFachadaImpl}")
@@ -56,7 +58,7 @@ public class ProgramaEstudiosControlador extends BaseController implements
 
 	private String selectedClave;
 	private String selectedDsc;
-	private String selectedTipo;
+	private int selectedTipo;
 
 	private List<ProgramaEstudiosDTO> filteredList;
 	private List<ProgramaEstudiosMateriasDTO> listMateriasVer;
@@ -121,6 +123,8 @@ public class ProgramaEstudiosControlador extends BaseController implements
 			} catch (FachadaException e) {
 				super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
 						Constantes.ERROR_OBTENIENDO_LISTA_CATALOGO);
+				LOGGER.error("Error catalogo", e);
+				
 			}
 		}
 	}
@@ -141,6 +145,7 @@ public class ProgramaEstudiosControlador extends BaseController implements
 		} catch (FachadaException e) {
 			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
 					Constantes.ERROR_OBTENIENDO_LISTA_CATALOGO);
+			LOGGER.error("Error catalogo", e);
 		}
 	}
 
@@ -151,6 +156,7 @@ public class ProgramaEstudiosControlador extends BaseController implements
 			} catch (FachadaException e) {
 				super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
 						Constantes.ERROR_OBTENIENDO_LISTA_CATALOGO);
+				LOGGER.error("Error catalogo", e);
 			}
 		}
 	}
@@ -192,9 +198,54 @@ public class ProgramaEstudiosControlador extends BaseController implements
 			}
 		}
 	}
+	
+	public void limpiarFiltrado(){
+		try {
+			listItems = fachada.getAll();
+			selectedClave = "";
+			selectedDsc = "";
+			selectedTipo = 0;
+		} catch (FachadaException e) {
+			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR, Constantes.ERROR_OBTENIENDO_LISTA_CATALOGO);
+		}
+	}
 
+	public void buscarFiltrado(){
+		try{
+			boolean cve = selectedClave == null || selectedClave.isEmpty() ? false : true;
+			boolean dsc = selectedDsc == null || selectedDsc.isEmpty() ? false : true;
+			boolean tipo = selectedTipo == 0 ? false : true;
+			if(cve && dsc && tipo){
+				listItems = fachada.findByClaveDscAndTipo(selectedClave, selectedDsc, selectedTipo);
+			}else if(cve && dsc){
+				listItems = fachada.findByClaveAndDsc(selectedClave, selectedDsc);
+			}else if(dsc && tipo){
+				listItems = fachada.findByDscAndTipo(selectedDsc, selectedTipo);
+			}else if(cve && tipo){
+				listItems = fachada.findByClaveAndTipo(selectedClave, selectedTipo);
+			}else if(cve){
+				listItems = fachada.findByClave(selectedClave);
+			}else if(dsc){
+				listItems = fachada.findByDsc(selectedDsc);
+			}else if(tipo){
+				listItems = fachada.findByTipo(selectedTipo);
+			}else{
+				listItems = fachada.getAll();
+			}
+		}catch(FachadaException e){
+			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR, Constantes.ERROR_OBTENIENDO_LISTA_CATALOGO);
+		}
+	}
+	
 	public void save() {
 		try {
+			nuevoItem.setClave(nuevoClave);
+			nuevoItem.setDsc(nuevoDsc);
+			nuevoItem.setFechaAut(nuevoFechaAut);
+			nuevoItem.setHorasPractica(Integer.parseInt(nuevoHorasPractica));
+			nuevoItem.setHorasTeoria(Integer.parseInt(nuevoHorasTeoria));
+			nuevoItem.setIdTipo(nuevoIdTipo);
+			nuevoItem.setNoAut(nuevoNoAut);
 			int pk = fachada.save(nuevoItem);
 			if (!CollectionUtils.isEmpty(listAutNuevo)) {
 				for (ProgramaEstudiosAutorizacionDTO dto : listAutNuevo) {
@@ -218,6 +269,27 @@ public class ProgramaEstudiosControlador extends BaseController implements
 
 	public void update() {
 		try {
+			if(editarClave != null && !editarClave.isEmpty()){
+				selectedItem.setClave(editarClave);
+			}
+			if(editarDsc != null && !editarDsc.isEmpty()){
+				selectedItem.setDsc(editarDsc);
+			}
+			if(editarFechaAut != null){
+				selectedItem.setFechaAut(editarFechaAut);
+			}
+			if(editarHorasPractica != null && !editarHorasPractica.isEmpty()){
+				selectedItem.setHorasPractica(Integer.parseInt(editarHorasPractica));
+			}
+			if(editarHorasTeoria != null && !editarHorasTeoria.isEmpty()){
+				selectedItem.setHorasTeoria(Integer.parseInt(editarHorasTeoria));
+			}
+			if(editarIdTipo != 0){
+				selectedItem.setIdTipo(editarIdTipo);
+			}
+			if(editarNoAut != null && !editarNoAut.isEmpty()){
+				selectedItem.setNoAut(editarNoAut);
+			}
 			fachada.update(selectedItem);
 			if (!CollectionUtils.isEmpty(listAutEditar)) {// TODO obtener las
 															// listas
@@ -353,28 +425,26 @@ public class ProgramaEstudiosControlador extends BaseController implements
 		DocumentoDTO documentoDTO = new DocumentoDTO();
 		documentoDTO.setNombre(nuevoDocNombre);
 		documentoDTO.setRuta(nuevoDocRuta);
-		List<ProgramaEstudiosAutorizacionDTO> listTemp = nuevoItem
-				.getListAutorizaciones();
+		List<ProgramaEstudiosAutorizacionDTO> listTemp = listAutNuevo;
 		ProgramaEstudiosAutorizacionDTO dtoTemp = new ProgramaEstudiosAutorizacionDTO();
 		if (CollectionUtils.isEmpty(listTemp)) {
 			listTemp = new ArrayList<ProgramaEstudiosAutorizacionDTO>();
 		}
 		dtoTemp.setDoc(documentoDTO);
-		nuevoItem.setListAutorizaciones(listTemp);
+		setListAutNuevo(listTemp);
 	}
 
 	public void addEditarDocumento() {
 		DocumentoDTO documentoDTO = new DocumentoDTO();
 		documentoDTO.setNombre(editarDocNombre);
 		documentoDTO.setRuta(editarDocRuta);
-		List<ProgramaEstudiosAutorizacionDTO> listTemp = selectedItem
-				.getListAutorizaciones();
+		List<ProgramaEstudiosAutorizacionDTO> listTemp = listAutEditar;
 		ProgramaEstudiosAutorizacionDTO dtoTemp = new ProgramaEstudiosAutorizacionDTO();
 		if (CollectionUtils.isEmpty(listTemp)) {
 			listTemp = new ArrayList<ProgramaEstudiosAutorizacionDTO>();
 		}
 		dtoTemp.setDoc(documentoDTO);
-		selectedItem.setListAutorizaciones(listTemp);
+		setListAutEditar(listTemp);
 	}
 
 	public void handlerNuevoRegistroFileUpload(FileUploadEvent event) {
@@ -396,6 +466,7 @@ public class ProgramaEstudiosControlador extends BaseController implements
 			inputStream.close();
 			out.flush();
 			out.close();
+			addNuevoDocumento();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (FachadaException e) {
@@ -423,6 +494,7 @@ public class ProgramaEstudiosControlador extends BaseController implements
 			inputStream.close();
 			out.flush();
 			out.close();
+			addEditarDocumento();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (FachadaException e) {
@@ -574,7 +646,7 @@ public class ProgramaEstudiosControlador extends BaseController implements
 	/**
 	 * @return the selectedTipo
 	 */
-	public String getSelectedTipo() {
+	public int getSelectedTipo() {
 		return selectedTipo;
 	}
 
@@ -582,7 +654,7 @@ public class ProgramaEstudiosControlador extends BaseController implements
 	 * @param selectedTipo
 	 *            the selectedTipo to set
 	 */
-	public void setSelectedTipo(String selectedTipo) {
+	public void setSelectedTipo(int selectedTipo) {
 		this.selectedTipo = selectedTipo;
 	}
 

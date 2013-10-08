@@ -1,5 +1,6 @@
 package mx.com.asteca.persistencia.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import mx.com.asteca.persistencia.PersistenciaException;
@@ -20,5 +21,8 @@ public interface AulaDAO extends BaseDAO<Aulas, Integer> {
 	 * @throws PersistenciaException
 	 */
 	List<Aulas> findBySede(String sede) throws PersistenciaException;
+
+	List<Aulas> findAulasDisponibles(Date timeStampInicial, Date timeStampFinal, int idSede)
+			throws PersistenciaException;
 
 }

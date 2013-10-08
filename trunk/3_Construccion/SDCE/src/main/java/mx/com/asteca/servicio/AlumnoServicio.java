@@ -3,6 +3,7 @@
  */
 package mx.com.asteca.servicio;
 
+import java.util.Date;
 import java.util.List;
 
 import mx.com.asteca.comun.dto.AlumnoDTO;
@@ -106,5 +107,19 @@ public interface AlumnoServicio extends
 	AlumnoDTO populate(int alumnoID) throws ServicioException;
 
 	List<AlumnoDTO> getListaDatosBasicos() throws ServicioException;
+
+	List<AlumnoDTO> findAlumnosByCurso(int idCurso) throws ServicioException;
+
+	String findAsistencia(int idAlumno, int idCurso, Date fecha)
+			throws ServicioException;
+
+	long registraAsistencia(int idAlumno, int idCurso, Date fecha,
+			short presente) throws ServicioException;
+
+	String getCalificacion(int idAlumno, int idCurso, int idMateria)
+			throws ServicioException;
+
+	long saveCalificacion(int idAlumno, int idCurso, int idMateria,
+			double calificacion) throws ServicioException;
 
 }

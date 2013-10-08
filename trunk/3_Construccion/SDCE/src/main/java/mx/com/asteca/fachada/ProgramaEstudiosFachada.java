@@ -44,4 +44,22 @@ public interface ProgramaEstudiosFachada extends
 	void removeAutorizacion(ProgramaEstudiosAutorizacionDTO dto)
 			throws FachadaException;
 
+	List<ProgramaEstudiosDTO> findByDsc(String dsc) throws FachadaException;
+
+	List<ProgramaEstudiosDTO> findByClave(String cve) throws FachadaException;
+
+	List<ProgramaEstudiosDTO> findByTipo(int idTipo) throws FachadaException;
+
+	List<ProgramaEstudiosDTO> findByClaveDscAndTipo(String cve, String dsc,
+			int idTipo) throws FachadaException;
+
+	List<ProgramaEstudiosDTO> findByClaveAndDsc(String cve, String dsc)
+			throws FachadaException;
+
+	List<ProgramaEstudiosDTO> findByClaveAndTipo(String cve, int idTipo)
+			throws FachadaException;
+
+	List<ProgramaEstudiosDTO> findByDscAndTipo(String dsc, int idTipo)
+			throws FachadaException;
+
 }

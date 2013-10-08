@@ -1,3 +1,5 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
@@ -36,13 +38,13 @@
 					<p:commandButton id="deleteButton" value="#{msg.eliminar }"
 						icon="ui-icon-trash" onclick="borrarDialog.show()" update="growl" />
 					<p:commandButton id="editarButton" value="#{msg.editar }"
-						icon="ui-icon-pencil" onclick="editarDialog.show()"
+						icon="ui-icon-pencil" onclick="editarDialog.show()" 
 						update=":form:displayEditar, growl" />
 					<p:commandButton id="viewButton" value="#{msg.ver }"
-						icon="ui-icon-search" oncomplete="verDialog.show()"
+						icon="ui-icon-search" oncomplete="verDialog.show()" 
 						update=":form:displayVer, growl" />
 					<p:commandButton id="nuevoButton" value="#{msg.nuevo }"
-						icon="ui-icon-plusthick" onclick="nuevoDialog.show()"
+						icon="ui-icon-plusthick" onclick="nuevoDialog.show()" 
 						update=":form:displayNuevo, growl" />
 				</h:panelGrid>
 			</p:panel>
@@ -69,7 +71,7 @@
 				</p:dataTable>
 			</p:panel>
 			<!-- Panel de Ver -->
-			<p:dialog id="dialog" header="#{msg.ver}" widgetVar="verDialog"
+			<p:dialog id="dialog" header="#{msg.ver}" widgetVar="verDialog" position="top"
 				modal="true">
 				<h:panelGrid id="displayVer" columns="2" cellpadding="4">
 					<h:panelGroup id="messagePanelVer" layout="block">
@@ -78,21 +80,21 @@
 					</h:panelGroup>
 					<h:outputText />
 					<h:outputText value="#{msg.clave}" />
-					<h:outputText value="#{beanAulas.itemSelected.clave}"
-						style="font-weight:bold" />
+					<p:inputText readonly="true" value="#{beanAulas.itemSelected.clave}"
+						style="font-weight:bold; height:100%" />
 					<h:outputText value="#{msg.descripcion}" />
-					<h:outputText value="#{beanAulas.itemSelected.dsc}"
-						style="font-weight:bold" />
+					<p:inputText readonly="true" value="#{beanAulas.itemSelected.dsc}"
+						style="font-weight:bold; height:100%" />
 					<h:outputText value="#{msg.sede}" />
-					<h:outputText value="#{beanAulas.itemSelected.sede}"
-						style="font-weight:bold" />
+					<p:inputText readonly="true" value="#{beanAulas.itemSelected.sede}"
+						style="font-weight:bold; height:100%" />
 					<h:outputText value="#{msg.capacidad}" />
-					<h:outputText value="#{beanAulas.itemSelected.capacidad}"
-						style="font-weight:bold" />
+					<p:inputText readonly="true" value="#{beanAulas.itemSelected.capacidad}"
+						style="font-weight:bold; height:100%" />
 					<h:outputText value="#{msg.activo}" />
-					<h:outputText
+					<p:inputText readonly="true"
 						value="#{beanAulas.itemSelected.activo == 1 ? 'Si' : 'No' }"
-						style="font-weight:bold" />
+						style="font-weight:bold; height:100%" />
 				</h:panelGrid>
 				<p:commandButton id="aceptarVerBtn" value="#{msg.aceptar }"
 					icon="ui-icon-check" onclick="verDialog.hide()" />
@@ -100,24 +102,26 @@
 			<!-- Fin de panel de Ver -->
 			<!--  Inicio panel de Nuevo -->
 			<p:dialog id="dialogNuevo" header="#{msg.frsNuevoRegistro}"
-				widgetVar="nuevoDialog" closable="true" modal="true"
+				widgetVar="nuevoDialog" closable="true" modal="true" position="top"
 				draggable="false" width="400">
 				<h:panelGrid columns="2" width="100%" id="displayNuevo">
-					<h:outputText value="#{msg.clave}" />
-					<p:inputText value="#{beanAulas.itemNuevo.clave}"
-						style="width: 260px; " />
+					<h:outputText value="#{msg.clave}*" />
+					<p:inputText value="#{beanAulas.itemNuevo.clave}"   label="Clave"
+						style="width: 260px; font-weight:bold; height:100%" />
 					<h:outputText value="#{msg.descripcion}" />
 					<p:inputText id="nombrePopupNuevo"
-						value="#{beanAulas.itemNuevo.dsc }" style="min-width: 260px" />
-					<h:outputText value="#{msg.sede}" />
-					<p:selectOneMenu id="selectSedeTipoNuevo" style="min-width: 260px"
+						value="#{beanAulas.itemNuevo.dsc }" style="min-width: 260px; font-weight:bold; height:100%" />
+					<h:outputText value="#{msg.sede}*" />
+					<p:selectOneMenu id="selectSedeTipoNuevo" style="min-width: 260px; font-weight:bold; height:100%"  
 						value="#{beanAulas.idCatGralNuevo }">
 						<f:selectItem itemLabel="#{msg.seleccionarSede }" itemValue="" />
 						<f:selectItems value="#{beanAulas.listaSelectTiposItemsCatGral }" />
 					</p:selectOneMenu>
 					<h:outputText value="#{msg.capacidad}" />
-					<p:inputText id="capacidadPopupNuevo"
-						value="#{beanAulas.capacidadNuevo }" style="min-width: 260px" />
+					<p:inputText id="capacidadPopupNuevo"   requiredMessage="Capacidad no valida"
+						value="#{beanAulas.capacidadNuevo }" style="min-width: 260px; font-weight:bold; height:100%" >
+							<f:validateRegex pattern="(^[0-9]{9}$)" />
+						</p:inputText>
 					<h:outputText id="activoPopupNuevoLabel" value="#{msg.activo}" />
 					<h:selectBooleanCheckbox id="activoPopupNuevo"
 						value="#{beanAulas.nuevoActivo}">
@@ -125,43 +129,45 @@
 				</h:panelGrid>
 				<h:panelGrid style="float: right;" columns="2">
 					<p:commandButton value="#{msg.aceptar }" icon="ui-icon-check"
-						oncomplete="nuevoDialog.hide()"
+						oncomplete="if(!args.validationFailed) nuevoDialog.hide()"
 						actionListener="#{beanAulas.save }" update=":form:table, growl" />
 					<p:commandButton value="#{msg.cancelar }" icon="ui-icon-closethick"
-						oncomplete="nuevoDialog.hide()"
+						onclick="nuevoDialog.hide()"
 						actionListener="#{beanAulas.saveCancel }" />
 				</h:panelGrid>
 			</p:dialog>
 			<!-- Fin de panel de nuevo -->
 			<!-- Inicio de panel de edicion -->
-			<p:dialog id="dialogEditar" header="#{msg.frsNuevoRegistro}"
+			<p:dialog id="dialogEditar" header="#{msg.frsNuevoRegistro}" position="top"
 				widgetVar="editarDialog" closable="true" modal="true"
 				draggable="false" width="400">
 				<h:panelGrid columns="2" width="100%" id="displayEditar">
 					<h:outputText value="#{msg.clave}" />
 					<h:panelGroup>
-						<h:inputText id="selectedCve"
-							value="#{beanAulas.selectedClaveEdit}" style="width: 260px; " />
+						<p:inputText id="selectedCve"
+							value="#{beanAulas.selectedClaveEdit}" style="width: 260px; font-weight:bold; height:100%" />
 						<p:watermark for="selectedCve"
 							value="#{beanAulas.itemSelected.clave }" />
 					</h:panelGroup>
 					<h:outputText value="#{msg.descripcion}" />
 					<h:panelGroup>
-						<p:inputText id="inputNombreSelected" style="width: 260px; "
+						<p:inputText id="inputNombreSelected" style="width: 260px; font-weight:bold; height:100% "
 							value="#{beanAulas.selectedDscEdit }" />
 						<p:watermark for="inputNombreSelected"
 							value="#{beanAulas.itemSelected.dsc }" />
 					</h:panelGroup>
 					<h:outputText value="#{msg.sede}" />
-					<p:selectOneMenu id="selectTipoSelected" style="min-width: 260px"
+					<p:selectOneMenu id="selectTipoSelected" style="min-width: 260px; font-weight:bold; height:100%"
 						value="#{beanAulas.idCatGralSelected }">
 						<f:selectItem itemLabel="#{msg.seleccionarSede }" itemValue="" />
 						<f:selectItems value="#{beanAulas.listaSelectTiposItemsCatGral }" />
 					</p:selectOneMenu>
 					<h:outputText value="#{msg.capacidad}" />
 					<h:panelGroup>
-						<p:inputText id="inputCapacidaqdSelected" style="width: 260px; "
-							value="#{beanAulas.selectedCapacidadEdit }" />
+						<p:inputText id="inputCapacidaqdSelected" style="width: 260px; font-weight:bold; height:100% "
+							value="#{beanAulas.selectedCapacidadEdit }" >
+								<f:validateRegex pattern="(^[0-9]{9}$)" />
+							</p:inputText>
 						<p:watermark for="inputCapacidaqdSelected"
 							value="#{beanAulas.itemSelected.capacidad }" />
 					</h:panelGroup>
@@ -172,10 +178,10 @@
 				</h:panelGrid>
 				<h:panelGrid style="float: right;" columns="2">
 					<p:commandButton value="#{msg.aceptar }" icon="ui-icon-check"
-						oncomplete="editarDialog.hide()"
+						oncomplete="if(!args.validationFailed) editarDialog.hide()"
 						actionListener="#{beanAulas.update }" update=":form:table, growl" />
 					<p:commandButton value="#{msg.cancelar }" icon="ui-icon-closethick"
-						oncomplete="editarDialog.hide()"
+						onclick="editarDialog.hide()"
 						actionListener="#{beanAulas.canceldelete }" />
 				</h:panelGrid>
 			</p:dialog>

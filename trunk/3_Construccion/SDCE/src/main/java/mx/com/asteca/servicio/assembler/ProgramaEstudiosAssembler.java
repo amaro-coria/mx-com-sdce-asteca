@@ -108,7 +108,11 @@ public class ProgramaEstudiosAssembler extends
 				mapping.setIdProgEstudio(dto.getIdProgEstudio());
 			}
 			mapping.setNoAut(dto.getNoAut());
-			
+			if(dto.getIdTipo() != 0){
+				CatGral catGral = new CatGral();
+				catGral.setIdCatGral(dto.getIdTipo());
+				mapping.setCatGral(catGral);
+			}
 			/*
 			 * List<ProgramaEstudiosMateriasDTO> listEstudios = dto.getListMaterias();
 			Set<ProgramaEstMaterias> setEstudios = new HashSet<ProgramaEstMaterias>();

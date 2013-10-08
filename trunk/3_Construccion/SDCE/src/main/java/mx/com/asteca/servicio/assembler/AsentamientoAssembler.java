@@ -23,7 +23,7 @@ public class AsentamientoAssembler extends Assembler<AsentamientoDTO, Asentamien
 			return null;
 		}
 		AsentamientoDTO dto = new AsentamientoDTO();
-			dto.setActivo(mapping.getActivo());
+			dto.setActivo((short) (mapping.getActivo() == null ? 0 : mapping.getActivo()));
 			dto.setClave(mapping.getClave());
 			dto.setIdCp(mapping.getIdCp());
 			dto.setNombre(mapping.getNombre());

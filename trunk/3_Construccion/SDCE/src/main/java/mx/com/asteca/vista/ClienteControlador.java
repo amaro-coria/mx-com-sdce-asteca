@@ -77,10 +77,12 @@ public class ClienteControlador extends BaseController implements Serializable {
 	public void initSelectClientes() {
 		if (CollectionUtils.isEmpty(listaSelectClientes)) {
 			listaSelectClientes = new ArrayList<SelectItem>();
-			for (ClienteDTO dto : getListaClientes()) {
-				SelectItem item = new SelectItem(dto.getIdCliente(),
-						dto.getNombre());
-				listaSelectClientes.add(item);
+			if(!CollectionUtils.isEmpty(getListaClientes())){
+				for (ClienteDTO dto : getListaClientes()) {
+					SelectItem item = new SelectItem(dto.getIdCliente(),
+							dto.getNombre());
+					listaSelectClientes.add(item);
+				}
 			}
 		}
 	}
@@ -90,10 +92,12 @@ public class ClienteControlador extends BaseController implements Serializable {
 			listaSelectClave = new ArrayList<SelectItem>();
 			try {
 				List<ClienteDTO> listaClientes = fachadaCliente.getAll();
-				for (ClienteDTO clienteDTO : listaClientes) {
-					SelectItem item = new SelectItem(clienteDTO.getClave(),
-							clienteDTO.getClave());
-					listaSelectClave.add(item);
+				if(!CollectionUtils.isEmpty(listaClientes)){
+					for (ClienteDTO clienteDTO : listaClientes) {
+						SelectItem item = new SelectItem(clienteDTO.getClave(),
+								clienteDTO.getClave());
+						listaSelectClave.add(item);
+					}
 				}
 			} catch (FachadaException e) {
 				super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
@@ -105,10 +109,12 @@ public class ClienteControlador extends BaseController implements Serializable {
 	public void initSelectTiposClientes() {
 		if (CollectionUtils.isEmpty(listaSelectTiposClientes)) {
 			listaSelectTiposClientes = new ArrayList<SelectItem>();
-			for (TipoClienteDTO dto : getListaTipoClientes()) {
-				SelectItem item = new SelectItem(dto.getIdTipoCliente(),
-						dto.getNombre());
-				listaSelectTiposClientes.add(item);
+			if(!CollectionUtils.isEmpty(getListaTipoClientes())){
+				for (TipoClienteDTO dto : getListaTipoClientes()) {
+					SelectItem item = new SelectItem(dto.getIdTipoCliente(),
+							dto.getNombre());
+					listaSelectTiposClientes.add(item);
+				}
 			}
 		}
 	}
@@ -218,7 +224,12 @@ public class ClienteControlador extends BaseController implements Serializable {
 		clienteNuevo.setTipoCliente(idTipoCliente);
 		try {
 			fachadaCliente.save(clienteNuevo);
-			listaClientes.add(clienteNuevo);
+			if(!CollectionUtils.isEmpty(listaClientes)){
+				listaClientes.add(clienteNuevo);
+			}else{
+				listaClientes = new ArrayList<ClienteDTO>();
+				listaClientes.add(clienteNuevo);
+			}
 			initSelectClave();
 			cambiaClaveSelected();
 			cambiaNombreSelected();

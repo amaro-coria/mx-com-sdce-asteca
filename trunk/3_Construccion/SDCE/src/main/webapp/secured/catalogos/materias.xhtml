@@ -1,0 +1,145 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+<h:body>
+	<ui:composition>
+		<h:form id="form" >
+			<p:growl id="growl" showDetail="true" sticky="true" />
+			<p:panel id="panel" header="Buscar" closable="false"
+				toggleable="false" style="text-align:center;">
+				<h:panelGrid columns="2" style="text-align:left;">
+					<h:outputText value="#{msg.nombre} :" />
+					<p:selectOneMenu id="selectDsc" style="min-width: 480px"
+						value="#{beanMateria.selectedNombre }">
+						<f:selectItem itemLabel="#{msg.seleccionarNombre }" itemValue="" />
+						<f:selectItems value="#{beanMateria.listSelect1}" />
+					</p:selectOneMenu>
+				</h:panelGrid>
+				<br />
+				<h:panelGrid style="text-align:right" width="100%">
+					<h:panelGrid columns="2" style="text-align:right">
+						<p:commandButton value="#{msg.limpiar}"
+							icon="ui-icon-arrowrefresh-1-e"
+							onclick=":form:selectCveFilter.selectValue('')"
+							actionListener="#{beanMateria.limpiarFiltrado }" update="growl" />
+						<p:commandButton icon="ui-icon-search"
+							actionListener="#{beanMateria.buscarFiltrado}"
+							value="#{msg.buscar}" update="growl, :form:table" />
+					</h:panelGrid>
+				</h:panelGrid>
+			</p:panel>
+			<p:panel>
+				<h:panelGrid columns="4" style="text-align:left;">
+					<p:commandButton id="deleteButton" value="#{msg.eliminar }"
+						icon="ui-icon-trash" onclick="borrarDialog.show()" update="growl" />
+					<p:commandButton id="editarButton" value="#{msg.editar }" 
+						icon="ui-icon-pencil" onclick="editarDialog.show()"
+						update=":form:displayEditar, growl" />
+					<p:commandButton id="viewButton" value="#{msg.ver }" 
+						icon="ui-icon-search"
+						oncomplete="verDialog.show()" update=":form:displayVer, growl" />
+					<p:commandButton id="nuevoButton" value="#{msg.nuevo }" 
+						icon="ui-icon-plusthick" onclick="nuevoDialog.show()"
+						update=":form:displayNuevo, growl" />
+				</h:panelGrid>
+			</p:panel>
+			<p:panel>
+				<p:dataTable id="table" value="#{beanMateria.listItems}"
+					var="item" rowKey="#{item.idMateria}" paginator="true"
+					selection="#{beanMateria.itemSelected}"
+					filteredValue="#{beanMateria.filteredList }"
+					paginatorPosition="bottom" rows="10">
+					<p:column selectionMode="single" style="width:2%" />
+					<p:column id="eqCve" headerText="#{msg.nombre}"
+						sortBy="#{item.nombre}" filterBy="#{item.nombre }">
+						<h:outputText value="#{item.nombre}" />
+					</p:column>
+				</p:dataTable>
+			</p:panel>
+			<!-- Panel de Ver -->
+			<p:dialog id="dialog" header="#{msg.ver}" widgetVar="verDialog" position="top" draggable="true"
+				modal="true">
+				<h:panelGrid id="displayVer" columns="2" cellpadding="4">
+					<h:panelGroup id="messagePanelVer" layout="block">
+						<h:messages errorStyle="color: red" infoStyle="color: green"
+							layout="list" style="font-size:12px;font-family:Arial" />
+					</h:panelGroup>
+					<h:outputText />
+					<h:outputText value="#{msg.nombre}"/>
+					<p:inputText readonly="true" style="height:100%; width: 260px; font-weight:bold;" value="#{item.nombre }"/>
+				</h:panelGrid>
+				<p:commandButton id="aceptarVerBtn" value="#{msg.aceptar }"
+					icon="ui-icon-check" onclick="verDialog.hide()" />
+			</p:dialog>
+			<!-- Fin de panel de Ver -->
+			<!--  Inicio panel de Nuevo -->
+			<p:dialog id="dialogNuevo" header="#{msg.frsNuevoRegistro}"
+				widgetVar="nuevoDialog" closable="true" modal="true" position="top"
+				draggable="true" width="400">
+				<h:panelGrid columns="2" width="100%" id="displayNuevo">
+				<h:panelGroup id="messagePanelNuevo" layout="block">
+						<h:messages errorStyle="color: red" infoStyle="color: green"
+							layout="list" style="font-size:12px;font-family:Arial" />
+					</h:panelGroup>
+					<h:outputText />
+					<h:outputText value="#{msg.nombre }*"/>
+					<p:inputText style="height:100%; width: 260px; font-weight:bold;" value="#{beanMateria.nuevoNombre }"   label="Nombre"/>
+				</h:panelGrid>
+				<h:panelGrid style="float: right;" columns="2">
+					<p:commandButton value="#{msg.aceptar }" icon="ui-icon-check"
+						oncomplete="nuevoDialog.hide()"
+						actionListener="#{beanMateria.save }" update=":form:table growl selectDsc" />
+					<p:commandButton value="#{msg.cancelar }" icon="ui-icon-closethick"
+						onclick="nuevoDialog.hide()"
+						actionListener="#{beanMateria.saveCancel }" />
+				</h:panelGrid>
+			</p:dialog>
+			<!-- Fin de panel de nuevo -->
+			<!-- Inicio de panel de edicion -->
+			<p:dialog id="dialogEditar" header="#{msg.frsNuevoRegistro}"
+				widgetVar="editarDialog" closable="true" modal="true" position="top"
+				draggable="true" width="400">
+				<h:panelGrid columns="2" width="100%" id="displayEditar">
+				<h:panelGroup id="messagePanelEditar" layout="block">
+						<h:messages errorStyle="color: red" infoStyle="color: green"
+							layout="list" style="font-size:12px;font-family:Arial" />
+					</h:panelGroup>
+					<h:outputText />
+					<h:outputText value="#{msg.nombre }"/>
+					<h:panelGroup>
+						<p:inputText value="#{beanMateria.editarNombre }" style="height:100%;" id="editarNombreInput"/>
+						<p:watermark value="#{beanMateria.itemSelected.nombre }" for="editarNombreInput"/>
+					</h:panelGroup>
+				</h:panelGrid>
+				<h:panelGrid style="float: right;" columns="2">
+					<p:commandButton value="#{msg.aceptar }" icon="ui-icon-check"
+						oncomplete="editarDialog.hide()"
+						actionListener="#{beanMateria.update }" update=":form:table growl selectDsc" />
+					<p:commandButton value="#{msg.cancelar }" icon="ui-icon-closethick"
+						oncomplete="editarDialog.hide()"
+						actionListener="#{beanMateria.cancelDelete }" />
+				</h:panelGrid>
+			</p:dialog>
+			<!-- Fin de panel de edicion -->
+			<!-- Panel de borrado -->
+			<p:confirmDialog showEffect="fade" widgetVar="borrarDialog"
+				header="#{msg.confirmar }" message="#{msg.frsBorrarConfirmacion }">
+				<p:commandButton value="#{msg.si }"
+					actionListener="#{beanMateria.delete}" update="table growl selectDsc"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check"
+					oncomplete="borrarDialog.hide()" />
+				<p:commandButton value="#{msg.no }" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close"
+					onclick="borrarDialog.hide()" />
+			</p:confirmDialog>
+			<!-- Fin de panel de borrado -->
+		</h:form>
+
+	</ui:composition>
+</h:body>
+</html>

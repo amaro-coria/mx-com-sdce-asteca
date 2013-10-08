@@ -95,9 +95,11 @@ public class EquipoControlador extends BaseController implements Serializable {
 	private void initListaSelectTiposEquipoCatGral(){
 		if(CollectionUtils.isEmpty(listaSelectTiposEquipoCatGral)){
 			listaSelectTiposEquipoCatGral = new ArrayList<SelectItem>();
-			for(CatGralDTO dto : getListaCatGral()){
-				SelectItem item = new SelectItem(dto.getIdCatGral(), dto.getDsc());
-				listaSelectTiposEquipoCatGral.add(item);
+			if(!CollectionUtils.isEmpty(getListaCatGral())){
+				for(CatGralDTO dto : getListaCatGral()){
+					SelectItem item = new SelectItem(dto.getIdCatGral(), dto.getDsc());
+					listaSelectTiposEquipoCatGral.add(item);
+				}
 			}
 		}
 	}
@@ -108,9 +110,11 @@ public class EquipoControlador extends BaseController implements Serializable {
 	private void initListaSelectCve() {
 		if (CollectionUtils.isEmpty(listaSelectCve)) {
 			listaSelectCve = new ArrayList<SelectItem>();
-			for (EquipoDTO dto : getListaEquipos()) {
-				SelectItem item = new SelectItem(dto.getClave(), dto.getClave());
-				listaSelectCve.add(item);
+			if(!CollectionUtils.isEmpty(getListaEquipos())){
+				for (EquipoDTO dto : getListaEquipos()) {
+					SelectItem item = new SelectItem(dto.getClave(), dto.getClave());
+					listaSelectCve.add(item);
+				}
 			}
 		}
 	}
@@ -298,7 +302,12 @@ public class EquipoControlador extends BaseController implements Serializable {
 			CatGralDTO temp2 = listaCatGral.get(index);
 			equipoNuevo.setDscTipo(temp2.getDsc());
 			equipoNuevo.setIdEquipo(pk);
-			listaEquipos.add(equipoNuevo);
+			if(!CollectionUtils.isEmpty(listaEquipos)){
+				listaEquipos.add(equipoNuevo);
+			}else{
+				listaEquipos = new ArrayList<EquipoDTO>();
+				listaEquipos.add(equipoNuevo);
+			}
 			cambiaDescSelect();
 			//refreshEstados();
 		} catch (FachadaException e1) {

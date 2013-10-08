@@ -11,4 +11,15 @@ public interface CursoServicio extends BaseService<CursoDTO, Integer, Cursos>{
 	public List<CursoDTO> findByInstructorSedeAndArea(Integer instructor,
 			Integer sede, Integer area, Date fechaIni, Date fachaFin)  throws ServicioException;
 
+	int saveMateriaCurso(int idCurso, int idMateria) throws ServicioException;
+
+	int saveAlumnoCurso(int idAlumno, int idCurso) throws ServicioException;
+
+	void removeAlumnoCurso(int idAlumno, int idCurso) throws ServicioException;
+
+	void removeMateriaCurso(int idMateria, int idCurso)
+			throws ServicioException;
+
+	CursoDTO findByReferencia(String referencia) throws ServicioException;
+
 }

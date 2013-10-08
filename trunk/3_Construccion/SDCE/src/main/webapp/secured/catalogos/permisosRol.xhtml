@@ -1,3 +1,5 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
@@ -10,15 +12,15 @@
 			<p:growl id="growl" showDetail="true" sticky="true" />
 			<p:panel>
 				<h:panelGrid columns="4" style="text-align:left;">
-					<p:commandButton id="deleteButton" value="#{msg.eliminar }"
+					<p:commandButton id="deleteButton" value="#{msg.eliminar }" 
 						icon="ui-icon-trash" onclick="borrarDialog.show()" update="growl" />
-					<p:commandButton id="editarButton" value="#{msg.editar}"
+					<p:commandButton id="editarButton" value="#{msg.editar}" 
 						icon="ui-icon-pencil" onclick="editarDialog.show()"
 						update=":form:displayEditar, growl" actionListener="#{permisoRolBean.editar}" />
-					<p:commandButton id="viewButton" value="#{msg.ver}"
+					<p:commandButton id="viewButton" value="#{msg.ver}" 
 						icon="ui-icon-search" oncomplete="verDialog.show()"
 						update=":form:displayVer, growl" actionListener="#{permisoRolBean.ver}" />
-					<p:commandButton id="nuevoButton" value="#{msg.nuevo}"
+					<p:commandButton id="nuevoButton" value="#{msg.nuevo}" 
 						icon="ui-icon-plusthick" onclick="nuevoDialog.show()"
 						update=":form:displayNuevo, growl" />
 				</h:panelGrid>
@@ -53,7 +55,7 @@
 				</p:dataTable>
 			</p:panel>
 			<!-- Panel de Ver -->
-			<p:dialog id="dialog" header="#{msg.ver}" widgetVar="verDialog"
+			<p:dialog id="dialog" header="#{msg.ver}" widgetVar="verDialog" draggable="true" position="top"
 				modal="true">
 				<h:panelGrid id="displayVer" columns="1" >
 					<h:panelGrid columns="2" cellpadding="4">
@@ -122,28 +124,28 @@
 			<!-- Fin de panel de Ver -->
 			<!--  Inicio panel de Nuevo -->
 			<p:dialog id="dialogNuevo" header="#{msg.frsNuevoRegistro}"
-				widgetVar="nuevoDialog" closable="true" modal="true"
-				draggable="false" width="400">
+				widgetVar="nuevoDialog" closable="true" modal="true" position="top"
+				draggable="true" width="400">
 				<h:panelGrid columns="2" width="100%" id="displayNuevo">
 					<h:outputText value="#{msg.nombre}" />
 					<h:outputText value="#{permisoRolBean.userSelected.nombre}"
 						style="width: 260px; " />
-					<h:outputText value="#{msg.clave}" />
-					<p:inputText id="nombrePopupNuevo"
+					<h:outputText value="#{msg.clave}*" />
+					<p:inputText id="nombrePopupNuevo"   label="Clave"
 						value="#{permisoRolBean.selectedUsuario}" style="min-width: 260px" />
-					<h:outputText value="#{msg.contrasenia}" />
-					<p:password id="passwdPopupNuevo" 
+					<h:outputText value="#{msg.contrasenia}*" />
+					<p:password id="passwdPopupNuevo"    label="Password"
 						value="#{permisoRolBean.userSelected.password}" style="min-width: 260px" />
-					<h:outputText value="Confirmar #{msg.contrasenia}" />
-					<p:password id="passwdConfirmPopupNuevo" 
+					<h:outputText value="Confirmar #{msg.contrasenia}*" />
+					<p:password id="passwdConfirmPopupNuevo"    label="PasswordRepite"
 						value="#{permisoRolBean.confirmarPassword}" style="min-width: 260px" />
-					<h:outputText id="rolPopupEditarLabel" value="#{msg.rol}"/>					
-					<p:selectOneMenu id="rolPopupEdit" value="#{permisoRolBean.selectedRol}" 
+					<h:outputText id="rolPopupEditarLabel" value="#{msg.rol}*"/>					
+					<p:selectOneMenu id="rolPopupEdit" value="#{permisoRolBean.selectedRol}"   label="Rol" 
 						valueChangeListener="#{permisoRolBean.updateModulos}" immediate="true" rendered="true">
 						<f:selectItems value="#{permisoRolBean.rolItems}"/>
 					</p:selectOneMenu>
-					<h:outputText id="activoPopupNuevoLabel" value="#{msg.activo}" />
-					<h:selectBooleanCheckbox id="activoPopupNuevo"
+					<h:outputText id="activoPopupNuevoLabel" value="#{msg.activo}*" />
+					<h:selectBooleanCheckbox id="activoPopupNuevo"   label="Activo"
 						value="#{permisoRolBean.nuevoRolActivo}">
 					</h:selectBooleanCheckbox>
 				</h:panelGrid>
@@ -201,9 +203,9 @@
 			</p:dialog>
 			<!-- Fin de panel de nuevo -->
 			<!-- Inicio de panel de edicion -->
-			<p:dialog id="dialogEditar" header="#{msg.frsNuevoRegistro}"
+			<p:dialog id="dialogEditar" header="#{msg.frsNuevoRegistro}" position="top"
 				widgetVar="editarDialog" closable="true" modal="true"
-				draggable="false" width="400">
+				draggable="true" width="400">
 				<h:panelGrid columns="1" id="displayEditar">
 				<h:panelGrid columns="2" width="100%">
 					<h:outputText value="#{msg.clave}" />

@@ -1,0 +1,581 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+<h:body>
+	<ui:composition>
+		<h:form id="form">
+			<p:growl id="growl" showDetail="true" sticky="true" />
+			<p:panel id="panel" header="Buscar" closable="false"
+				toggleable="false" style="text-align:center;">
+				<h:panelGrid columns="2" style="text-align:left;">
+					<h:outputText value="#{msg.tipo} :" />
+					<p:selectOneMenu value="#{beanInstructor.selectedTipo }"
+						style="min-width: 480px">
+						<f:selectItem itemLabel="#{msg.seleccionarTipo }" itemValue="" />
+						<f:selectItems value="#{beanInstructor.listSelect1}" />
+					</p:selectOneMenu>
+					<h:outputText value="#{msg.nombre} :" />
+					<p:selectOneMenu style="min-width: 480px"
+						value="#{beanInstructor.selectedNombre }">
+						<f:selectItem itemLabel="#{msg.seleccionarNombre }" itemValue="" />
+						<f:selectItems value="#{beanInstructor.listSelect2}" />
+					</p:selectOneMenu>
+					<h:outputText value="#{msg.estatus} :" />
+					<p:selectOneMenu style="min-width: 480px"
+						value="#{beanInstructor.selectedEstatus }">
+						<f:selectItem itemLabel="#{msg.seleccionarEst }" itemValue="" />
+						<f:selectItems value="#{beanInstructor.listSelect3}" />
+					</p:selectOneMenu>
+				</h:panelGrid>
+				<br />
+				<h:panelGrid style="text-align:right" width="100%">
+					<h:panelGrid columns="2" style="text-align:right">
+						<p:commandButton value="#{msg.limpiar}"
+							icon="ui-icon-arrowrefresh-1-e"
+							onclick=":form:selectCteCveFilter.selectValue('')"
+							actionListener="#{beanInstructor.limpiarFiltrado }"
+							update="growl" />
+						<p:commandButton icon="ui-icon-search"
+							actionListener="#{beanInstructor.buscarFiltrado}"
+							value="#{msg.buscar}" update="growl, :form:clientesTable" />
+					</h:panelGrid>
+				</h:panelGrid>
+			</p:panel>
+			<p:panel>
+				<h:panelGrid columns="4" style="text-align:left;">
+					<p:commandButton id="deleteButton" value="#{msg.eliminar }" 
+						icon="ui-icon-trash" onclick="borrarDialog.show()" update="growl" />
+					<p:commandButton id="editarButton" value="#{msg.editar }" 
+						icon="ui-icon-pencil" onclick="editarDialog.show()"
+						update=":form:displayEditar, growl" />
+					<p:commandButton id="viewButton" value="#{msg.ver }" 
+						icon="ui-icon-search" oncomplete="verDialog.show()"
+						update=":form:displayVer, growl" />
+					<p:commandButton id="nuevoButton" value="#{msg.nuevo }" 
+						icon="ui-icon-plusthick" onclick="nuevoDialog.show()"
+						update=":form:displayNuevo, growl" />
+				</h:panelGrid>
+			</p:panel>
+			<p:panel>
+				<p:dataTable id="clientesTable" value="#{beanInstructor.listaItems}"
+					var="item" rowKey="#{item.idInstructor}" paginator="true"
+					selection="#{beanInstructor.itemSelected}"
+					filteredValue="#{beanInstructor.filteredList }"
+					paginatorPosition="bottom" rows="10">
+					<p:column selectionMode="single" style="width:2%" />
+					<p:column id="cteCve" headerText="#{msg.tipo}"
+						sortBy="#{item.tipo}" filterBy="#{item.tipo }">
+						<h:outputText id="cveCte" value="#{item.tipo}" />
+					</p:column>
+					<p:column id="clienteNombre" headerText="#{msg.nombre}"
+						filterBy="#{item.nombre }" sortBy="#{item.nombre}">
+						<h:outputText id="nombreCliente" value="#{item.nombre}" />
+					</p:column>
+					<p:column id="clienteResponsable" headerText="#{msg.estatus}"
+						filterBy="#{item.estatus }" sortBy="#{item.estatus}">
+						<h:outputText id="responsableCliente" value="#{item.estatus}" />
+					</p:column>
+				</p:dataTable>
+			</p:panel>
+			<!-- Inicio de panel monitor de descarga -->
+			<p:dialog modal="true" widgetVar="statusDownloadDialog"
+				header="Status" draggable="false" closable="false">
+				<p:graphicImage value="/images/ajax-loader.gif" />
+			</p:dialog>
+			<!-- Fin de panel monitor de descarga -->
+			<!-- Panel de Ver -->
+			<p:dialog id="dialog" header="#{msg.ver}" widgetVar="verDialog"
+				modal="true" draggable="true" position="top">
+				<h:panelGrid id="displayVer" columns="1" cellpadding="4">
+					<h:panelGroup id="messagePanelVer" layout="block">
+						<h:messages errorStyle="color: red" infoStyle="color: green"
+							layout="list" style="font-size:12px;font-family:Arial" />
+					</h:panelGroup>
+					<p:tabView>
+						<p:tab title="#{msg.datosGenerales }">
+							<h:panelGrid columns="2">
+								<h:outputText value="#{msg.noEmpleado }" />
+								<p:inputText readonly="true"
+									value="#{beanInstructor.itemSelected.noEmpleado }"
+									style="height:100%; width: 260px; font-weight:bold;" />
+								<h:outputText value="#{msg.nombre }" />
+								<p:inputText readonly="true"
+									style="height:100%; width: 260px; font-weight:bold;"
+									value="#{beanInstructor.itemSelected.dtoPersona.nombre }" />
+								<h:outputText value="#{msg.apellidoP }" />
+								<p:inputText readonly="true" style="height:100%;"
+									value="#{beanInstructor.itemSelected.dtoPersona.apellidoP }" />
+								<h:outputText value="#{msg.apellidoM }" />
+								<p:inputText readonly="true"
+									style="height:100%; width: 260px; font-weight:bold;"
+									value="#{beanInstructor.itemSelected.dtoPersona.apellidoM }" />
+								<h:outputText value="#{msg.fechaNacimiento }" />
+								<p:inputText readonly="true"
+									style="height:100%; width: 260px; font-weight:bold;"
+									value="#{beanInstructor.itemSelected.dtoPersona.fechaNacStr }" />
+								<h:outputText value="#{msg.lugarNacimiento }" />
+								<p:inputText readonly="true"
+									style="height:100%; width: 260px; font-weight:bold;"
+									value="#{beanInstructor.itemSelected.dtoPersona.lugarNac }" />
+								<h:outputText value="#{msg.curp }" />
+								<p:inputText readonly="true"
+									style="height:100%; width: 260px; font-weight:bold;"
+									value="#{beanInstructor.itemSelected.dtoPersona.curp }" />
+								<h:outputText value="#{msg.rfc }" />
+								<p:inputText readonly="true"
+									style="height:100%; width: 260px; font-weight:bold;"
+									value="#{beanInstructor.itemSelected.dtoPersona.rfc }" />
+								<h:outputText value="#{msg.ife }" />
+								<p:inputText readonly="true"
+									style="height:100%; width: 260px; font-weight:bold;"
+									value="#{beanInstructor.itemSelected.dtoPersona.ife }" />
+								<h:outputText value="#{msg.instructor }" />
+								<p:inputText readonly="true"
+									value="#{beanInstructor.itemSelected.tipo }"
+									style="height:100%;" />
+							</h:panelGrid>
+						</p:tab>
+						<p:tab title="#{msg.domicilio }">
+							<h:panelGrid columns="2">
+								<h:outputText value="#{msg.calle }" />
+								<p:inputText readonly="true"
+									style="height:100%; width: 260px; font-weight:bold;"
+									value="#{beanInstructor.itemSelected.dtoDomicilio.calle }" />
+								<h:outputText value="#{msg.noExterior }" />
+								<p:inputText readonly="true"
+									style="height:100%; width: 260px; font-weight:bold;"
+									value="#{beanInstructor.itemSelected.dtoDomicilio.noExterior }" />
+								<h:outputText value="#{msg.noInterior }" />
+								<p:inputText readonly="true"
+									style="height:100%; width: 260px; font-weight:bold;"
+									value="#{beanInstructor.itemSelected.dtoDomicilio.noInterior }" />
+								<h:outputText value="#{msg.colonia }" />
+								<p:inputText readonly="true"
+									style="height:100%; width: 260px; font-weight:bold;"
+									value="#{beanInstructor.itemSelected.dtoDomicilio.asentamiento }" />
+								<h:outputText value="#{msg.estado }" />
+								<p:inputText readonly="true"
+									style="height:100%; width: 260px; font-weight:bold;"
+									value="#{beanInstructor.itemSelected.dtoDomicilio.estado }" />
+								<h:outputText value="#{msg.delegacion }" />
+								<p:inputText readonly="true"
+									style="height:100%; width: 260px; font-weight:bold;"
+									value="#{beanInstructor.itemSelected.dtoDomicilio.municipio }" />
+								<h:outputText value="#{msg.codigoPostal }" />
+								<p:inputText readonly="true"
+									style="height:100%; width: 260px; font-weight:bold;"
+									value="#{beanInstructor.itemSelected.dtoDomicilio.cp }" />
+							</h:panelGrid>
+						</p:tab>
+						<p:tab title="#{msg.cedulas }">
+							<p:dataTable
+								value="#{beanInstructor.itemSelected.listInstructoresMaterias }"
+								var="item">
+								<p:column headerText="#{msg.materia }">
+									<h:outputText value="#{item.materia.nombre }" />
+								</p:column>
+							</p:dataTable>
+							<p:separator />
+							<p:dataTable
+								value="#{beanInstructor.itemSelected.listInstructoresDocumentos }"
+								var="item" rowKey="#{item.id}"
+								selection="#{beanInstructor.documentoSelected}"
+								selectionMode="single">
+								<p:ajax event="rowSelect"
+									listener="#{beanInstructor.onDocumentoSelect}" />
+								<p:column headerText="#{msg.archivo }">
+									<h:outputText value="#{item.documento.nombre }" />
+								</p:column>
+							</p:dataTable>
+							<h:panelGrid columns="1">
+								<p:commandButton value="Descargar" ajax="false"
+									onclick="PrimeFaces.monitorDownload(showStatus, hideStatus)">
+									<p:fileDownload value="#{beanInstructor.file}" />
+								</p:commandButton>
+							</h:panelGrid>
+						</p:tab>
+					</p:tabView>
+				</h:panelGrid>
+				<p:commandButton id="aceptarVerBtn" value="#{msg.aceptar }"
+					icon="ui-icon-check" onclick="verDialog.hide()" />
+			</p:dialog>
+			<!-- Fin de panel de Ver -->
+			<!--  Inicio panel de Nuevo -->
+			<p:dialog id="dialogNuevo" header="#{msg.frsNuevoRegistro}"
+				widgetVar="nuevoDialog" closable="true" modal="true"
+				draggable="true" width="600" height="400" position="top">
+				<h:panelGrid columns="1" width="100%" id="displayNuevo">
+					<p:tabView>
+						<p:tab title="#{msg.datosGenerales }">
+							<h:panelGrid columns="2">
+								<h:outputText value="#{msg.noEmpleado }*" />
+								<p:inputText value="#{beanInstructor.nuevoNoEmpleado }" required="true" label="NoEmpleado"
+									style="height:100%; width: 260px; font-weight:bold;" />
+								<h:outputText value="#{msg.nombre }*" />
+								<p:inputText value="#{beanInstructor.nuevoNombre }" required="true" label="Nombre"
+									style="height:100%; width: 260px; font-weight:bold;" />
+								<h:outputText value="#{msg.apellidoP}*" />
+								<p:inputText value="#{beanInstructor.nuevoApellidoP }" required="true" label="ApellidoPaterno"
+									style="height:100%; width: 260px; font-weight:bold;" />
+								<h:outputText value="#{msg.apellidoM }" />
+								<p:inputText value="#{beanInstructor.nuevoApellidoM }"
+									style="height:100%; width: 260px; font-weight:bold;" />
+								<h:outputText value="#{msg.fechaNacimiento }*" />
+								<p:calendar navigator="true" required="true" label="FechaNacimiento"
+									value="#{beanInstructor.nuevoFechaNac }" styleClass="dateTimeField"/>
+								<h:outputText value="#{msg.lugarNacimiento }" />
+								<p:inputText value="#{beanInstructor.nuevoLugarNac }"
+									style="height:100%; width: 260px; font-weight:bold;" />
+								<h:outputText value="#{msg.curp }" />
+								<p:inputText value="#{beanInstructor.nuevoCURP }"
+									style="height:100%; width: 260px; font-weight:bold;" />
+								<h:outputText value="#{msg.rfc }" />
+								<p:inputText value="#{beanInstructor.nuevoRFC }"
+									style="height:100%; width: 260px; font-weight:bold;" />
+								<h:outputText value="#{msg.ife }" />
+								<p:inputText value="#{beanInstructor.nuevoIFE }"
+									style="height:100%; width: 260px; font-weight:bold;" />
+								<h:outputText value="#{msg.instructor }*" />
+								<p:selectOneMenu required="true" label="Tipo"
+									value="#{beanInstructor.nuevoIdTipoInstructor }">
+									<f:selectItems
+										value="#{beanInstructor.listSelectTipoInstructor}" />
+								</p:selectOneMenu>
+								<h:outputText value="#{msg.estatus}*" />
+								<p:selectOneMenu value="#{beanInstructor.nuevoIdEstatus}" required="true" label="Estatus">
+									<f:selectItem itemLabel="#{msg.seleccionarEst}" itemValue="0" />
+									<f:selectItems value="#{beanInstructor.listSelectEstatus}" />
+								</p:selectOneMenu>
+							</h:panelGrid>
+						</p:tab>
+						<p:tab title="#{msg.domicilio }">
+							<h:panelGrid columns="2">
+								<h:outputText value="#{msg.calle }*" />
+								<p:inputText value="#{beanInstructor.nuevoCalle }" required="true" label="Calle"
+									style="height:100%; width: 260px; font-weight:bold;" />
+								<h:outputText value="#{msg.noExterior }" />
+								<p:inputText value="#{beanInstructor.nuevoNoExt }"
+									style="height:100%; width: 260px; font-weight:bold;" />
+								<h:outputText value="#{msg.noInterior }" />
+								<p:inputText value="#{beanInstructor.nuevoNoInt }"
+									style="height:100%; width: 260px; font-weight:bold;" />
+								<h:outputText value="#{msg.colonia }*" />
+								<p:selectOneMenu style="width:180px; height:100%" required="true" label="Colonia"
+									value="#{beanInstructor.nuevoIdAsentamientoMunicipioEstado }"
+									id="nuevoSelectColonias">
+									<f:selectItems
+										value="#{beanInstructor.nuevoSelectListColonias }" />
+								</p:selectOneMenu>
+								<h:outputText value="#{msg.estado }*" />
+								<p:inputText readonly="true" id="nuevoEstadoInput" required="true" label="Estado"
+									style="height:100%; width: 260px; font-weight:bold;"
+									value="#{beanInstructor.nuevoEstado }" />
+								<h:outputText value="#{msg.delegacion }*" />
+								<p:inputText readonly="true" id="nuevoDelegacionInput" required="true" label="Delegacion"
+									style="height:100%; width: 260px; font-weight:bold;"
+									value="#{beanInstructor.nuevoDelegacion }" />
+								<h:outputText value="#{msg.codigoPostal }*" />
+								<p:autoComplete id="autoCompleteCPNuevo" style="height:100%;" required="true" label="CP"
+									value="#{beanInstructor.nuevoCPAutoComplete}"
+									completeMethod="#{beanInstructor.complete}"
+									forceSelection="true">
+									<p:ajax
+										update="nuevoSelectColonias nuevoEstadoInput nuevoDelegacionInput"
+										listener="#{beanInstructor.handleSelectCambiaCp}"
+										event="itemSelect" />
+								</p:autoComplete>
+							</h:panelGrid>
+						</p:tab>
+						<p:tab title="#{msg.cedulas }">
+							<p:pickList value="#{beanInstructor.nuevoDualListModel}"
+								var="item" itemLabel="#{item.nombre}"
+								itemValue="#{item.idMateria}" />
+							<p:separator />
+							<p:dataTable value="#{beanInstructor.nuevoListaDocumentos }"
+								id="tableNuevosDocsInstr" var="item">
+								<p:column headerText="#{msg.archivo }">
+									<h:outputText value="#{item.nombre }" />
+								</p:column>
+							</p:dataTable>
+							<h:panelGrid id="panelDocsCargadosNuevo" columns="1"
+								style="width:400px">
+								<h:panelGrid columns="2">
+									<h:outputText value="#{msg.estatus }" />
+									<p:selectOneMenu style="width:170px; height:100%"
+										value="#{beanInstructor.nuevoDocEstatusSelected }">
+										<f:selectItems
+											value="#{beanInstructor.listaSelectEstatusDocs }" />
+									</p:selectOneMenu>
+								</h:panelGrid>
+								<p:fileUpload label="#{msg.frsSeleccionar }" fileLimit="1"
+									showButtons="false" uploadLabel="#{msg.cargar }"
+									cancelLabel="#{msg.cancelar }"
+									fileUploadListener="#{beanInstructor.handlerNuevoFileUpload}"
+									mode="advanced" update=":form:growl tableNuevosDocsInstr" />
+								<p:commandButton icon="ui-icon-plusthick" style="float: right"
+									update="panelDocsCargadosNuevo" value="#{msg.agregar }"
+									actionListener="#{beanInstructor.addNuevoDocumento}" />
+							</h:panelGrid>
+						</p:tab>
+					</p:tabView>
+				</h:panelGrid>
+				<h:panelGrid style="float: right;" columns="2">
+					<p:commandButton value="#{msg.aceptar }" icon="ui-icon-check"
+						oncomplete="nuevoDialog.hide()"
+						actionListener="#{beanInstructor.save }"
+						update=":form:clientesTable growl" />
+					<p:commandButton value="#{msg.cancelar }" icon="ui-icon-closethick"
+						oncomplete="nuevoDialog.hide()"
+						actionListener="#{beanInstructor.saveCancel }" />
+				</h:panelGrid>
+			</p:dialog>
+			<!-- Fin de panel de nuevo -->
+			<!-- Inicio de panel de edicion -->
+			<p:dialog id="dialogEditar" header="#{msg.frsNuevoRegistro}"
+				widgetVar="editarDialog" closable="true" modal="true"
+				draggable="true" width="600" height="400" position="top">
+				<h:panelGrid columns="1" width="100%" id="displayEditar">
+					<p:tabView>
+						<p:tab title="#{msg.datosGenerales }">
+							<h:panelGrid columns="2">
+								<h:outputText value="#{msg.noEmpleado }" style="height:100%;" />
+								<h:panelGroup>
+									<p:inputText value="#{beanInstructor.editarNoEmpleado}"
+										style="height:100%; width: 260px; font-weight:bold;"
+										id="editarNoEmpleadoInput" />
+									<p:watermark value="#{beanInstructor.itemSelected.noEmpleado }"
+										for="editarNoEmpleadoInput" />
+								</h:panelGroup>
+								<h:outputText value="#{msg.nombre }" />
+								<h:panelGroup>
+									<p:inputText readonly="true"
+										style="height:100%; width: 260px; font-weight:bold;"
+										value="#{beanInstructor.editarNombre}" id="nombreEditarInput" />
+									<p:watermark
+										value="#{beanInstructor.itemSelected.dtoPersona.nombre }"
+										for="nombreEditarInput" />
+								</h:panelGroup>
+								<h:outputText value="#{msg.apellidoP }" />
+								<h:panelGroup>
+									<p:inputText readonly="true"
+										style="height:100%; width: 260px; font-weight:bold;"
+										id="editarApellidoPInput"
+										value="#{beanInstructor.editarApellidoP}" />
+									<p:watermark
+										value="#{beanInstructor.itemSelected.dtoPersona.apellidoP }"
+										for="editarApellidoPInput" />
+								</h:panelGroup>
+								<h:outputText value="#{msg.apellidoM }" />
+								<h:panelGroup>
+									<p:inputText readonly="true"
+										style="height:100%; width: 260px; font-weight:bold;"
+										value="#{beanInstructor.editarApellidoM}"
+										id="editarApellidoMInput" />
+									<p:watermark
+										value="#{beanInstructor.itemSelected.dtoPersona.apellidoM }"
+										for="editarApellidoMInput" />
+								</h:panelGroup>
+								<h:outputText value="#{msg.fechaNacimiento }" />
+								<h:panelGroup>
+									<p:calendar readonly="true"
+										styleClass="dateTimeField"
+										id="editarFechaNac1Input"
+										value="#{beanInstructor.editarFechaNac}" />
+									<p:watermark
+										value="#{beanInstructor.itemSelected.dtoPersona.fechaNacStr }"
+										for="editarFechaNac1Input" />
+								</h:panelGroup>
+								<h:outputText value="#{msg.lugarNacimiento }" />
+								<h:panelGroup>
+									<p:inputText readonly="true"
+										style="height:100%; width: 260px; font-weight:bold;"
+										id="editarLugarNacInput"
+										value="#{beanInstructor.editarLugarNac}" />
+									<p:watermark
+										value="#{beanInstructor.itemSelected.dtoPersona.lugarNac }"
+										for="editarLugarNacInput" />
+								</h:panelGroup>
+								<h:outputText value="#{msg.curp }" />
+								<h:panelGroup>
+									<p:inputText readonly="true"
+										style="height:100%; width: 260px; font-weight:bold;"
+										id="editarCURPInput" value="#{beanInstructor.editarCURP}" />
+									<p:watermark
+										value="#{beanInstructor.itemSelected.dtoPersona.curp }"
+										for="editarCURPInput" />
+								</h:panelGroup>
+								<h:outputText value="#{msg.rfc }" />
+								<h:panelGroup>
+									<p:inputText readonly="true"
+										style="height:100%; width: 260px; font-weight:bold;"
+										id="editarRFCInput" value="#{beanInstructor.editarRFC}" />
+									<p:watermark
+										value="#{beanInstructor.itemSelected.dtoPersona.rfc }"
+										for="editarRFCInput" />
+								</h:panelGroup>
+								<h:outputText value="#{msg.ife }" />
+								<h:panelGroup>
+									<p:inputText readonly="true"
+										style="height:100%; width: 260px; font-weight:bold;"
+										id="editarIFEInput" value="#{beanInstructor.editarIFE}" />
+									<p:watermark
+										value="#{beanInstructor.itemSelected.dtoPersona.ife }"
+										for="editarIFEInput" />
+								</h:panelGroup>
+								<h:outputText value="#{msg.instructor }" />
+								<p:selectOneMenu
+									value="#{beanInstructor.editarIdTipoInstructor}">
+									<f:selectItems value="beanInstructor.listSelectTipoInstructor" />
+								</p:selectOneMenu>
+								<h:outputText value="#{msg.estatus}" />
+								<p:selectOneMenu value="#{beanInstructor.editarIdEstatus}">
+									<f:selectItem itemLabel="#{msg.seleccionarEst}" itemValue="0" />
+									<f:selectItems value="#{beanInstructor.listSelectEstatus}" />
+								</p:selectOneMenu>
+							</h:panelGrid>
+						</p:tab>
+						<p:tab title="#{msg.domicilio }">
+							<h:panelGrid columns="2">
+								<h:outputText value="#{msg.calle }" />
+								<h:panelGroup>
+									<p:inputText value="#{beanInstructor.editarCalle }"
+										style="height:100%; width: 260px; font-weight:bold;"
+										id="editarCalleInput" />
+									<p:watermark
+										value="#{beanInstructor.itemSelected.dtoDomicilio.calle }"
+										for="editarCalleInput" />
+								</h:panelGroup>
+								<h:outputText value="#{msg.noExterior }" />
+								<h:panelGroup>
+									<p:inputText value="#{beanInstructor.editarNoExt }"
+										style="height:100%; width: 260px; font-weight:bold;"
+										id="editarNoExtInput" />
+									<p:watermark
+										value="#{beanInstructor.itemSelected.dtoDomicilio.noExterior }"
+										for="editarNoExtInput" />
+								</h:panelGroup>
+								<h:outputText value="#{msg.noInterior }" />
+								<h:panelGroup>
+									<p:inputText value="#{beanInstructor.editarNoInt }"
+										style="height:100%; width: 260px; font-weight:bold;"
+										id="editarNoIntInput" />
+									<p:watermark
+										value="#{beanInstructor.itemSelected.dtoDomicilio.noInterior }"
+										for="editarNoIntInput" />
+								</h:panelGroup>
+								<h:outputText value="#{msg.colonia }" />
+								<p:selectOneMenu
+									style="height:100%; width: 180px; font-weight:bold;"
+									value="#{beanInstructor.editarIdAsentamientoMunicipioEstado }"
+									id="editarSelectColonias">
+									<f:selectItems
+										value="#{beanInstructor.editarSelectListColonias }" />
+								</p:selectOneMenu>
+								<h:outputText value="#{msg.estado }" />
+								<h:panelGroup>
+									<p:inputText readonly="true" id="editarEstadoInput"
+										style="height:100%; width: 260px; font-weight:bold;"
+										value="#{beanInstructor.editarEstado }" />
+									<p:watermark
+										value="#{beanInstructor.itemSelected.dtoDomicilio.estado }"
+										for="editarEstadoInput" />
+								</h:panelGroup>
+								<h:outputText value="#{msg.delegacion }" />
+								<h:panelGroup>
+									<p:inputText readonly="true" id="editarDelegacionInput"
+										style="height:100%; width: 260px; font-weight:bold;"
+										value="#{beanInstructor.editarDelegacion }" />
+									<p:watermark
+										value="#{beanInstructor.itemSelected.dtoDomicilio.municipio }"
+										for="editarDelegacionInput" />
+								</h:panelGroup>
+								<h:outputText value="#{msg.codigoPostal }" />
+								<h:panelGroup>
+									<p:autoComplete id="autoCompleteCPeditar" style="height:100%;"
+										value="#{beanInstructor.editarCPAutoComplete}"
+										completeMethod="#{beanInstructor.complete}"
+										forceSelection="true">
+										<p:ajax
+											update="editarSelectColonias editarEstadoInput editarDelegacionInput"
+											listener="#{beanInstructor.handleSelectCambiaCpEditar}"
+											event="itemSelect" />
+									</p:autoComplete>
+									<p:watermark
+										value="#{beanInstructor.itemSelected.dtoDomicilio.cp }"
+										for="autoCompleteCPeditar" />
+								</h:panelGroup>
+							</h:panelGrid>
+						</p:tab>
+						<p:tab title="#{msg.cedulas }">
+							<p:pickList value="#{beanInstructor.editarDualListModel}"
+								var="item" itemLabel="#{item.nombre}" itemValue="#{item}" />
+							<p:separator />
+							<p:dataTable value="#{beanInstructor.editarListaDocumentos }"
+								id="tableEditarDocsInstr" var="item">
+								<p:column headerText="#{msg.archivo }">
+									<h:outputText value="#{item.nombre }" />
+								</p:column>
+							</p:dataTable>
+							<h:panelGrid id="panelDocsCargadosEditar" columns="1"
+								style="width:400px">
+								<h:panelGrid columns="2">
+									<h:outputText value="#{msg.estatus }" />
+									<p:selectOneMenu style="width:170px; height:100%"
+										value="#{beanInstructor.editarDocEstatusSelected }">
+										<f:selectItems
+											value="#{beanInstructor.listaSelectEstatusDocs }" />
+									</p:selectOneMenu>
+								</h:panelGrid>
+								<p:fileUpload label="#{msg.frsSeleccionar }" fileLimit="1"
+									showButtons="false" uploadLabel="#{msg.cargar }"
+									cancelLabel="#{msg.cancelar }"
+									fileUploadListener="#{beanInstructor.handlerEditarFileUpload}"
+									mode="advanced" update=":form:growl tableEditarDocsInstr" />
+								<p:commandButton icon="ui-icon-plusthick" style="float: right"
+									update="panelDocsCargadosEditar" value="#{msg.agregar }"
+									actionListener="#{beanInstructor.addEditarDocumento}" />
+							</h:panelGrid>
+						</p:tab>
+					</p:tabView>
+				</h:panelGrid>
+				<h:panelGrid style="float: right;" columns="2">
+					<p:commandButton value="#{msg.aceptar }" icon="ui-icon-check"
+						oncomplete="editarDialog.hide()"
+						actionListener="#{beanInstructor.update }"
+						update=":form:clientesTable, growl" />
+					<p:commandButton value="#{msg.cancelar }" icon="ui-icon-closethick"
+						oncomplete="editarDialog.hide()"
+						actionListener="#{beanInstructor.cancelDelete }" />
+				</h:panelGrid>
+			</p:dialog>
+			<!-- Fin de panel de edicion -->
+			<!-- Panel de borrado -->
+			<p:confirmDialog showEffect="fade" widgetVar="borrarDialog"
+				header="#{msg.confirmar }" message="#{msg.frsBorrarConfirmacion }">
+				<p:commandButton value="#{msg.si }"
+					actionListener="#{beanInstructor.delete}"
+					update="clientesTable, growl" styleClass="ui-confirmdialog-yes"
+					icon="ui-icon-check" oncomplete="borrarDialog.hide()" />
+				<p:commandButton value="#{msg.no }" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close"
+					onclick="borrarDialog.hide()" />
+			</p:confirmDialog>
+			<!-- Fin de panel de borrado -->
+		</h:form>
+		<script type="text/javascript">
+			function showStatus() {
+				statusDownloadDialog.show();
+			}
+			function hideStatus() {
+				statusDownloadDialog.hide();
+			}
+		</script>
+
+	</ui:composition>
+</h:body>
+</html>

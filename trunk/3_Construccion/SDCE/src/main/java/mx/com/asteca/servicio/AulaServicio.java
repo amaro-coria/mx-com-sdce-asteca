@@ -1,5 +1,6 @@
 package mx.com.asteca.servicio;
 
+import java.util.Date;
 import java.util.List;
 
 import mx.com.asteca.comun.dto.AulaDTO;
@@ -20,5 +21,8 @@ public interface AulaServicio extends BaseService<AulaDTO, Integer, Aulas> {
 	 * @throws ServicioException
 	 */
 	List<AulaDTO> findBySede(String sede) throws ServicioException;
+
+	List<AulaDTO> findAulasDisponibles(Date timeStampInicial,
+			Date timeStampFinal, int idSede) throws ServicioException;
 
 }

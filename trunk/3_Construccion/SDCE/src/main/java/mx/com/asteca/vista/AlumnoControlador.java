@@ -4,6 +4,8 @@
 package mx.com.asteca.vista;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -1022,7 +1024,11 @@ public class AlumnoControlador extends BaseController implements Serializable {
 	 */
 	public void showVer() {
 		try {
-			itemSelected = fachada.populate(itemSelected.getIdAlumno());
+			if(itemSelected==null || itemSelected.getIdAlumno() == 0){
+				super.addWarningMessage(Constantes.MESSAGE_TITLE_WARNING,"Necesita seleccionar un elemento");
+			}else{
+				itemSelected = fachada.populate(itemSelected.getIdAlumno());
+			}
 		} catch (FachadaException e) {
 			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
 					Constantes.ERROR_SELECT_ITEM);
@@ -1274,15 +1280,19 @@ public class AlumnoControlador extends BaseController implements Serializable {
 		if (documentoTempDownload != null
 				&& documentoTempDownload.getRuta() != null
 				&& !documentoTempDownload.getRuta().isEmpty()) {
-			String ruta = "C:/" + documentoTempDownload.getRuta();
+			String ruta = documentoTempDownload.getRuta();
 			String nombre = documentoTempDownload.getNombre();
 			// TODO String extension ....
 			String[] paths = ruta.split("\\.");
 			String realExtension = paths[paths.length - 1];
 			String mimeMapping = FileExtensionUtil.getInstance()
 					.getMimeMapping(realExtension);
-			InputStream stream = FacesContext.getCurrentInstance()
-					.getExternalContext().getResourceAsStream(ruta);
+			InputStream stream = null;
+			try {
+				stream = new FileInputStream(ruta);
+			} catch (FileNotFoundException e) {
+				super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR, "Archivo no disponible");
+			}
 			file = new DefaultStreamedContent(stream, mimeMapping, nombre + "."
 					+ realExtension);
 		}
