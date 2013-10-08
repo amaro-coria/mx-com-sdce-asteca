@@ -61,6 +61,77 @@ public class ProgramaEstudiosFachadaImpl extends
 	BaseService getBaseService() {
 		return servicePrograma;
 	}
+
+	@Override
+	public List<ProgramaEstudiosDTO> findByDsc(String dsc) throws FachadaException{
+		try{
+			List<ProgramaEstudiosDTO> lista = servicePrograma.findByDsc(dsc);
+			return lista;
+		}catch(ServicioException e){
+			throw new FachadaException("Error en findByDsc:"+e.getMessage(), e);
+		}
+	}
+	
+	@Override
+	public List<ProgramaEstudiosDTO> findByClave(String cve)  throws FachadaException{
+		try{
+			List<ProgramaEstudiosDTO> lista = servicePrograma.findByClave(cve);
+			return lista;
+		}catch(ServicioException e){
+			throw new FachadaException("Error en findByClave:"+e.getMessage(), e);
+		}
+	}
+	
+	@Override
+	public List<ProgramaEstudiosDTO> findByTipo(int idTipo)  throws FachadaException{
+		try{
+			List<ProgramaEstudiosDTO> lista = servicePrograma.findByTipo(idTipo);
+			return lista;
+		}catch(ServicioException e){
+			throw new FachadaException("Error en findByTipo:"+e.getMessage(), e);
+		}
+	}
+	
+	@Override
+	public List<ProgramaEstudiosDTO> findByClaveDscAndTipo(String cve, String dsc, int idTipo)  throws FachadaException{
+		try{
+			List<ProgramaEstudiosDTO> lista = servicePrograma.findByClaveDscAndTipo(cve, dsc, idTipo);
+			return lista;
+		}catch(ServicioException e){
+			throw new FachadaException("Error en findByClaveDscAndTipo:"+e.getMessage(), e);
+		}
+	}
+	
+	@Override
+	public List<ProgramaEstudiosDTO> findByClaveAndDsc(String cve, String dsc) throws FachadaException{
+		try{
+			List<ProgramaEstudiosDTO> lista = servicePrograma.findByClaveAndDsc(cve, dsc);
+			return lista;
+		}catch(ServicioException e){
+			throw new FachadaException("Error en findByClaveAndDsc:"+e.getMessage(), e);
+		}
+	}
+	
+	@Override
+	public List<ProgramaEstudiosDTO> findByClaveAndTipo(String cve, int idTipo) throws FachadaException{
+		try{
+			List<ProgramaEstudiosDTO> lista = servicePrograma.findByClaveAndTipo(cve, idTipo);
+			return lista;
+		}catch(ServicioException e){
+			throw new FachadaException("Error en findByClaveAndTipo:"+e.getMessage(), e);
+		}
+	}
+	
+	@Override
+	public List<ProgramaEstudiosDTO> findByDscAndTipo(String dsc, int idTipo)  throws FachadaException{
+		try{
+			List<ProgramaEstudiosDTO> lista = servicePrograma.findByDscAndTipo(dsc, idTipo);
+			return lista;
+		}catch(ServicioException e){
+			throw new FachadaException("Error en findByDscAndTipo:"+e.getMessage(), e);
+		}
+	}
+	
 	
 	@Override
 	public int saveEstudioMateria(ProgramaEstudiosMateriasDTO dto) throws FachadaException{

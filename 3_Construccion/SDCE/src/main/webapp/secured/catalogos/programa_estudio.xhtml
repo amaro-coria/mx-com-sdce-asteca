@@ -27,7 +27,7 @@
 					<h:outputText value="#{msg.tipo} :" />
 					<p:selectOneMenu id="selectEstFilter" style="min-width: 480px"
 						value="#{beanProgramaEstudios.selectedTipo }">
-						<f:selectItem itemLabel="#{msg.seleccionarTipo }" itemValue="" />
+						<f:selectItem itemLabel="#{msg.seleccionarTipo }" itemValue="0" />
 						<f:selectItems value="#{beanProgramaEstudios.listSelect3}" />
 					</p:selectOneMenu>
 				</h:panelGrid>
@@ -38,23 +38,23 @@
 							icon="ui-icon-arrowrefresh-1-e"
 							onclick=":form:cveFilter.selectValue('')"
 							actionListener="#{beanProgramaEstudios.limpiarFiltrado }"
-							update="growl" />
+							update="growl catGralTable" />
 						<p:commandButton icon="ui-icon-search"
 							actionListener="#{beanProgramaEstudios.buscarFiltrado}"
-							value="#{msg.buscar}" update="catGralTable,growl" />
+							value="#{msg.buscar}" update="catGralTable growl" />
 					</h:panelGrid>
 				</h:panelGrid>
 			</p:panel>
 			<p:panel>
 				<h:panelGrid columns="4" style="text-align:left;">
-					<p:commandButton id="deleteButton" value="#{msg.eliminar }"
+					<p:commandButton id="deleteButton" value="#{msg.eliminar }" process="@this"
 						icon="ui-icon-trash" onclick="borrarDialog.show()" update="growl" />
-					<p:commandButton id="editarButton" value="#{msg.editar }"
+					<p:commandButton id="editarButton" value="#{msg.editar }" process="@this"
 						icon="ui-icon-pencil" onclick="editarDialog.show()" update="growl" />
-					<p:commandButton id="viewButton" value="#{msg.ver }"
+					<p:commandButton id="viewButton" value="#{msg.ver }" process="@this"
 						icon="ui-icon-search" oncomplete="verDialog.show()"
 						update=":form:displayVer, growl" />
-					<p:commandButton id="nuevoButton" value="#{msg.nuevo }"
+					<p:commandButton id="nuevoButton" value="#{msg.nuevo }" process="@this"
 						icon="ui-icon-plusthick" onclick="nuevoDialog.show()"
 						update="growl" />
 				</h:panelGrid>
@@ -102,29 +102,29 @@
 							<h:panelGrid columns="2">
 								<h:outputText value="#{msg.clave }" />
 								<p:inputText value="#{beanProgramaEstudios.selectedItem.clave }"
-									readonly="true" />
+									readonly="true" style="height:100%; width: 100%; font-weight:bold;"/>
 								<h:outputText value="#{msg.descripcion }" />
-								<p:inputText value="#{beanProgramaEstudios.selectedItem.dsc }"
+								<p:inputText value="#{beanProgramaEstudios.selectedItem.dsc }" style="height:100%; width: 100%; font-weight:bold;"
 									readonly="true" />
 								<h:outputText value="#{msg.tipo }" />
-								<p:inputText value="#{beanProgramaEstudios.selectedItem.tipo }"
+								<p:inputText value="#{beanProgramaEstudios.selectedItem.tipo }" style="height:100%; width: 100%; font-weight:bold;"
 									readonly="true" />
 								<h:outputText value="#{msg.noAut }" />
-								<p:inputText value="#{beanProgramaEstudios.selectedItem.noAut }"
+								<p:inputText value="#{beanProgramaEstudios.selectedItem.noAut }" style="height:100%; width: 100%; font-weight:bold;"
 									readonly="true" />
 								<h:outputText value="#{msg.horasPractica }" />
 								<p:inputText
-									value="#{beanProgramaEstudios.selectedItem.horasPractica }"
+									value="#{beanProgramaEstudios.selectedItem.horasPractica }" style="height:100%; width: 100%; font-weight:bold;"
 									readonly="true" />
 							</h:panelGrid>
 							<h:panelGrid columns="2">
 								<h:outputText value="#{msg.fecha }" />
 								<p:inputText
-									value="#{beanProgramaEstudios.selectedItem.fechaAutString }"
+									value="#{beanProgramaEstudios.selectedItem.fechaAutString }" style="height:100%; width: 100%; font-weight:bold;"
 									readonly="true" />
 								<h:outputText value="#{msg.horasTeoria }" />
 								<p:inputText
-									value="#{beanProgramaEstudios.selectedItem.horasTeoria }"
+									value="#{beanProgramaEstudios.selectedItem.horasTeoria }" style="height:100%; width: 100%; font-weight:bold;"
 									readonly="true" />
 							</h:panelGrid>
 						</h:panelGrid>
@@ -170,33 +170,35 @@
 			<!--  Inicio panel de Nuevo -->
 			<p:dialog id="dialogNuevo" header="#{msg.frsNuevoRegistro}"
 				widgetVar="nuevoDialog" closable="true" modal="true"
-				draggable="false" width="400">
+				draggable="true" width="550" height="500">
 				<h:panelGrid id="displayNuevo" columns="2" cellpadding="4">
 					<h:panelGroup id="messagePanelNuevo" layout="block">
 						<h:messages errorStyle="color: red" infoStyle="color: green"
 							layout="list" style="font-size:12px;font-family:Arial" />
 						<h:panelGrid columns="2">
 							<h:panelGrid columns="2">
-								<h:outputText value="#{msg.clave }" />
-								<p:inputText value="#{beanProgramaEstudios.nuevoClave }" />
-								<h:outputText value="#{msg.descripcion }" />
-								<p:inputText value="#{beanProgramaEstudios.nuevoDsc }" />
-								<h:outputText value="#{msg.tipo }" />
-								<p:selectOneMenu value="#{beanProgramaEstudios.nuevoIdTipo }">
+								<h:outputText value="#{msg.clave }*" />
+								<p:inputText value="#{beanProgramaEstudios.nuevoClave }"  style="height:100%; width: 100%; font-weight:bold;"
+								required="true" label="Clave"/>
+								<h:outputText value="#{msg.descripcion }*" />
+								<p:inputText value="#{beanProgramaEstudios.nuevoDsc }" style="height:100%; width: 100%; font-weight:bold;"
+								required="true" label="Descripcion"/>
+								<h:outputText value="#{msg.tipo }*" />
+								<p:selectOneMenu value="#{beanProgramaEstudios.nuevoIdTipo }" style="height:100%; width: 100%; font-weight:bold;" required="true" label="Tipo">
 									<f:selectItem itemLabel="#{msg.seleccionarTipo }" itemValue="0" />
 									<f:selectItems value="#{beanProgramaEstudios.listTipos }" />
 								</p:selectOneMenu>
-								<h:outputText value="#{msg.noAut }" />
-								<p:inputText value="#{beanProgramaEstudios.nuevoNoAut }" />
-								<h:outputText value="#{msg.horasPractica }" />
-								<p:inputText value="#{beanProgramaEstudios.nuevoHorasPractica }" />
+								<h:outputText value="#{msg.noAut }*" />
+								<p:inputText value="#{beanProgramaEstudios.nuevoNoAut }" style="height:100%; width: 100%; font-weight:bold;" required="true" label="NoAut."/>
+								<h:outputText value="#{msg.horasPractica }*" />
+								<p:inputText value="#{beanProgramaEstudios.nuevoHorasPractica }" style="height:100%; width: 100%; font-weight:bold;" required="true" label="HorasPractica"/>
 							</h:panelGrid>
 							<h:panelGrid columns="2">
-								<h:outputText value="#{msg.fecha }" />
-								<p:calendar navigator="true"
-									value="#{beanProgramaEstudios.nuevoFechaAut }" />
-								<h:outputText value="#{msg.horasTeoria }" />
-								<p:inputText value="#{beanProgramaEstudios.nuevoHorasTeoria }" />
+								<h:outputText value="#{msg.fecha }*" />
+								<p:calendar navigator="true" required="true"
+									value="#{beanProgramaEstudios.nuevoFechaAut }" styleClass="dateTimeField"/>
+								<h:outputText value="#{msg.horasTeoria }*" />
+								<p:inputText value="#{beanProgramaEstudios.nuevoHorasTeoria }" style="height:100%; width: 100%; font-weight:bold;" required="true" label="HorasTeoria"/>
 							</h:panelGrid>
 						</h:panelGrid>
 						<p:separator />
@@ -219,20 +221,20 @@
 								</p:dataTable>
 								<h:panelGrid columns="4">
 									<p:selectOneMenu
-										value="#{beanProgramaEstudios.nuevoMateriaId }">
+										value="#{beanProgramaEstudios.nuevoMateriaId } " style="height:100%; width: 100%; font-weight:bold;">
 										<f:selectItems
 											value="#{beanProgramaEstudios.listMateriasDisponibles }" />
 									</p:selectOneMenu>
 									<h:panelGroup>
 										<p:inputText
-											value="#{beanProgramaEstudios.nuevoMateriaHorasPracticas }"
+											value="#{beanProgramaEstudios.nuevoMateriaHorasPracticas }" style="height:100%; width: 100%; font-weight:bold;"
 											id="nuevoMateriaHorasPracticasInput" />
 										<p:watermark value="#{msg.horasPractica }"
 											for="nuevoMateriaHorasPracticasInput" />
 									</h:panelGroup>
 									<h:panelGroup>
 										<p:inputText
-											value="#{beanProgramaEstudios.nuevoMateriaHorasTeoria }"
+											value="#{beanProgramaEstudios.nuevoMateriaHorasTeoria }" style="height:100%; width: 100%; font-weight:bold;"
 											id="nuevoMateriaHorasTeoriaInput" />
 										<p:watermark value="#{msg.horasTeoria }"
 											for="nuevoMateriaHorasTeoriaInput" />
@@ -244,7 +246,7 @@
 							</p:tab>
 							<p:tab title="#{msg.autorizacion }">
 								<p:dataTable id="materiasTableNuevo2"
-									value="#{beanProgramaEstudios.listAutVer}" var="item"
+									value="#{beanProgramaEstudios.listAutNuevo}" var="item"
 									rowKey="#{item.idAutorizacion}"
 									selection="#{beanProgramaEstudios.autSelected}"
 									selectionMode="single">
@@ -268,11 +270,11 @@
 				</h:panelGrid>
 				<h:panelGrid style="float: right;" columns="2">
 					<p:commandButton value="#{msg.aceptar }" icon="ui-icon-check"
-						oncomplete="nuevoDialog.hide()"
+						oncomplete="if(!args.validationFailed) nuevoDialog.hide()"
 						actionListener="#{beanProgramaEstudios.save }"
 						update=":form:catGralTable, growl" />
 					<p:commandButton value="#{msg.cancelar }" icon="ui-icon-closethick"
-						oncomplete="nuevoDialog.hide()"
+						onclick="nuevoDialog.hide()"
 						actionListener="#{beanProgramaEstudios.saveCancel }" />
 				</h:panelGrid>
 			</p:dialog>
@@ -280,7 +282,7 @@
 			<!-- Inicio de panel de edicion -->
 			<p:dialog id="dialogEditar" header="#{msg.frsNuevoRegistro}"
 				widgetVar="editarDialog" closable="true" modal="true"
-				draggable="false" width="400">
+				draggable="true" width="550" height="500">
 				<h:panelGrid id="displayEditar" columns="2" cellpadding="4">
 					<h:panelGroup id="messagePanelEditar" layout="block">
 						<h:messages errorStyle="color: red" infoStyle="color: green"
@@ -288,23 +290,23 @@
 						<h:panelGrid columns="2">
 							<h:panelGrid columns="2">
 								<h:outputText value="#{msg.clave }" />
-								<p:inputText value="#{beanProgramaEstudios.editarClave }" />
+								<p:inputText value="#{beanProgramaEstudios.editarClave }" style="height:100%; width: 100%; font-weight:bold;"/>
 								<h:outputText value="#{msg.descripcion }" />
-								<p:inputText value="#{beanProgramaEstudios.editarDsc }" />
+								<p:inputText value="#{beanProgramaEstudios.editarDsc }" style="height:100%; width: 100%; font-weight:bold;"/>
 								<h:outputText value="#{msg.tipo }" />
-								<p:selectOneMenu value="#{beanProgramaEstudios.editarIdTipo }">
+								<p:selectOneMenu value="#{beanProgramaEstudios.editarIdTipo }" style="height:100%; width: 100%; font-weight:bold;">
 									<f:selectItem itemLabel="#{msg.seleccionarTipo }" itemValue="0" />
 									<f:selectItems value="#{beanProgramaEstudios.listTipos }" />
 								</p:selectOneMenu>
 								<h:outputText value="#{msg.noAut }" />
-								<p:inputText value="#{beanProgramaEstudios.editarNoAut }" />
+								<p:inputText value="#{beanProgramaEstudios.editarNoAut }" style="height:100%; width: 100%; font-weight:bold;"/>
 								<h:outputText value="#{msg.horasPractica }" />
-								<p:inputText value="#{beanProgramaEstudios.editarHorasPractica }" />
+								<p:inputText value="#{beanProgramaEstudios.editarHorasPractica }" style="height:100%; width: 100%; font-weight:bold;"/>
 							</h:panelGrid>
 							<h:panelGrid columns="2">
 								<h:outputText value="#{msg.fecha }" />
 								<p:calendar navigator="true"
-									value="#{beanProgramaEstudios.editarFechaAut }" />
+									value="#{beanProgramaEstudios.editarFechaAut }" styleClass="dateTimeField"/>
 								<h:outputText value="#{msg.horasTeoria }" />
 								<p:inputText value="#{beanProgramaEstudios.editarHorasTeoria }" />
 							</h:panelGrid>
@@ -329,20 +331,20 @@
 								</p:dataTable>
 								<h:panelGrid columns="4">
 									<p:selectOneMenu
-										value="#{beanProgramaEstudios.editarMateriaId }">
+										value="#{beanProgramaEstudios.editarMateriaId }" style="height:100%; width: 100%; font-weight:bold;">
 										<f:selectItems
 											value="#{beanProgramaEstudios.listMateriasDisponibles }" />
 									</p:selectOneMenu>
 									<h:panelGroup>
 										<p:inputText
-											value="#{beanProgramaEstudios.editarMateriaHorasPracticas }"
+											value="#{beanProgramaEstudios.editarMateriaHorasPracticas }" style="height:100%; width: 100%; font-weight:bold;"
 											id="editarMateriaHorasPracticasInput" />
 										<p:watermark value="#{msg.horasPractica }"
 											for="editarMateriaHorasPracticasInput" />
 									</h:panelGroup>
 									<h:panelGroup>
 										<p:inputText
-											value="#{beanProgramaEstudios.editarMateriaHorasTeoria }"
+											value="#{beanProgramaEstudios.editarMateriaHorasTeoria }" style="height:100%; width: 100%; font-weight:bold;"
 											id="editarMateriaHorasTeoriaInput" />
 										<p:watermark value="#{msg.horasTeoria }"
 											for="editarMateriaHorasTeoriaInput" />

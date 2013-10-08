@@ -1,5 +1,6 @@
 package mx.com.asteca.servicio.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import mx.com.asteca.comun.Constantes;
@@ -49,6 +50,18 @@ public class AulaServicioImpl extends BaseServiceImpl<AulaDTO, Integer, Aulas>
 	@Override
 	Assembler getAssembler() {
 		return assembler;
+	}
+	
+	@Override
+	@Transactional(readOnly=true)
+	public List<AulaDTO> findAulasDisponibles(Date timeStampInicial, Date timeStampFinal, int idSede) throws ServicioException{
+		try{
+			List<Aulas> listaAulas = dao.findAulasDisponibles(timeStampInicial, timeStampFinal, idSede);
+			List<AulaDTO> listaDTOs = assembler.getDTOListTransform(listaAulas);
+			return listaDTOs;
+		} catch (PersistenciaException e) {
+			throw new ServicioException("Error en servicio findAulasDisponibles:"+e.getMessage(), e);
+		}
 	}
 	
 	/* (non-Javadoc)

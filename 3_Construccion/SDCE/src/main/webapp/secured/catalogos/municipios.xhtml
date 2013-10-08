@@ -1,3 +1,5 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
@@ -51,12 +53,12 @@
 			</p:panel>
 			<p:panel>
 				<h:panelGrid columns="4" style="text-align:left;">
-					<p:commandButton id="deleteButton" value="#{msg.eliminar }"
+					<p:commandButton id="deleteButton" value="#{msg.eliminar }" 
 						icon="ui-icon-trash" onclick="borrarDialog.show()" update="growl" />
-					<p:commandButton id="editarButton" value="#{msg.editar }"
+					<p:commandButton id="editarButton" value="#{msg.editar }" 
 						icon="ui-icon-pencil" onclick="editarDialog.show()"
 						update=":form:displayEditar, growl" />
-					<p:commandButton id="viewButton" value="#{msg.ver }"
+					<p:commandButton id="viewButton" value="#{msg.ver }" 
 						icon="ui-icon-search" oncomplete="verDialog.show()"
 						update=":form:displayVer, growl" />
 					<p:commandButton id="nuevoButton" value="#{msg.nuevo }"
@@ -87,7 +89,7 @@
 				</p:dataTable>
 			</p:panel>
 			<!-- Panel de Ver -->
-			<p:dialog id="dialog" header="#{msg.ver}" widgetVar="verDialog"
+			<p:dialog id="dialog" header="#{msg.ver}" widgetVar="verDialog" position="top" draggable="true"
 				modal="true">
 				<h:panelGrid id="displayVer" columns="2" cellpadding="4">
 					<h:panelGroup id="messagePanelVer" layout="block">
@@ -96,52 +98,52 @@
 					</h:panelGroup>
 					<h:outputText />
 					<h:outputText value="#{msg.clave}" />
-					<h:outputText value="#{beanMunicipios.municipioSelected.clave}"
-						style="font-weight:bold" />
+					<p:inputText readonly="true" value="#{beanMunicipios.municipioSelected.clave}"
+						style="height:100%; width: 260px; font-weight:bold;" />
 					<h:outputText value="#{msg.nombre}" />
-					<h:outputText value="#{beanMunicipios.municipioSelected.nombre}"
-						style="font-weight:bold" />
+					<p:inputText readonly="true" value="#{beanMunicipios.municipioSelected.nombre}"
+						style="height:100%; width: 260px; font-weight:bold;" />
 					<h:outputText value="#{msg.pais}" />
-					<h:outputText value="#{beanMunicipios.municipioSelected.pais}"
-						style="font-weight:bold" />
+					<p:inputText readonly="true" value="#{beanMunicipios.municipioSelected.pais}"
+						style="height:100%; width: 260px; font-weight:bold;" />
 					<h:outputText value="#{msg.pais}" />
-					<h:outputText value="#{beanMunicipios.municipioSelected.estado}"
-						style="font-weight:bold" />
+					<p:inputText readonly="true" value="#{beanMunicipios.municipioSelected.estado}"
+						style="height:100%; width: 260px; font-weight:bold;" />
 					<h:outputText value="#{msg.activo}" />
-					<h:outputText
+					<p:inputText readonly="true"
 						value="#{beanMunicipios.municipioSelected.activo == 1 ? 'Si' : 'No' }"
-						style="font-weight:bold" />
+						style="height:100%; width: 260px; font-weight:bold;" />
 				</h:panelGrid>
 				<p:commandButton id="aceptarVerBtn" value="#{msg.aceptar }"
 					icon="ui-icon-check" onclick="verDialog.hide()" />
 			</p:dialog>
 			<!-- Fin de panel de Ver -->
 			<!--  Inicio panel de Nuevo -->
-			<p:dialog id="dialogNuevo" header="#{msg.frsNuevoRegistro}"
-				widgetVar="nuevoDialog" closable="true" modal="true"
-				draggable="false" width="400">
+			<p:dialog id="dialogNuevo" header="#{msg.frsNuevoRegistro}" position="top"
+				widgetVar="nuevoDialog" closable="true" modal="true" 
+				draggable="true" width="400">
 				<h:panelGrid columns="2" width="100%" id="displayNuevo">
-					<h:outputText value="#{msg.clave}" />
-					<p:inputText value="#{beanMunicipios.municipioNuevo.clave}"
-						style="width: 260px; " />
-					<h:outputText id="nombrePopupNuevoLabel" value="#{msg.nombre}" />
-					<p:inputText id="nombrePopupNuevo"
+					<h:outputText value="#{msg.clave}*" />
+					<p:inputText value="#{beanMunicipios.municipioNuevo.clave}"   label="Clave"
+						style="height:100%; width: 260px; font-weight:bold;"  />
+					<h:outputText id="nombrePopupNuevoLabel" value="#{msg.nombre}*" />
+					<p:inputText id="nombrePopupNuevo"   label="Nombre"
 						value="#{beanMunicipios.municipioNuevo.nombre }"
-						style="min-width: 260px" />
-					<h:outputText id="paisNuevo" value="#{msg.pais }" />
-					<p:selectOneMenu value="#{beanMunicipios.idPaisNuevo }"
-						style="min-width: 250px">
+						style="height:100%; width: 260px; font-weight:bold;" />
+					<h:outputText id="paisNuevo" value="#{msg.pais }*" />
+					<p:selectOneMenu value="#{beanMunicipios.idPaisNuevo }"   label="Pais"
+						style="height:100%; width: 250px; font-weight:bold;" >
 						<f:selectItem itemLabel="#{msg.seleccionarPais }" itemValue="" />
 						<f:selectItems value="#{beanMunicipios.listaSelectPaises}" />
 					</p:selectOneMenu>
-					<h:outputText id="edoSelectNuevo" value="#{msg.estado }" />
-					<p:selectOneMenu value="#{beanMunicipios.idEdoNuevo }"
-						style="min-width: 250px">
+					<h:outputText id="edoSelectNuevo" value="#{msg.estado }*" />
+					<p:selectOneMenu value="#{beanMunicipios.idEdoNuevo }"   label="Estado"
+						style="height:100%; width: 250px; font-weight:bold;" >
 						<f:selectItem itemLabel="#{msg.seleccionarEdo }" itemValue="" />
 						<f:selectItems value="#{beanMunicipios.listaSelectEstados}" />
 					</p:selectOneMenu>
-					<h:outputText id="activoPopupNuevoLabel" value="#{msg.activo}" />
-					<h:selectBooleanCheckbox id="activoPopupNuevo"
+					<h:outputText id="activoPopupNuevoLabel" value="#{msg.activo}*" />
+					<h:selectBooleanCheckbox id="activoPopupNuevo"   label="Activo"
 						value="#{beanMunicipios.nuevoMunicipioActivo}">
 					</h:selectBooleanCheckbox>
 				</h:panelGrid>
@@ -157,34 +159,34 @@
 			</p:dialog>
 			<!-- Fin de panel de nuevo -->
 			<!-- Inicio de panel de edicion -->
-			<p:dialog id="dialogEditar" header="#{msg.frsNuevoRegistro}"
+			<p:dialog id="dialogEditar" header="#{msg.frsNuevoRegistro}" position="top"
 				widgetVar="editarDialog" closable="true" modal="true"
-				draggable="false" width="400">
+				draggable="true" width="400">
 				<h:panelGrid columns="2" width="100%" id="displayEditar">
 					<h:outputText value="#{msg.clave}" />
 					<h:panelGroup>
 						<p:inputText id="selectedCve"
 							value="#{beanMunicipios.selectedMunicipioClave}"
-							style="width: 260px; " />
+						style="height:100%; width: 260px; font-weight:bold;" />
 						<p:watermark for="selectedCve"
 							value="#{beanMunicipios.municipioSelected.clave }" />
 					</h:panelGroup>
 					<h:outputText value="#{msg.nombre}" />
 					<h:panelGroup>
-						<p:inputText id="inputEstadoSelected" style="width: 260px; "
-							value="#{beanMunicipios.selectedMunicipioNombre }" />
+						<p:inputText id="inputEstadoSelected" 
+						style="height:100%; width: 260px; font-weight:bold;" />
 						<p:watermark for="inputEstadoSelected"
 							value="#{beanMunicipios.municipioSelected.nombre }" />
 					</h:panelGroup>
 					<h:outputText id="paisEditar" value="#{msg.pais }" />
 					<p:selectOneMenu value="#{beanMunicipios.idPaisEdit }"
-						style="min-width: 250px">
+						style="height:100%; width: 250px; font-weight:bold;" >
 						<f:selectItem itemLabel="#{msg.seleccionarPais }" itemValue="" />
 						<f:selectItems value="#{beanMunicipios.listaSelectPaises}" />
 					</p:selectOneMenu>
 					<h:outputText id="edoLabelEditar" value="#{msg.estado }" />
 					<p:selectOneMenu value="#{beanMunicipios.idEdoEdit }"
-						style="min-width: 250px">
+						style="height:100%; width: 250px; font-weight:bold;" >
 						<f:selectItem itemLabel="#{msg.seleccionarPais }" itemValue="" />
 						<f:selectItems value="#{beanMunicipios.listaSelectEstados}" />
 					</p:selectOneMenu>

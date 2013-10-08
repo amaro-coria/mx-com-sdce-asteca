@@ -78,18 +78,18 @@
 					</h:panelGroup>
 					<h:outputText />
 					<h:outputText value="#{msg.clave}" />
-					<h:outputText value="#{beanEstados.estadoSelected.clave}"
-						style="font-weight:bold" />
+					<p:inputText readonly="true" value="#{beanEstados.estadoSelected.clave}"
+						style="font-weight:bold; height:100%" />
 					<h:outputText value="#{msg.nombre}" />
-					<h:outputText value="#{beanEstados.estadoSelected.nombre}"
-						style="font-weight:bold" />
+					<p:inputText readonly="true" value="#{beanEstados.estadoSelected.nombre}"
+						style="font-weight:bold; height:100%" />
 					<h:outputText value="#{msg.pais}" />
-					<h:outputText value="#{beanEstados.estadoSelected.pais}"
-						style="font-weight:bold" />
+					<p:inputText readonly="true" value="#{beanEstados.estadoSelected.pais}"
+						style="font-weight:bold; height:100%" />
 					<h:outputText value="#{msg.activo}" />
-					<h:outputText
+					<p:inputText readonly="true"
 						value="#{beanEstados.estadoSelected.activo == 1 ? 'Si' : 'No' }"
-						style="font-weight:bold" />
+						style="font-weight:bold; height:100%" />
 				</h:panelGrid>
 				<p:commandButton id="aceptarVerBtn" value="#{msg.aceptar }"
 					icon="ui-icon-check" onclick="verDialog.hide()" />
@@ -102,14 +102,14 @@
 				<h:panelGrid columns="2" width="100%" id="displayNuevo">
 					<h:outputText value="#{msg.clave}" />
 					<p:inputText value="#{beanEstados.estadoNuevo.clave}"
-						style="width: 260px; " />
+						style="width: 260px; font-weight:bold; height:100%" />
 					<h:outputText id="nombrePopupNuevoLabel" value="#{msg.nombre}" />
 					<p:inputText id="nombrePopupNuevo"
 						value="#{beanEstados.estadoNuevo.nombre }"
-						style="min-width: 260px" />
+						style="width: 260px; font-weight:bold; height:100%" />
 					<h:outputText id="paisNuevo" value="#{msg.pais }" />
 					<p:selectOneMenu value="#{beanEstados.idPaisNuevo }"
-						style="min-width: 250px">
+						style="width: 250px; font-weight:bold; height:100%" >
 						<f:selectItem itemLabel="#{msg.seleccionarPais }" itemValue="" />
 						<f:selectItems value="#{beanEstados.listaSelectPaises}" />
 					</p:selectOneMenu>
@@ -137,13 +137,13 @@
 					<h:outputText value="#{msg.clave}" />
 					<h:panelGroup>
 						<p:inputText id="selectedCve"
-							value="#{beanEstados.selectedEstadoClave}" style="width: 260px; " />
+							value="#{beanEstados.selectedEstadoClave}" style="width: 260px; font-weight:bold; height:100%" />
 						<p:watermark for="selectedCve"
 							value="#{beanEstados.estadoSelected.clave }" />
 					</h:panelGroup>
 					<h:outputText value="#{msg.nombre}" />
 					<h:panelGroup>
-						<p:inputText id="inputEstadoSelected" style="width: 260px; "
+						<p:inputText id="inputEstadoSelected" style="width: 260px; font-weight:bold; height:100%" 
 							value="#{beanEstados.selectedEstadoNombre }" />
 						<p:watermark for="inputEstadoSelected"
 							value="#{beanEstados.estadoSelected.nombre }" />

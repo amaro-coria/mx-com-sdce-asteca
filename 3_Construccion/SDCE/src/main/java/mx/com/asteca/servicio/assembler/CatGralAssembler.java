@@ -23,6 +23,7 @@ public class CatGralAssembler extends Assembler<CatGralDTO, CatGral> {
 		TiposCatGral tipoCatGral = mapping.getTiposCatGral();
 		dto.setIdTipoCatGral(tipoCatGral.getIdCatGral());
 		dto.setActivo(mapping.getActivo());
+		dto.setTipo(mapping.getTiposCatGral().getTipo());
 		return dto;
 	}
 

@@ -11,6 +11,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 import javax.faces.model.SelectItem;
+import javax.rmi.CORBA.UtilDelegate;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -43,6 +44,7 @@ import mx.com.asteca.fachada.RolesModPermisosSobreFachada;
 import mx.com.asteca.fachada.RolesModPermisosUsrFachada;
 import mx.com.asteca.fachada.RolesModUsuariosFachada;
 import mx.com.asteca.fachada.RolesModulosFachada;
+import mx.com.asteca.util.FechaUtil;
 
 @ManagedBean(name = Constantes.BEAN_LOGIN)
 @RequestScoped
@@ -145,6 +147,8 @@ public class LoginControlador extends BaseController implements Serializable {
 							  .append(usuario.getApellidoM()!=null?usuario.getApellidoM():"");
 				servletReq.getSession().setAttribute("nombreUsuario", nombreCompleto.toString());
 				servletReq.getSession().setAttribute("fechaHora", DateFormat.getDateInstance(DateFormat.FULL).format(new Date()));
+				servletReq.getSession().setAttribute("fechaHoraStr", FechaUtil.getInstance().parseDateMM_dd_yy(new Date())); 
+						//DateFormat.getDateInstance(DateFormat.FULL).format(new Date()));
 				
 			}
 			

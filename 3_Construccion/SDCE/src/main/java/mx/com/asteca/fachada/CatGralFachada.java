@@ -3,6 +3,7 @@ package mx.com.asteca.fachada;
 import java.util.List;
 
 import mx.com.asteca.comun.dto.CatGralDTO;
+import mx.com.asteca.comun.dto.TipoCatGralDTO;
 
 /**
  * @author Jorge Amaro Coria
@@ -54,5 +55,7 @@ public interface CatGralFachada extends BaseFachada<CatGralDTO, Integer>{
 	 * @throws FachadaException
 	 */
 	List<CatGralDTO> findByTiposSede() throws FachadaException;
+
+	List<TipoCatGralDTO> getTiposCatGral() throws FachadaException;
 	
 }

@@ -27,7 +27,9 @@ public class DocsAssembler extends Assembler<DocumentoDTO, Docs> {
 				dto.setEstatus(mapping.getEstatus().getDescEstatus());
 				dto.setIdEstatus(mapping.getEstatus().getIdEstatus());
 			}
-			dto.setIdAlumno(mapping.getIdAlumno());
+			if(mapping.getIdAlumno() != null){
+				dto.setIdAlumno(mapping.getIdAlumno());
+			}
 			dto.setNombre(mapping.getNombre());
 			dto.setRuta(mapping.getRuta());
 			dto.setIdDoc(mapping.getIdDoc());

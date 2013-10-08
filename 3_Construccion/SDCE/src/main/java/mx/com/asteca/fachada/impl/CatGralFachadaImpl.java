@@ -3,11 +3,14 @@ package mx.com.asteca.fachada.impl;
 import java.util.List;
 
 import mx.com.asteca.comun.dto.CatGralDTO;
+import mx.com.asteca.comun.dto.TipoCatGralDTO;
 import mx.com.asteca.fachada.CatGralFachada;
 import mx.com.asteca.fachada.FachadaException;
 import mx.com.asteca.servicio.BaseService;
 import mx.com.asteca.servicio.CatGralServicio;
 import mx.com.asteca.servicio.ServicioException;
+import mx.com.asteca.servicio.TipoCatGralServicio;
+import mx.com.asteca.util.CatGralTipo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -24,9 +27,22 @@ public class CatGralFachadaImpl extends BaseFachadaImpl<CatGralDTO, Integer> imp
 	@Autowired
 	private CatGralServicio servicio;
 	
+	@Autowired
+	private TipoCatGralServicio servicioTipoCatGral;
+	
 	@Override
 	BaseService getBaseService() {
 		return servicio;
+	}
+	
+	@Override
+	public List<TipoCatGralDTO> getTiposCatGral() throws FachadaException{
+		try{
+			List<TipoCatGralDTO> list = servicioTipoCatGral.getAll();
+			return list;
+		} catch (ServicioException e) {
+			throw new FachadaException("Error del getTiposCatGral:"+e.getMessage(), e);
+		}
 	}
 	
 	

@@ -1,3 +1,5 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
@@ -50,15 +52,15 @@
 			</p:panel>
 			<p:panel>
 				<h:panelGrid columns="4" style="text-align:left;">
-					<p:commandButton id="deleteButton" value="#{msg.eliminar }"
+					<p:commandButton id="deleteButton" value="#{msg.eliminar }" 
 						icon="ui-icon-trash" onclick="borrarDialog.show()" update="growl" />
-					<p:commandButton id="editarButton" value="#{msg.editar }"
+					<p:commandButton id="editarButton" value="#{msg.editar }" 
 						icon="ui-icon-pencil" onclick="editarDialog.show()"
 						update=":form:displayEditar, growl" />
-					<p:commandButton id="viewButton" value="#{msg.ver }"
+					<p:commandButton id="viewButton" value="#{msg.ver }" 
 						icon="ui-icon-search" oncomplete="verDialog.show()"
 						update=":form:displayVer, growl" />
-					<p:commandButton id="nuevoButton" value="#{msg.nuevo }"
+					<p:commandButton id="nuevoButton" value="#{msg.nuevo }" 
 						icon="ui-icon-plusthick" onclick="nuevoDialog.show()"
 						update=":form:displayNuevo, growl" />
 				</h:panelGrid>
@@ -87,7 +89,7 @@
 				</p:dataTable>
 			</p:panel>
 			<!-- Panel de Ver -->
-			<p:dialog id="dialog" header="#{msg.ver}" widgetVar="verDialog"
+			<p:dialog id="dialog" header="#{msg.ver}" widgetVar="verDialog" draggable="true" position="top"
 				modal="true">
 				<h:panelGrid id="displayVer" columns="2" cellpadding="4">
 					<h:panelGroup id="messagePanelVer" layout="block">
@@ -96,24 +98,29 @@
 					</h:panelGroup>
 					<h:outputText />
 					<h:outputText value="#{msg.clave}" />
-					<h:outputText value="#{beanClientes.clienteSelected.clave}"
-						style="font-weight:bold" />
+					<p:inputText readonly="true"
+						value="#{beanClientes.clienteSelected.clave}"
+						style="font-weight:bold; height:100%;" />
 					<h:outputText value="#{msg.nombre}" />
-					<h:outputText value="#{beanClientes.clienteSelected.nombre}"
-						style="font-weight:bold" />
+					<p:inputText readonly="true"
+						value="#{beanClientes.clienteSelected.nombre}"
+						style="font-weight:bold; height:100%;" />
 					<h:outputText value="#{msg.responsable}" />
-					<h:outputText value="#{beanClientes.clienteSelected.responsable}"
-						style="font-weight:bold" />
+					<p:inputText readonly="true"
+						value="#{beanClientes.clienteSelected.responsable}"
+						style="font-weight:bold; height:100%;" />
 					<h:outputText value="#{msg.telefono}" />
-					<h:outputText value="#{beanClientes.clienteSelected.telefono}"
-						style="font-weight:bold" />
+					<p:inputText readonly="true"
+						value="#{beanClientes.clienteSelected.telefono}"
+						style="font-weight:bold; height:100%;" />
 					<h:outputText value="#{msg.email}" />
-					<h:outputText value="#{beanClientes.clienteSelected.email}"
-						style="font-weight:bold" />
+					<p:inputText readonly="true"
+						value="#{beanClientes.clienteSelected.email}"
+						style="font-weight:bold; height:100%;" />
 					<h:outputText value="#{msg.tipo}" />
-					<h:outputText
+					<p:inputText readonly="true"
 						value="#{beanClientes.clienteSelected.tipoClienteString}"
-						style="font-weight:bold" />
+						style="font-weight:bold; height:100%;" />
 				</h:panelGrid>
 				<p:commandButton id="aceptarVerBtn" value="#{msg.aceptar }"
 					icon="ui-icon-check" onclick="verDialog.hide()" />
@@ -121,31 +128,32 @@
 			<!-- Fin de panel de Ver -->
 			<!--  Inicio panel de Nuevo -->
 			<p:dialog id="dialogNuevo" header="#{msg.frsNuevoRegistro}"
-				widgetVar="nuevoDialog" closable="true" modal="true"
-				draggable="false" width="400">
+				widgetVar="nuevoDialog" closable="true" modal="true" position="top"
+				draggable="true" width="400">
 				<h:panelGrid columns="2" width="100%" id="displayNuevo">
-					<h:outputText value="#{msg.clave}" />
-					<p:inputText value="#{beanClientes.clienteNuevo.clave}"
-						style="width: 260px; " />
-					<h:outputText id="nombrePopupNuevoLabel" value="#{msg.nombre}" />
-					<p:inputText id="nombrePopupNuevo"
+					<h:outputText value="#{msg.clave}*" />
+					<p:inputText value="#{beanClientes.clienteNuevo.clave}"   label="Clave"
+						style="width: 260px; font-weight:bold; height:100%; " />
+					<h:outputText id="nombrePopupNuevoLabel" value="#{msg.nombre}*" />
+					<p:inputText id="nombrePopupNuevo"   label="Nombre"
 						value="#{beanClientes.clienteNuevo.nombre }"
-						style="min-width: 260px" />
+						style="width: 260px; font-weight:bold; height:100%; " />
 					<h:outputText id="responsablePopupNuevoLabel"
-						value="#{msg.responsable }" />
-					<p:inputText id="responsableNuevoString"
+						value="#{msg.responsable }*" />
+					<p:inputText id="responsableNuevoString"   label="Responsable"
 						value="#{beanClientes.clienteNuevo.responsable}"
-						style="min-width: 260px" />
-					<h:outputText id="telefonoPopupNuevoLabel" value="#{msg.telefono}" />
-					<p:inputText id="telefonoPopupNuevo"
+						style="width: 260px; font-weight:bold; height:100%; " />
+					<h:outputText id="telefonoPopupNuevoLabel" value="#{msg.telefono}*" />
+					<p:inputText id="telefonoPopupNuevo"   label="Telefono"
 						value="#{beanClientes.clienteNuevo.telefono}"
-						style="min-width: 260px" />
-					<h:outputText id="emailPopupNuevoLabel" value="#{msg.email}" />
-					<p:inputText id="emailPopupNuevo"
+						style="width: 260px; font-weight:bold; height:100%; " />
+					<h:outputText id="emailPopupNuevoLabel" value="#{msg.email}*" />
+					<p:inputText id="emailPopupNuevo"   
 						value="#{beanClientes.clienteNuevo.email}"
-						style="min-width: 260px" />
-					<h:outputText id="tipoPopupNuevoLabel" value="#{msg.tipo}" />
-					<p:selectOneRadio id="radioTipoNuevo"
+						style="width: 260px; font-weight:bold; height:100%; " >
+						</p:inputText>
+					<h:outputText id="tipoPopupNuevoLabel" value="#{msg.tipo}*" />
+					<p:selectOneRadio id="radioTipoNuevo"   label="TipoCliente"
 						value="#{beanClientes.idTipoCliente}">
 						<f:selectItems value="#{beanClientes.listaSelectTiposClientes}" />
 					</p:selectOneRadio>
@@ -163,42 +171,47 @@
 			<!-- Fin de panel de nuevo -->
 			<!-- Inicio de panel de edicion -->
 			<p:dialog id="dialogEditar" header="#{msg.frsNuevoRegistro}"
-				widgetVar="editarDialog" closable="true" modal="true"
-				draggable="false" width="400">
+				widgetVar="editarDialog" closable="true" modal="true" position="top"
+				draggable="true" width="400">
 				<h:panelGrid columns="2" width="100%" id="displayEditar">
 					<h:outputText value="#{msg.clave}" />
 					<h:panelGroup>
-						<h:inputText id="selectedCve"
+						<p:inputText id="selectedCve"
 							value="#{beanClientes.selectedClienteClave}"
-							style="width: 260px; " />
+							style="width: 260px; font-weight:bold; height:100%; " />
 						<p:watermark for="selectedCve"
 							value="#{beanClientes.clienteSelected.clave }" />
 					</h:panelGroup>
 					<h:outputText value="#{msg.nombre}" />
 					<h:panelGroup>
-						<p:inputText id="inputNombreSelected" style="width: 260px; "
-							value="#{beanClientes.selectedClienteNombre }" />
+						<p:inputText id="inputNombreSelected"
+							style="width: 260px; font-weight:bold; height:100%; " />
 						<p:watermark for="inputNombreSelected"
 							value="#{beanClientes.clienteSelected.nombre }" />
 					</h:panelGroup>
 					<h:outputText value="#{msg.responsable}" />
 					<h:panelGroup>
-						<p:inputText id="inputResponsableSelected" style="width: 260px; "
+						<p:inputText id="inputResponsableSelected"
+							style="width: 260px; font-weight:bold; height:100%; "
 							value="#{beanClientes.selectedClienteResponsable }" />
 						<p:watermark for="inputResponsableSelected"
 							value="#{beanClientes.clienteSelected.responsable }" />
 					</h:panelGroup>
 					<h:outputText value="#{msg.telefono}" />
 					<h:panelGroup>
-						<p:inputText id="inputTelefonoSelected" style="width: 260px; "
+						<p:inputText id="inputTelefonoSelected"
+							style="width: 260px; font-weight:bold; height:100%; "
 							value="#{beanClientes.selectedClienteTelefono }" />
 						<p:watermark for="inputTelefonoSelected"
 							value="#{beanClientes.clienteSelected.telefono }" />
 					</h:panelGroup>
 					<h:outputText value="#{msg.email}" />
 					<h:panelGroup>
-						<p:inputText id="inputEmailSelected" style="width: 260px; "
-							value="#{beanClientes.selectedClienteEmail }" />
+						<p:inputText id="inputEmailSelected" label="EditarEmail" 
+							style="width: 260px; font-weight:bold; height:100%; "
+							value="#{beanClientes.selectedClienteEmail }" >
+								<f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+							</p:inputText>
 						<p:watermark for="inputEmailSelected"
 							value="#{beanClientes.clienteSelected.email }" />
 					</h:panelGroup>

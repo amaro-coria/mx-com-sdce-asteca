@@ -17,12 +17,12 @@ import javax.faces.model.SelectItem;
 import mx.com.asteca.comun.Constantes;
 import mx.com.asteca.comun.dto.AdministrativoDTO;
 import mx.com.asteca.comun.dto.AsentamientoDTO;
+import mx.com.asteca.comun.dto.DomicilioDTO;
 import mx.com.asteca.comun.dto.EstadoDTO;
 import mx.com.asteca.comun.dto.MunicipioDTO;
+import mx.com.asteca.comun.dto.PersonaDTO;
 import mx.com.asteca.fachada.AdministrativoFachada;
-import mx.com.asteca.fachada.BaseFachada;
 import mx.com.asteca.fachada.FachadaException;
-import mx.com.asteca.fachada.ModulosFachada;
 
 import org.primefaces.event.SelectEvent;
 import org.springframework.util.CollectionUtils;
@@ -31,7 +31,7 @@ import org.springframework.util.CollectionUtils;
  * @author JAMARO
  * 
  */
-@ManagedBean(name = Constantes.BEAN_ADMINISTRATIVOS)
+@ManagedBean(name = Constantes.BEAN_CAT_ADMIN)
 @ViewScoped
 public class AdministrativoControlador extends BaseController implements
 		Serializable {
@@ -42,10 +42,9 @@ public class AdministrativoControlador extends BaseController implements
 	private static final long serialVersionUID = 1L;
 	private static final String modulo = Constantes.MODULO_ADMIN;
 
-
 	@ManagedProperty("#{administrativoFachadaImpl}")
 	private transient AdministrativoFachada fachada;
-	
+
 	private List<AdministrativoDTO> listItems;
 	private List<AdministrativoDTO> filteredList;
 
@@ -57,7 +56,7 @@ public class AdministrativoControlador extends BaseController implements
 
 	private AdministrativoDTO itemSelected;
 	private AdministrativoDTO itemNuevo;
-	
+
 	private String nuevoAdminNoEmpleado;
 	private String nuevoAdminNombre;
 	private String nuevoAdminApaterno;
@@ -72,7 +71,7 @@ public class AdministrativoControlador extends BaseController implements
 	private String nuevoAdminCalle;
 	private String nuevoAdminNoExt;
 	private String nuevoAdminNoInt;
-	
+
 	private String editarAdminNoEmpleado;
 	private String editarAdminNombre;
 	private String editarAdminApaterno;
@@ -87,37 +86,192 @@ public class AdministrativoControlador extends BaseController implements
 	private String editarAdminCalle;
 	private String editarAdminNoExt;
 	private String editarAdminNoInt;
-	
+
 	private List<String> listCPString;
 	private List<Integer> listaCPs;
-	
+
 	private String nuevoAdminCPAutoComplete;
 	private String nuevoAdminDelegacion;
 	private String nuevoAdminEntidadFederativa;
 	private String nuevoAdminPais;
 	private String nuevoAdminIdAsentamientoMunicipioEstado;
-	
+
 	private String editarAdminCPAutoComplete;
 	private String editarAdminDelegacion;
 	private String editarAdminEntidadFederativa;
 	private String editarAdminPais;
 	private String editarAdminIdAsentamientoMunicipioEstado;
-	
+
 	private int nuevoAdminCpIdAsentamiento;
 	private int editarAdminCpIdAsentamiento;
-	
+
 	private List<SelectItem> nuevoAdminSelectListColonias;
 	private List<SelectItem> editarAdminSelectListColonias;
-	
-	public AdministrativoControlador(){
+
+	public AdministrativoControlador() {
 		itemNuevo = new AdministrativoDTO();
 		itemSelected = new AdministrativoDTO();
 	}
+
+	public void save() {
+		boolean b = validaDatos();
+		if(b){
+			DomicilioDTO domicilioDTO = new DomicilioDTO();
+			domicilioDTO.setCalle(nuevoAdminCalle);
+			domicilioDTO.setCp(nuevoAdminCpIdAsentamiento);
+			String[] datosDemograficos = nuevoAdminIdAsentamientoMunicipioEstado
+					.split("\\|");
+			int idAsentamientoTemp = Integer.parseInt(datosDemograficos[0]);
+			int idMunicipioTemp = Integer.parseInt(datosDemograficos[1]);
+			int idEstadoTemp = Integer.parseInt(datosDemograficos[2]);
+			domicilioDTO.setIdAsentamiento(idAsentamientoTemp);
+			domicilioDTO.setIdEstado(idEstadoTemp);
+			domicilioDTO.setIdMunicipio(idMunicipioTemp);
+			domicilioDTO.setNoExterior(nuevoAdminNoExt);
+			domicilioDTO.setNoInterior(nuevoAdminNoInt);
+			PersonaDTO dtoPersona = new PersonaDTO();
+			dtoPersona.setActivo((short) 1);
+			dtoPersona.setApellidoM(nuevoAdminAmaterno);
+			dtoPersona.setApellidoP(nuevoAdminApaterno);
+			dtoPersona.setCurp(nuevoAdminCURP);
+			dtoPersona.setEmail(nuevoAdminEmail);
+			dtoPersona.setFechaNac(nuevoAdminFechaNac);
+			dtoPersona.setIfe(nuevoAdminIFE);
+			dtoPersona.setLugarNac(nuevoAdminLugarNac);
+			dtoPersona.setNombre(nuevoAdminNombre);
+			dtoPersona.setPasaporte(nuevoAdminPasaporte);
+			dtoPersona.setRfc(nuevoAdminRFC);
+
+			itemNuevo.setDtoDomicilio(domicilioDTO);
+			itemNuevo.setDtoPersona(dtoPersona);
+			itemNuevo.setNoEmpleado(nuevoAdminNoEmpleado);
+			try {
+				fachada.save(itemNuevo);
+			} catch (FachadaException e) {
+				super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
+						Constantes.ERROR_NUEVO_REGISTRO);
+			}
+		}
+	}
 	
-	public void testButtonActionListener(ActionEvent event) {
-        System.out.println("testButtonActionListener invoked");
-    }
-	
+	private boolean validaDatos(){
+		if(nuevoAdminNoEmpleado == null || nuevoAdminNoEmpleado.isEmpty()){
+			return false;
+		}else if(nuevoAdminNombre == null || nuevoAdminNombre.isEmpty()){
+			return false;
+		}else if(nuevoAdminApaterno == null || nuevoAdminApaterno.isEmpty()){
+			return false;
+		}else if(nuevoAdminAmaterno == null || nuevoAdminAmaterno.isEmpty()){
+			return false;
+		}else if(nuevoAdminEmail == null || nuevoAdminEmail.isEmpty()){
+			return false;
+		}else if(nuevoAdminCalle == null || nuevoAdminCalle.isEmpty()){
+			return false;
+		}else if(nuevoAdminIdAsentamientoMunicipioEstado == null || nuevoAdminIdAsentamientoMunicipioEstado.isEmpty()){
+			return false;
+		}
+		return true;
+	}
+
+	public void saveCancel() {
+		nuevoAdminNoEmpleado = "";
+		nuevoAdminNombre = "";
+		nuevoAdminApaterno = "";
+		nuevoAdminAmaterno = "";
+		nuevoAdminFechaNac = null;
+		nuevoAdminLugarNac = "";
+		nuevoAdminCURP = "";
+		nuevoAdminRFC = "";
+		nuevoAdminIFE = "";
+		nuevoAdminPasaporte = "";
+		nuevoAdminEmail = "";
+		nuevoAdminCalle = "";
+		nuevoAdminNoExt = "";
+		nuevoAdminNoInt = "";
+		nuevoAdminCPAutoComplete = "";
+		nuevoAdminDelegacion = "";
+		nuevoAdminEntidadFederativa = "";
+		nuevoAdminPais = "";
+		nuevoAdminIdAsentamientoMunicipioEstado = "";
+	}
+
+	public void update() {
+		DomicilioDTO domicilioDTO = itemSelected.getDtoDomicilio();
+		if (domicilioDTO == null) {
+			domicilioDTO = new DomicilioDTO();
+		}
+		if (editarAdminCalle != null && !editarAdminCalle.isEmpty()) {
+			domicilioDTO.setCalle(editarAdminCalle);
+		}
+		if (editarAdminCpIdAsentamiento != 0) {
+			domicilioDTO.setCp(editarAdminCpIdAsentamiento);
+		}
+		if (editarAdminIdAsentamientoMunicipioEstado != null
+				&& !editarAdminIdAsentamientoMunicipioEstado.isEmpty()) {
+			String[] datosDemograficos = editarAdminIdAsentamientoMunicipioEstado
+					.split("\\|");
+			int idAsentamientoTemp = Integer.parseInt(datosDemograficos[0]);
+			int idMunicipioTemp = Integer.parseInt(datosDemograficos[1]);
+			int idEstadoTemp = Integer.parseInt(datosDemograficos[2]);
+			domicilioDTO.setIdAsentamiento(idAsentamientoTemp);
+			domicilioDTO.setIdEstado(idEstadoTemp);
+			domicilioDTO.setIdMunicipio(idMunicipioTemp);
+		}
+		if (editarAdminNoExt != null && !editarAdminNoExt.isEmpty()) {
+			domicilioDTO.setNoExterior(editarAdminNoExt);
+		}
+		if (editarAdminNoInt != null && !editarAdminNoInt.isEmpty()) {
+			domicilioDTO.setNoInterior(editarAdminNoInt);
+		}
+		PersonaDTO dtoPersona = itemSelected.getDtoPersona();
+		if (dtoPersona == null) {
+			dtoPersona = new PersonaDTO();
+		}
+		dtoPersona.setActivo((short) 1);
+		if (editarAdminAmaterno != null && !editarAdminAmaterno.isEmpty()) {
+			dtoPersona.setApellidoM(editarAdminAmaterno);
+		}
+		if (editarAdminApaterno != null && !editarAdminApaterno.isEmpty()) {
+			dtoPersona.setApellidoP(editarAdminApaterno);
+		}
+		if (editarAdminCURP != null && !editarAdminCURP.isEmpty()) {
+			dtoPersona.setCurp(editarAdminCURP);
+		}
+		if (editarAdminEmail != null && !editarAdminEmail.isEmpty()) {
+			dtoPersona.setEmail(editarAdminEmail);
+		}
+		if (editarAdminFechaNac != null) {
+			dtoPersona.setFechaNac(editarAdminFechaNac);
+		}
+		if (editarAdminIFE != null && !editarAdminIFE.isEmpty()) {
+			dtoPersona.setIfe(editarAdminIFE);
+		}
+		if (editarAdminLugarNac != null && !editarAdminLugarNac.isEmpty()) {
+			dtoPersona.setLugarNac(editarAdminLugarNac);
+		}
+		if (editarAdminNombre != null && !editarAdminNombre.isEmpty()) {
+			dtoPersona.setNombre(editarAdminNombre);
+		}
+		if (editarAdminPasaporte != null && !editarAdminPasaporte.isEmpty()) {
+			dtoPersona.setPasaporte(editarAdminPasaporte);
+		}
+		if (editarAdminRFC != null && !editarAdminRFC.isEmpty()) {
+			dtoPersona.setRfc(editarAdminRFC);
+		}
+
+		itemSelected.setDtoDomicilio(domicilioDTO);
+		itemSelected.setDtoPersona(dtoPersona);
+		if (editarAdminNoEmpleado != null && !editarAdminNoEmpleado.isEmpty()) {
+			itemSelected.setNoEmpleado(editarAdminNoEmpleado);
+		}
+		try {
+			fachada.update(itemSelected);
+		} catch (FachadaException e) {
+			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
+					Constantes.ERROR_UPDATE_REGISTRO);
+		}
+	}
+
 	private void initListaItems() {
 		if (CollectionUtils.isEmpty(listItems)) {
 			try {
@@ -132,10 +286,12 @@ public class AdministrativoControlador extends BaseController implements
 	private void initListaSelectItems1() {
 		if (CollectionUtils.isEmpty(listSelectItems1)) {
 			listSelectItems1 = new ArrayList<SelectItem>();
-			for (AdministrativoDTO dto : getListItems()) {
-				SelectItem item = new SelectItem(dto.getNoEmpleado(),
-						dto.getNoEmpleado());
-				listSelectItems1.add(item);
+			if (!CollectionUtils.isEmpty(getListItems())) {
+				for (AdministrativoDTO dto : getListItems()) {
+					SelectItem item = new SelectItem(dto.getNoEmpleado(),
+							dto.getNoEmpleado());
+					listSelectItems1.add(item);
+				}
 			}
 		}
 	}
@@ -143,13 +299,27 @@ public class AdministrativoControlador extends BaseController implements
 	private void initListaSelectItems2() {
 		if (CollectionUtils.isEmpty(listSelectItems2)) {
 			listSelectItems2 = new ArrayList<SelectItem>();
-			for (AdministrativoDTO dto : getListItems()) {
-				SelectItem item = new SelectItem(dto.getNombreCompleto(), dto.getNombreCompleto());
-				listSelectItems2.add(item);
+			if (!CollectionUtils.isEmpty(getListItems())) {
+				for (AdministrativoDTO dto : getListItems()) {
+					SelectItem item = new SelectItem(dto.getNombreCompleto(),
+							dto.getNombreCompleto());
+					listSelectItems2.add(item);
+				}
 			}
 		}
 	}
-	
+
+	private void initListaCPs() {
+		if (CollectionUtils.isEmpty(listaCPs)) {
+			try {
+				listaCPs = fachada.getDistincCPs();
+			} catch (FachadaException e) {
+				super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
+						Constantes.ERROR_OBTENIENDO_LISTA_CATALOGO);
+			}
+		}
+	}
+
 	private void initListaCPString() {
 		if (CollectionUtils.isEmpty(listCPString)) {
 			listCPString = new ArrayList<String>();
@@ -159,18 +329,18 @@ public class AdministrativoControlador extends BaseController implements
 			}
 		}
 	}
-	
-	public void verItem(){
-		System.out.println("SelectedElement:"+itemSelected);
+
+	public void verItem() {
+		System.out.println("SelectedElement:" + itemSelected);
 	}
-	
+
 	/**
 	 * Inicializa el componente para que el panel de Ver pueda ser accedido
 	 */
 	public void showVer() {
-		System.out.println("SelectedElement:"+itemSelected);
+		System.out.println("SelectedElement:" + itemSelected);
 	}
-	
+
 	public List<String> complete(String cp) {
 		List<String> results = new ArrayList<String>();
 		for (String s : getListCPString()) {
@@ -180,19 +350,19 @@ public class AdministrativoControlador extends BaseController implements
 		}
 		return results;
 	}
-	
+
 	public void handleSelectCambiaCpEditar(SelectEvent e) {
 		String selection = e.getObject().toString();
 		editarAdminCPAutoComplete = selection;
 		handlerCambiaCpEditar();
 	}
-	
+
 	public void handleSelectCambiaCp(SelectEvent e) {
 		String selection = e.getObject().toString();
 		nuevoAdminCPAutoComplete = selection;
 		handlerCambiaCp();
 	}
-	
+
 	public void handlerCambiaCpEditar() {
 		try {
 			editarAdminCpIdAsentamiento = Integer
@@ -232,7 +402,7 @@ public class AdministrativoControlador extends BaseController implements
 			}
 		}
 	}
-	
+
 	public void handlerCambiaCp() {
 		try {
 			nuevoAdminCpIdAsentamiento = Integer
@@ -272,7 +442,7 @@ public class AdministrativoControlador extends BaseController implements
 			}
 		}
 	}
-	
+
 	/**
 	 * Limpia los valores de busqueda
 	 * 
@@ -282,7 +452,7 @@ public class AdministrativoControlador extends BaseController implements
 		listItems = null;
 		initListaItems();
 	}
-	
+
 	/**
 	 * Realiza la busqueda y actualiza valores para el datatable
 	 * 
@@ -290,20 +460,25 @@ public class AdministrativoControlador extends BaseController implements
 	 */
 	public void buscarFiltrado(ActionEvent e) {
 		try {
-			boolean buscarNombre = selectedNombre == null || selectedNombre.isEmpty();
-			boolean buscarClave = selectedClave == null || selectedClave.isEmpty();
+			boolean buscarNombre = selectedNombre == null
+					|| selectedNombre.isEmpty();
+			boolean buscarClave = selectedClave == null
+					|| selectedClave.isEmpty();
 			buscarNombre = !buscarNombre;
 			buscarClave = !buscarClave;
-			if(buscarNombre && buscarClave){
-				List<AdministrativoDTO> results = fachada.findByNombreClave(selectedNombre, selectedClave);
+			if (buscarNombre && buscarClave) {
+				List<AdministrativoDTO> results = fachada.findByNombreClave(
+						selectedNombre, selectedClave);
 				listItems = results;
-			}else if(buscarNombre){
-				List<AdministrativoDTO> results = fachada.findByNombre(selectedNombre);
+			} else if (buscarNombre) {
+				List<AdministrativoDTO> results = fachada
+						.findByNombre(selectedNombre);
 				listItems = results;
-			}else if(buscarClave){
-				List<AdministrativoDTO> results = fachada.findByClave(selectedClave);
+			} else if (buscarClave) {
+				List<AdministrativoDTO> results = fachada
+						.findByClave(selectedClave);
 				listItems = results;
-			}else{
+			} else {
 				listItems = null;
 				initListaItems();
 				return;
@@ -409,7 +584,8 @@ public class AdministrativoControlador extends BaseController implements
 	}
 
 	/**
-	 * @param selectedClave the selectedClave to set
+	 * @param selectedClave
+	 *            the selectedClave to set
 	 */
 	public void setSelectedClave(String selectedClave) {
 		this.selectedClave = selectedClave;
@@ -423,7 +599,8 @@ public class AdministrativoControlador extends BaseController implements
 	}
 
 	/**
-	 * @param selectedNombre the selectedNombre to set
+	 * @param selectedNombre
+	 *            the selectedNombre to set
 	 */
 	public void setSelectedNombre(String selectedNombre) {
 		this.selectedNombre = selectedNombre;
@@ -437,7 +614,8 @@ public class AdministrativoControlador extends BaseController implements
 	}
 
 	/**
-	 * @param filteredList the filteredList to set
+	 * @param filteredList
+	 *            the filteredList to set
 	 */
 	public void setFilteredList(List<AdministrativoDTO> filteredList) {
 		this.filteredList = filteredList;
@@ -451,7 +629,8 @@ public class AdministrativoControlador extends BaseController implements
 	}
 
 	/**
-	 * @param nuevoAdminNoEmpleado the nuevoAdminNoEmpleado to set
+	 * @param nuevoAdminNoEmpleado
+	 *            the nuevoAdminNoEmpleado to set
 	 */
 	public void setNuevoAdminNoEmpleado(String nuevoAdminNoEmpleado) {
 		this.nuevoAdminNoEmpleado = nuevoAdminNoEmpleado;
@@ -465,7 +644,8 @@ public class AdministrativoControlador extends BaseController implements
 	}
 
 	/**
-	 * @param nuevoAdminNombre the nuevoAdminNombre to set
+	 * @param nuevoAdminNombre
+	 *            the nuevoAdminNombre to set
 	 */
 	public void setNuevoAdminNombre(String nuevoAdminNombre) {
 		this.nuevoAdminNombre = nuevoAdminNombre;
@@ -479,7 +659,8 @@ public class AdministrativoControlador extends BaseController implements
 	}
 
 	/**
-	 * @param nuevoAdminApaterno the nuevoAdminApaterno to set
+	 * @param nuevoAdminApaterno
+	 *            the nuevoAdminApaterno to set
 	 */
 	public void setNuevoAdminApaterno(String nuevoAdminApaterno) {
 		this.nuevoAdminApaterno = nuevoAdminApaterno;
@@ -493,7 +674,8 @@ public class AdministrativoControlador extends BaseController implements
 	}
 
 	/**
-	 * @param nuevoAdminAmaterno the nuevoAdminAmaterno to set
+	 * @param nuevoAdminAmaterno
+	 *            the nuevoAdminAmaterno to set
 	 */
 	public void setNuevoAdminAmaterno(String nuevoAdminAmaterno) {
 		this.nuevoAdminAmaterno = nuevoAdminAmaterno;
@@ -507,7 +689,8 @@ public class AdministrativoControlador extends BaseController implements
 	}
 
 	/**
-	 * @param nuevoAdminFechaNac the nuevoAdminFechaNac to set
+	 * @param nuevoAdminFechaNac
+	 *            the nuevoAdminFechaNac to set
 	 */
 	public void setNuevoAdminFechaNac(Date nuevoAdminFechaNac) {
 		this.nuevoAdminFechaNac = nuevoAdminFechaNac;
@@ -521,7 +704,8 @@ public class AdministrativoControlador extends BaseController implements
 	}
 
 	/**
-	 * @param nuevoAdminLugarNac the nuevoAdminLugarNac to set
+	 * @param nuevoAdminLugarNac
+	 *            the nuevoAdminLugarNac to set
 	 */
 	public void setNuevoAdminLugarNac(String nuevoAdminLugarNac) {
 		this.nuevoAdminLugarNac = nuevoAdminLugarNac;
@@ -535,7 +719,8 @@ public class AdministrativoControlador extends BaseController implements
 	}
 
 	/**
-	 * @param nuevoAdminCURP the nuevoAdminCURP to set
+	 * @param nuevoAdminCURP
+	 *            the nuevoAdminCURP to set
 	 */
 	public void setNuevoAdminCURP(String nuevoAdminCURP) {
 		this.nuevoAdminCURP = nuevoAdminCURP;
@@ -549,7 +734,8 @@ public class AdministrativoControlador extends BaseController implements
 	}
 
 	/**
-	 * @param nuevoAdminRFC the nuevoAdminRFC to set
+	 * @param nuevoAdminRFC
+	 *            the nuevoAdminRFC to set
 	 */
 	public void setNuevoAdminRFC(String nuevoAdminRFC) {
 		this.nuevoAdminRFC = nuevoAdminRFC;
@@ -563,7 +749,8 @@ public class AdministrativoControlador extends BaseController implements
 	}
 
 	/**
-	 * @param nuevoAdminIFE the nuevoAdminIFE to set
+	 * @param nuevoAdminIFE
+	 *            the nuevoAdminIFE to set
 	 */
 	public void setNuevoAdminIFE(String nuevoAdminIFE) {
 		this.nuevoAdminIFE = nuevoAdminIFE;
@@ -577,7 +764,8 @@ public class AdministrativoControlador extends BaseController implements
 	}
 
 	/**
-	 * @param nuevoAdminPasaporte the nuevoAdminPasaporte to set
+	 * @param nuevoAdminPasaporte
+	 *            the nuevoAdminPasaporte to set
 	 */
 	public void setNuevoAdminPasaporte(String nuevoAdminPasaporte) {
 		this.nuevoAdminPasaporte = nuevoAdminPasaporte;
@@ -591,7 +779,8 @@ public class AdministrativoControlador extends BaseController implements
 	}
 
 	/**
-	 * @param nuevoAdminEmail the nuevoAdminEmail to set
+	 * @param nuevoAdminEmail
+	 *            the nuevoAdminEmail to set
 	 */
 	public void setNuevoAdminEmail(String nuevoAdminEmail) {
 		this.nuevoAdminEmail = nuevoAdminEmail;
@@ -605,7 +794,8 @@ public class AdministrativoControlador extends BaseController implements
 	}
 
 	/**
-	 * @param nuevoAdminCalle the nuevoAdminCalle to set
+	 * @param nuevoAdminCalle
+	 *            the nuevoAdminCalle to set
 	 */
 	public void setNuevoAdminCalle(String nuevoAdminCalle) {
 		this.nuevoAdminCalle = nuevoAdminCalle;
@@ -619,7 +809,8 @@ public class AdministrativoControlador extends BaseController implements
 	}
 
 	/**
-	 * @param nuevoAdminNoExt the nuevoAdminNoExt to set
+	 * @param nuevoAdminNoExt
+	 *            the nuevoAdminNoExt to set
 	 */
 	public void setNuevoAdminNoExt(String nuevoAdminNoExt) {
 		this.nuevoAdminNoExt = nuevoAdminNoExt;
@@ -633,7 +824,8 @@ public class AdministrativoControlador extends BaseController implements
 	}
 
 	/**
-	 * @param nuevoAdminNoInt the nuevoAdminNoInt to set
+	 * @param nuevoAdminNoInt
+	 *            the nuevoAdminNoInt to set
 	 */
 	public void setNuevoAdminNoInt(String nuevoAdminNoInt) {
 		this.nuevoAdminNoInt = nuevoAdminNoInt;
@@ -648,7 +840,8 @@ public class AdministrativoControlador extends BaseController implements
 	}
 
 	/**
-	 * @param listCPString the listCPString to set
+	 * @param listCPString
+	 *            the listCPString to set
 	 */
 	public void setListCPString(List<String> listCPString) {
 		this.listCPString = listCPString;
@@ -658,11 +851,13 @@ public class AdministrativoControlador extends BaseController implements
 	 * @return the listaCPs
 	 */
 	public List<Integer> getListaCPs() {
+		initListaCPs();
 		return listaCPs;
 	}
 
 	/**
-	 * @param listaCPs the listaCPs to set
+	 * @param listaCPs
+	 *            the listaCPs to set
 	 */
 	public void setListaCPs(List<Integer> listaCPs) {
 		this.listaCPs = listaCPs;
@@ -676,7 +871,8 @@ public class AdministrativoControlador extends BaseController implements
 	}
 
 	/**
-	 * @param nuevoAdminCPAutoComplete the nuevoAdminCPAutoComplete to set
+	 * @param nuevoAdminCPAutoComplete
+	 *            the nuevoAdminCPAutoComplete to set
 	 */
 	public void setNuevoAdminCPAutoComplete(String nuevoAdminCPAutoComplete) {
 		this.nuevoAdminCPAutoComplete = nuevoAdminCPAutoComplete;
@@ -690,7 +886,8 @@ public class AdministrativoControlador extends BaseController implements
 	}
 
 	/**
-	 * @param editarAdminNoEmpleado the editarAdminNoEmpleado to set
+	 * @param editarAdminNoEmpleado
+	 *            the editarAdminNoEmpleado to set
 	 */
 	public void setEditarAdminNoEmpleado(String editarAdminNoEmpleado) {
 		this.editarAdminNoEmpleado = editarAdminNoEmpleado;
@@ -704,7 +901,8 @@ public class AdministrativoControlador extends BaseController implements
 	}
 
 	/**
-	 * @param editarAdminNombre the editarAdminNombre to set
+	 * @param editarAdminNombre
+	 *            the editarAdminNombre to set
 	 */
 	public void setEditarAdminNombre(String editarAdminNombre) {
 		this.editarAdminNombre = editarAdminNombre;
@@ -718,7 +916,8 @@ public class AdministrativoControlador extends BaseController implements
 	}
 
 	/**
-	 * @param editarAdminApaterno the editarAdminApaterno to set
+	 * @param editarAdminApaterno
+	 *            the editarAdminApaterno to set
 	 */
 	public void setEditarAdminApaterno(String editarAdminApaterno) {
 		this.editarAdminApaterno = editarAdminApaterno;
@@ -732,7 +931,8 @@ public class AdministrativoControlador extends BaseController implements
 	}
 
 	/**
-	 * @param editarAdminAmaterno the editarAdminAmaterno to set
+	 * @param editarAdminAmaterno
+	 *            the editarAdminAmaterno to set
 	 */
 	public void setEditarAdminAmaterno(String editarAdminAmaterno) {
 		this.editarAdminAmaterno = editarAdminAmaterno;
@@ -746,7 +946,8 @@ public class AdministrativoControlador extends BaseController implements
 	}
 
 	/**
-	 * @param editarAdminFechaNac the editarAdminFechaNac to set
+	 * @param editarAdminFechaNac
+	 *            the editarAdminFechaNac to set
 	 */
 	public void setEditarAdminFechaNac(Date editarAdminFechaNac) {
 		this.editarAdminFechaNac = editarAdminFechaNac;
@@ -760,7 +961,8 @@ public class AdministrativoControlador extends BaseController implements
 	}
 
 	/**
-	 * @param editarAdminLugarNac the editarAdminLugarNac to set
+	 * @param editarAdminLugarNac
+	 *            the editarAdminLugarNac to set
 	 */
 	public void setEditarAdminLugarNac(String editarAdminLugarNac) {
 		this.editarAdminLugarNac = editarAdminLugarNac;
@@ -774,7 +976,8 @@ public class AdministrativoControlador extends BaseController implements
 	}
 
 	/**
-	 * @param editarAdminCURP the editarAdminCURP to set
+	 * @param editarAdminCURP
+	 *            the editarAdminCURP to set
 	 */
 	public void setEditarAdminCURP(String editarAdminCURP) {
 		this.editarAdminCURP = editarAdminCURP;
@@ -788,7 +991,8 @@ public class AdministrativoControlador extends BaseController implements
 	}
 
 	/**
-	 * @param editarAdminRFC the editarAdminRFC to set
+	 * @param editarAdminRFC
+	 *            the editarAdminRFC to set
 	 */
 	public void setEditarAdminRFC(String editarAdminRFC) {
 		this.editarAdminRFC = editarAdminRFC;
@@ -802,7 +1006,8 @@ public class AdministrativoControlador extends BaseController implements
 	}
 
 	/**
-	 * @param editarAdminIFE the editarAdminIFE to set
+	 * @param editarAdminIFE
+	 *            the editarAdminIFE to set
 	 */
 	public void setEditarAdminIFE(String editarAdminIFE) {
 		this.editarAdminIFE = editarAdminIFE;
@@ -816,7 +1021,8 @@ public class AdministrativoControlador extends BaseController implements
 	}
 
 	/**
-	 * @param editarAdminPasaporte the editarAdminPasaporte to set
+	 * @param editarAdminPasaporte
+	 *            the editarAdminPasaporte to set
 	 */
 	public void setEditarAdminPasaporte(String editarAdminPasaporte) {
 		this.editarAdminPasaporte = editarAdminPasaporte;
@@ -830,7 +1036,8 @@ public class AdministrativoControlador extends BaseController implements
 	}
 
 	/**
-	 * @param editarAdminEmail the editarAdminEmail to set
+	 * @param editarAdminEmail
+	 *            the editarAdminEmail to set
 	 */
 	public void setEditarAdminEmail(String editarAdminEmail) {
 		this.editarAdminEmail = editarAdminEmail;
@@ -844,7 +1051,8 @@ public class AdministrativoControlador extends BaseController implements
 	}
 
 	/**
-	 * @param editarAdminCalle the editarAdminCalle to set
+	 * @param editarAdminCalle
+	 *            the editarAdminCalle to set
 	 */
 	public void setEditarAdminCalle(String editarAdminCalle) {
 		this.editarAdminCalle = editarAdminCalle;
@@ -858,7 +1066,8 @@ public class AdministrativoControlador extends BaseController implements
 	}
 
 	/**
-	 * @param editarAdminNoExt the editarAdminNoExt to set
+	 * @param editarAdminNoExt
+	 *            the editarAdminNoExt to set
 	 */
 	public void setEditarAdminNoExt(String editarAdminNoExt) {
 		this.editarAdminNoExt = editarAdminNoExt;
@@ -872,7 +1081,8 @@ public class AdministrativoControlador extends BaseController implements
 	}
 
 	/**
-	 * @param editarAdminNoInt the editarAdminNoInt to set
+	 * @param editarAdminNoInt
+	 *            the editarAdminNoInt to set
 	 */
 	public void setEditarAdminNoInt(String editarAdminNoInt) {
 		this.editarAdminNoInt = editarAdminNoInt;
@@ -886,7 +1096,8 @@ public class AdministrativoControlador extends BaseController implements
 	}
 
 	/**
-	 * @param nuevoAdminDelegacion the nuevoAdminDelegacion to set
+	 * @param nuevoAdminDelegacion
+	 *            the nuevoAdminDelegacion to set
 	 */
 	public void setNuevoAdminDelegacion(String nuevoAdminDelegacion) {
 		this.nuevoAdminDelegacion = nuevoAdminDelegacion;
@@ -900,9 +1111,11 @@ public class AdministrativoControlador extends BaseController implements
 	}
 
 	/**
-	 * @param nuevoAdminEntidadFederativa the nuevoAdminEntidadFederativa to set
+	 * @param nuevoAdminEntidadFederativa
+	 *            the nuevoAdminEntidadFederativa to set
 	 */
-	public void setNuevoAdminEntidadFederativa(String nuevoAdminEntidadFederativa) {
+	public void setNuevoAdminEntidadFederativa(
+			String nuevoAdminEntidadFederativa) {
 		this.nuevoAdminEntidadFederativa = nuevoAdminEntidadFederativa;
 	}
 
@@ -914,7 +1127,8 @@ public class AdministrativoControlador extends BaseController implements
 	}
 
 	/**
-	 * @param nuevoAdminPais the nuevoAdminPais to set
+	 * @param nuevoAdminPais
+	 *            the nuevoAdminPais to set
 	 */
 	public void setNuevoAdminPais(String nuevoAdminPais) {
 		this.nuevoAdminPais = nuevoAdminPais;
@@ -928,7 +1142,8 @@ public class AdministrativoControlador extends BaseController implements
 	}
 
 	/**
-	 * @param nuevoAdminIdAsentamientoMunicipioEstado the nuevoAdminIdAsentamientoMunicipioEstado to set
+	 * @param nuevoAdminIdAsentamientoMunicipioEstado
+	 *            the nuevoAdminIdAsentamientoMunicipioEstado to set
 	 */
 	public void setNuevoAdminIdAsentamientoMunicipioEstado(
 			String nuevoAdminIdAsentamientoMunicipioEstado) {
@@ -943,7 +1158,8 @@ public class AdministrativoControlador extends BaseController implements
 	}
 
 	/**
-	 * @param editarAdminCPAutoComplete the editarAdminCPAutoComplete to set
+	 * @param editarAdminCPAutoComplete
+	 *            the editarAdminCPAutoComplete to set
 	 */
 	public void setEditarAdminCPAutoComplete(String editarAdminCPAutoComplete) {
 		this.editarAdminCPAutoComplete = editarAdminCPAutoComplete;
@@ -957,7 +1173,8 @@ public class AdministrativoControlador extends BaseController implements
 	}
 
 	/**
-	 * @param editarAdminDelegacion the editarAdminDelegacion to set
+	 * @param editarAdminDelegacion
+	 *            the editarAdminDelegacion to set
 	 */
 	public void setEditarAdminDelegacion(String editarAdminDelegacion) {
 		this.editarAdminDelegacion = editarAdminDelegacion;
@@ -971,9 +1188,11 @@ public class AdministrativoControlador extends BaseController implements
 	}
 
 	/**
-	 * @param editarAdminEntidadFederativa the editarAdminEntidadFederativa to set
+	 * @param editarAdminEntidadFederativa
+	 *            the editarAdminEntidadFederativa to set
 	 */
-	public void setEditarAdminEntidadFederativa(String editarAdminEntidadFederativa) {
+	public void setEditarAdminEntidadFederativa(
+			String editarAdminEntidadFederativa) {
 		this.editarAdminEntidadFederativa = editarAdminEntidadFederativa;
 	}
 
@@ -985,7 +1204,8 @@ public class AdministrativoControlador extends BaseController implements
 	}
 
 	/**
-	 * @param editarAdminPais the editarAdminPais to set
+	 * @param editarAdminPais
+	 *            the editarAdminPais to set
 	 */
 	public void setEditarAdminPais(String editarAdminPais) {
 		this.editarAdminPais = editarAdminPais;
@@ -999,7 +1219,8 @@ public class AdministrativoControlador extends BaseController implements
 	}
 
 	/**
-	 * @param editarAdminIdAsentamientoMunicipioEstado the editarAdminIdAsentamientoMunicipioEstado to set
+	 * @param editarAdminIdAsentamientoMunicipioEstado
+	 *            the editarAdminIdAsentamientoMunicipioEstado to set
 	 */
 	public void setEditarAdminIdAsentamientoMunicipioEstado(
 			String editarAdminIdAsentamientoMunicipioEstado) {
@@ -1014,7 +1235,8 @@ public class AdministrativoControlador extends BaseController implements
 	}
 
 	/**
-	 * @param nuevoAdminCpIdAsentamiento the nuevoAdminCpIdAsentamiento to set
+	 * @param nuevoAdminCpIdAsentamiento
+	 *            the nuevoAdminCpIdAsentamiento to set
 	 */
 	public void setNuevoAdminCpIdAsentamiento(int nuevoAdminCpIdAsentamiento) {
 		this.nuevoAdminCpIdAsentamiento = nuevoAdminCpIdAsentamiento;
@@ -1028,7 +1250,8 @@ public class AdministrativoControlador extends BaseController implements
 	}
 
 	/**
-	 * @param editarAdminCpIdAsentamiento the editarAdminCpIdAsentamiento to set
+	 * @param editarAdminCpIdAsentamiento
+	 *            the editarAdminCpIdAsentamiento to set
 	 */
 	public void setEditarAdminCpIdAsentamiento(int editarAdminCpIdAsentamiento) {
 		this.editarAdminCpIdAsentamiento = editarAdminCpIdAsentamiento;
@@ -1042,7 +1265,8 @@ public class AdministrativoControlador extends BaseController implements
 	}
 
 	/**
-	 * @param nuevoAdminSelectListColonias the nuevoAdminSelectListColonias to set
+	 * @param nuevoAdminSelectListColonias
+	 *            the nuevoAdminSelectListColonias to set
 	 */
 	public void setNuevoAdminSelectListColonias(
 			List<SelectItem> nuevoAdminSelectListColonias) {
@@ -1057,7 +1281,8 @@ public class AdministrativoControlador extends BaseController implements
 	}
 
 	/**
-	 * @param editarAdminSelectListColonias the editarAdminSelectListColonias to set
+	 * @param editarAdminSelectListColonias
+	 *            the editarAdminSelectListColonias to set
 	 */
 	public void setEditarAdminSelectListColonias(
 			List<SelectItem> editarAdminSelectListColonias) {
@@ -1067,5 +1292,12 @@ public class AdministrativoControlador extends BaseController implements
 	@Override
 	String getModulo() {
 		return modulo;
+	}
+
+	/**
+	 * @return the fachada
+	 */
+	public AdministrativoFachada getFachada() {
+		return fachada;
 	}
 }

@@ -1,3 +1,5 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
@@ -6,64 +8,275 @@
 
 <h:body>
 	<ui:composition>
-		<h:form id="form" styleClass="login">
-			<p:growl id="growl" showDetail="true" sticky="true" />			
-				<h:panelGrid columns="2" style="text-align:left;">
-					<h:panelGrid columns="2">
-						<h:outputText value="#{msg.cliente }"/>
-						<p:selectOneMenu>
-							<f:selectItem itemLabel="Selecciona" itemValue="0"/>
-						</p:selectOneMenu>
-						<h:outputText value="#{msg.area }"/>
-						<p:selectOneMenu>
-							<f:selectItem itemLabel="Selecciona" itemValue="0"/>
-						</p:selectOneMenu>
-						<h:outputText value="#{msg.curso }"/>
-						<p:selectOneMenu>
-							<f:selectItem itemLabel="Selecciona" itemValue="0"/>
-						</p:selectOneMenu>
-						<h:outputText value="#{msg.periodo }"/>
-						<h:panelGroup>
-							<p:calendar navigator="true" /> #{msg.al } <p:calendar navigator="true" />
-						</h:panelGroup>
-						<h:outputText value="#{msg.sede }"/>
-						<p:selectOneMenu>
-							<f:selectItem itemLabel="Selecciona" itemValue="0"/>
-						</p:selectOneMenu>
-						<h:outputText value="#{msg.horarioDe }"/>
-						<h:panelGroup>
-							<p:inputText /> #{msg.a } <p:inputText />
-						</h:panelGroup>
-						<h:outputText value="#{msg.a }"/>
-					</h:panelGrid>
-					<h:panelGrid columns="2">
-						<h:outputText value="#{msg.grupo }"/>
-						<p:inputText />
-						<h:outputText value="#{msg.referencia }"/>
-						<p:inputText />
-					</h:panelGrid>
+		<h:form id="form">
+			<p:growl id="growl" showDetail="true" sticky="true" />
+			<h:panelGrid columns="2" style="text-align:left;">
+				<h:panelGrid columns="2">
+					<h:outputText value="#{msg.cliente }" />
+					<p:selectOneMenu value="#{beanCurso.idClienteSelected}">
+						<f:selectItem itemLabel="#{msg.seleccionarCliente}" itemValue="0" />
+						<f:selectItems value="#{beanCurso.listSelectClientes}" />
+					</p:selectOneMenu>
+					<h:outputText value="#{msg.area }" />
+					<p:selectOneMenu value="#{beanCurso.idAreaSelected}">
+						<f:selectItem itemLabel="#{msg.seleccionarArea}" itemValue="0" />
+						<f:selectItems value="#{beanCurso.listSelectArea}" />
+					</p:selectOneMenu>
+					<h:outputText value="#{msg.curso }" />
+					<p:selectOneMenu value="#{beanCurso.idProgramaEstudioSelected}">
+						<f:selectItem itemLabel="#{msg.seleccionarCurso}" itemValue="0" />
+						<f:selectItems value="#{beanCurso.listSelectProgramaEstudio}" />
+					</p:selectOneMenu>
+					<h:outputText value="#{msg.periodo }" />
+					<h:panelGroup>
+						<p:calendar navigator="true"
+							value="#{beanCurso.nuevoCursoFechaInicio}" /> #{msg.al } <p:calendar
+							navigator="true" value="#{beanCurso.nuevoCursoFechaFin}" />
+					</h:panelGroup>
+					<h:outputText value="#{msg.sede }" />
+					<p:selectOneMenu value="#{beanCurso.idSedeSelected}">
+						<f:selectItem itemLabel="#{seleccionarSede}" itemValue="0" />
+						<f:selectItems value="#{beanCurso.listSelectSede}" />
+					</p:selectOneMenu>
+					<h:outputText value="#{msg.horarioDe }" />
+					<h:panelGroup>
+						<p:calendar value="#{beanCurso.nuevoCursoHoraInicio}"
+							pattern="HH:mm" timeOnly="true" /> #{msg.a } <p:calendar
+							value="#{beanCurso.nuevoCursoHoraFin}" pattern="HH:mm"
+							timeOnly="true" />
+					</h:panelGroup>
 				</h:panelGrid>
-				<p:separator />
-				<p:tabView>
-					<p:tab title="#{msg.materias }">
-						<h:panelGrid columns="2">
-							<h:outputText value="#{msg.responsable }"/>
-								<p:selectOneMenu>
-							<f:selectItem itemLabel="Selecciona" itemValue="0"/>
+				<h:panelGrid columns="1">
+					<h:panelGrid columns="2" style="vertical-align:top;">
+						<h:outputText value="#{msg.grupo }" />
+						<p:inputText style="height:100%"
+							value="#{beanCurso.nuevoCursoGrupoString}" />
+						<h:outputText value="#{msg.referencia }" />
+						<p:inputText style="height:100%"
+							value="#{beanCurso.nuevoCursoReferencia}" />
+					</h:panelGrid>
+					<h:panelGrid columns="1" style="vertical-align:bottom;">
+						<p:commandButton value="#{msg.crearCurso}" update="tabView"
+							actionListener="#{beanCurso.creaCurso}" />
+					</h:panelGrid>
+
+				</h:panelGrid>
+			</h:panelGrid>
+			<p:separator />
+			<p:tabView id="tabView" widgetVar="tabView1">
+				<p:tab title="#{msg.materias }" id="tabMaterias">
+					<h:panelGrid columns="2" rendered="#{beanCurso.tabViewShow}">
+						<h:outputText value="#{msg.responsable }" />
+						<p:selectOneMenu value="#{beanCurso.idInstructorSelected}">
+							<f:selectItem itemLabel="#{msg.seleccionarInstructor}"
+								itemValue="0" />
+							<f:selectItems value="#{beanCurso.listSelectInstructor}" />
 						</p:selectOneMenu>
-							<h:outputText value="#{msg.sede }"/>
-								<p:selectOneMenu>
-							<f:selectItem itemLabel="Selecciona" itemValue="0"/>
+						<h:outputText value="#{msg.sede }" />
+						<p:selectOneMenu value="#{beanCurso.idSedeSelected}">
+							<f:selectItem itemLabel="#{msg.seleccionarSede}" itemValue="0" />
+							<f:selectItems value="#{beanCurso.listSelectSede}" />
 						</p:selectOneMenu>
+					</h:panelGrid>
+					<p:dataTable value="#{beanCurso.listMaterias}" var="item"
+						rowKey="#{item.idMateria}"
+						selection="#{beanCurso.selectedMateria}" id="table"
+						rendered="#{beanCurso.tabViewShow}">
+						<p:column selectionMode="single" style="width:2%" />
+						<p:column headerText="#{msg.materia}">
+							<h:outputText value="#{item.nombre}" />
+						</p:column>
+						<p:column headerText="#{msg.aula}">
+							<h:outputText value="#{item.nombreAula}" />
+						</p:column>
+						<p:column headerText="#{msg.instructor}">
+							<h:outputText value="#{item.nombreInstructor}" />
+						</p:column>
+						<p:column headerText="#{msg.fechaHoraInicial}">
+							<h:outputText value="#{item.fechaInicialString}" />
+						</p:column>
+						<p:column headerText="#{msg.fechaHoraFinal}">
+							<h:outputText value="#{item.fechaFinalString}" />
+						</p:column>
+						<p:column headerText="#{msg.tipo}">
+							<h:outputText value="#{item.tipoNombre}" />
+						</p:column>
+					</p:dataTable>
+					<p:separator />
+					<h:panelGrid columns="3" style="float:right;"
+						rendered="#{beanCurso.tabViewShow}">
+						<p:commandButton value="#{msg.agregar}" icon="ui-icon-plusthick"
+							onclick="agregarMateriaDialog.show()" update=":form:growl" />
+						<p:commandButton value="#{msg.editar}" icon="ui-icon-pencil"
+							oncomplete="editarMateriaDialog.show()"
+							update="displayEditar :form:growl" />
+						<p:commandButton value="#{msg.eliminar}" icon="ui-icon-trash"
+							onclick="borrarDialog.show()" update=":form:growl" />
+					</h:panelGrid>
+					<!-- Dialogo de editar Materia-->
+					<p:dialog id="dialogEditarMateria"
+						header="#{msg.frsEditarRegistro}" widgetVar="editarMateriaDialog"
+						closable="true" modal="true" draggable="true" width="400"
+						height="400">
+						<h:panelGrid columns="2" id="displayEditar">
+							<h:outputText value="#{msg.materia}" />
+							<p:selectOneMenu value="#{beanCurso.idMateriaSelected}">
+								<f:selectItems value="#{beanCurso.listSelectMaterias}" />
+							</p:selectOneMenu>
+							<h:outputText value="#{msg.fechaHoraInicial}" />
+							<h:panelGroup>
+								<p:calendar value="#{beanCurso.editarFechaHoraInicial}"
+									navigator="true" pattern="MM/dd/yyyy HH:mm">
+									<p:ajax event="dateSelect"
+										listener="#{beanCurso.handleCambiaFechaEditar}"
+										update="aulasDisponiblesEditar" />
+								</p:calendar>
+							</h:panelGroup>
+							<h:outputText value="#{msg.fechaHoraFinal}" />
+							<h:panelGroup>
+								<p:calendar value="#{beanCurso.editarFechaHoraFinal}"
+									navigator="true" pattern="MM/dd/yyyy HH:mm">
+									<p:ajax event="dateSelect"
+										listener="#{beanCurso.handleCambiaFechaEditar}"
+										update="aulasDisponiblesEditar" />
+								</p:calendar>
+							</h:panelGroup>
+							<h:outputText value="#{msg.aula}" />
+							<p:selectOneMenu value="#{beanCurso.idAulaEditarSelected}"
+								id="aulasDisponiblesEditar">
+								<f:selectItems
+									value="#{beanCurso.listSelectAulasDisponiblesEditar}" />
+							</p:selectOneMenu>
+							<h:outputText value="#{msg.instructor}" />
+							<p:selectOneMenu value="#{beanCurso.idInstructorSelected}">
+								<f:selectItems value="#{beanCurso.listSelectInstructor}" />
+							</p:selectOneMenu>
+							<h:outputText value="#{msg.tipo}" />
+							<p:selectOneMenu value="#{beanCurso.idTipoCursoSelected}">
+								<f:selectItem itemLabel="#{msg.seleccionarTipo}" itemValue="0" />
+								<f:selectItems value="#{beanCurso.listSelectClasifCurso}" />
+							</p:selectOneMenu>
 						</h:panelGrid>
-					</p:tab>
-					<p:tab title="#{msg.alumnos }">
-					</p:tab>
-					<p:tab title="#{msg.asistencia }">
-					</p:tab>
-					<p:tab title="#{msg.calificaciones }">
-					</p:tab>
-				</p:tabView>
+						<h:panelGrid columns="2">
+							<p:commandButton value="#{msg.aceptar}"
+								oncomplete="editarMateriaDialog.hide()"
+								actionListener="#{beanCurso.updateMateriaSelected}"
+								update="table :form:growl" />
+							<p:commandButton value="#{msg.cancelar}"
+								onclick="editarMateriaDialog.hide()" />
+						</h:panelGrid>
+					</p:dialog>
+					<!-- Fin de dialogo de editar Materia-->
+					<!-- Dialogo de Agregar Materia-->
+					<p:dialog id="dialogAgregarMateria"
+						header="#{msg.frsEditarRegistro}" widgetVar="agregarMateriaDialog"
+						closable="true" modal="true" draggable="true" width="400"
+						height="400">
+						<h:panelGrid columns="2">
+							<h:outputText value="#{msg.materia}" />
+							<p:selectOneMenu value="#{beanCurso.idNuevoMateriaSelected}">
+								<f:selectItems value="#{beanCurso.listSelectMaterias}" />
+							</p:selectOneMenu>
+							<h:outputText value="#{msg.fechaHoraInicial}" />
+							<p:calendar value="#{beanCurso.nuevoFechaHoraInicial}"
+								navigator="true" pattern="MM/dd/yyyy HH:mm">
+								<p:ajax event="dateSelect"
+									listener="#{beanCurso.handleCambiaFechaNuevo}"
+									update="aulasDisponiblesNuevo" />
+							</p:calendar>
+							<h:outputText value="#{msg.fechaHoraFinal}" />
+							<p:calendar value="#{beanCurso.nuevoFechaHoraFinal}"
+								navigator="true" pattern="MM/dd/yyyy HH:mm">
+								<p:ajax event="dateSelect"
+									listener="#{beanCurso.handleCambiaFechaNuevo}"
+									update="aulasDisponiblesNuevo" />
+							</p:calendar>
+							<h:outputText value="#{msg.aula}" />
+							<p:selectOneMenu value="#{beanCurso.idAulaNuevoSelected}"
+								id="aulasDisponiblesNuevo">
+								<f:selectItems
+									value="#{beanCurso.listSelectAulasDisponiblesNuevo}" />
+							</p:selectOneMenu>
+							<h:outputText value="#{msg.instructor}" />
+							<p:selectOneMenu value="#{beanCurso.idNuevoInstructorSelected}">
+								<f:selectItems value="#{beanCurso.listSelectInstructor}" />
+							</p:selectOneMenu>
+							<h:outputText value="#{msg.tipo}" />
+							<p:selectOneMenu value="#{beanCurso.idNuevoTipoCursoSelected}">
+								<f:selectItem itemLabel="#{msg.seleccionarTipo}" itemValue="0" />
+								<f:selectItems value="#{beanCurso.listSelectClasifCurso}" />
+							</p:selectOneMenu>
+							<h:panelGrid columns="2">
+								<p:commandButton value="#{msg.aceptar}"
+									oncomplete="agregarMateriaDialog.hide()"
+									actionListener="#{beanCurso.addMateriaNueva}" update="table" />
+								<p:commandButton value="#{msg.cancelar}"
+									onclick="agregarMateriaDialog.hide()" />
+							</h:panelGrid>
+						</h:panelGrid>
+					</p:dialog>
+					<!-- Fin de dialogo de Agregar Materia-->
+					<!-- Panel de borrado Materia -->
+					<p:confirmDialog showEffect="fade" widgetVar="borrarDialog"
+						header="#{msg.confirmar }" message="#{msg.frsBorrarConfirmacion }">
+						<p:commandButton value="#{msg.si }"
+							actionListener="#{beanCurso.deleteMateria}" update="table"
+							styleClass="ui-confirmdialog-yes" icon="ui-icon-check"
+							oncomplete="borrarDialog.hide()" />
+						<p:commandButton value="#{msg.no }" type="button"
+							styleClass="ui-confirmdialog-no" icon="ui-icon-close"
+							onclick="borrarDialog.hide()" />
+					</p:confirmDialog>
+					<!-- Fin de panel de borrado Materia -->
+				</p:tab>
+				<p:tab title="#{msg.alumnos }">
+					<p:dataTable value="#{beanCurso.listaAlumnosAgregados}"
+						selection="#{beanCurso.selectedAlumno}" var="item"
+						rowKey="#{item.idAlumno}" rendered="#{beanCurso.tabViewShow}"
+						id="tableAlumnos">
+						<p:column selectionMode="single" style="width:2%" />
+						<p:column headerText="#{msg.matricula}">
+							<h:outputText value="#{item.matricula}" />
+						</p:column>
+						<p:column headerText="#{msg.alumno}">
+							<h:outputText value="#{item.nombre}" />
+						</p:column>
+						<p:column headerText="#{msg.estatus}">
+							<h:outputText value="#{item.estatus}" />
+						</p:column>
+					</p:dataTable>
+					<h:panelGrid columns="2">
+						<p:commandButton value="#{msg.agregar}" icon="ui-icon-plusthick"
+							onclick="agregarAlumnoDialog.show()" update=":form:growl" />
+						<p:commandButton value="#{msg.eliminar}" />
+					</h:panelGrid>
+					<p:dialog id="dialogAgregarAlumno"
+						header="#{msg.frsAgregarRegistro}" widgetVar="agregarAlumnoDialog"
+						closable="true" modal="true" draggable="true" width="400"
+						height="400">
+						<h:panelGrid columns="2">
+							<h:outputText value="#{msg.alumno}" />
+							<p:selectOneMenu value="#{beanCurso.idAlumnoAgregar}">
+								<f:selectItems value="#{beanCurso.listaSelectAgregarAlumno}" />
+							</p:selectOneMenu>
+							<h:outputText />
+							<p:commandButton value="#{msg.aceptar}"
+								actionListener="#{beanCurso.addAlumno}"
+								oncomplete="agregarAlumnoDialog.hide()" update="tableAlumnos" />
+						</h:panelGrid>
+					</p:dialog>
+					<p:confirmDialog showEffect="fade" widgetVar="borrarAlumnoDialog"
+						header="#{msg.confirmar }" message="#{msg.frsBorrarConfirmacion }">
+						<p:commandButton value="#{msg.si }"
+							actionListener="#{beanCurso.deleteAlumno}" update="tableAlumnos"
+							styleClass="ui-confirmdialog-yes" icon="ui-icon-check"
+							oncomplete="borrarAlumnoDialog.hide()" />
+						<p:commandButton value="#{msg.no }" type="button"
+							styleClass="ui-confirmdialog-no" icon="ui-icon-close"
+							onclick="borrarAlumnoDialog.hide()" />
+					</p:confirmDialog>
+				</p:tab>
+			</p:tabView>
 		</h:form>
 
 	</ui:composition>

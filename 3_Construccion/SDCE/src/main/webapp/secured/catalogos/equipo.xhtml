@@ -1,3 +1,5 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
@@ -6,7 +8,7 @@
 
 <h:body>
 	<ui:composition>
-		<h:form id="form" styleClass="login">
+		<h:form id="form">
 			<p:growl id="growl" showDetail="true" sticky="true" />
 			<p:panel id="panel" header="Buscar" closable="false"
 				toggleable="false" style="text-align:center;">
@@ -49,15 +51,15 @@
 			</p:panel>
 			<p:panel>
 				<h:panelGrid columns="4" style="text-align:left;">
-					<p:commandButton id="deleteButton" value="#{msg.eliminar }"
+					<p:commandButton id="deleteButton" value="#{msg.eliminar }" 
 						icon="ui-icon-trash" onclick="borrarDialog.show()" update="growl" />
-					<p:commandButton id="editarButton" value="#{msg.editar }"
+					<p:commandButton id="editarButton" value="#{msg.editar }" 
 						icon="ui-icon-pencil" onclick="editarDialog.show()"
 						update=":form:displayEditar, growl" />
-					<p:commandButton id="viewButton" value="#{msg.ver }"
+					<p:commandButton id="viewButton" value="#{msg.ver }" 
 						icon="ui-icon-search" oncomplete="verDialog.show()"
 						update=":form:displayVer, growl" />
-					<p:commandButton id="nuevoButton" value="#{msg.nuevo }"
+					<p:commandButton id="nuevoButton" value="#{msg.nuevo }" 
 						icon="ui-icon-plusthick" onclick="nuevoDialog.show()"
 						update=":form:displayNuevo, growl" />
 				</h:panelGrid>
@@ -85,7 +87,7 @@
 				</p:dataTable>
 			</p:panel>
 			<!-- Panel de Ver -->
-			<p:dialog id="dialog" header="#{msg.ver}" widgetVar="verDialog"
+			<p:dialog id="dialog" header="#{msg.ver}" widgetVar="verDialog" draggable="true" position="top"
 				modal="true">
 				<h:panelGrid id="displayVer" columns="2" cellpadding="4">
 					<h:panelGroup id="messagePanelVer" layout="block">
@@ -94,18 +96,18 @@
 					</h:panelGroup>
 					<h:outputText />
 					<h:outputText value="#{msg.clave}" />
-					<h:outputText value="#{beanEquipo.equipoSelected.clave}"
-						style="font-weight:bold" />
+					<p:inputText readonly="true" value="#{beanEquipo.equipoSelected.clave}"
+						style="font-weight:bold; height:100%" />
 					<h:outputText value="#{msg.descripcion}" />
-					<h:outputText value="#{beanEquipo.equipoSelected.dsc}"
-						style="font-weight:bold" />
+					<p:inputText readonly="true" value="#{beanEquipo.equipoSelected.dsc}"
+						style="font-weight:bold; height:100%" />
 					<h:outputText value="#{msg.tipoEquipo}" />
-					<h:outputText value="#{beanEquipo.equipoSelected.dscTipo}"
-						style="font-weight:bold" />
+					<p:inputText readonly="true" value="#{beanEquipo.equipoSelected.dscTipo}"
+						style="font-weight:bold; height:100%" />
 					<h:outputText value="#{msg.activo}" />
-					<h:outputText
+					<p:inputText readonly="true"
 						value="#{beanEquipo.equipoSelected.activo == 1 ? 'Si' : 'No' }"
-						style="font-weight:bold" />
+						style="font-weight:bold; height:100%" />
 				</h:panelGrid>
 				<p:commandButton id="aceptarVerBtn" value="#{msg.aceptar }"
 					icon="ui-icon-check" onclick="verDialog.hide()" />
@@ -113,25 +115,26 @@
 			<!-- Fin de panel de Ver -->
 			<!--  Inicio panel de Nuevo -->
 			<p:dialog id="dialogNuevo" header="#{msg.frsNuevoRegistro}"
-				widgetVar="nuevoDialog" closable="true" modal="true"
-				draggable="false" width="400">
+				widgetVar="nuevoDialog" closable="true" modal="true" position="top"
+				draggable="true" width="400">
 				<h:panelGrid columns="2" width="100%" id="displayNuevo">
-					<h:outputText value="#{msg.clave}" />
-					<p:inputText value="#{beanEquipo.equipoNuevo.clave}"
-						style="width: 260px; " />
+					<h:outputText value="#{msg.clave}*" />
+					<p:inputText value="#{beanEquipo.equipoNuevo.clave}"   label="Clave"
+						style="width: 260px;font-weight:bold; height:100% " />
 					<h:outputText id="nombrePopupNuevoLabel" value="#{msg.descripcion}" />
 					<p:inputText id="nombrePopupNuevo"
-						value="#{beanEquipo.equipoNuevo.dsc }" style="min-width: 260px" />
+						value="#{beanEquipo.equipoNuevo.dsc }"
+						style="width: 260px;font-weight:bold; height:100% " />
 					<h:outputText id="responsablePopupNuevoLabel"
-						value="#{msg.tipoEquipo }" />
-					<p:selectOneMenu id="selectTipoNuevo" style="min-width: 260px"
+						value="#{msg.tipoEquipo }*" />
+					<p:selectOneMenu id="selectTipoNuevo" style="width: 260px;font-weight:bold; height:100% "   label="TipoEquipo"
 						value="#{beanEquipo.idCatGralNuevo }">
 						<f:selectItem itemLabel="#{msg.seleccionarTipoEq }" itemValue="" />
 						<f:selectItems
 							value="#{beanEquipo.listaSelectTiposEquipoCatGral }" />
 					</p:selectOneMenu>
-					<h:outputText id="activoPopupNuevoLabel" value="#{msg.activo}" />
-					<h:selectBooleanCheckbox id="activoPopupNuevo"
+					<h:outputText id="activoPopupNuevoLabel" value="#{msg.activo}*" />
+					<h:selectBooleanCheckbox id="activoPopupNuevo"   label="Activo"
 						value="#{beanEquipo.nuevoActivo}">
 					</h:selectBooleanCheckbox>
 				</h:panelGrid>
@@ -146,26 +149,26 @@
 			</p:dialog>
 			<!-- Fin de panel de nuevo -->
 			<!-- Inicio de panel de edicion -->
-			<p:dialog id="dialogEditar" header="#{msg.frsNuevoRegistro}"
+			<p:dialog id="dialogEditar" header="#{msg.frsEditarRegistro}" position="top"
 				widgetVar="editarDialog" closable="true" modal="true"
-				draggable="false" width="400">
+				draggable="true" width="400">
 				<h:panelGrid columns="2" width="100%" id="displayEditar">
 					<h:outputText value="#{msg.clave}" />
 					<h:panelGroup>
-						<h:inputText id="selectedCve"
-							value="#{beanEquipo.selectedClaveEdit}" style="width: 260px; " />
+						<p:inputText id="selectedCve"
+							value="#{beanEquipo.selectedClaveEdit}" style="width: 260px;font-weight:bold; height:100% " />
 						<p:watermark for="selectedCve"
 							value="#{beanEquipo.equipoSelected.clave }" />
 					</h:panelGroup>
 					<h:outputText value="#{msg.descripcion}" />
 					<h:panelGroup>
-						<p:inputText id="inputNombreSelected" style="width: 260px; "
+						<p:inputText id="inputNombreSelected" style="width: 260px;font-weight:bold; height:100% "
 							value="#{beanEquipo.selectedDscEdit }" />
 						<p:watermark for="inputNombreSelected"
 							value="#{beanEquipo.equipoSelected.dsc }" />
 					</h:panelGroup>
 					<h:outputText value="#{msg.tipoEquipo}" />
-					<p:selectOneMenu id="selectTipoSelected" style="min-width: 260px"
+					<p:selectOneMenu id="selectTipoSelected" style="width: 260px;font-weight:bold; height:100% "
 						value="#{beanEquipo.idCatGralSelected }">
 						<f:selectItem itemLabel="#{msg.seleccionarTipoEq }" itemValue="" />
 						<f:selectItems
@@ -199,7 +202,6 @@
 			</p:confirmDialog>
 			<!-- Fin de panel de borrado -->
 		</h:form>
-
 	</ui:composition>
 </h:body>
 </html>

@@ -28,16 +28,26 @@ public class MateriaAssembler extends Assembler<MateriaDTO, Materias> {
 		MateriaDTO dto = new MateriaDTO();
 			dto.setFechaFinal(mapping.getFhFinal());
 			dto.setFechaInicial(mapping.getFhInicial());
-			dto.setIdAula(mapping.getAulas().getIdAula());
-			dto.setIdInstructor(mapping.getInstructores().getIdInstructor());
+			if(mapping.getAulas() != null){
+				dto.setIdAula(mapping.getAulas().getIdAula());
+				dto.setNombreAula(mapping.getAulas().getDsc());
+			}
+			if(mapping.getInstructores() != null){
+				dto.setIdInstructor(mapping.getInstructores().getIdInstructor());
+				String nombre = mapping.getInstructores().getPersonas().getNombre() + " " + mapping.getInstructores().getPersonas().getApellidoP() + " " + mapping.getInstructores().getPersonas().getApellidoM();
+				dto.setNombreInstructor(nombre);
+			}
 			dto.setIdMateria(mapping.getIdMateria());
-			dto.setIdTipo(mapping.getCatGral().getIdCatGral());
-			dto.setNombre(mapping.getMateriasRegistros().getNombre());
-			dto.setIdMateriaRegistro(mapping.getMateriasRegistros().getIdMateria());
-			dto.setNombreAula(mapping.getAulas().getDsc());
-			String nombre = mapping.getInstructores().getPersonas().getNombre() + " " + mapping.getInstructores().getPersonas().getApellidoP() + " " + mapping.getInstructores().getPersonas().getApellidoM();
-			dto.setNombreInstructor(nombre);
-			dto.setTipoNombre(mapping.getCatGral().getDsc());
+			if(mapping.getCatGral() != null){
+				dto.setIdTipo(mapping.getCatGral().getIdCatGral());
+			}
+			if(mapping.getMateriasRegistros() != null){
+				dto.setNombre(mapping.getMateriasRegistros().getNombre());
+				dto.setIdMateriaRegistro(mapping.getMateriasRegistros().getIdMateria());
+			}
+			if(mapping.getCatGral() != null){
+				dto.setTipoNombre(mapping.getCatGral().getDsc());
+			}
 		return dto;
 	}
 

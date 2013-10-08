@@ -1,0 +1,238 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+	<style type="text/css">
+</style>
+</h:head>
+<h:body>
+	<ui:composition>
+		<h:form id="form">
+			<p:growl id="growl" showDetail="true" sticky="true" />
+			<p:panel id="panel" header="Buscar" closable="false"
+				toggleable="false" style="text-align:center;">
+				<h:panelGrid columns="2" style="text-align:left;">
+					<h:outputText value="#{msg.referencia} :" />
+					<p:selectOneMenu id="cveFilter"
+						value="#{beanVerCurso.referenciaSelected }"
+						style="min-width: 480px">
+						<f:selectItem itemLabel="#{msg.seleccionarReferencia }"
+							itemValue="" />
+						<f:selectItems value="#{beanVerCurso.listSelectItem1}" />
+					</p:selectOneMenu>
+				</h:panelGrid>
+				<br />
+				<h:panelGrid style="text-align:right" width="100%">
+					<h:panelGrid columns="2" style="text-align:right">
+						<p:commandButton value="#{msg.limpiar}"
+							icon="ui-icon-arrowrefresh-1-e"
+							onclick=":form:cveFilter.selectValue('')"
+							actionListener="#{beanVerCurso.limpiarFiltrado }" update="growl" />
+						<p:commandButton icon="ui-icon-search"
+							actionListener="#{beanVerCurso.buscarFiltrado}"
+							value="#{msg.buscar}" update="tabView,growl" />
+					</h:panelGrid>
+				</h:panelGrid>
+			</p:panel>
+			<p:panel>
+				<p:tabView id="tabView" widgetVar="tabView1">
+					<p:tab title="#{msg.materias }" id="tabMaterias">
+						<p:dataTable value="#{beanVerCurso.listMaterias}" var="item"
+							rowKey="#{item.idMateria}" id="table"
+							rendered="#{beanVerCurso.displayTab}">
+							<p:column headerText="#{msg.materia}">
+								<h:outputText value="#{item.nombre}" />
+							</p:column>
+							<p:column headerText="#{msg.aula}">
+								<h:outputText value="#{item.nombreAula}" />
+							</p:column>
+							<p:column headerText="#{msg.instructor}">
+								<h:outputText value="#{item.nombreInstructor}" />
+							</p:column>
+							<p:column headerText="#{msg.fechaHoraInicial}">
+								<h:outputText value="#{item.fechaInicialString}" />
+							</p:column>
+							<p:column headerText="#{msg.fechaHoraFinal}">
+								<h:outputText value="#{item.fechaFinalString}" />
+							</p:column>
+							<p:column headerText="#{msg.tipo}">
+								<h:outputText value="#{item.tipoNombre}" />
+							</p:column>
+						</p:dataTable>
+					</p:tab>
+					<p:tab title="#{msg.alumnos }">
+						<p:dataTable value="#{beanVerCurso.listaAlumnosAgregados}"
+							var="item" rowKey="#{item.idAlumno}"
+							rendered="#{beanVerCurso.displayTab}" id="tableAlumnos">
+							<p:column selectionMode="single" style="width:2%" />
+							<p:column headerText="#{msg.matricula}">
+								<h:outputText value="#{item.matricula}" />
+							</p:column>
+							<p:column headerText="#{msg.alumno}">
+								<h:outputText value="#{item.nombre}" />
+							</p:column>
+							<p:column headerText="#{msg.estatus}">
+								<h:outputText value="#{item.estatus}" />
+							</p:column>
+						</p:dataTable>
+					</p:tab>
+					<p:tab title="#{msg.asistencia }">
+						<h:panelGrid columns="2">
+							<p:commandButton value="#{msg.imprimir}" />
+							<p:commandButton value="#{msg.asistencia }"
+								oncomplete="agregarAsistenciaDialog.show()" />
+						</h:panelGrid>
+						<p:separator />
+						<p:scrollPanel style="width:550px;height:200px" mode="native"
+							id="scrollPanel">
+							<table class="order-table">
+								<thead>
+									<tr>
+										<th class="order-table-header">Matricula</th>
+										<th class="order-table-header">Nombre</th>
+										<ui:repeat var="dias" value="#{beanVerCurso.encabezadoDias}">
+											<th class="order-table-header">#{dias }</th>
+										</ui:repeat>
+									</tr>
+								</thead>
+
+								<ui:repeat var="o"
+									value="#{beanVerCurso.listaAlumnosAsistencia}"
+									varStatus="status">
+									<tr class="order-table-odd-row">
+										<td>#{o.matricula}</td>
+										<td>#{o.nombre}</td>
+										<ui:repeat var="a" value="#{o.asistencias}">
+											<td>#{a }</td>
+										</ui:repeat>
+
+									</tr>
+								</ui:repeat>
+
+
+							</table>
+						</p:scrollPanel>
+						<p:dialog id="dialogAgregarAsistencia"
+							header="#{msg.frsAgregarRegistro}"
+							widgetVar="agregarAsistenciaDialog" closable="true" modal="true"
+							draggable="true" width="400" height="400">
+							<h:panelGrid columns="1">
+								<h:panelGrid columns="2">
+									<h:outputText value="#{msg.dia}" />
+									<p:calendar maxdate="#{beanVerCurso.maxDate }"
+										mindate="#{beanVerCurso.minDate }" navigator="true"
+										value="#{beanVerCurso.registrarAsistenciaDate }">
+										<p:ajax event="dateSelect"
+											listener="#{beanVerCurso.handleDateSelect }"
+											update="tableAsistenciaCursoDia"></p:ajax>
+									</p:calendar>
+								</h:panelGrid>
+								<p:dataTable id="tableAsistenciaCursoDia"
+									value="#{beanVerCurso.listaAsistenciaTemp }" var="asist"
+									rowKey="#{asist.idAlumno }"
+									selection="#{beanVerCurso.listaAsistenciaSelecteds}">
+									<p:column selectionMode="multiple" style="width:2%"
+										headerText="#{msg.asistencia }" width="150px" />
+									<p:column headerText="#{msg.alumno }">
+										<h:outputText value="#{asist.alumno }" />
+									</p:column>
+								</p:dataTable>
+								<h:panelGrid columns="2">
+									<p:commandButton value="#{msg.aceptar}"
+										actionListener="#{beanVerCurso.registraAsistencia}"
+										oncomplete="agregarAsistenciaDialog.hide()"
+										update="scrollPanel" />
+									<p:commandButton value="#{msg.cancelar }"
+										onclick="agregarAsistenciaDialog.hide()" />
+								</h:panelGrid>
+
+
+							</h:panelGrid>
+
+						</p:dialog>
+					</p:tab>
+					<p:tab title="#{msg.calificaciones }">
+						<h:panelGrid columns="1">
+							<p:commandButton value="#{msg.calificaciones }" update="dialogAgregarCalificacion"
+								oncomplete="agregarCalificacionDialog.show()"
+								actionListener="#{beanVerCurso.initSelectMaterias }" />
+						</h:panelGrid>
+
+						<p:scrollPanel style="width:550px;height:200px" mode="native"
+							id="scrollPanel2">
+							<table class="order-table">
+								<thead>
+									<tr>
+										<th class="order-table-header">Matricula</th>
+										<th class="order-table-header">Alumno</th>
+										<ui:repeat var="mat"
+											value="#{beanVerCurso.encabezadoMaterias}">
+											<th class="order-table-header">#{mat }</th>
+										</ui:repeat>
+									</tr>
+								</thead>
+								<ui:repeat var="o"
+									value="#{beanVerCurso.listaAlumnosCalificaciones}"
+									varStatus="status">
+									<tr class="order-table-odd-row">
+										<td>#{o.matricula}</td>
+										<td>#{o.nombre}</td>
+										<ui:repeat var="a" value="#{o.listCalificaciones}">
+											<td>#{a }</td>
+										</ui:repeat>
+
+									</tr>
+								</ui:repeat>
+
+
+							</table>
+						</p:scrollPanel>
+						<p:dialog id="dialogAgregarCalificacion"
+							header="#{msg.frsAgregarRegistro}"
+							widgetVar="agregarCalificacionDialog" closable="true"
+							modal="true" draggable="true" width="400" height="400">
+							<h:panelGrid columns="2">
+								<h:outputText value="#{msg.materia }" />
+								<p:selectOneMenu value="#{beanVerCurso.idMateriaSelected }">
+									<f:selectItem itemLabel="#{msg.seleccionarMateria }"
+										itemValue="0" />
+									<f:selectItems
+										value="#{beanVerCurso.listaSelectMateriasCurso }" />
+									<p:ajax update="tablaMateriasCalif"
+										listener="#{beanVerCurso.handleMateriaChange}" />
+								</p:selectOneMenu>
+							</h:panelGrid>
+							<p:dataTable id="tablaMateriasCalif" 
+								value="#{beanVerCurso.listaCalifMateriaSingle }" editable="true"
+								editMode="cell" var="ca" rowKey="#{ca.idAlumno }">
+								<p:column headerText="#{msg.alumno }">
+									<h:outputText value="#{ca.nombre }" />
+								</p:column>
+								<p:column headerText="#{msg.calificacion }">
+									<p:cellEditor>
+										<f:facet name="output">
+											<h:outputText value="#{ca.calificacion}" />
+										</f:facet>
+										<f:facet name="input">
+											<p:inputText id="modelInput" value="#{ca.calificacion}"
+												style="width:96%" />
+										</f:facet>
+									</p:cellEditor>
+								</p:column>
+							</p:dataTable>
+							<h:panelGrid columns="2">
+								<p:commandButton value="#{msg.aceptar }" actionListener="#{beanVerCurso.saveCalificaciones }" oncomplete="agregarCalificacionDialog.hide()"/>
+								<p:commandButton value="#{msg.cancelar }" actionListener="#{beanVerCurso.cancelSaveCalificaciones }" oncomplete="agregarCalificacionDialog.hide()"/>
+							</h:panelGrid>
+						</p:dialog>
+					</p:tab>
+				</p:tabView>
+			</p:panel>
+		</h:form>
+
+
+	</ui:composition>
+</h:body>
+</html>

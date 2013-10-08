@@ -3,7 +3,9 @@
  */
 package mx.com.asteca.servicio.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import mx.com.asteca.comun.Constantes;
@@ -13,6 +15,8 @@ import mx.com.asteca.persistencia.PersistenciaException;
 import mx.com.asteca.persistencia.dao.AlumnoDAO;
 import mx.com.asteca.persistencia.dao.BaseDAO;
 import mx.com.asteca.persistencia.entidades.Alumnos;
+import mx.com.asteca.persistencia.entidades.Cursos;
+import mx.com.asteca.persistencia.entidades.Materias;
 import mx.com.asteca.servicio.AlumnoServicio;
 import mx.com.asteca.servicio.ServicioException;
 import mx.com.asteca.servicio.assembler.Assembler;
@@ -51,6 +55,74 @@ public class AlumnoServicioImpl extends
 		return assemblerAlumno;
 	}		
 
+	@Override
+	@Transactional
+	public long saveCalificacion(int idAlumno, int idCurso, int idMateria, double calificacion) throws ServicioException{
+		try{
+			Alumnos alumnos = new Alumnos();
+			Cursos cursos = new Cursos();
+			Materias materias = new Materias();
+			alumnos.setIdAlumno(idAlumno);
+			cursos.setIdCurso(idCurso);
+			materias.setIdMateria(idMateria);
+			long pk = daoAlumno.saveCalificacion(alumnos, cursos, materias, BigDecimal.valueOf(calificacion));
+			return pk;
+		} catch (PersistenciaException e) {
+			throw new ServicioException("Error en saveCalificacion Servicio : "
+					+ e.getMessage(), e);
+		}
+	}
+	
+	@Override
+	@Transactional(readOnly=true)
+	public String getCalificacion(int idAlumno, int idCurso, int idMateria) throws ServicioException{
+		try{
+			Alumnos alumnos = new Alumnos();
+			Cursos cursos = new Cursos();
+			Materias materias = new Materias();
+			alumnos.setIdAlumno(idAlumno);
+			cursos.setIdCurso(idCurso);
+			materias.setIdMateria(idMateria);
+			BigDecimal result = daoAlumno.getCalificacion(alumnos, cursos, materias);
+			return String.valueOf(result.doubleValue());
+		} catch (PersistenciaException e) {
+			throw new ServicioException("Error en getCalificacion Servicio : "
+					+ e.getMessage(), e);
+		}
+	}
+	
+	@Override
+	@Transactional
+	public long registraAsistencia(int idAlumno, int idCurso, Date fecha, short presente) throws ServicioException{
+		try{
+			Alumnos alumnos = new Alumnos();
+			Cursos cursos = new Cursos();
+			alumnos.setIdAlumno(idAlumno);
+			cursos.setIdCurso(idCurso);
+			long pk = daoAlumno.registraAsistencia(alumnos, cursos, fecha, presente);
+			return pk;
+		} catch (PersistenciaException e) {
+			throw new ServicioException("Error en registraAsistencia Servicio : "
+					+ e.getMessage(), e);
+		}
+	}
+	
+	@Override
+	@Transactional(readOnly=true)
+	public String findAsistencia(int idAlumno, int idCurso, Date fecha) throws ServicioException{
+		try{
+			Alumnos alumnos = new Alumnos();
+			Cursos cursos = new Cursos();
+			alumnos.setIdAlumno(idAlumno);
+			cursos.setIdCurso(idCurso);
+			String asistencia = daoAlumno.findAsistencia(alumnos, cursos, fecha);
+			return asistencia;
+		} catch (PersistenciaException e) {
+			throw new ServicioException("Error en findAsistencia Servicio : "
+					+ e.getMessage(), e);
+		}
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -254,6 +326,29 @@ public class AlumnoServicioImpl extends
 			return listaAlumnos;
 		} catch (PersistenciaException e) {
 			throw new ServicioException("Error en getListaDatosBasicos Servicio : "
+					+ e.getMessage(), e);
+		}
+	}
+	
+	@Override
+	@Transactional(readOnly=true)
+	public List<AlumnoDTO> findAlumnosByCurso(int idCurso)throws ServicioException{
+		try{
+			Cursos cursos = new Cursos();
+			cursos.setIdCurso(idCurso);
+			List<AlumnoTempDTO> listaBasica = daoAlumno.getAlumnosPorCurso(cursos);
+			List<AlumnoDTO> listaAlumnos = new ArrayList<AlumnoDTO>();
+			for(AlumnoTempDTO temp : listaBasica){
+				AlumnoDTO dto = new AlumnoDTO();
+					dto.setIdAlumno(temp.getIdAlumno());
+					dto.setNombre(temp.getNombre() + " " + temp.getApellidoP() + " " + temp.getApellidoM());
+					dto.setEstatus(temp.getDescEstatus());
+					dto.setMatricula(temp.getMatricula());
+				listaAlumnos.add(dto);
+			}
+			return listaAlumnos;
+		} catch (PersistenciaException e) {
+			throw new ServicioException("Error en findAlumnosByCurso Servicio : "
 					+ e.getMessage(), e);
 		}
 	}

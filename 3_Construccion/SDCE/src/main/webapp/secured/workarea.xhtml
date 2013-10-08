@@ -1,3 +1,4 @@
+<!DOCTYPE html >
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
@@ -6,6 +7,30 @@
 	xmlns:p="http://primefaces.org/ui">
 <h:head>
 	<link href="../../css/asteca.css" rel="stylesheet" type="text/css" />
+	<style type="text/css">
+.order-table {
+	border-collapse: collapse;
+}
+
+.order-table-header {
+	text-align: center;
+	background: none repeat scroll 0 0 #E5E5E5;
+	border-bottom: 1px solid #BBBBBB;
+	padding: 16px;
+}
+
+.order-table-odd-row {
+	text-align: center;
+	background: none repeat scroll 0 0 #FFFFFFF;
+	border-top: 1px solid #BBBBBB;
+}
+
+.order-table-even-row {
+	text-align: center;
+	background: none repeat scroll 0 0 #F9F9F9;
+	border-top: 1px solid #BBBBBB;
+}
+</style>
 </h:head>
 
 <h:body id="frmEjemplo">
@@ -26,14 +51,12 @@
 
 			<div id="templatemo_middle_column">
 				<ui:insert name="templatemo_left_column">
-					<p:ajaxStatus style="width:40px; height:40px;" id="ajaxStatusPanel">
-						<f:facet name="start">
-							<h:graphicImage value="../../images/ajax-loader.gif" />
-						</f:facet>
-						<f:facet name="complete">
-							<h:outputText value="" />
-						</f:facet>
-					</p:ajaxStatus>
+					<p:ajaxStatus onstart="statusDialog.show();" 
+						onsuccess="statusDialog.hide();" oncomplete="statusDialog.hide();" onerror="statusDialog.hide();" />
+					<p:dialog modal="true" widgetVar="statusDialog" header="Status"
+						draggable="false" closable="false">
+						<p:graphicImage value="../../images/ajax-loader.gif" />
+					</p:dialog>
 					<ui:include src="#{menuBean.navegacion}" />
 				</ui:insert>
 			</div>

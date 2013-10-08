@@ -33,6 +33,9 @@ public class Instructores  implements java.io.Serializable {
      private Personas personas;
      private String noEmpleado;
      private Set<Materias> materiases = new HashSet<Materias>(0);
+     private Set<InstructoresMaterias> instructoresMateriases = new HashSet<InstructoresMaterias>(0);
+     private Set<InstructoresDocumentos> instructoresDocumentoses = new HashSet<InstructoresDocumentos>(0);
+     private Estatus estatus;
 
     public Instructores() {
     }
@@ -105,6 +108,37 @@ public class Instructores  implements java.io.Serializable {
         this.materiases = materiases;
     }
 
+    @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="instructores")
+    public Set<InstructoresMaterias> getInstructoresMateriases() {
+        return this.instructoresMateriases;
+    }
+    
+    public void setInstructoresMateriases(Set<InstructoresMaterias> instructoresMateriases) {
+        this.instructoresMateriases = instructoresMateriases;
+    }
+@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="instructores")
+    public Set<InstructoresDocumentos> getInstructoresDocumentoses() {
+        return this.instructoresDocumentoses;
+    }
+    
+    public void setInstructoresDocumentoses(Set<InstructoresDocumentos> instructoresDocumentoses) {
+        this.instructoresDocumentoses = instructoresDocumentoses;
+    }
+
+
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="ID_ESTATUS")
+	public Estatus getEstatus() {
+		return estatus;
+	}
+
+
+	/**
+	 * @param estatus the estatus to set
+	 */
+	public void setEstatus(Estatus estatus) {
+		this.estatus = estatus;
+	}
 
 
 
