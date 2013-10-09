@@ -133,7 +133,7 @@ public class MateriaRegistroControlador extends BaseController implements Serial
 	
 	public void save(ActionEvent e){
 		try{
-			if (nuevoNombre != null && !nuevoNombre.isEmpty()) {
+			if (validaDatos()) {
 				itemNuevo.setNombre(nuevoNombre);
 				int pk = fachada.save(itemNuevo);
 				itemNuevo.setIdMateria(pk);
@@ -146,6 +146,10 @@ public class MateriaRegistroControlador extends BaseController implements Serial
 		}catch(FachadaException ex){
 			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR, Constantes.ERROR_NUEVO_REGISTRO);
 		}
+	}
+	
+	private boolean validaDatos(){
+		return(!(nuevoNombre == null) || !nuevoNombre.isEmpty());
 	}
 	
 	public void saveCancel(){

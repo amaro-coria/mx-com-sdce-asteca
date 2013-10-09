@@ -123,6 +123,28 @@ public class CursoControlador extends BaseController implements Serializable{
 		}
 	}
 	
+	//TODO Verificar metodo
+	private boolean validaDatos(){
+		if(nuevoFechaHoraFinal == null){
+			return false;
+		} else if (nuevoFechaHoraInicial == null){
+			return false;
+		} else if (idAulaNuevoSelected == 0){
+			return false;
+		} else if (idNuevoInstructorSelected == 0) {
+			return false;
+		} else if (idNuevoMateriaSelected == 0) {
+			return false;
+		} else if (idNuevoTipoCursoSelected == 0){
+			return false;
+		}else if (idAlumnoAgregar == 0) {
+			return false;
+		} else if (dtoCursoNuevo == null) {
+			return false;
+		}
+		return true;
+	}
+	
 	public void addAlumno(){
 		try {
 			fachada.saveAlumnoCurso(idAlumnoAgregar, dtoCursoNuevo.getIdCurso());
@@ -141,7 +163,7 @@ public class CursoControlador extends BaseController implements Serializable{
 			}
 		} catch (FachadaException e) {
 			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR, Constantes.ERROR_NUEVO_REGISTRO);
-		}
+			}
 	}
 	
 	public void deleteMateria(){

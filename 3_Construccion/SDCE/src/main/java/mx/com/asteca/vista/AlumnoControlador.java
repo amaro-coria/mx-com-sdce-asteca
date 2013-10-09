@@ -449,60 +449,123 @@ public class AlumnoControlador extends BaseController implements Serializable {
 		showVer();
 	}
 
-	public void addAlumno() {
-		itemNuevo.setListaEstudios(nuevoAlumnoListaEstudios);
-		itemNuevo.setMatricula(nuevoAlumnoMatricula);
-		itemNuevo.setIdEstatus(nuevoAlumnoIdEstatusSelected);
-		PersonaDTO personaDTO = new PersonaDTO();
-		personaDTO.setApellidoM(nuevoAlumnoApellidoM);
-		personaDTO.setApellidoP(nuevoAlumnoApellidoP);
-		personaDTO.setCurp(nuevoAlumnoCurp);
-		personaDTO.setEmail(nuevoAlumnoEmail);
-		personaDTO.setFechaNac(nuevoAlumnoFechaNac);
-		personaDTO.setIfe(nuevoAlumnoIfe);
-		personaDTO.setLugarNac(nuevoAlumnoLugarNac);
-		personaDTO.setNombre(nuevoAlumnoNombre);
-		personaDTO.setPasaporte(nuevoAlumnoPasaporte);
-		personaDTO.setRfc(nuevoAlumnoRfc);
-		DomicilioDTO domicilioDTO = new DomicilioDTO();
-		domicilioDTO.setCalle(nuevoAlumnoCalle);
-		domicilioDTO.setCp(nuevoAlumnoCpIdAsentamiento);
-		String[] datosDemograficos = nuevoAlumnoIdAsentamientoMunicipioEstado
-				.split("\\|");
-		int idAsentamientoTemp = Integer.parseInt(datosDemograficos[0]);
-		int idMunicipioTemp = Integer.parseInt(datosDemograficos[1]);
-		int idEstadoTemp = Integer.parseInt(datosDemograficos[2]);
-		domicilioDTO.setIdAsentamiento(idAsentamientoTemp);
-		domicilioDTO.setIdEstado(idEstadoTemp);
-		domicilioDTO.setIdMunicipio(idMunicipioTemp);
-		domicilioDTO.setNoExterior(nuevoAlumnoNoExt);
-		domicilioDTO.setNoInterior(nuevoAlumnoNoInt);
-		domicilioDTO.setTelefono(nuevoAlumnoTelefono);
-		FamiliaDTO familiaDTO = new FamiliaDTO();
-		familiaDTO.setConyugueFechaNac(nuevoAlumnoConyugueFechaNac);
-		familiaDTO.setConyugueNombre(nuevoAlumnoConyugueNombre);
-		familiaDTO.setHijo1FechaNac(nuevoAlumnoHijo1FechaNac);
-		familiaDTO.setHijo1Nombre(nuevoAlumnoHijo1Nombre);
-		familiaDTO.setHijo2FechaNac(nuevoAlumnoHijo2FechaNac);
-		familiaDTO.setHijo2Nombre(nuevoAlumnoHijo2Nombre);
-		familiaDTO.setMadreFechaNac(nuevoAlumnoMadreFechaNac);
-		familiaDTO.setMadreNombre(nuevoAlumnoMadreNombre);
-		familiaDTO.setPadreFechaNac(nuevoAlumnoPadreFechaNac);
-		familiaDTO.setPadreNombre(nuevoAlumnoPadreNombre);
-		itemNuevo.setDtoDomicilio(domicilioDTO);
-		itemNuevo.setDtoPersona(personaDTO);
-		itemNuevo.setDtoFamilia(familiaDTO);
-		try {
-			int alumnoID = fachada.save(itemNuevo);
-			itemNuevo.setIdAlumno(alumnoID);
-			listaItems.add(itemNuevo);
-			listaSelect = null;
-			initListaSelect();
-		} catch (FachadaException e) {
-			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
-					Constantes.ERROR_NUEVO_REGISTRO);
+	private boolean validaDatos(){
+		if (nuevoAlumnoMatricula == null || nuevoAlumnoMatricula.isEmpty()) {
+			return false;
+		}else if (nuevoAlumnoNombre == null || nuevoAlumnoNombre.isEmpty()) {
+			return false;
+		}else if (nuevoAlumnoApellidoP == null || nuevoAlumnoApellidoP.isEmpty()) {
+			return false;
+		}else if (nuevoAlumnoApellidoM == null || nuevoAlumnoApellidoM.isEmpty()) {
+			return false;
+		}else if (nuevoAlumnoFechaNac == null) {
+			return false;
+		}else if (nuevoAlumnoLugarNac == null || nuevoAlumnoLugarNac.isEmpty()) {
+			return false;
+		}else if (nuevoAlumnoIfe == null || nuevoAlumnoIfe.isEmpty()) {
+			return false;
+		}else if (nuevoAlumnoEmail == null || nuevoAlumnoEmail.isEmpty()) {
+			return false;
+		}else if (nuevoAlumnoCalle == null || nuevoAlumnoCalle.isEmpty()) {
+			return false;
+		}else if (nuevoAlumnoCiudad == null || nuevoAlumnoCiudad.isEmpty()) {
+			return false;
+		}else if (nuevoAlumnoDelegacion == null || nuevoAlumnoDelegacion.isEmpty()) {
+			return false;
+		}else if (nuevoAlumnoTelefono == null || nuevoAlumnoTelefono.isEmpty()) {
+			return false;
+		}else if (nuevoAlumnoCp == null || nuevoAlumnoCp.isEmpty()) {
+			return false;
+		}else if (nuevoAlumnoCapacidad == null || nuevoAlumnoCapacidad.isEmpty()) {
+			return false;
+		}else if (nuevoAlumnoCapacidadAutorizada == null || nuevoAlumnoCapacidadAutorizada.isEmpty()) {
+			return false;
+		}else if (nuevoAlumnoCapacidadHoras == null || nuevoAlumnoCapacidadHoras.isEmpty()) {
+			return false;
+		}else if (nuevoAlumnoCapacidadFechaFin == null) {
+			return false;
+		}else if (nuevoAlumnoCapacidadFechaInicio == null) {
+			return false;
+		}else if (nuevoAlumnoCapacidadAcreditada == null || nuevoAlumnoCapacidadAcreditada.isEmpty()) {
+			return false;
+		}else if (nuevoAlumnoReferenciaNuevaNombre == null || nuevoAlumnoReferenciaNuevaNombre.isEmpty()) {
+			return false;
+		}else if (nuevoAlumnoReferenciaNuevaApellidoP == null || nuevoAlumnoReferenciaNuevaApellidoP.isEmpty()) {
+			return false;
+		}else if (nuevoAlumnoReferenciaNuevaApellidoM == null || nuevoAlumnoReferenciaNuevaApellidoM.isEmpty()) {
+			return false;
+		}else if (nuevoAlumnoReferenciaNuevaCalle == null || nuevoAlumnoReferenciaNuevaCalle.isEmpty()) {
+			return false;
+		}else if (nuevoAlumnoReferenciaNuevaDelegacion == null || nuevoAlumnoReferenciaNuevaDelegacion.isEmpty()) {
+			return false;
+		}else if (nuevoAlumnoReferenciaNuevaCiudad == null || nuevoAlumnoReferenciaNuevaCiudad.isEmpty()) {
+			return false;
+		}else if (nuevoAlumnoReferenciaNuevaEntidadFederativa == null || nuevoAlumnoReferenciaNuevaEntidadFederativa.isEmpty()) {
+			return false;
+		}else if (CollectionUtils.isEmpty(nuevoAlumnoListaEstudios)) {
+			return false;
 		}
-
+		return true;
+	}
+	
+	public void addAlumno() {
+		boolean b = validaDatos();
+		if (b) {
+			itemNuevo.setListaEstudios(nuevoAlumnoListaEstudios);
+			itemNuevo.setMatricula(nuevoAlumnoMatricula);
+			itemNuevo.setIdEstatus(nuevoAlumnoIdEstatusSelected);
+			PersonaDTO personaDTO = new PersonaDTO();
+			personaDTO.setApellidoM(nuevoAlumnoApellidoM);
+			personaDTO.setApellidoP(nuevoAlumnoApellidoP);
+			personaDTO.setCurp(nuevoAlumnoCurp);
+			personaDTO.setEmail(nuevoAlumnoEmail);
+			personaDTO.setFechaNac(nuevoAlumnoFechaNac);
+			personaDTO.setIfe(nuevoAlumnoIfe);
+			personaDTO.setLugarNac(nuevoAlumnoLugarNac);
+			personaDTO.setNombre(nuevoAlumnoNombre);
+			personaDTO.setPasaporte(nuevoAlumnoPasaporte);
+			personaDTO.setRfc(nuevoAlumnoRfc);
+			DomicilioDTO domicilioDTO = new DomicilioDTO();
+			domicilioDTO.setCalle(nuevoAlumnoCalle);
+			domicilioDTO.setCp(nuevoAlumnoCpIdAsentamiento);
+			String[] datosDemograficos = nuevoAlumnoIdAsentamientoMunicipioEstado
+					.split("\\|");
+			int idAsentamientoTemp = Integer.parseInt(datosDemograficos[0]);
+			int idMunicipioTemp = Integer.parseInt(datosDemograficos[1]);
+			int idEstadoTemp = Integer.parseInt(datosDemograficos[2]);
+			domicilioDTO.setIdAsentamiento(idAsentamientoTemp);
+			domicilioDTO.setIdEstado(idEstadoTemp);
+			domicilioDTO.setIdMunicipio(idMunicipioTemp);
+			domicilioDTO.setNoExterior(nuevoAlumnoNoExt);
+			domicilioDTO.setNoInterior(nuevoAlumnoNoInt);
+			domicilioDTO.setTelefono(nuevoAlumnoTelefono);
+			FamiliaDTO familiaDTO = new FamiliaDTO();
+			familiaDTO.setConyugueFechaNac(nuevoAlumnoConyugueFechaNac);
+			familiaDTO.setConyugueNombre(nuevoAlumnoConyugueNombre);
+			familiaDTO.setHijo1FechaNac(nuevoAlumnoHijo1FechaNac);
+			familiaDTO.setHijo1Nombre(nuevoAlumnoHijo1Nombre);
+			familiaDTO.setHijo2FechaNac(nuevoAlumnoHijo2FechaNac);
+			familiaDTO.setHijo2Nombre(nuevoAlumnoHijo2Nombre);
+			familiaDTO.setMadreFechaNac(nuevoAlumnoMadreFechaNac);
+			familiaDTO.setMadreNombre(nuevoAlumnoMadreNombre);
+			familiaDTO.setPadreFechaNac(nuevoAlumnoPadreFechaNac);
+			familiaDTO.setPadreNombre(nuevoAlumnoPadreNombre);
+			itemNuevo.setDtoDomicilio(domicilioDTO);
+			itemNuevo.setDtoPersona(personaDTO);
+			itemNuevo.setDtoFamilia(familiaDTO);
+			try {
+				int alumnoID = fachada.save(itemNuevo);
+				itemNuevo.setIdAlumno(alumnoID);
+				listaItems.add(itemNuevo);
+				listaSelect = null;
+				initListaSelect();
+			} catch (FachadaException e) {
+				super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
+						Constantes.ERROR_NUEVO_REGISTRO);
+			}
+		}else{
+			super.addWarningMessage(Constantes.WARNING_NECESITAS_LLENAR_CAMPOS_REQUERIDOS);
+		}
 	}
 
 	public void handlerNuevoAlumnoFileUpload(FileUploadEvent event) {
