@@ -151,6 +151,8 @@ public class AdministrativoControlador extends BaseController implements
 				super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
 						Constantes.ERROR_NUEVO_REGISTRO);
 			}
+		}else {
+			super.addWarningMessage(Constantes.WARNING_NECESITAS_LLENAR_CAMPOS_REQUERIDOS);
 		}
 	}
 	

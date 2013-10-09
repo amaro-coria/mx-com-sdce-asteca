@@ -535,71 +535,104 @@ public class InstructorControlador extends BaseController implements
 		editarListaDocumentos.add(documentoDTO);
 	}
 
-	public void save() {
-		itemNuevo.setNoEmpleado(nuevoNoEmpleado);
-		itemNuevo.setIdTipo(nuevoIdTipoInstructor);
-		PersonaDTO dtoPersona = new PersonaDTO();
-		dtoPersona.setActivo((short) 1);
-		dtoPersona.setApellidoM(nuevoApellidoM);
-		dtoPersona.setApellidoP(nuevoApellidoP);
-		dtoPersona.setCurp(nuevoCURP);
-		dtoPersona.setFechaNac(nuevoFechaNac);
-		dtoPersona.setIfe(nuevoIFE);
-		dtoPersona.setLugarNac(nuevoLugarNac);
-		dtoPersona.setNombre(nuevoNombre);
-		dtoPersona.setRfc(nuevoRFC);
-		DomicilioDTO domicilioDTO = new DomicilioDTO();
-		domicilioDTO.setCalle(nuevoCalle);
-		domicilioDTO.setCp(nuevoCpIdAsentamiento);
-		String[] datosDemograficos = nuevoIdAsentamientoMunicipioEstado
-				.split("\\|");
-		int idAsentamientoTemp = Integer.parseInt(datosDemograficos[0]);
-		int idMunicipioTemp = Integer.parseInt(datosDemograficos[1]);
-		int idEstadoTemp = Integer.parseInt(datosDemograficos[2]);
-		domicilioDTO.setIdAsentamiento(idAsentamientoTemp);
-		domicilioDTO.setIdEstado(idEstadoTemp);
-		domicilioDTO.setIdMunicipio(idMunicipioTemp);
-		domicilioDTO.setNoExterior(nuevoNoExt);
-		domicilioDTO.setNoInterior(nuevoNoInt);
-		itemNuevo.setDtoDomicilio(domicilioDTO);
-		itemNuevo.setDtoPersona(dtoPersona);
-		itemNuevo.setIdTipo(nuevoIdTipoInstructor);
-		itemNuevo.setIdEstatus(nuevoIdEstatus);
-		// itemNuevo.setEstatus(nuev)
-		try {
-			int pk = fachada.save(itemNuevo);
-			itemNuevo.setIdInstructor(pk);
-			for (DocumentoDTO dto : nuevoListaDocumentos) {
-				int pkDoc = fachada.saveDocumento(dto);
-				dto.setIdDoc(pkDoc);
-				InstructorDocumentoDTO doc = new InstructorDocumentoDTO();
-				doc.setDocumento(dto);
-				doc.setIdInstructor(pk);
-				int pkDoc2 = fachada.saveInstructorDocumento(doc);
-				doc.setId(pkDoc2);
-			}
-			List<MateriaRegistroDTO> listaTarget = nuevoDualListModel.getTarget();
-			List<MateriaRegistroDTO> listaSource = nuevoDualListModel.getSource();
-			for (Object o:  listaTarget) {
-				Integer idMateria = Integer.parseInt(o.toString());
-				InstructorMateriaDTO mat = new InstructorMateriaDTO();
-				mat.setIdInstructor(pk);
-					MateriaRegistroDTO materia = new MateriaRegistroDTO();
-					materia.setIdMateria(idMateria);
-				mat.setMateria(materia);
-				int pkMat = fachada.saveInstructorMateria(mat);
-				mat.setId(pkMat);
-			}
-			if(!CollectionUtils.isEmpty(listaItems)){
-				listaItems.add(itemNuevo);
-			}else{
-				listaItems = new ArrayList<InstructorDTO>();
-				listaItems.add(itemNuevo);
-			}
-		} catch (FachadaException e) {
-			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
-					Constantes.ERROR_NUEVO_REGISTRO);
+	private boolean validaDatos(){
+		if (nuevoApellidoP == null || nuevoApellidoP.isEmpty()) {
+			return false;
+		}else if (nuevoNombre == null || nuevoNombre.isEmpty()) {
+			return false;
+		}else if (nuevoNoEmpleado == null || nuevoNoEmpleado.isEmpty() ) {
+			return false;
+		}else if (nuevoIdTipoInstructor == 0) {
+			return false;
+		}else if (nuevoFechaNac == null) {
+			return false;
+		}else if (nuevoIdEstatus == 0) {
+			return false;
+		}else if (nuevoCalle == null || nuevoCalle.isEmpty()) {
+			return false;
+		}else if (nuevoIdAsentamientoMunicipioEstado == null || nuevoIdAsentamientoMunicipioEstado.isEmpty()) {
+			return false;
+		}else if (nuevoEstado == null || nuevoEstado.isEmpty()) {
+			return false;
+		}else if (nuevoDelegacion == null || nuevoDelegacion.isEmpty()) {
+			return false;
+		}else if (nuevoCp == 0) {
+			return false;
 		}
+		return true;
+	}
+	
+	public void save() {
+		boolean b = validaDatos();
+		if (b) {
+			itemNuevo.setNoEmpleado(nuevoNoEmpleado);
+			itemNuevo.setIdTipo(nuevoIdTipoInstructor);
+			PersonaDTO dtoPersona = new PersonaDTO();
+			dtoPersona.setActivo((short) 1);
+			dtoPersona.setApellidoM(nuevoApellidoM);
+			dtoPersona.setApellidoP(nuevoApellidoP);
+			dtoPersona.setCurp(nuevoCURP);
+			dtoPersona.setFechaNac(nuevoFechaNac);
+			dtoPersona.setIfe(nuevoIFE);
+			dtoPersona.setLugarNac(nuevoLugarNac);
+			dtoPersona.setNombre(nuevoNombre);
+			dtoPersona.setRfc(nuevoRFC);
+			DomicilioDTO domicilioDTO = new DomicilioDTO();
+			domicilioDTO.setCalle(nuevoCalle);
+			domicilioDTO.setCp(nuevoCpIdAsentamiento);
+			String[] datosDemograficos = nuevoIdAsentamientoMunicipioEstado
+					.split("\\|");
+			int idAsentamientoTemp = Integer.parseInt(datosDemograficos[0]);
+			int idMunicipioTemp = Integer.parseInt(datosDemograficos[1]);
+			int idEstadoTemp = Integer.parseInt(datosDemograficos[2]);
+			domicilioDTO.setIdAsentamiento(idAsentamientoTemp);
+			domicilioDTO.setIdEstado(idEstadoTemp);
+			domicilioDTO.setIdMunicipio(idMunicipioTemp);
+			domicilioDTO.setNoExterior(nuevoNoExt);
+			domicilioDTO.setNoInterior(nuevoNoInt);
+			itemNuevo.setDtoDomicilio(domicilioDTO);
+			itemNuevo.setDtoPersona(dtoPersona);
+			itemNuevo.setIdTipo(nuevoIdTipoInstructor);
+			itemNuevo.setIdEstatus(nuevoIdEstatus);
+			// itemNuevo.setEstatus(nuev)
+			try {
+				int pk = fachada.save(itemNuevo);
+				itemNuevo.setIdInstructor(pk);
+				for (DocumentoDTO dto : nuevoListaDocumentos) {
+					int pkDoc = fachada.saveDocumento(dto);
+					dto.setIdDoc(pkDoc);
+					InstructorDocumentoDTO doc = new InstructorDocumentoDTO();
+					doc.setDocumento(dto);
+					doc.setIdInstructor(pk);
+					int pkDoc2 = fachada.saveInstructorDocumento(doc);
+					doc.setId(pkDoc2);
+				}
+				List<MateriaRegistroDTO> listaTarget = nuevoDualListModel.getTarget();
+				List<MateriaRegistroDTO> listaSource = nuevoDualListModel.getSource();
+				for (Object o:  listaTarget) {
+					Integer idMateria = Integer.parseInt(o.toString());
+					InstructorMateriaDTO mat = new InstructorMateriaDTO();
+					mat.setIdInstructor(pk);
+						MateriaRegistroDTO materia = new MateriaRegistroDTO();
+						materia.setIdMateria(idMateria);
+					mat.setMateria(materia);
+					int pkMat = fachada.saveInstructorMateria(mat);
+					mat.setId(pkMat);
+				}
+				if(!CollectionUtils.isEmpty(listaItems)){
+					listaItems.add(itemNuevo);
+				}else{
+					listaItems = new ArrayList<InstructorDTO>();
+					listaItems.add(itemNuevo);
+				}
+			} catch (FachadaException e) {
+				super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
+						Constantes.ERROR_NUEVO_REGISTRO);
+			}
+		} else {
+			super.addWarningMessage(Constantes.WARNING_NECESITAS_LLENAR_CAMPOS_REQUERIDOS);
+		}
+		
 	}
 
 	public void update() {

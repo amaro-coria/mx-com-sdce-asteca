@@ -13,17 +13,20 @@
 			<h:panelGrid columns="2" style="text-align:left;">
 				<h:panelGrid columns="2">
 					<h:outputText value="#{msg.cliente }" />
-					<p:selectOneMenu value="#{beanCurso.idClienteSelected}">
+					<p:selectOneMenu style="width:150px;"
+					value="#{beanCurso.idClienteSelected}">
 						<f:selectItem itemLabel="#{msg.seleccionarCliente}" itemValue="0" />
 						<f:selectItems value="#{beanCurso.listSelectClientes}" />
 					</p:selectOneMenu>
 					<h:outputText value="#{msg.area }" />
-					<p:selectOneMenu value="#{beanCurso.idAreaSelected}">
+					<p:selectOneMenu value="#{beanCurso.idAreaSelected}"
+					style="width:150px;">
 						<f:selectItem itemLabel="#{msg.seleccionarArea}" itemValue="0" />
 						<f:selectItems value="#{beanCurso.listSelectArea}" />
 					</p:selectOneMenu>
 					<h:outputText value="#{msg.curso }" />
-					<p:selectOneMenu value="#{beanCurso.idProgramaEstudioSelected}">
+					<p:selectOneMenu value="#{beanCurso.idProgramaEstudioSelected}"
+					style="width:150px">
 						<f:selectItem itemLabel="#{msg.seleccionarCurso}" itemValue="0" />
 						<f:selectItems value="#{beanCurso.listSelectProgramaEstudio}" />
 					</p:selectOneMenu>
@@ -34,7 +37,8 @@
 							navigator="true" value="#{beanCurso.nuevoCursoFechaFin}" />
 					</h:panelGroup>
 					<h:outputText value="#{msg.sede }" />
-					<p:selectOneMenu value="#{beanCurso.idSedeSelected}">
+					<p:selectOneMenu value="#{beanCurso.idSedeSelected}"
+					style="width:150px">
 						<f:selectItem itemLabel="#{seleccionarSede}" itemValue="0" />
 						<f:selectItems value="#{beanCurso.listSelectSede}" />
 					</p:selectOneMenu>
@@ -251,7 +255,7 @@
 						<p:commandButton value="#{msg.eliminar}" />
 					</h:panelGrid>
 					<p:dialog id="dialogAgregarAlumno"
-						header="#{msg.frsAgregarRegistro}" widgetVar="agregarAlumnoDialog"
+						header="#{msg.frsNuevoRegistro}" widgetVar="agregarAlumnoDialog"
 						closable="true" modal="true" draggable="true" width="400"
 						height="400">
 						<h:panelGrid columns="2">

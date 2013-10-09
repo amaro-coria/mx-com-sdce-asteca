@@ -237,34 +237,60 @@ public class ProgramaEstudiosControlador extends BaseController implements
 		}
 	}
 	
-	public void save() {
-		try {
-			nuevoItem.setClave(nuevoClave);
-			nuevoItem.setDsc(nuevoDsc);
-			nuevoItem.setFechaAut(nuevoFechaAut);
-			nuevoItem.setHorasPractica(Integer.parseInt(nuevoHorasPractica));
-			nuevoItem.setHorasTeoria(Integer.parseInt(nuevoHorasTeoria));
-			nuevoItem.setIdTipo(nuevoIdTipo);
-			nuevoItem.setNoAut(nuevoNoAut);
-			int pk = fachada.save(nuevoItem);
-			if (!CollectionUtils.isEmpty(listAutNuevo)) {
-				for (ProgramaEstudiosAutorizacionDTO dto : listAutNuevo) {
-					dto.setIdProgramaEstudios(pk);
-					int pkTemp = fachada.saveAutorizacion(dto);
-					dto.setIdAutorizacion(pkTemp);
-				}
-			}
-			if (!CollectionUtils.isEmpty(listMateriasNuevo)) {
-				for (ProgramaEstudiosMateriasDTO dto : listMateriasNuevo) {
-					dto.setIdProgrEstudios(pk);
-					int pkTemp = fachada.saveEstudioMateria(dto);
-					dto.setIdProgrEstMateria(pkTemp);
-				}
-			}
-		} catch (FachadaException e) {
-			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
-					Constantes.ERROR_NUEVO_REGISTRO);
+	private boolean validaDatos(){
+		if (!(nuevoClave == null) || !nuevoClave.isEmpty()) {
+			return false;
+		}else if (!(nuevoDsc == null) || !nuevoDsc.isEmpty()) {
+			return false;
+		}else if (!(nuevoHorasPractica == null) || !nuevoHorasPractica.isEmpty()) {
+			return false;
+		}else if (!(nuevoHorasTeoria == null) || !nuevoHorasTeoria.isEmpty()) {
+			return false;
+		}else if (!(nuevoNoAut == null) || !nuevoNoAut.isEmpty()) {
+			return false;
+		}else if (!(nuevoItem == null)) {
+			return false;
+		}else if (CollectionUtils.isEmpty(listAutNuevo)) {
+			return false;
+		}else if (nuevoIdTipo == 0) {
+			return false;
 		}
+		return true;
+	}
+	
+	public void save() {
+		if (validaDatos()) {
+			try {
+				nuevoItem.setClave(nuevoClave);
+				nuevoItem.setDsc(nuevoDsc);
+				nuevoItem.setFechaAut(nuevoFechaAut);
+				nuevoItem.setHorasPractica(Integer.parseInt(nuevoHorasPractica));
+				nuevoItem.setHorasTeoria(Integer.parseInt(nuevoHorasTeoria));
+				nuevoItem.setIdTipo(nuevoIdTipo);
+				nuevoItem.setNoAut(nuevoNoAut);
+				int pk = fachada.save(nuevoItem);
+				if (!CollectionUtils.isEmpty(listAutNuevo)) {
+					for (ProgramaEstudiosAutorizacionDTO dto : listAutNuevo) {
+						dto.setIdProgramaEstudios(pk);
+						int pkTemp = fachada.saveAutorizacion(dto);
+						dto.setIdAutorizacion(pkTemp);
+					}
+				}
+				if (!CollectionUtils.isEmpty(listMateriasNuevo)) {
+					for (ProgramaEstudiosMateriasDTO dto : listMateriasNuevo) {
+						dto.setIdProgrEstudios(pk);
+						int pkTemp = fachada.saveEstudioMateria(dto);
+						dto.setIdProgrEstMateria(pkTemp);
+					}
+				}
+			} catch (FachadaException e) {
+				super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
+						Constantes.ERROR_NUEVO_REGISTRO);
+			}
+		} else {
+			super.addWarningMessage(Constantes.WARNING_NECESITAS_LLENAR_CAMPOS_REQUERIDOS);
+		}
+		
 	}
 
 	public void update() {
