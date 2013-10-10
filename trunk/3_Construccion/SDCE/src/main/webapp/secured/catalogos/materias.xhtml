@@ -92,7 +92,6 @@
 				</h:panelGrid>
 				<h:panelGrid style="float: right;" columns="2">
 					<p:commandButton value="#{msg.aceptar }" icon="ui-icon-check"
-						oncomplete="nuevoDialog.hide()"
 						actionListener="#{beanMateria.save }" update=":form:table growl selectDsc" />
 					<p:commandButton value="#{msg.cancelar }" icon="ui-icon-closethick"
 						onclick="nuevoDialog.hide()"
