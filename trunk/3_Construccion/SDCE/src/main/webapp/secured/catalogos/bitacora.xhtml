@@ -9,60 +9,61 @@
 		<h:form styleClass="login">
 			<p:growl id="growl" showDetail="true" sticky="true" />
 			<p:panel id="panel" header="Buscar" closable="false"
-				toggleable="false" style="text-align:center;" >
+				toggleable="false" style="text-align:center;">
 				<h:panelGrid columns="2" style="text-align:left;">
 					<h:outputText value="#{msg.accion} :" />
-					<p:selectOneMenu id="selectEstado" 
+					<p:selectOneMenu id="selectEstado"
 						value="#{beanBitacora.accionSelected}" style="min-width: 450px;">
-						<f:selectItem itemLabel="#{msg.seleccionarAccion}" itemValue="" noSelectionOption="true" />
+						<f:selectItem itemLabel="#{msg.seleccionarAccion}" itemValue=""
+							noSelectionOption="true" />
 						<f:selectItems value="#{beanBitacora.listSelectAccion}" />
 					</p:selectOneMenu>
-					
+
 					<h:outputText value="#{msg.usuario} :" />
 					<p:selectOneMenu id="selectTipo"
-						value="#{beanBitacora.usuarioSelected}" style="min-width: 450px;" >
-						<f:selectItem itemLabel="#{msg.seleccionarUsuario}" itemValue="0" noSelectionOption="true" />
+						value="#{beanBitacora.usuarioSelected}" style="min-width: 450px;">
+						<f:selectItem itemLabel="#{msg.seleccionarUsuario}" itemValue="0"
+							noSelectionOption="true" />
 						<f:selectItems value="#{beanBitacora.listSelectUsuarios}" />
 					</p:selectOneMenu>
 				</h:panelGrid>
-				
+
 				<h:panelGrid style="text-align:right" width="100%">
 					<h:panelGrid columns="2" style="text-align:right">
 						<p:commandButton value="#{msg.limpiar}"
 							icon="ui-icon-arrowrefresh-1-e"
 							onclick=":form:selectEstado.selectValue('')"
 							actionListener="#{beanBitacora.limpiarFiltrado}" update="growl" />
-						<p:commandButton value="#{msg.buscar}"
-							icon="ui-icon-search"
+						<p:commandButton value="#{msg.buscar}" icon="ui-icon-search"
 							actionListener="#{beanBitacora.buscarFiltrado}"
 							update="notificacionesTable" />
 					</h:panelGrid>
 				</h:panelGrid>
 			</p:panel>
 			<p:panel>
-				<p:commandButton value="#{msg.ver}" icon="ui-icon-search" 								
-								oncomplete="verDialog.show()"
-								update="displayVer, growl" />
+				<p:commandButton value="#{msg.ver}" icon="ui-icon-search"
+					oncomplete="verDialog.show()" update="displayVer, growl" />
 			</p:panel>
 			<p:panel>
 				<p:dataTable id="notificacionesTable"
 					value="#{beanBitacora.listItems}" var="item"
-					rowKey="#{item.idBitacora}" paginator="true" 
-					selection="#{beanBitacora.itemSelected}" filteredValue="#{beanBitacora.filteredList}"
+					rowKey="#{item.idBitacora}" paginator="true"
+					selection="#{beanBitacora.itemSelected}"
+					filteredValue="#{beanBitacora.filteredList}"
 					paginatorPosition="bottom" rows="10">
 					<p:column selectionMode="single" style="width:2%" />
 					<p:column id="id" headerText="#{msg.alta}"
-						sortBy="#{item.fechaString}" filterBy="#{item.fechaString}" rendered="false">
+						sortBy="#{item.fechaString}" filterBy="#{item.fechaString}"
+						rendered="false">
 						<h:outputText id="idCell" value="#{item.fechaString}" />
 					</p:column>
 					<p:column id="name2" headerText="#{msg.accion}"
 						sortBy="#{item.accion}" filterBy="#{item.accion}">
 						<h:outputText id="nameCell2" value="#{item.accion}" />
 					</p:column>
-					<p:column id="name3" headerText="#{msg.ip}"
-						sortBy="#{item.ip}" filterBy="#{item.ip}">
-						<h:outputText id="nameCell3"
-							value="#{item.ip}" />
+					<p:column id="name3" headerText="#{msg.ip}" sortBy="#{item.ip}"
+						filterBy="#{item.ip}">
+						<h:outputText id="nameCell3" value="#{item.ip}" />
 					</p:column>
 					<p:column id="name4" headerText="#{msg.usuario}"
 						sortBy="#{item.usuario}" filterBy="#{item.usuario}">
@@ -84,20 +85,20 @@
 						<h:outputText />
 						<h:outputText value="#{msg.fecha}" />
 						<p:inputText value="#{beanBitacora.itemSelected.fechaString}"
-							style="font-weight:bold" readonly="true"/>
+							style="font-weight:bold" readonly="true" />
 						<h:outputText value="#{msg.accion}" />
 						<p:inputText value="#{beanBitacora.itemSelected.accion}"
 							style="font-weight:bold" readonly="true" />
 						<h:outputText value="#{msg.ip}" />
 						<p:inputText value="#{beanBitacora.itemSelected.ip}"
 							style="font-weight:bold" readonly="true" />
-							<h:outputText value="#{msg.usuario}" />
+						<h:outputText value="#{msg.usuario}" />
 						<p:inputText value="#{beanBitacora.itemSelected.usuario}"
 							style="font-weight:bold" readonly="true" />
 						<h:outputText value="#{msg.mensaje}" />
 						<p:inputTextarea value="#{beanBitacora.itemSelected.mensaje}"
-							style="font-weight:bold"  readonly="true"/>
-						
+							style="font-weight:bold" readonly="true" />
+
 					</h:panelGrid>
 					<p:commandButton id="aceptarVerBtn" value="#{msg.aceptar}"
 						icon="ui-icon-check" onclick="verDialog.hide()" />
