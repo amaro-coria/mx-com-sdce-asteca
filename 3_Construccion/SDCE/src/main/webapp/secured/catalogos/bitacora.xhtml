@@ -1,79 +1,110 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<ui:composition template="/templates/layout.xhtml"
+<html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:ace="http://www.icefaces.org/icefaces/components"
-	xmlns:ice="http://www.icesoft.com/icefaces/component">
-	<ui:define name="body">
-		<h:panelGroup id="messagePanel" layout="block">
-			<h:messages errorStyle="color: red" infoStyle="color: green"
-				layout="list" />
-		</h:panelGroup>
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+<h:body>
+	<ui:composition>
 		<h:form styleClass="login">
-			<ace:panel id="panel" header="Buscar" closable="false"
-				toggleable="false" style="text-align:center;">
+			<p:growl id="growl" showDetail="true" sticky="true" />
+			<p:panel id="panel" header="Buscar" closable="false"
+				toggleable="false" style="text-align:center;" >
 				<h:panelGrid columns="2" style="text-align:left;">
 					<h:outputText value="#{msg.accion} :" />
-					<ace:simpleSelectOneMenu id="selectProvince1" label=""
-						labelPosition="top">
-						<f:selectItem itemValue="" itemLabel="" />
-					</ace:simpleSelectOneMenu>
-					<h:outputText value="#{msg.usuario} :" />
-					<ace:simpleSelectOneMenu id="selectProvince2" label=""
-						labelPosition="top">
-						<f:selectItem itemValue="" itemLabel="" />
-					</ace:simpleSelectOneMenu>
+					<p:selectOneMenu id="selectEstado" 
+						value="#{beanBitacora.accionSelected}" style="min-width: 450px;">
+						<f:selectItem itemLabel="#{msg.seleccionarAccion}" itemValue="" noSelectionOption="true" />
+						<f:selectItems value="#{beanBitacora.listSelectAccion}" />
+					</p:selectOneMenu>
 					
+					<h:outputText value="#{msg.usuario} :" />
+					<p:selectOneMenu id="selectTipo"
+						value="#{beanBitacora.usuarioSelected}" style="min-width: 450px;" >
+						<f:selectItem itemLabel="#{msg.seleccionarUsuario}" itemValue="0" noSelectionOption="true" />
+						<f:selectItems value="#{beanBitacora.listSelectUsuarios}" />
+					</p:selectOneMenu>
 				</h:panelGrid>
-				<br />
-				<ul class="buttons">
-					<li><h:commandButton action="#{login.guardar}"
-							value="#{msg.limpiar}" />
-					</li>
-					<li><h:commandButton action="#{login.guardar}"
-							value="#{msg.buscar}" />
-					</li>
-				</ul>
-				</ace:panel>
-				<h:commandButton action="#{login.guardar}"
-							value="#{msg.ver}" />
-				<ace:panel>
-				<ace:dataTable id="carTable"
-                          value="#{dataTableBean.carsData}"
-                          var="car"
-                          paginator="true"
-                          paginatorPosition="bottom"
-                          rows="5">
-                <ace:column id="id" headerText="#{msg.alta}" sortBy="#{car.id}"
-                            >
-                    <ice:rowSelector value="#{car.selected}"
-                                     preStyleOnSelection="true"/>
-                    <h:outputText id="idCell" value="#{car.id}"/>
-                </ace:column>
-                <ace:column id="name" headerText="#{msg.accion}" sortBy="#{car.name}"
-                            >
-                    <h:outputText id="nameCell" value="#{car.name}"/>
-                </ace:column>
-                <ace:column id="chassis" headerText="#{msg.ip}" sortBy="#{car.chassis}"
-                            >
-                    <h:outputText id="chassisCell" value="#{car.chassis}"/>
-                </ace:column>
-                <ace:column id="weight" headerText="#{msg.usuario}" sortBy="#{car.weight}"
-                            >
-                    <h:outputText id="weightCell" value="#{car.weight}lbs."/>
-                </ace:column>
-                <ace:column id="foo" headerText="#{msg.mensaje}" sortBy="#{car.weight}"
-                            >
-                    <h:outputText id="foo2" value="#{car.weight}lbs."/>
-                </ace:column>
-                </ace:dataTable>
-			</ace:panel>
+				
+				<h:panelGrid style="text-align:right" width="100%">
+					<h:panelGrid columns="2" style="text-align:right">
+						<p:commandButton value="#{msg.limpiar}"
+							icon="ui-icon-arrowrefresh-1-e"
+							onclick=":form:selectEstado.selectValue('')"
+							actionListener="#{beanBitacora.limpiarFiltrado}" update="growl" />
+						<p:commandButton value="#{msg.buscar}"
+							icon="ui-icon-search"
+							actionListener="#{beanBitacora.buscarFiltrado}"
+							update="notificacionesTable" />
+					</h:panelGrid>
+				</h:panelGrid>
+			</p:panel>
+			<p:panel>
+				<p:commandButton value="#{msg.ver}" icon="ui-icon-search" 								
+								oncomplete="verDialog.show()"
+								update="displayVer, growl" />
+			</p:panel>
+			<p:panel>
+				<p:dataTable id="notificacionesTable"
+					value="#{beanBitacora.listItems}" var="item"
+					rowKey="#{item.idBitacora}" paginator="true" 
+					selection="#{beanBitacora.itemSelected}" filteredValue="#{beanBitacora.filteredList}"
+					paginatorPosition="bottom" rows="10">
+					<p:column selectionMode="single" style="width:2%" />
+					<p:column id="id" headerText="#{msg.alta}"
+						sortBy="#{item.fechaString}" filterBy="#{item.fechaString}" rendered="false">
+						<h:outputText id="idCell" value="#{item.fechaString}" />
+					</p:column>
+					<p:column id="name2" headerText="#{msg.accion}"
+						sortBy="#{item.accion}" filterBy="#{item.accion}">
+						<h:outputText id="nameCell2" value="#{item.accion}" />
+					</p:column>
+					<p:column id="name3" headerText="#{msg.ip}"
+						sortBy="#{item.ip}" filterBy="#{item.ip}">
+						<h:outputText id="nameCell3"
+							value="#{item.ip}" />
+					</p:column>
+					<p:column id="name4" headerText="#{msg.usuario}"
+						sortBy="#{item.usuario}" filterBy="#{item.usuario}">
+						<h:outputText id="nameCell4" value="#{item.usuario}" />
+					</p:column>
+					<p:column id="name5" headerText="#{msg.mensaje}"
+						sortBy="#{item.mensaje}" filterBy="#{item.mensaje}">
+						<h:outputText id="nameCell5" value="#{item.mensaje}" />
+					</p:column>
+				</p:dataTable>
+				<!-- Panel de Ver -->
+				<p:dialog id="dialog" header="#{msg.ver}" widgetVar="verDialog"
+					modal="true">
+					<h:panelGrid id="displayVer" columns="2" cellpadding="4">
+						<h:panelGroup id="messagePanelVer" layout="block">
+							<h:messages errorStyle="color: red" infoStyle="color: green"
+								layout="list" style="font-size:12px;font-family:Arial" />
+						</h:panelGroup>
+						<h:outputText />
+						<h:outputText value="#{msg.fecha}" />
+						<p:inputText value="#{beanBitacora.itemSelected.fechaString}"
+							style="font-weight:bold" readonly="true"/>
+						<h:outputText value="#{msg.accion}" />
+						<p:inputText value="#{beanBitacora.itemSelected.accion}"
+							style="font-weight:bold" readonly="true" />
+						<h:outputText value="#{msg.ip}" />
+						<p:inputText value="#{beanBitacora.itemSelected.ip}"
+							style="font-weight:bold" readonly="true" />
+							<h:outputText value="#{msg.usuario}" />
+						<p:inputText value="#{beanBitacora.itemSelected.usuario}"
+							style="font-weight:bold" readonly="true" />
+						<h:outputText value="#{msg.mensaje}" />
+						<p:inputTextarea value="#{beanBitacora.itemSelected.mensaje}"
+							style="font-weight:bold"  readonly="true"/>
+						
+					</h:panelGrid>
+					<p:commandButton id="aceptarVerBtn" value="#{msg.aceptar}"
+						icon="ui-icon-check" onclick="verDialog.hide()" />
+				</p:dialog>
+				<!-- Fin de panel de Ver -->
+			</p:panel>
 		</h:form>
-	</ui:define>
-</ui:composition>
-
+	</ui:composition>
+</h:body>
 </html>
