@@ -126,13 +126,14 @@ public class LoginControlador extends BaseController implements Serializable {
 	public String login() {
 		try{
 			HttpServletRequest servletReq = (HttpServletRequest) super.getFacesContext().getCurrentInstance().getExternalContext().getRequest();
-			
+			String ip = servletReq.getRemoteAddr();
 			UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(this.getUserName(), this.getPassword());
 			
 			HttpSession session = servletReq.getSession(false);
-			
+			int idUsuario = 0;
 			if(session != null) {
 				PersonaDTO usuario = fachadaPersona.getUser(this.getUserName());
+				idUsuario = usuario.getIdPersona();
 				obtenerModulosPermisosUsr(usuario.getIdPersona());
 				servletReq.getSession().setAttribute("SPRING_SECURITY_CURRENT_USER", usuario);
 				menu = new HashMap<Integer, ModulosDTO>();
@@ -148,6 +149,7 @@ public class LoginControlador extends BaseController implements Serializable {
 				servletReq.getSession().setAttribute("nombreUsuario", nombreCompleto.toString());
 				servletReq.getSession().setAttribute("fechaHora", DateFormat.getDateInstance(DateFormat.FULL).format(new Date()));
 				servletReq.getSession().setAttribute("fechaHoraStr", FechaUtil.getInstance().parseDateMM_dd_yy(new Date())); 
+				servletReq.getSession().setAttribute("idUsuario", usuario.getIdPersona());
 						//DateFormat.getDateInstance(DateFormat.FULL).format(new Date()));
 				
 			}
@@ -156,6 +158,7 @@ public class LoginControlador extends BaseController implements Serializable {
 			Authentication authResult = am.authenticate(authRequest);
 			
 			SecurityContextHolder.getContext().setAuthentication(authResult);
+			super.addBitacora(Constantes.ACCION_LOGIN, idUsuario, ip, Constantes.ACCION_MENSALE_LOGIN_SUCCESSFUL);
 		} catch (BadCredentialsException bce) {
 			super.addErrorMessage(Constantes.ERROR_LOGIN);
 			return null;

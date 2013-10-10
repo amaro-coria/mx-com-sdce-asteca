@@ -12,12 +12,14 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
+import javax.servlet.http.HttpServletRequest;
 
 import mx.com.asteca.comun.Constantes;
 import mx.com.asteca.comun.dto.MateriaRegistroDTO;
 import mx.com.asteca.fachada.FachadaException;
 import mx.com.asteca.fachada.MateriaRegistroFachada;
 
+import org.primefaces.context.RequestContext;
 import org.springframework.util.CollectionUtils;
 
 /**
@@ -107,8 +109,10 @@ public class MateriaRegistroControlador extends BaseController implements Serial
 	public void delete(){
 		try{
 			fachada.remove(itemSelected);
+			addBitacora(Constantes.ACCION_DELETE_REGISTRO, Constantes.ACCION_DELETE_REGISTRO_EXITOSO_MENSAJE+":Materia"+itemSelected.getIdMateria()+":");
 		}catch(FachadaException e){
 			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR, Constantes.ERROR_DELETE_REGISTRO);
+			addBitacora(Constantes.ACCION_DELETE_REGISTRO, Constantes.ACCION_DELETE_REGISTRO_FALLIDO_MENSAJE+":Materia"+itemSelected.getIdMateria()+":");
 		}
 	}
 	
@@ -124,11 +128,16 @@ public class MateriaRegistroControlador extends BaseController implements Serial
 				listSelect1 = null;
 				initListSelect1();
 			}else{
-				super.addWarningMessage(Constantes.WARNING_NECESITAS_LLENAR_CAMPOS_REQUERIDOS);
+				super.addWarningMessage(Constantes.MESSAGE_TITLE_WARNING, Constantes.WARNING_NECESITAS_LLENAR_CAMPOS_REQUERIDOS);
+				return;
 			}
 		}catch(FachadaException e){
 			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR, Constantes.ERROR_UPDATE_REGISTRO);
+			addBitacora(Constantes.ACCION_UPDATE_REGISTRO, Constantes.ACCION_UPDATE_REGISTRO_FALLIDO_MENSAJE);
+			return;
 		}
+		super.addInfoMessage(Constantes.MESSAGE_TITLE_INFO, Constantes.UPDATE_REGISTRO_EXITOSO);		
+		addBitacora(Constantes.ACCION_UPDATE_REGISTRO, Constantes.ACCION_UPDATE_REGISTRO_EXITOSO_MENSAJE+":Materia "+itemSelected.getIdMateria()+":");
 	}
 	
 	public void save(ActionEvent e){
@@ -140,16 +149,20 @@ public class MateriaRegistroControlador extends BaseController implements Serial
 				listItems.add(itemNuevo);
 				listSelect1 = null;
 				initListSelect1();
+				RequestContext.getCurrentInstance().execute("nuevoDialog.hide()");
+				super.addInfoMessage(Constantes.MESSAGE_TITLE_INFO, Constantes.NUEVO_REGISTRO_EXITOSO);
+				addBitacora(Constantes.ACCION_NUEVO_REGISTRO, Constantes.ACCION_NUEVO_REGISTRO_EXITOSO_MENSAJE+":Materia "+pk+":");
 			} else {
 				super.addWarningMessage(Constantes.WARNING_NECESITAS_LLENAR_CAMPOS_REQUERIDOS);
 			}
 		}catch(FachadaException ex){
 			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR, Constantes.ERROR_NUEVO_REGISTRO);
+			addBitacora(Constantes.ACCION_UPDATE_REGISTRO, Constantes.ACCION_NUEVO_REGISTRO_FALLIDO_MENSAJE+":Materia:");
 		}
 	}
 	
 	private boolean validaDatos(){
-		return(!(nuevoNombre == null) || !nuevoNombre.isEmpty());
+		return(!(nuevoNombre == null) && !nuevoNombre.isEmpty());
 	}
 	
 	public void saveCancel(){

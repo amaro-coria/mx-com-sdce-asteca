@@ -22,6 +22,7 @@ import mx.com.asteca.fachada.FachadaException;
 import mx.com.asteca.fachada.ModulosFachada;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.primefaces.context.RequestContext;
 
 /**
  * @author Jorge Amaro Coria
@@ -173,9 +174,11 @@ public class AulaControlador extends BaseController implements Serializable {
 		try {
 			fachada.remove(itemSelected);
 			listaItems.remove(itemSelected);
+			addBitacora(Constantes.ACCION_DELETE_REGISTRO, Constantes.ACCION_DELETE_REGISTRO_EXITOSO_MENSAJE+":Aula"+itemSelected.getIdAula()+":");
 		} catch (FachadaException e1) {
 			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
 					Constantes.ERROR_DELETE_REGISTRO);
+			addBitacora(Constantes.ACCION_DELETE_REGISTRO, Constantes.ACCION_DELETE_REGISTRO_FALLIDO_MENSAJE+":Aula"+itemSelected.getIdAula()+":");
 			return;
 		}
 		setSelectedItemFilter("");
@@ -218,9 +221,12 @@ public class AulaControlador extends BaseController implements Serializable {
 			setSelectedClaveEdit("");
 			setSelectedDscEdit("");
 			setSelectedCapacidadEdit("");
+			super.addInfoMessage(Constantes.MESSAGE_TITLE_INFO, Constantes.UPDATE_REGISTRO_EXITOSO);		
+			addBitacora(Constantes.ACCION_UPDATE_REGISTRO, Constantes.ACCION_UPDATE_REGISTRO_EXITOSO_MENSAJE+":Aula"+itemSelected.getIdAula()+":");
 		} catch (FachadaException e1) {
 			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
 					Constantes.ERROR_UPDATE_REGISTRO);
+			addBitacora(Constantes.ACCION_UPDATE_REGISTRO, Constantes.ACCION_UPDATE_REGISTRO_FALLIDO_MENSAJE+":Aula:");
 			return;
 		}
 		super.addInfoMessage(Constantes.UPDATE_REGISTRO_EXITOSO);
@@ -232,42 +238,67 @@ public class AulaControlador extends BaseController implements Serializable {
 	 * @param e
 	 */
 	public void save(ActionEvent e) {
-		itemNuevo.setActivo(nuevoActivo == true ? (short) 1 : (short) 0);
-		if (idCatGralNuevo == 0) {
-			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
-					Constantes.ERROR_NECESITAS_SELECCIONAR_UN_TIPO_EQUIPO);
-			return;
-		} else {
-			itemNuevo.setIdSede(idCatGralNuevo);
-		}
-		try {
-			int capacidad = Integer.parseInt(capacidadNuevo);
-			itemNuevo.setCapacidad(capacidad);
-		} catch (NumberFormatException nex) {
-			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
-					Constantes.ERROR_FORMATO_NUMERO);
-			return;
-		}
-		try {
-			int pk = fachada.save(itemNuevo);
-			CatGralDTO temp = new CatGralDTO();
-			temp.setIdCatGral(idCatGralNuevo);
-			int index = listaCatGral.indexOf(temp);
-			CatGralDTO temp2 = listaCatGral.get(index);
-			itemNuevo.setSede(temp2.getDsc());
-			itemNuevo.setIdAula(pk);
-			if (CollectionUtils.isEmpty(listaItems)) {
-				listaItems = new ArrayList<AulaDTO>();
+		if(validaNuevo()){
+			itemNuevo.setActivo(nuevoActivo == true ? (short) 1 : (short) 0);
+			if (idCatGralNuevo == 0) {
+				super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
+						Constantes.ERROR_NECESITAS_SELECCIONAR_UN_TIPO_EQUIPO);
+				return;
+			} else {
+				itemNuevo.setIdSede(idCatGralNuevo);
 			}
-			listaItems.add(itemNuevo);
-			// refreshEstados();
-		} catch (FachadaException e1) {
-			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
-					Constantes.ERROR_NUEVO_REGISTRO);
-			return;
+			try {
+				int capacidad = Integer.parseInt(capacidadNuevo);
+				itemNuevo.setCapacidad(capacidad);
+			} catch (NumberFormatException nex) {
+				super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
+						Constantes.ERROR_FORMATO_NUMERO);
+				return;
+			}
+			try {
+				int pk = fachada.save(itemNuevo);
+				CatGralDTO temp = new CatGralDTO();
+				temp.setIdCatGral(idCatGralNuevo);
+				int index = listaCatGral.indexOf(temp);
+				CatGralDTO temp2 = listaCatGral.get(index);
+				itemNuevo.setSede(temp2.getDsc());
+				itemNuevo.setIdAula(pk);
+				if (CollectionUtils.isEmpty(listaItems)) {
+					listaItems = new ArrayList<AulaDTO>();
+				}
+				listaItems.add(itemNuevo);
+				RequestContext.getCurrentInstance().execute("nuevoDialog.hide()");
+				super.addInfoMessage(Constantes.MESSAGE_TITLE_INFO, Constantes.NUEVO_REGISTRO_EXITOSO);
+				addBitacora(Constantes.ACCION_NUEVO_REGISTRO, Constantes.ACCION_NUEVO_REGISTRO_EXITOSO_MENSAJE+":Aula "+pk+":");
+				// refreshEstados();
+			} catch (FachadaException e1) {
+				super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
+						Constantes.ERROR_NUEVO_REGISTRO);
+				addBitacora(Constantes.ACCION_NUEVO_REGISTRO, Constantes.ACCION_NUEVO_REGISTRO_FALLIDO_MENSAJE+":Aula:");
+				return;
+			}
+			itemNuevo = new AulaDTO();
 		}
-		itemNuevo = new AulaDTO();
-		super.addInfoMessage(Constantes.NUEVO_REGISTRO_EXITOSO);
+	}
+	
+	private boolean validaNuevo(){
+		if(idCatGralNuevo == 0){
+			super.addWarningMessage(Constantes.MESSAGE_TITLE_WARNING,
+					Constantes.ERROR_NECESITAS_SELECCIONAR_UN_TIPO_EQUIPO);
+			return false;
+		}else if(capacidadNuevo != null && !capacidadNuevo.isEmpty()){
+			try {
+				int capacidad = Integer.parseInt(capacidadNuevo);
+			} catch (NumberFormatException nex) {
+				super.addWarningMessage(Constantes.MESSAGE_TITLE_WARNING,
+						Constantes.ERROR_FORMATO_NUMERO);
+				return false;
+			}
+		}else if(capacidadNuevo == null && capacidadNuevo.isEmpty()){
+			super.addWarningMessage(Constantes.MESSAGE_TITLE_WARNING, Constantes.WARNING_NECESITAS_LLENAR_CAMPOS_REQUERIDOS);
+			return false;
+		}
+		return true;
 	}
 
 	/**
