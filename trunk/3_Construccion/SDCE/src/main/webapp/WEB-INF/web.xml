@@ -21,6 +21,13 @@
 			org.springframework.web.context.request.RequestContextListener
 		</listener-class>
 	</listener>
+	<listener>
+		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
+	</listener>
+	<context-param>
+		<param-name>log4jConfigLocation</param-name>
+		<param-value>/WEB-INF/log4j.properties</param-value>
+	</context-param>
 	<context-param>
 		<param-name>javax.faces.STATE_SAVING_METHOD</param-name>
 		<param-value>server</param-value>
@@ -94,16 +101,19 @@
 	<context-param>
 		<!-- reCaptcha public key for localhost domain -->
 		<param-name>primefaces.PUBLIC_CAPTCHA_KEY</param-name>
-		<param-value>6Le3WOcSAAAAAOiPrVgvcVvpmRx1goixJ-L6F7Qz</param-value>
+		<!-- <param-value>6Le3WOcSAAAAAOiPrVgvcVvpmRx1goixJ-L6F7Qz</param-value> -->
+		<!-- reCaptcha public key for 201.150.38.106 domain -->
+		<param-value>6Lew2ucSAAAAAPW6trGARXAMntS5UW9xDWpJ-MHp</param-value>
 		<!-- reCaptcha public key for 201.150.38.106 domain
 		<param-value>6Lew2ucSAAAAAPW6trGARXAMntS5UW9xDWpJ-MHp</param-value>
 		-->
 	</context-param>
-
 	<context-param>
 		<!-- reCaptcha private key for localhost domain -->
 		<param-name>primefaces.PRIVATE_CAPTCHA_KEY</param-name>
-		<param-value>6Le3WOcSAAAAACfgyNG2PQj_Nh0HEDzkjLU4_2OB</param-value>
+		<!-- <param-value>6Le3WOcSAAAAACfgyNG2PQj_Nh0HEDzkjLU4_2OB</param-value> -->
+		<!-- reCaptcha private key for 201.150.38.106 domain -->
+		<param-value>6Lew2ucSAAAAADSrRXdafBFXGSLMrcVPJTIJ7tAa</param-value>
 		<!-- reCaptcha private key for 201.150.38.106 domain
 		<param-value>6Lew2ucSAAAAADSrRXdafBFXGSLMrcVPJTIJ7tAa</param-value>
 		 -->
