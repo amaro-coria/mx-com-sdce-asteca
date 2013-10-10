@@ -51,6 +51,19 @@ public class Constantes {
 	public static final String ASSEMBLER_TIPOS_INSTRUCTORES="assemblerTiposInstructores";
 	public static final String ASSEMBLER_CURSO="assemblerCurso";
 	public static final String ASSEMBLER_TIPOS_CAT_GRAL="assemblerTiposCatGral";
+	public static final String ASSEMBLER_BITACORA="assemblerBitacora";
+	public static final String ACCION_LOGIN="Login";
+	public static final String ACCION_LOGOUT="Logout";
+	public static final String ACCION_NUEVO_REGISTRO="Nuevo Registro";
+	public static final String ACCION_NUEVO_REGISTRO_EXITOSO_MENSAJE="Nuevo registro guardado con éxito";
+	public static final String ACCION_NUEVO_REGISTRO_FALLIDO_MENSAJE="Nuevo registro tuvo fallo al guardar";
+	public static final String ACCION_UPDATE_REGISTRO="Edición de Registro";
+	public static final String ACCION_UPDATE_REGISTRO_EXITOSO_MENSAJE="Edición de registro guardado con éxito";
+	public static final String ACCION_UPDATE_REGISTRO_FALLIDO_MENSAJE="Edición de registro tuvo fallo al actualizar";
+	public static final String ACCION_MENSALE_LOGIN_SUCCESSFUL="Login exitoso";
+	public static final String ACCION_DELETE_REGISTRO="Borrado de registro";
+	public static final String ACCION_DELETE_REGISTRO_EXITOSO_MENSAJE="Borrado de registro exitoso";
+	public static final String ACCION_DELETE_REGISTRO_FALLIDO_MENSAJE="Falla al borrar registro";
 	public static final String ERROR_OBTENIENDO_LISTA_CATALOGO="No se pudo obtener el catalogo.";
 	public static final String ERROR_NUEVO_REGISTRO="No se pudo completar el nuevo registro.";
 	public static final String BEAN_EQUIPO="beanEquipo";
@@ -77,6 +90,7 @@ public class Constantes {
 	public static final String BEAN_INSTRUCTORES="beanInstructor";
 	public static final String BEAN_MAERIAS_REGISTRO="beanMateria";
 	public static final String BEAN_VER_CURSOS="beanVerCurso";
+	public static final String BEAN_BITACORA="beanBitacora";
 	public static final String ERROR_NECESITAS_SELECCIONAR_UN_PAIS="Necesitas seleccionar un pais";
 	public static final String ERROR_NECESITAS_SELECCIONAR_UN_EDO="Necesitas seleccionar un estado";
 	public static final String ERROR_NECESITAS_SELECCIONAR_UN_CLIENTE="Necesitas seleccionar un cliente";
@@ -125,5 +139,6 @@ public class Constantes {
 	public static final String MODULO_INSTRUCTORES="Instructores";
 	public static final String MODULO_MATERIAS="Materias";
 	public static final String MODULO_VER_CURSO="Ver Cursos";
-	
+	public static final String MODULO_BITACORA="Bitacora";
+	public static final String SESION_ATRIBUTO_USUARIO="idUsuario";
 }
