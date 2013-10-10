@@ -1,6 +1,7 @@
 package mx.com.asteca.vista;
 
 import java.text.MessageFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -11,17 +12,25 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 
+import mx.com.asteca.comun.Constantes;
+import mx.com.asteca.comun.dto.BitacoraDTO;
 import mx.com.asteca.comun.dto.ModulosDTO;
-import mx.com.asteca.fachada.BaseFachada;
+import mx.com.asteca.fachada.BitacoraFachada;
 import mx.com.asteca.fachada.FachadaException;
 import mx.com.asteca.fachada.ModulosFachada;
 
-import org.springframework.web.context.request.SessionScope;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class BaseController {
 
 	@ManagedProperty("#{modulosFachadaImpl}")
-	private ModulosFachada modulosFachada;
+	private transient ModulosFachada modulosFachada;
+	@ManagedProperty("#{bitacoraFachadaImpl}")
+	private transient BitacoraFachada fachadaBitacora;
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(BaseController.class);
+	
 	private boolean alta;
 	private boolean cambios;
 	private boolean borrar;
@@ -30,6 +39,37 @@ public abstract class BaseController {
 
 	abstract String getModulo();
 
+	public void addBitacora(String accion, int idUsr, String ip, String mensaje){
+		BitacoraDTO dto = new BitacoraDTO();
+		dto.setAccion(accion);
+		dto.setFecha(new Date());
+		dto.setIdUsr(idUsr);
+		dto.setIp(ip);
+		dto.setMensaje(mensaje);
+		try {
+			fachadaBitacora.save(dto);
+		} catch (FachadaException e) {
+			LOGGER.error("No se pudo agregar registro a bitacora::"+dto+":::"+e.getMessage(), e);
+		}
+	}
+	
+	public void addBitacora(String accion, String mensaje){
+		HttpServletRequest servletReq = (HttpServletRequest) getFacesContext().getCurrentInstance().getExternalContext().getRequest();		
+		Integer idUsr = (Integer) servletReq.getAttribute(Constantes.SESION_ATRIBUTO_USUARIO);
+		String ip = servletReq.getRemoteAddr();
+		BitacoraDTO dto = new BitacoraDTO();
+		dto.setAccion(accion);
+		dto.setFecha(new Date());
+		dto.setIdUsr(idUsr);
+		dto.setIp(ip);
+		dto.setMensaje(mensaje);
+		try {
+			fachadaBitacora.save(dto);
+		} catch (FachadaException e) {
+			LOGGER.error("No se pudo agregar registro a bitacora::"+dto+":::"+e.getMessage(), e);
+		}
+	}
+	
 	public boolean isAlta() {
 		return alta;
 	}
@@ -266,6 +306,20 @@ public abstract class BaseController {
 
 	public void setModulosFachada(ModulosFachada modulosFachada) {
 		this.modulosFachada = modulosFachada;
+	}
+
+	/**
+	 * @return the fachadaBitacora
+	 */
+	public BitacoraFachada getFachadaBitacora() {
+		return fachadaBitacora;
+	}
+
+	/**
+	 * @param fachadaBitacora the fachadaBitacora to set
+	 */
+	public void setFachadaBitacora(BitacoraFachada fachadaBitacora) {
+		this.fachadaBitacora = fachadaBitacora;
 	}
 
 }
