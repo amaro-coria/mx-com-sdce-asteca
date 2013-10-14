@@ -149,7 +149,6 @@
 				</h:panelGrid>
 				<h:panelGrid style="float: right;" columns="2">
 					<p:commandButton value="#{msg.aceptar }" icon="ui-icon-check"
-						oncomplete="nuevoDialog.hide()"
 						actionListener="#{beanMunicipios.saveMunicipio }"
 						update=":form:municipiosTable, growl" />
 					<p:commandButton value="#{msg.cancelar }" icon="ui-icon-closethick"

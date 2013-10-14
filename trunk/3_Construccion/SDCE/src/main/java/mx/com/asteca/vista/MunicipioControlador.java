@@ -21,6 +21,7 @@ import mx.com.asteca.fachada.FachadaException;
 import mx.com.asteca.fachada.MunicipioFachada;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.SelectableDataModel;
 
@@ -241,11 +242,13 @@ public class MunicipioControlador extends BaseController implements Serializable
 			cambiaEdoSelect();
 		} catch (FachadaException e1) {
 			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR, Constantes.ERROR_DELETE_REGISTRO);
+			addBitacora(Constantes.ACCION_DELETE_REGISTRO, Constantes.ACCION_DELETE_REGISTRO_FALLIDO_MENSAJE+":Municipio"+municipioSelected.getIdMunicipio()+":");
 			return;
 		}
 		setSelectedMunicipioClave("");
 		setSelectedMunicipioNombre("");
 		super.addInfoMessage(Constantes.DELETE_REGISTRO_EXITOSO);
+		addBitacora(Constantes.ACCION_DELETE_REGISTRO, Constantes.ACCION_DELETE_REGISTRO_EXITOSO_MENSAJE+":Municipio"+municipioSelected.getIdMunicipio()+":");
 	}
 	
 	
@@ -281,9 +284,11 @@ public class MunicipioControlador extends BaseController implements Serializable
 			cambiaPaisSelect();
 		} catch (FachadaException e1) {
 			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR, Constantes.ERROR_UPDATE_REGISTRO);
+			addBitacora(Constantes.ACCION_UPDATE_REGISTRO, Constantes.ACCION_UPDATE_REGISTRO_FALLIDO_MENSAJE+":Municipio:");
 			return;
 		}
-		super.addInfoMessage(Constantes.UPDATE_REGISTRO_EXITOSO);
+		super.addInfoMessage(Constantes.MESSAGE_TITLE_INFO, Constantes.UPDATE_REGISTRO_EXITOSO);		
+		addBitacora(Constantes.ACCION_UPDATE_REGISTRO, Constantes.ACCION_UPDATE_REGISTRO_EXITOSO_MENSAJE+":Municipio "+municipioSelected.getIdMunicipio()+":");
 	}
 	
 	/**
@@ -300,22 +305,37 @@ public class MunicipioControlador extends BaseController implements Serializable
 			super.addWarningMessage(Constantes.MESSAGE_TITLE_WARNING, Constantes.ERROR_NECESITAS_SELECCIONAR_UN_EDO);
 			return;
 		}
+		if(!validate()){
+			super.addWarningMessage(Constantes.MESSAGE_TITLE_WARNING, Constantes.WARNING_NECESITAS_LLENAR_CAMPOS_REQUERIDOS);
+			return;
+		}
 		municipioNuevo.setIdPais(idPaisNuevo);
 		municipioNuevo
 				.setActivo(nuevoMunicipioActivo == true ? (short) 1 : (short) 0);
 		try {
-			fachadaMunicipio.save(municipioNuevo);
+			int pk = fachadaMunicipio.save(municipioNuevo);
+			municipioNuevo.setIdMunicipio(pk);			
 			listaMunicipios.add(municipioNuevo);
 			cambiaPaisSelect();
+			super.addInfoMessage(Constantes.NUEVO_REGISTRO_EXITOSO);
+			RequestContext.getCurrentInstance().execute("nuevoDialog.hide()");
+			addBitacora(Constantes.ACCION_NUEVO_REGISTRO, Constantes.ACCION_NUEVO_REGISTRO_EXITOSO_MENSAJE+":Municipio "+municipioNuevo.getIdMunicipio()+":");
 			//refreshEstados();
 		} catch (FachadaException e1) {
 			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR, Constantes.ERROR_NUEVO_REGISTRO);
+			addBitacora(Constantes.ACCION_NUEVO_REGISTRO, Constantes.ACCION_NUEVO_REGISTRO_FALLIDO_MENSAJE+":Municipio:");
 			return;
 		}
 		municipioNuevo = new MunicipioDTO();
-		super.addInfoMessage(Constantes.NUEVO_REGISTRO_EXITOSO);
 	}
 	
+	
+	public boolean validate(){
+		if(municipioNuevo.getNombre() == null || municipioNuevo.getNombre().isEmpty()){
+			return false;
+		}
+		return true;
+	}
 	
 	public void saveMunicipioCancel(ActionEvent e){
 		municipioNuevo = new MunicipioDTO();

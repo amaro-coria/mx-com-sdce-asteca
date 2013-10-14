@@ -116,6 +116,7 @@ public class Constantes {
 	public static final String BEAN_REPORTE_MENSUAL="beanReporteMensual";
 	public static final String BEAN_REPORTE_INSTRUCTOR="beanReporteInstructor";
 	public static final String WARNING_NECESITAS_LLENAR_CAMPOS_REQUERIDOS="Necesitas llenar todos los campos requeridos";
+	public static final String WARNING_FORMATO_EMAIL="Email no valido";
 	public static final String MODULO_ADMIN = "Administrativos";
 	public static final String MODULO_ALUMNO = "Alumnos";
 	public static final String MODULO_AULA = "Aulas";

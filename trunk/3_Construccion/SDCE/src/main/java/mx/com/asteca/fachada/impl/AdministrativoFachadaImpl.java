@@ -58,6 +58,20 @@ public class AdministrativoFachadaImpl extends
 	}
 	
 	@Override
+	public void delete(AdministrativoDTO dtoAdmin) throws FachadaException{
+		try{
+			PersonaDTO dtoPersona = dtoAdmin.getDtoPersona();
+			DomicilioDTO dtoDomicilio = dtoAdmin.getDtoDomicilio();
+			servicioPersona.remove(dtoPersona);
+			servicioDomicilio.remove(dtoDomicilio);
+			servicioAdmin.remove(dtoAdmin);
+		} catch (ServicioException e) {
+			throw new FachadaException("Error en delete Fachada : "
+					+ e.getMessage(), e);
+		}
+	}
+	
+	@Override
 	public Integer save(AdministrativoDTO dtoAdmin) throws FachadaException{
 		try{
 			PersonaDTO dtoPersona = dtoAdmin.getDtoPersona();

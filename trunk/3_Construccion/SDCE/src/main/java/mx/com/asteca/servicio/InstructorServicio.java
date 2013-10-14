@@ -13,4 +13,6 @@ import mx.com.asteca.persistencia.entidades.Instructores;
 public interface InstructorServicio extends
 		BaseService<InstructorDTO, Integer, Instructores> {
 
+	void removeDependencias(InstructorDTO dto) throws ServicioException;
+
 }

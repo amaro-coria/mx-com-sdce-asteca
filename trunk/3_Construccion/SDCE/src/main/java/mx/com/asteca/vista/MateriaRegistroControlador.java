@@ -110,6 +110,7 @@ public class MateriaRegistroControlador extends BaseController implements Serial
 		try{
 			fachada.remove(itemSelected);
 			addBitacora(Constantes.ACCION_DELETE_REGISTRO, Constantes.ACCION_DELETE_REGISTRO_EXITOSO_MENSAJE+":Materia"+itemSelected.getIdMateria()+":");
+			super.addInfoMessage(Constantes.DELETE_REGISTRO_EXITOSO);
 		}catch(FachadaException e){
 			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR, Constantes.ERROR_DELETE_REGISTRO);
 			addBitacora(Constantes.ACCION_DELETE_REGISTRO, Constantes.ACCION_DELETE_REGISTRO_FALLIDO_MENSAJE+":Materia"+itemSelected.getIdMateria()+":");
@@ -157,7 +158,7 @@ public class MateriaRegistroControlador extends BaseController implements Serial
 			}
 		}catch(FachadaException ex){
 			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR, Constantes.ERROR_NUEVO_REGISTRO);
-			addBitacora(Constantes.ACCION_UPDATE_REGISTRO, Constantes.ACCION_NUEVO_REGISTRO_FALLIDO_MENSAJE+":Materia:");
+			addBitacora(Constantes.ACCION_NUEVO_REGISTRO, Constantes.ACCION_NUEVO_REGISTRO_FALLIDO_MENSAJE+":Estado:");
 		}
 	}
 	

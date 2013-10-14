@@ -15,8 +15,11 @@ import mx.com.asteca.comun.dto.ClienteDTO;
 import mx.com.asteca.comun.dto.TipoClienteDTO;
 import mx.com.asteca.fachada.ClienteFachada;
 import mx.com.asteca.fachada.FachadaException;
+import mx.com.asteca.persistencia.entidades.Clientes;
+import mx.com.asteca.util.EmailValidator;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.primefaces.context.RequestContext;
 
 @ManagedBean(name = Constantes.BEAN_CLIENTES)
 @ViewScoped
@@ -26,7 +29,7 @@ public class ClienteControlador extends BaseController implements Serializable {
 	 * Declara ID serializable
 	 */
 	private static final long serialVersionUID = 1L;
-	private static final String modulo=Constantes.MODULO_CLIENTE;
+	private static final String modulo = Constantes.MODULO_CLIENTE;
 	/*
 	 * Tiene que ser transient para no generar excepcion de no serializacion
 	 */
@@ -58,7 +61,7 @@ public class ClienteControlador extends BaseController implements Serializable {
 	private String nombreSelected;
 	private String responsableSelected;
 	private List<ClienteDTO> filteredClientes;
-	
+
 	public ClienteControlador() {
 		clienteSelected = new ClienteDTO();
 		clienteNuevo = new ClienteDTO();
@@ -77,7 +80,7 @@ public class ClienteControlador extends BaseController implements Serializable {
 	public void initSelectClientes() {
 		if (CollectionUtils.isEmpty(listaSelectClientes)) {
 			listaSelectClientes = new ArrayList<SelectItem>();
-			if(!CollectionUtils.isEmpty(getListaClientes())){
+			if (!CollectionUtils.isEmpty(getListaClientes())) {
 				for (ClienteDTO dto : getListaClientes()) {
 					SelectItem item = new SelectItem(dto.getIdCliente(),
 							dto.getNombre());
@@ -92,7 +95,7 @@ public class ClienteControlador extends BaseController implements Serializable {
 			listaSelectClave = new ArrayList<SelectItem>();
 			try {
 				List<ClienteDTO> listaClientes = fachadaCliente.getAll();
-				if(!CollectionUtils.isEmpty(listaClientes)){
+				if (!CollectionUtils.isEmpty(listaClientes)) {
 					for (ClienteDTO clienteDTO : listaClientes) {
 						SelectItem item = new SelectItem(clienteDTO.getClave(),
 								clienteDTO.getClave());
@@ -109,7 +112,7 @@ public class ClienteControlador extends BaseController implements Serializable {
 	public void initSelectTiposClientes() {
 		if (CollectionUtils.isEmpty(listaSelectTiposClientes)) {
 			listaSelectTiposClientes = new ArrayList<SelectItem>();
-			if(!CollectionUtils.isEmpty(getListaTipoClientes())){
+			if (!CollectionUtils.isEmpty(getListaTipoClientes())) {
 				for (TipoClienteDTO dto : getListaTipoClientes()) {
 					SelectItem item = new SelectItem(dto.getIdTipoCliente(),
 							dto.getNombre());
@@ -130,10 +133,10 @@ public class ClienteControlador extends BaseController implements Serializable {
 		}
 	}
 
-	public void addMessageTest(ActionEvent e){
+	public void addMessageTest(ActionEvent e) {
 		super.addErrorMessage("HOLA MUNDO MENSAJE");
 	}
-	
+
 	public void initListaTiposClientes() {
 		if (CollectionUtils.isEmpty(listaTipoClientes)) {
 			try {
@@ -161,12 +164,14 @@ public class ClienteControlador extends BaseController implements Serializable {
 		} catch (FachadaException e1) {
 			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
 					Constantes.ERROR_DELETE_REGISTRO);
+			addBitacora(Constantes.ACCION_DELETE_REGISTRO, Constantes.ACCION_DELETE_REGISTRO_FALLIDO_MENSAJE+":Cliente"+clienteSelected.getIdCliente()+":");
 			return;
 		}
 		setSelectedClienteClave("");
 		setSelectedClienteNombre("");
 		setSelectedClienteResponsable("");
 		super.addInfoMessage(Constantes.DELETE_REGISTRO_EXITOSO);
+		addBitacora(Constantes.ACCION_DELETE_REGISTRO, Constantes.ACCION_DELETE_REGISTRO_EXITOSO_MENSAJE+":Cliente "+clienteSelected.getIdCliente()+":");
 	}
 
 	public void updateCliente(ActionEvent e) {
@@ -175,71 +180,114 @@ public class ClienteControlador extends BaseController implements Serializable {
 					Constantes.ERROR_NECESITAS_SELECCIONAR_UN_CLIENTE);
 			return;
 		}
-		if(selectedTipoCliente == 0){
+		if (selectedTipoCliente == 0) {
 			super.addWarningMessage(Constantes.MESSAGE_TITLE_WARNING,
 					Constantes.ERROR_NECESITAS_SELECCIONAR_UN_TIPO_CLIENTE);
 			return;
 		}
-		if(selectedClienteNombre != null && !selectedClienteNombre.isEmpty()){
+		if (selectedClienteNombre != null && !selectedClienteNombre.isEmpty()) {
 			clienteSelected.setNombre(selectedClienteNombre);
 		}
-		if(selectedClienteResponsable != null && !selectedClienteResponsable.isEmpty()){
+		if (selectedClienteResponsable != null
+				&& !selectedClienteResponsable.isEmpty()) {
 			clienteSelected.setResponsable(selectedClienteResponsable);
 		}
-		if(selectedClienteTelefono != null && !selectedClienteTelefono.isEmpty()){
+		if (selectedClienteTelefono != null
+				&& !selectedClienteTelefono.isEmpty()) {
 			clienteSelected.setTelefono(selectedClienteTelefono);
 		}
-		if(selectedClienteEmail != null && !selectedClienteEmail.isEmpty()){
+		if (selectedClienteEmail != null && !selectedClienteEmail.isEmpty()) {
 			clienteSelected.setEmail(selectedClienteEmail);
 		}
 		clienteSelected.setTipoCliente(selectedTipoCliente);
-		if(selectedClienteClave != null && !selectedClienteClave.isEmpty()){
+		if (selectedClienteClave != null && !selectedClienteClave.isEmpty()) {
 			clienteSelected.setClave(selectedClienteClave);
 		}
 		try {
 			fachadaCliente.update(clienteSelected);
 			int indexListSelected = listaClientes.indexOf(clienteSelected);
-			if(indexListSelected > 0){
+			if (indexListSelected > 0) {
 				listaClientes.set(indexListSelected, clienteSelected);
 			}
 			initSelectClave();
 			cambiaClaveSelected();
 			cambiaNombreSelected();
+			super.addInfoMessage(Constantes.MESSAGE_TITLE_INFO, Constantes.UPDATE_REGISTRO_EXITOSO);		
+			addBitacora(Constantes.ACCION_UPDATE_REGISTRO, Constantes.ACCION_UPDATE_REGISTRO_EXITOSO_MENSAJE+":Cliente "+clienteSelected.getIdCliente()+":");
 		} catch (FachadaException e1) {
 			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
 					Constantes.ERROR_UPDATE_REGISTRO);
+			addBitacora(Constantes.ACCION_UPDATE_REGISTRO, Constantes.ACCION_UPDATE_REGISTRO_FALLIDO_MENSAJE+":Cliente:");
 			return;
 		}
-		//refreshClientes();
+		// refreshClientes();
 		super.addInfoMessage(Constantes.UPDATE_REGISTRO_EXITOSO);
-		
+
 	}
 
 	public void saveCliente(ActionEvent e) {
-		if (idTipoCliente == 0) {
-			super.addWarningMessage(Constantes.MESSAGE_TITLE_WARNING,
-					Constantes.ERROR_NECESITAS_SELECCIONAR_UN_TIPO_CLIENTE);
-			return;
-		}
-		clienteNuevo.setTipoCliente(idTipoCliente);
-		try {
-			fachadaCliente.save(clienteNuevo);
-			if(!CollectionUtils.isEmpty(listaClientes)){
-				listaClientes.add(clienteNuevo);
-			}else{
-				listaClientes = new ArrayList<ClienteDTO>();
-				listaClientes.add(clienteNuevo);
+		boolean b = validaDatos();
+		if(b){
+			if (idTipoCliente == 0) {
+				super.addWarningMessage(Constantes.MESSAGE_TITLE_WARNING,
+						Constantes.ERROR_NECESITAS_SELECCIONAR_UN_TIPO_CLIENTE);
+				return;
 			}
-			initSelectClave();
-			cambiaClaveSelected();
-			cambiaNombreSelected();
-		} catch (FachadaException e1) {
-			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
-					Constantes.ERROR_NUEVO_REGISTRO);
-			return;
+			clienteNuevo.setTipoCliente(idTipoCliente);
+			try {
+				int pk = fachadaCliente.save(clienteNuevo);
+				clienteNuevo.setIdCliente(pk);
+				if (!CollectionUtils.isEmpty(listaClientes)) {
+					listaClientes.add(clienteNuevo);
+				} else {
+					listaClientes = new ArrayList<ClienteDTO>();
+					listaClientes.add(clienteNuevo);
+				}
+				initSelectClave();
+				cambiaClaveSelected();
+				cambiaNombreSelected();
+				RequestContext.getCurrentInstance().execute("nuevoDialog.hide()");
+				super.addInfoMessage(Constantes.MESSAGE_TITLE_INFO, Constantes.NUEVO_REGISTRO_EXITOSO);
+				addBitacora(Constantes.ACCION_NUEVO_REGISTRO, Constantes.ACCION_NUEVO_REGISTRO_EXITOSO_MENSAJE+":Cliente "+pk+":");
+			} catch (FachadaException e1) {
+				super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
+						Constantes.ERROR_NUEVO_REGISTRO);
+				addBitacora(Constantes.ACCION_NUEVO_REGISTRO, Constantes.ACCION_NUEVO_REGISTRO_FALLIDO_MENSAJE+":Cliente:");
+				return;
+			}
+			clienteNuevo = new ClienteDTO();
+		}else{
+			super.addWarningMessage(Constantes.MESSAGE_TITLE_WARNING, Constantes.WARNING_NECESITAS_LLENAR_CAMPOS_REQUERIDOS);
 		}
-		clienteNuevo = new ClienteDTO();
-		super.addInfoMessage(Constantes.NUEVO_REGISTRO_EXITOSO);
+	}
+
+	public boolean validaDatos() {
+		if (clienteSelected.getClave() == null
+				|| clienteSelected.getClave().isEmpty()) {
+			return false;
+		} else if (clienteSelected.getNombre() == null
+				|| clienteSelected.getNombre().isEmpty()) {
+			return false;
+		} else if (clienteSelected.getResponsable() == null
+				|| clienteSelected.getResponsable().isEmpty()) {
+			return false;
+		} else if (clienteSelected.getTelefono() == null
+				|| clienteSelected.getTelefono().isEmpty()) {
+			return false;
+		} else if (clienteSelected.getEmail() == null
+				|| clienteSelected.getTelefono().isEmpty()) {
+			return false;
+		} else if (clienteSelected.getEmail() != null
+				&& !clienteSelected.getTelefono().isEmpty()) {
+			boolean b = EmailValidator.getInstance().validate(
+					clienteSelected.getEmail());
+			if (!b) {
+				super.addWarningMessage(Constantes.MESSAGE_TITLE_WARNING,
+						Constantes.WARNING_FORMATO_EMAIL);
+				return false;
+			}
+		}
+		return true;
 	}
 
 	public void saveClienteCancel(ActionEvent e) {
