@@ -81,6 +81,20 @@ public class InstructorFachadaImpl extends
 	}
 	
 	@Override
+	public void remove(InstructorDTO dto) throws FachadaException {
+		try {
+			servicioInstructor.removeDependencias(dto);
+			DomicilioDTO domicilio = dto.getDtoDomicilio();
+			PersonaDTO persona = dto.getDtoPersona();
+			servicioInstructor.remove(dto);
+			servicioDomicilio.remove(domicilio);
+			servicioPersona.remove(persona);
+		} catch (ServicioException e) {
+			throw new FachadaException("Error en xx: "+e.getMessage(), e);
+		}
+	}
+	
+	@Override
 	public int saveDocumento(DocumentoDTO dto) throws FachadaException{
 		try{
 			int pk = servicioDoc.save(dto);

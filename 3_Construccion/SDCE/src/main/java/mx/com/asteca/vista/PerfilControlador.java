@@ -10,6 +10,7 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.ActionEvent;
 
+import org.primefaces.context.RequestContext;
 import org.springframework.util.CollectionUtils;
 
 import mx.com.asteca.comun.Constantes;
@@ -23,7 +24,6 @@ import mx.com.asteca.fachada.ModulosFachada;
 import mx.com.asteca.fachada.PermisosFachada;
 import mx.com.asteca.fachada.RolesFachada;
 import mx.com.asteca.fachada.RolesModulosFachada;
-
 
 @ManagedBean(name = Constantes.BEAN_PERFIL)
 @ViewScoped
@@ -42,11 +42,10 @@ public class PerfilControlador extends BaseController implements Serializable {
 	private RolesModulosFachada rolesModulosFachada;
 	@ManagedProperty("#{permisosFachadaImpl}")
 	private PermisosFachada permisosFachada;
-	
+
 	private RolesDTO rolSelected;
 	private RolesDTO rolNuevo;
 
-	
 	private List<RolesDTO> listaRoles;
 	private List<ModulosDTO> listaModulos;
 	private List<ModulosDTO> listaModulosEdit;
@@ -58,270 +57,340 @@ public class PerfilControlador extends BaseController implements Serializable {
 	private boolean nuevoRolActivo;
 	private String selectedClave;
 	private String selectedNombre;
-	
+
 	public PerfilControlador() {
 		rolNuevo = new RolesDTO();
 		rolSelected = new RolesDTO();
 		listaPermisos = new ArrayList<PermisosDTO>();
 	}
-		
+
 	public void initListaRoles() {
-		if(CollectionUtils.isEmpty(listaRoles)) {
+		if (CollectionUtils.isEmpty(listaRoles)) {
 			try {
 				listaRoles = rolesFachada.getAll();
 			} catch (FachadaException e) {
 				super.addErrorMessage("Error al obtener Roles");
 			}
 		}
-		
+
 	}
-	
+
 	public void initListaModulos() {
-		if(CollectionUtils.isEmpty(listaModulos)) {
+		if (CollectionUtils.isEmpty(listaModulos)) {
 			try {
 				listaModulos = modulosFachada.getAll();
 			} catch (FachadaException e) {
 				super.addErrorMessage("Error al obtener Modulos");
 			}
 		}
-		
+
 	}
+
 	public void initListaModulosEdit() {
-		if(CollectionUtils.isEmpty(listaModulosEdit)) {
+		if (CollectionUtils.isEmpty(listaModulosEdit)) {
 			try {
 				listaModulosEdit = modulosFachada.getAll();
 			} catch (FachadaException e) {
 				super.addErrorMessage("Error al obtener Modulos");
 			}
 		}
-		
+
 	}
+
 	public void initListaModulosVer() {
-		if(CollectionUtils.isEmpty(listaModulosVer)) {
+		if (CollectionUtils.isEmpty(listaModulosVer)) {
 			try {
 				listaModulosVer = modulosFachada.getAll();
 			} catch (FachadaException e) {
 				super.addErrorMessage("Error al obtener Modulos");
 			}
 		}
-		
+
 	}
-	
-	public void saveRol(ActionEvent e) {
-		rolNuevo
-				.setActivo(nuevoRolActivo == true ? (short) 1 : (short) 0);
-		try {
-			int idPermiso = 0;
-			int idRol = 0;
-			PermisosDTO permisos;
-			RolesModulosDTO rolesModulos;
-			idRol = rolesFachada.save(rolNuevo);
-			if(listaRoles == null) {
-				listaRoles = new ArrayList<RolesDTO>();
-			}
-			rolNuevo.setIdRol(idRol);
-			listaRoles.add(rolNuevo);
-			for(ModulosDTO modulo:listaModulos) {
-				if(modulo.isAlta() || modulo .isBorrar() || modulo.isConsulta() || modulo.isEditar() || modulo.isImprimir()) {
-					permisos = new PermisosDTO();
-					permisos.setAlta(modulo.isAlta()?(short)1:(short)0);
-					permisos.setBorrar(modulo.isBorrar()?(short)1:(short)0);
-					permisos.setCambios(modulo.isEditar()?(short)1:(short)0);
-					permisos.setConsulta(modulo.isConsulta()?(short)1:(short)0);
-					permisos.setImpresion(modulo.isImprimir()?(short)1:(short)0);
-					
-					idPermiso = permisosFachada.save(permisos);
-					
-					rolesModulos = new RolesModulosDTO();
-					
-					rolesModulos.setIdModulo(modulo.getIdModulo());
-					rolesModulos.setIdPermisos(idPermiso);
-					rolesModulos.setIdRol(idRol);
-					rolesModulos.setActivo((short)1);
-					
-					rolesModulosFachada.save(rolesModulos);
-				}
-			}
-			
-		} catch (FachadaException e1) {
-			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR, Constantes.ERROR_NUEVO_REGISTRO);
-			return;
+
+	private boolean validaDatos() {
+		if (rolNuevo.getClave() == null || rolNuevo.getClave().isEmpty()) {
+			return false;
+		} else if (rolNuevo.getNombre() == null
+				|| rolNuevo.getNombre().isEmpty()) {
+			return false;
 		}
-		rolNuevo = new RolesDTO();
-		initListaModulos();
-		super.addInfoMessage(Constantes.NUEVO_REGISTRO_EXITOSO);
+		return true;
 	}
-	
-	
+
+	public void saveRol(ActionEvent e) {
+		boolean b = validaDatos();
+		if (b) {
+			rolNuevo.setActivo(nuevoRolActivo == true ? (short) 1 : (short) 0);
+			try {
+				int idPermiso = 0;
+				int idRol = 0;
+				PermisosDTO permisos;
+				RolesModulosDTO rolesModulos;
+				idRol = rolesFachada.save(rolNuevo);
+				if (listaRoles == null) {
+					listaRoles = new ArrayList<RolesDTO>();
+				}
+				rolNuevo.setIdRol(idRol);
+				if(!CollectionUtils.isEmpty(listaRoles)){
+					listaRoles.add(rolNuevo);
+				}else{
+					listaRoles = new ArrayList<RolesDTO>();
+					listaRoles.add(rolNuevo);
+				}
+				for (ModulosDTO modulo : listaModulos) {
+					if (modulo.isAlta() || modulo.isBorrar()
+							|| modulo.isConsulta() || modulo.isEditar()
+							|| modulo.isImprimir()) {
+						permisos = new PermisosDTO();
+						permisos.setAlta(modulo.isAlta() ? (short) 1
+								: (short) 0);
+						permisos.setBorrar(modulo.isBorrar() ? (short) 1
+								: (short) 0);
+						permisos.setCambios(modulo.isEditar() ? (short) 1
+								: (short) 0);
+						permisos.setConsulta(modulo.isConsulta() ? (short) 1
+								: (short) 0);
+						permisos.setImpresion(modulo.isImprimir() ? (short) 1
+								: (short) 0);
+
+						idPermiso = permisosFachada.save(permisos);
+
+						rolesModulos = new RolesModulosDTO();
+
+						rolesModulos.setIdModulo(modulo.getIdModulo());
+						rolesModulos.setIdPermisos(idPermiso);
+						rolesModulos.setIdRol(idRol);
+						rolesModulos.setActivo((short) 1);
+
+						rolesModulosFachada.save(rolesModulos);
+					}
+				}
+				RequestContext.getCurrentInstance().execute("nuevoDialog.hide()");
+				super.addInfoMessage(Constantes.MESSAGE_TITLE_INFO, Constantes.NUEVO_REGISTRO_EXITOSO);
+				addBitacora(Constantes.ACCION_NUEVO_REGISTRO, Constantes.ACCION_NUEVO_REGISTRO_EXITOSO_MENSAJE+":Rol  "+rolNuevo.getIdRol()+":");
+			} catch (FachadaException e1) {
+				super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
+						Constantes.ERROR_NUEVO_REGISTRO);
+				addBitacora(Constantes.ACCION_NUEVO_REGISTRO, Constantes.ACCION_NUEVO_REGISTRO_FALLIDO_MENSAJE+":Rol:");
+				return;
+			}
+			rolNuevo = new RolesDTO();
+			initListaModulos();
+		} else {
+			super.addWarningMessage(Constantes.MESSAGE_TITLE_WARNING,
+					Constantes.WARNING_NECESITAS_LLENAR_CAMPOS_REQUERIDOS);
+		}
+	}
+
 	/**
 	 * Cancela el guardar nuevo registro
+	 * 
 	 * @param e
 	 */
-	public void saveRolCancel(ActionEvent e){
+	public void saveRolCancel(ActionEvent e) {
 		rolNuevo = new RolesDTO();
-	}	
-	
+	}
+
 	public void deleteRol(ActionEvent e) {
 		try {
-			listaRolesModulos = rolesModulosFachada.buscarPorRol(rolSelected.getIdRol());
-			for(RolesModulosDTO rolesModulos:listaRolesModulos) {
-				
+			listaRolesModulos = rolesModulosFachada.buscarPorRol(rolSelected
+					.getIdRol());
+			for (RolesModulosDTO rolesModulos : listaRolesModulos) {
+
 				rolesModulosFachada.remove(rolesModulos);
-				
-				permisosFachada.remove(permisosFachada.findByPK(rolesModulos.getIdPermisos()));
+
+				permisosFachada.remove(permisosFachada.findByPK(rolesModulos
+						.getIdPermisos()));
 			}
 			rolesFachada.remove(rolSelected);
-			
+
 			listaRoles.remove(rolSelected);
+			addBitacora(Constantes.ACCION_DELETE_REGISTRO, Constantes.ACCION_DELETE_REGISTRO_EXITOSO_MENSAJE+":Aula"+rolSelected.getIdRol()+":");
 		} catch (FachadaException e1) {
-			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR, Constantes.ERROR_DELETE_REGISTRO);
+			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
+					Constantes.ERROR_DELETE_REGISTRO);
+			addBitacora(Constantes.ACCION_DELETE_REGISTRO, Constantes.ACCION_DELETE_REGISTRO_FALLIDO_MENSAJE+":Rol "+rolSelected.getIdRol()+":");
 			return;
 		}
 		super.addInfoMessage(Constantes.DELETE_REGISTRO_EXITOSO);
 	}
-	
+
 	public void updateRol(ActionEvent e) {
 		int idPermiso = 0;
 		int index = 0;
 		PermisosDTO permisos;
 		RolesModulosDTO rolModulo;
-		rolSelected.setActivo(selectedRolActivo == true ? (short) 1
-				: (short) 0);
-		if(selectedClave != null && !selectedClave.isEmpty()){
+		rolSelected
+				.setActivo(selectedRolActivo == true ? (short) 1 : (short) 0);
+		if (selectedClave != null && !selectedClave.isEmpty()) {
 			rolSelected.setClave(selectedClave);
 		}
-		if(selectedNombre != null && !selectedNombre.isEmpty()){
+		if (selectedNombre != null && !selectedNombre.isEmpty()) {
 			rolSelected.setNombre(selectedNombre);
 		}
 		try {
 			rolesFachada.update(rolSelected);
 			int indexListFilter = listaRoles.indexOf(rolSelected);
-			if(indexListFilter > 0){
+			if (indexListFilter > 0) {
 				listaRoles.set(indexListFilter, rolSelected);
 			}
-			for(ModulosDTO modulo:listaModulosEdit) {
-				for(RolesModulosDTO rolesModulos:listaRolesModulos) {
-					if(rolesModulos.getIdModulo().equals(modulo.getIdModulo())) {
-						index+=1;
-						for(PermisosDTO permiso:listaPermisos) {
-							if(permiso.getIdPermiso() == rolesModulos.getIdPermisos()) {
-								permiso.setAlta(modulo.isAlta()?(short)1:(short)0);
-								permiso.setBorrar(modulo.isBorrar()?(short)1:(short)0);
-								permiso.setCambios(modulo.isEditar()?(short)1:(short)0);
-								permiso.setConsulta(modulo.isConsulta()?(short)1:(short)0);
-								permiso.setImpresion(modulo.isImprimir()?(short)1:(short)0);
-								
+			for (ModulosDTO modulo : listaModulosEdit) {
+				for (RolesModulosDTO rolesModulos : listaRolesModulos) {
+					if (rolesModulos.getIdModulo().equals(modulo.getIdModulo())) {
+						index += 1;
+						for (PermisosDTO permiso : listaPermisos) {
+							if (permiso.getIdPermiso() == rolesModulos
+									.getIdPermisos()) {
+								permiso.setAlta(modulo.isAlta() ? (short) 1
+										: (short) 0);
+								permiso.setBorrar(modulo.isBorrar() ? (short) 1
+										: (short) 0);
+								permiso.setCambios(modulo.isEditar() ? (short) 1
+										: (short) 0);
+								permiso.setConsulta(modulo.isConsulta() ? (short) 1
+										: (short) 0);
+								permiso.setImpresion(modulo.isImprimir() ? (short) 1
+										: (short) 0);
+
 								permisosFachada.update(permiso);
 							}
 						}
-							
+
 					}
 				}
-				if(index == 0) {
-					if(modulo.isAlta() || modulo .isBorrar() || modulo.isConsulta() || modulo.isEditar() || modulo.isImprimir()) {
+				if (index == 0) {
+					if (modulo.isAlta() || modulo.isBorrar()
+							|| modulo.isConsulta() || modulo.isEditar()
+							|| modulo.isImprimir()) {
 						permisos = new PermisosDTO();
-						permisos.setAlta(modulo.isAlta()?(short)1:(short)0);
-						permisos.setBorrar(modulo.isBorrar()?(short)1:(short)0);
-						permisos.setCambios(modulo.isEditar()?(short)1:(short)0);
-						permisos.setConsulta(modulo.isConsulta()?(short)1:(short)0);
-						permisos.setImpresion(modulo.isImprimir()?(short)1:(short)0);
-						
+						permisos.setAlta(modulo.isAlta() ? (short) 1
+								: (short) 0);
+						permisos.setBorrar(modulo.isBorrar() ? (short) 1
+								: (short) 0);
+						permisos.setCambios(modulo.isEditar() ? (short) 1
+								: (short) 0);
+						permisos.setConsulta(modulo.isConsulta() ? (short) 1
+								: (short) 0);
+						permisos.setImpresion(modulo.isImprimir() ? (short) 1
+								: (short) 0);
+
 						idPermiso = permisosFachada.save(permisos);
-						
+
 						rolModulo = new RolesModulosDTO();
-						
+
 						rolModulo.setIdModulo(modulo.getIdModulo());
 						rolModulo.setIdPermisos(idPermiso);
 						rolModulo.setIdRol(rolSelected.getIdRol());
-						rolModulo.setActivo((short)1);
-						
+						rolModulo.setActivo((short) 1);
+
 						rolesModulosFachada.save(rolModulo);
 					}
 				}
 				index = 0;
-				
+
 			}
 		} catch (FachadaException e1) {
-			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR, Constantes.ERROR_UPDATE_REGISTRO);
+			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
+					Constantes.ERROR_UPDATE_REGISTRO);
+			addBitacora(Constantes.ACCION_UPDATE_REGISTRO, Constantes.ACCION_UPDATE_REGISTRO_FALLIDO_MENSAJE+":Rol:");
 			return;
 		}
 		setSelectedClave("");
 		setSelectedNombre("");
 		initListaModulos();
-		super.addInfoMessage(Constantes.UPDATE_REGISTRO_EXITOSO);
+		super.addInfoMessage(Constantes.MESSAGE_TITLE_INFO, Constantes.UPDATE_REGISTRO_EXITOSO);		
+		addBitacora(Constantes.ACCION_UPDATE_REGISTRO, Constantes.ACCION_UPDATE_REGISTRO_EXITOSO_MENSAJE+":Rol "+rolSelected.getIdRol()+":");
 	}
-	
+
 	public void editar(ActionEvent e) {
 		initListaModulos();
-		listaRolesModulos = rolesModulosFachada.buscarPorRol(rolSelected.getIdRol());
-		if(listaPermisos.size() > 0) {
+		listaRolesModulos = rolesModulosFachada.buscarPorRol(rolSelected
+				.getIdRol());
+		if (listaPermisos.size() > 0) {
 			listaPermisos.clear();
 		}
-		for(RolesModulosDTO rolesModulos:listaRolesModulos) {
+		for (RolesModulosDTO rolesModulos : listaRolesModulos) {
 			try {
-				listaPermisos.add(permisosFachada.findByPK(rolesModulos.getIdPermisos()));
+				listaPermisos.add(permisosFachada.findByPK(rolesModulos
+						.getIdPermisos()));
 			} catch (FachadaException e1) {
 				e1.printStackTrace();
 			}
 			initListaModulosEdit();
-			for(ModulosDTO modulo:listaModulosEdit) {
-				if(rolesModulos.getIdModulo().equals(modulo.getIdModulo())) {
-					for(PermisosDTO permiso:listaPermisos) {
-						if(permiso.getIdPermiso() == rolesModulos.getIdPermisos()) {
-							modulo.setAlta(permiso.getAlta().equals((short)0)?false:true);
-							modulo.setBorrar(permiso.getBorrar().equals((short)0)?false:true);
-							modulo.setConsulta(permiso.getConsulta().equals((short)0)?false:true);
-							modulo.setEditar(permiso.getCambios().equals((short)0)?false:true);
-							modulo.setImprimir(permiso.getImpresion().equals((short)0)?false:true);
-							
+			for (ModulosDTO modulo : listaModulosEdit) {
+				if (rolesModulos.getIdModulo().equals(modulo.getIdModulo())) {
+					for (PermisosDTO permiso : listaPermisos) {
+						if (permiso.getIdPermiso() == rolesModulos
+								.getIdPermisos()) {
+							modulo.setAlta(permiso.getAlta().equals((short) 0) ? false
+									: true);
+							modulo.setBorrar(permiso.getBorrar().equals(
+									(short) 0) ? false : true);
+							modulo.setConsulta(permiso.getConsulta().equals(
+									(short) 0) ? false : true);
+							modulo.setEditar(permiso.getCambios().equals(
+									(short) 0) ? false : true);
+							modulo.setImprimir(permiso.getImpresion().equals(
+									(short) 0) ? false : true);
+
 						}
 					}
 				}
 			}
 		}
-		
+
 	}
-	
+
 	public void ver(ActionEvent e) {
 		initListaModulos();
-		listaRolesModulos = rolesModulosFachada.buscarPorRol(rolSelected.getIdRol());
-		if(listaPermisos.size() > 0) {
+		listaRolesModulos = rolesModulosFachada.buscarPorRol(rolSelected
+				.getIdRol());
+		if (listaPermisos.size() > 0) {
 			listaPermisos.clear();
 		}
 		initListaModulosVer();
-		for(RolesModulosDTO rolesModulos:listaRolesModulos) {
+		for (RolesModulosDTO rolesModulos : listaRolesModulos) {
 			try {
-				listaPermisos.add(permisosFachada.findByPK(rolesModulos.getIdPermisos()));
+				listaPermisos.add(permisosFachada.findByPK(rolesModulos
+						.getIdPermisos()));
 			} catch (FachadaException e1) {
 				e1.printStackTrace();
 			}
-			for(ModulosDTO modulo:listaModulosVer) {
-				if(rolesModulos.getIdModulo().equals(modulo.getIdModulo())) {
-					for(PermisosDTO permiso:listaPermisos) {
-						if(permiso.getIdPermiso() == rolesModulos.getIdPermisos()) {
-							modulo.setAlta(permiso.getAlta().equals((short)0)?false:true);
-							modulo.setBorrar(permiso.getBorrar().equals((short)0)?false:true);
-							modulo.setConsulta(permiso.getConsulta().equals((short)0)?false:true);
-							modulo.setEditar(permiso.getCambios().equals((short)0)?false:true);
-							modulo.setImprimir(permiso.getImpresion().equals((short)0)?false:true);
-							
+			for (ModulosDTO modulo : listaModulosVer) {
+				if (rolesModulos.getIdModulo().equals(modulo.getIdModulo())) {
+					for (PermisosDTO permiso : listaPermisos) {
+						if (permiso.getIdPermiso() == rolesModulos
+								.getIdPermisos()) {
+							modulo.setAlta(permiso.getAlta().equals((short) 0) ? false
+									: true);
+							modulo.setBorrar(permiso.getBorrar().equals(
+									(short) 0) ? false : true);
+							modulo.setConsulta(permiso.getConsulta().equals(
+									(short) 0) ? false : true);
+							modulo.setEditar(permiso.getCambios().equals(
+									(short) 0) ? false : true);
+							modulo.setImprimir(permiso.getImpresion().equals(
+									(short) 0) ? false : true);
+
 						}
 					}
 				}
 			}
 		}
-		
+
 	}
-	
-	public void cancelDeleteRol(ActionEvent e){
+
+	public void cancelDeleteRol(ActionEvent e) {
 		setSelectedClave("");
 		setSelectedNombre("");
 	}
+
 	private void limpiarModulos() {
-		if(listaModulosEdit.size() > 0) {
+		if (listaModulosEdit.size() > 0) {
 			listaModulosEdit.clear();
 		}
-		for(ModulosDTO modulo:listaModulos) {
+		for (ModulosDTO modulo : listaModulos) {
 			modulo.setAlta(false);
 			modulo.setBorrar(false);
 			modulo.setConsulta(false);
@@ -329,6 +398,7 @@ public class PerfilControlador extends BaseController implements Serializable {
 			modulo.setImprimir(false);
 		}
 	}
+
 	public RolesDTO getRolSelected() {
 		return rolSelected;
 	}

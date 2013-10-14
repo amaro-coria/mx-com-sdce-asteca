@@ -116,10 +116,10 @@
 				widgetVar="nuevoDialog" closable="true" modal="true"
 				draggable="true" width="400">
 				<h:panelGrid columns="2" width="100%" id="displayNuevo">
-					<h:outputText value="#{msg.clave}" />
+					<h:outputText value="#{msg.clave}*" />
 					<p:inputText value="#{beanCatGral.catalogoNuevo.cveRegistro}"
 						style="font-weight:bold; height:100%; width:260px" />
-					<h:outputText value="#{msg.descripcion}" />
+					<h:outputText value="#{msg.descripcion}*" />
 					<p:inputText id="nombrePopupNuevo"
 						value="#{beanCatGral.catalogoNuevo.dsc}" style="font-weight:bold; height:100%; width:260px" />
 						<h:outputText value="#{msg.tipo}"/>
@@ -134,7 +134,6 @@
 				</h:panelGrid>
 				<h:panelGrid style="float: right;" columns="2">
 					<p:commandButton value="#{msg.aceptar }" icon="ui-icon-check"
-						oncomplete="if(!args.validationFailed) nuevoDialog.hide()"
 						actionListener="#{beanCatGral.saveCat }"
 						update=":form:catGralTable, growl" />
 					<p:commandButton value="#{msg.cancelar }" icon="ui-icon-closethick"

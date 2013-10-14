@@ -23,7 +23,9 @@ import mx.com.asteca.comun.dto.MunicipioDTO;
 import mx.com.asteca.comun.dto.PersonaDTO;
 import mx.com.asteca.fachada.AdministrativoFachada;
 import mx.com.asteca.fachada.FachadaException;
+import mx.com.asteca.util.EmailValidator;
 
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 import org.springframework.util.CollectionUtils;
 
@@ -116,6 +118,11 @@ public class AdministrativoControlador extends BaseController implements
 	public void save() {
 		boolean b = validaDatos();
 		if(b){
+			boolean email = EmailValidator.getInstance().validate(nuevoAdminEmail);
+			if(!email){
+				super.addWarningMessage(Constantes.MESSAGE_TITLE_WARNING, Constantes.WARNING_FORMATO_EMAIL);
+				return;
+			}
 			DomicilioDTO domicilioDTO = new DomicilioDTO();
 			domicilioDTO.setCalle(nuevoAdminCalle);
 			domicilioDTO.setCp(nuevoAdminCpIdAsentamiento);
@@ -146,10 +153,21 @@ public class AdministrativoControlador extends BaseController implements
 			itemNuevo.setDtoPersona(dtoPersona);
 			itemNuevo.setNoEmpleado(nuevoAdminNoEmpleado);
 			try {
-				fachada.save(itemNuevo);
+				int pk = fachada.save(itemNuevo);
+				itemNuevo.setIdAmin(pk);
+				if(!listItems.isEmpty()){
+					listItems.add(itemNuevo);
+				}else{
+					listItems = new ArrayList<AdministrativoDTO>();
+					listItems.add(itemNuevo);
+				}
+				RequestContext.getCurrentInstance().execute("nuevoDialog.hide()");
+				super.addInfoMessage(Constantes.MESSAGE_TITLE_INFO, Constantes.NUEVO_REGISTRO_EXITOSO);
+				addBitacora(Constantes.ACCION_NUEVO_REGISTRO, Constantes.ACCION_NUEVO_REGISTRO_EXITOSO_MENSAJE+":Administrativo "+pk+":");
 			} catch (FachadaException e) {
 				super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
 						Constantes.ERROR_NUEVO_REGISTRO);
+				addBitacora(Constantes.ACCION_NUEVO_REGISTRO, Constantes.ACCION_NUEVO_REGISTRO_FALLIDO_MENSAJE+":Administrativo:");
 			}
 		}else {
 			super.addWarningMessage(Constantes.WARNING_NECESITAS_LLENAR_CAMPOS_REQUERIDOS);
@@ -197,6 +215,17 @@ public class AdministrativoControlador extends BaseController implements
 		nuevoAdminIdAsentamientoMunicipioEstado = "";
 	}
 
+	public void delete(){
+		try{
+			fachada.delete(itemSelected);
+			super.addInfoMessage(Constantes.DELETE_REGISTRO_EXITOSO);
+			addBitacora(Constantes.ACCION_DELETE_REGISTRO, Constantes.ACCION_DELETE_REGISTRO_EXITOSO_MENSAJE+":Administrativo"+itemSelected.getIdAmin()+":");
+		}catch(FachadaException e){
+			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR, Constantes.ERROR_DELETE_REGISTRO);
+			addBitacora(Constantes.ACCION_DELETE_REGISTRO, Constantes.ACCION_DELETE_REGISTRO_FALLIDO_MENSAJE+":Administrativo"+itemSelected.getIdAmin()+":");
+		}
+	}
+	
 	public void update() {
 		DomicilioDTO domicilioDTO = itemSelected.getDtoDomicilio();
 		if (domicilioDTO == null) {
@@ -268,9 +297,12 @@ public class AdministrativoControlador extends BaseController implements
 		}
 		try {
 			fachada.update(itemSelected);
+			super.addInfoMessage(Constantes.MESSAGE_TITLE_INFO, Constantes.UPDATE_REGISTRO_EXITOSO);		
+			addBitacora(Constantes.ACCION_UPDATE_REGISTRO, Constantes.ACCION_UPDATE_REGISTRO_EXITOSO_MENSAJE+":Administrativo "+itemSelected.getIdAmin()+":");
 		} catch (FachadaException e) {
 			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
 					Constantes.ERROR_UPDATE_REGISTRO);
+			addBitacora(Constantes.ACCION_UPDATE_REGISTRO, Constantes.ACCION_UPDATE_REGISTRO_FALLIDO_MENSAJE);
 		}
 	}
 

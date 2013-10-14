@@ -14,6 +14,7 @@ import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.primefaces.context.RequestContext;
 
 import mx.com.asteca.comun.Constantes;
 import mx.com.asteca.comun.dto.CatGralDTO;
@@ -219,14 +220,16 @@ public class CatGralControlador extends BaseController implements Serializable {
 			catGralFachada.remove(catalogoSelected);
 			listaCatalogos.remove(catalogoSelected);
 			cambiaDescSelect();
+			super.addInfoMessage(Constantes.DELETE_REGISTRO_EXITOSO);
+			addBitacora(Constantes.ACCION_DELETE_REGISTRO, Constantes.ACCION_DELETE_REGISTRO_EXITOSO_MENSAJE+":CatGral"+catalogoSelected.getIdCatGral()+":");
 		} catch (FachadaException e1) {
 			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR, Constantes.ERROR_DELETE_REGISTRO);
+			addBitacora(Constantes.ACCION_DELETE_REGISTRO, Constantes.ACCION_DELETE_REGISTRO_FALLIDO_MENSAJE+":CatGral"+catalogoSelected.getIdCatGral()+":");
 			return;
 		}
 		setSelectedClaveCatGral("");
 		setSelectedDscCatGral("");
 		setSelectedEstatusCatGral("");
-		super.addInfoMessage(Constantes.DELETE_REGISTRO_EXITOSO);
 	}
 	
 	
@@ -256,11 +259,13 @@ public class CatGralControlador extends BaseController implements Serializable {
 				listaCatalogos.set(indexListFilter, catalogoSelected);
 			}
 			cambiaDescSelect();
+			super.addInfoMessage(Constantes.MESSAGE_TITLE_INFO, Constantes.UPDATE_REGISTRO_EXITOSO);		
+			addBitacora(Constantes.ACCION_UPDATE_REGISTRO, Constantes.ACCION_UPDATE_REGISTRO_EXITOSO_MENSAJE+":CatGral "+catalogoSelected.getIdCatGral()+":");
 		} catch (FachadaException e1) {
 			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR, Constantes.ERROR_UPDATE_REGISTRO);
+			addBitacora(Constantes.ACCION_UPDATE_REGISTRO, Constantes.ACCION_UPDATE_REGISTRO_FALLIDO_MENSAJE);
 			return;
 		}
-		super.addInfoMessage(Constantes.UPDATE_REGISTRO_EXITOSO);
 	}
 	
 	/**
@@ -268,27 +273,47 @@ public class CatGralControlador extends BaseController implements Serializable {
 	 * @param e
 	 */
 	public void saveCat(ActionEvent e) {
-		catalogoNuevo.setIdTipoCatGral(idTipoCatGralNuevo);
-		catalogoNuevo
-				.setActivo(nuevoCatalogoActivo == true ? (short) 1 : (short) 0);
-		try {
-			catGralFachada.save(catalogoNuevo);
-			if(!CollectionUtils.isEmpty(listaCatalogos)){
-				listaCatalogos.add(catalogoNuevo);
-			}else{
-				listaCatalogos = new ArrayList<CatGralDTO>();
-				listaCatalogos.add(catalogoNuevo);
+		boolean b = validaDatos();
+		if(b){
+			catalogoNuevo.setIdTipoCatGral(idTipoCatGralNuevo);
+			catalogoNuevo
+					.setActivo(nuevoCatalogoActivo == true ? (short) 1 : (short) 0);
+			try {
+				int pk = catGralFachada.save(catalogoNuevo);
+				catalogoNuevo.setIdCatGral(pk);
+				RequestContext.getCurrentInstance().execute("nuevoDialog.hide()");
+				super.addInfoMessage(Constantes.MESSAGE_TITLE_INFO, Constantes.NUEVO_REGISTRO_EXITOSO);
+				addBitacora(Constantes.ACCION_NUEVO_REGISTRO, Constantes.ACCION_NUEVO_REGISTRO_EXITOSO_MENSAJE+":CatGral "+pk+":");
+				if(!CollectionUtils.isEmpty(listaCatalogos)){
+					listaCatalogos.add(catalogoNuevo);
+				}else{
+					listaCatalogos = new ArrayList<CatGralDTO>();
+					listaCatalogos.add(catalogoNuevo);
+				}
+				cambiaDescSelect();
+				//refreshEstados();
+			} catch (FachadaException e1) {
+				super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR, Constantes.ERROR_NUEVO_REGISTRO);
+				addBitacora(Constantes.ACCION_NUEVO_REGISTRO, Constantes.ACCION_NUEVO_REGISTRO_FALLIDO_MENSAJE+":CatGral:");
+				return;
 			}
-			cambiaDescSelect();
-			//refreshEstados();
-		} catch (FachadaException e1) {
-			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR, Constantes.ERROR_NUEVO_REGISTRO);
-			return;
+			catalogoNuevo = new CatGralDTO();
+			super.addInfoMessage(Constantes.NUEVO_REGISTRO_EXITOSO);
+		}else{
+			super.addWarningMessage(Constantes.MESSAGE_TITLE_WARNING, Constantes.WARNING_NECESITAS_LLENAR_CAMPOS_REQUERIDOS);
 		}
-		catalogoNuevo = new CatGralDTO();
-		super.addInfoMessage(Constantes.NUEVO_REGISTRO_EXITOSO);
 	}
 	
+	public boolean validaDatos(){
+		if(idTipoCatGralNuevo == 0){
+			return false;
+		}else if(catalogoNuevo.getCveRegistro() == null || catalogoNuevo.getCveRegistro().isEmpty()){ 
+			return false;
+		}else if(catalogoNuevo.getDsc() == null || catalogoNuevo.getDsc().isEmpty()){
+			return false;
+		}
+		return true;
+	}
 	
 	/**
 	 * Cancela el guardar nuevo registro

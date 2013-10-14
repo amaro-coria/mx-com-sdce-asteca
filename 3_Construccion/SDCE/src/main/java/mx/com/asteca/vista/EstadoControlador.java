@@ -17,6 +17,7 @@ import mx.com.asteca.fachada.EstadoFachada;
 import mx.com.asteca.fachada.FachadaException;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.primefaces.context.RequestContext;
 /* La clase es serializable porque se guarda en la vista */
 /**
  * Clase para controlar la pantalla de Estados.
@@ -197,11 +198,13 @@ public class EstadoControlador extends BaseController implements Serializable {
 			cambiaPaisSelect();
 		} catch (FachadaException e1) {
 			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR, Constantes.ERROR_DELETE_REGISTRO);
+			addBitacora(Constantes.ACCION_DELETE_REGISTRO, Constantes.ACCION_DELETE_REGISTRO_FALLIDO_MENSAJE+":Estado"+estadoSelected.getIdEstado()+":");
 			return;
 		}
 		setSelectedEstadoClave("");
 		setSelectedEstadoNombre("");
 		super.addInfoMessage(Constantes.DELETE_REGISTRO_EXITOSO);
+		addBitacora(Constantes.ACCION_DELETE_REGISTRO, Constantes.ACCION_DELETE_REGISTRO_EXITOSO_MENSAJE+":Estado"+estadoSelected.getIdEstado()+":");
 	}
 
 	/**
@@ -232,9 +235,11 @@ public class EstadoControlador extends BaseController implements Serializable {
 			cambiaPaisSelect();
 		} catch (FachadaException e1) {
 			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR, Constantes.ERROR_UPDATE_REGISTRO);
+			addBitacora(Constantes.ACCION_UPDATE_REGISTRO, Constantes.ACCION_UPDATE_REGISTRO_FALLIDO_MENSAJE+":Estado:");
 			return;
 		}
-		super.addInfoMessage(Constantes.UPDATE_REGISTRO_EXITOSO);
+		super.addInfoMessage(Constantes.MESSAGE_TITLE_INFO, Constantes.UPDATE_REGISTRO_EXITOSO);		
+		addBitacora(Constantes.ACCION_UPDATE_REGISTRO, Constantes.ACCION_UPDATE_REGISTRO_EXITOSO_MENSAJE+":Estado "+estadoSelected.getIdEstado()+":");
 	}
 
 	/**
@@ -246,26 +251,44 @@ public class EstadoControlador extends BaseController implements Serializable {
 			super.addWarningMessage(Constantes.MESSAGE_TITLE_WARNING, Constantes.ERROR_NECESITAS_SELECCIONAR_UN_PAIS);
 			return;
 		}
-		estadoNuevo.setIdPais(idPaisNuevo);
-		estadoNuevo
-				.setActivo(nuevoEstadoActivo == true ? (short) 1 : (short) 0);
-		try {
-			fachadaEstado.save(estadoNuevo);
-			listaEstados.add(estadoNuevo);
-			cambiaPaisSelect();
-			//refreshEstados();
-		} catch (FachadaException e1) {
-			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR, Constantes.ERROR_NUEVO_REGISTRO);
-			return;
+		boolean b = valida();
+		if(b){
+			estadoNuevo.setIdPais(idPaisNuevo);
+			estadoNuevo
+					.setActivo(nuevoEstadoActivo == true ? (short) 1 : (short) 0);
+			try {
+				int pk = fachadaEstado.save(estadoNuevo);
+				estadoNuevo.setIdEstado(pk);
+				listaEstados.add(estadoNuevo);
+				cambiaPaisSelect();
+				//refreshEstados();
+			} catch (FachadaException e1) {
+				super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR, Constantes.ERROR_NUEVO_REGISTRO);
+				addBitacora(Constantes.ACCION_NUEVO_REGISTRO, Constantes.ACCION_NUEVO_REGISTRO_FALLIDO_MENSAJE+":Materia:");
+				return;
+			}
+			estadoNuevo = new EstadoDTO();
+			super.addInfoMessage(Constantes.NUEVO_REGISTRO_EXITOSO);
+			RequestContext.getCurrentInstance().execute("nuevoDialog.hide()");
+			addBitacora(Constantes.ACCION_NUEVO_REGISTRO, Constantes.ACCION_NUEVO_REGISTRO_EXITOSO_MENSAJE+":Estado "+estadoNuevo.getIdEstado()+":");
+		}else{
+			super.addWarningMessage(Constantes.MESSAGE_TITLE_WARNING, Constantes.WARNING_NECESITAS_LLENAR_CAMPOS_REQUERIDOS);
 		}
-		estadoNuevo = new EstadoDTO();
-		super.addInfoMessage(Constantes.NUEVO_REGISTRO_EXITOSO);
 	}
 	
 	public void saveEstadoCancel(ActionEvent e){
 		estadoNuevo = new EstadoDTO();
 	}	
 	
+	
+	private boolean valida(){
+		if(!(estadoNuevo.getClave() != null && !estadoNuevo.getClave().isEmpty())){
+			return false;
+		}else if(!(estadoNuevo.getNombre() != null && !estadoNuevo.getNombre().isEmpty())){
+			return false;
+		}
+		return true;
+	}
 
 	// --------------------- GETTERS & SETTERS  ------------------------------- //
 	

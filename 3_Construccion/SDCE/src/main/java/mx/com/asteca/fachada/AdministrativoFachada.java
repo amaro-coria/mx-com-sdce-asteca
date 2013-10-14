@@ -34,4 +34,6 @@ public interface AdministrativoFachada extends
 
 	List<AsentamientoDTO> findAsentamientosByCp(int cp) throws FachadaException;
 
+	void delete(AdministrativoDTO dtoAdmin) throws FachadaException;
+
 }

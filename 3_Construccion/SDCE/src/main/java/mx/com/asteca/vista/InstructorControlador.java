@@ -38,6 +38,7 @@ import mx.com.asteca.fachada.FachadaException;
 import mx.com.asteca.fachada.InstructorFachada;
 import mx.com.asteca.util.FileExtensionUtil;
 
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.DefaultStreamedContent;
@@ -70,7 +71,7 @@ public class InstructorControlador extends BaseController implements
 	private List<SelectItem> listSelect3;
 	private List<SelectItem> listSelectTipoInstructor;
 	private List<SelectItem> listSelectEstatus;
-	
+
 	private short nuevoIdEstatus;
 	private short editarIdEstatus;
 
@@ -150,8 +151,7 @@ public class InstructorControlador extends BaseController implements
 	private StreamedContent file;
 	private DocumentoDTO documentoTempDownload;
 	private InstructorDocumentoDTO documentoSelected;
-	
-	
+
 	public InstructorControlador() {
 		itemNuevo = new InstructorDTO();
 		itemSelected = new InstructorDTO();
@@ -161,23 +161,25 @@ public class InstructorControlador extends BaseController implements
 		editarListaMaterias = new ArrayList<MateriaRegistroDTO>();
 	}
 
-	private void initListaSelectEstatus(){
+	private void initListaSelectEstatus() {
 		try {
-			if(CollectionUtils.isEmpty(listSelectEstatus)){
+			if (CollectionUtils.isEmpty(listSelectEstatus)) {
 				listSelectEstatus = new ArrayList<SelectItem>();
 				List<EstatusDTO> lista = fachada.getEstatus();
-				if(!CollectionUtils.isEmpty(lista)){
-					for(EstatusDTO dto : lista){
-						SelectItem item = new SelectItem(dto.getIdEstatus(), dto.getDescEstatus());
+				if (!CollectionUtils.isEmpty(lista)) {
+					for (EstatusDTO dto : lista) {
+						SelectItem item = new SelectItem(dto.getIdEstatus(),
+								dto.getDescEstatus());
 						listSelectEstatus.add(item);
 					}
 				}
 			}
 		} catch (FachadaException e) {
-			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR, Constantes.ERROR_OBTENIENDO_LISTA_CATALOGO);
+			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
+					Constantes.ERROR_OBTENIENDO_LISTA_CATALOGO);
 		}
 	}
-	
+
 	private void initDocListaSelectEstatus() {
 		if (CollectionUtils.isEmpty(listaSelectEstatusDocs)) {
 			listaSelectEstatusDocs = new ArrayList<SelectItem>();
@@ -210,7 +212,7 @@ public class InstructorControlador extends BaseController implements
 	}
 
 	private void initEditarDualListModel() {
-		if(itemSelected != null){
+		if (itemSelected != null) {
 			List<MateriaRegistroDTO> lista = getListaMateriasRegistros();
 			editarListaMaterias = new ArrayList<MateriaRegistroDTO>();
 			editarListaMateriasTarget = new ArrayList<MateriaRegistroDTO>();
@@ -353,7 +355,7 @@ public class InstructorControlador extends BaseController implements
 			}
 		}
 	}
-	
+
 	public void onDocumentoSelect(SelectEvent event) {
 		documentoSelected = (InstructorDocumentoDTO) event.getObject();
 		documentoTempDownload = documentoSelected.getDocumento();
@@ -535,31 +537,45 @@ public class InstructorControlador extends BaseController implements
 		editarListaDocumentos.add(documentoDTO);
 	}
 
-	private boolean validaDatos(){
+	private boolean validaDatos() {
 		if (nuevoApellidoP == null || nuevoApellidoP.isEmpty()) {
 			return false;
-		}else if (nuevoNombre == null || nuevoNombre.isEmpty()) {
+		} else if (nuevoNombre == null || nuevoNombre.isEmpty()) {
 			return false;
-		}else if (nuevoNoEmpleado == null || nuevoNoEmpleado.isEmpty() ) {
+		} else if (nuevoNoEmpleado == null || nuevoNoEmpleado.isEmpty()) {
 			return false;
-		}else if (nuevoIdTipoInstructor == 0) {
+		} else if (nuevoIdTipoInstructor == 0) {
 			return false;
-		}else if (nuevoFechaNac == null) {
+		} else if (nuevoFechaNac == null) {
 			return false;
-		}else if (nuevoIdEstatus == 0) {
+		} else if (nuevoIdEstatus == 0) {
 			return false;
-		}else if (nuevoCalle == null || nuevoCalle.isEmpty()) {
+		} else if (nuevoCalle == null || nuevoCalle.isEmpty()) {
 			return false;
-		}else if (nuevoIdAsentamientoMunicipioEstado == null || nuevoIdAsentamientoMunicipioEstado.isEmpty()) {
+		} else if (nuevoIdAsentamientoMunicipioEstado == null
+				|| nuevoIdAsentamientoMunicipioEstado.isEmpty()) {
 			return false;
-		}else if (nuevoEstado == null || nuevoEstado.isEmpty()) {
+		} else if (nuevoEstado == null || nuevoEstado.isEmpty()) {
 			return false;
-		}else if (nuevoDelegacion == null || nuevoDelegacion.isEmpty()) {
+		} else if (nuevoDelegacion == null || nuevoDelegacion.isEmpty()) {
 			return false;
-		}else if (nuevoCp == 0) {
+		} else if (nuevoCp == 0) {
 			return false;
 		}
 		return true;
+	}
+
+	public void delete(){
+		try{
+			fachada.remove(itemSelected);
+			addBitacora(Constantes.ACCION_DELETE_REGISTRO, Constantes.ACCION_DELETE_REGISTRO_EXITOSO_MENSAJE+":Instructor "+itemSelected.getIdInstructor()+":");
+		}catch(FachadaException e){
+			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
+					Constantes.ERROR_DELETE_REGISTRO);
+			addBitacora(Constantes.ACCION_DELETE_REGISTRO, Constantes.ACCION_DELETE_REGISTRO_FALLIDO_MENSAJE+":Instructor "+itemSelected.getIdInstructor()+":");
+			return;
+		}
+		super.addInfoMessage(Constantes.DELETE_REGISTRO_EXITOSO);
 	}
 	
 	public void save() {
@@ -607,32 +623,38 @@ public class InstructorControlador extends BaseController implements
 					int pkDoc2 = fachada.saveInstructorDocumento(doc);
 					doc.setId(pkDoc2);
 				}
-				List<MateriaRegistroDTO> listaTarget = nuevoDualListModel.getTarget();
-				List<MateriaRegistroDTO> listaSource = nuevoDualListModel.getSource();
-				for (Object o:  listaTarget) {
+				List<MateriaRegistroDTO> listaTarget = nuevoDualListModel
+						.getTarget();
+				List<MateriaRegistroDTO> listaSource = nuevoDualListModel
+						.getSource();
+				for (Object o : listaTarget) {
 					Integer idMateria = Integer.parseInt(o.toString());
 					InstructorMateriaDTO mat = new InstructorMateriaDTO();
 					mat.setIdInstructor(pk);
-						MateriaRegistroDTO materia = new MateriaRegistroDTO();
-						materia.setIdMateria(idMateria);
+					MateriaRegistroDTO materia = new MateriaRegistroDTO();
+					materia.setIdMateria(idMateria);
 					mat.setMateria(materia);
 					int pkMat = fachada.saveInstructorMateria(mat);
 					mat.setId(pkMat);
 				}
-				if(!CollectionUtils.isEmpty(listaItems)){
+				if (!CollectionUtils.isEmpty(listaItems)) {
 					listaItems.add(itemNuevo);
-				}else{
+				} else {
 					listaItems = new ArrayList<InstructorDTO>();
 					listaItems.add(itemNuevo);
 				}
+				RequestContext.getCurrentInstance().execute("nuevoDialog.hide()");
+				super.addInfoMessage(Constantes.MESSAGE_TITLE_INFO, Constantes.NUEVO_REGISTRO_EXITOSO);
+				addBitacora(Constantes.ACCION_NUEVO_REGISTRO, Constantes.ACCION_NUEVO_REGISTRO_EXITOSO_MENSAJE+":Instructor "+pk+":");
 			} catch (FachadaException e) {
 				super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
 						Constantes.ERROR_NUEVO_REGISTRO);
+				addBitacora(Constantes.ACCION_NUEVO_REGISTRO, Constantes.ACCION_NUEVO_REGISTRO_FALLIDO_MENSAJE+":Instructor:");
 			}
 		} else {
 			super.addWarningMessage(Constantes.WARNING_NECESITAS_LLENAR_CAMPOS_REQUERIDOS);
 		}
-		
+
 	}
 
 	public void update() {
@@ -686,18 +708,18 @@ public class InstructorControlador extends BaseController implements
 			domicilioDTO.setIdEstado(idEstadoTemp);
 			domicilioDTO.setIdMunicipio(idMunicipioTemp);
 		}
-		if(editarNoExt != null && !editarNoExt.isEmpty()){
+		if (editarNoExt != null && !editarNoExt.isEmpty()) {
 			domicilioDTO.setNoExterior(editarNoExt);
 		}
-		if(editarNoInt != null && !editarNoInt.isEmpty()){
+		if (editarNoInt != null && !editarNoInt.isEmpty()) {
 			domicilioDTO.setNoInterior(editarNoInt);
 		}
 		itemSelected.setDtoDomicilio(domicilioDTO);
 		itemSelected.setDtoPersona(dtoPersona);
-		if(editarIdTipoInstructor != 0){
+		if (editarIdTipoInstructor != 0) {
 			itemSelected.setIdTipo(editarIdTipoInstructor);
 		}
-		if(editarIdEstatus != 0){
+		if (editarIdEstatus != 0) {
 			itemSelected.setIdEstatus(editarIdEstatus);
 		}
 		// itemNuevo.setEstatus(nuev)
@@ -719,14 +741,17 @@ public class InstructorControlador extends BaseController implements
 				int pkMat = fachada.saveInstructorMateria(mat);
 				mat.setId(pkMat);
 			}
+			super.addInfoMessage(Constantes.MESSAGE_TITLE_INFO, Constantes.UPDATE_REGISTRO_EXITOSO);		
+			addBitacora(Constantes.ACCION_UPDATE_REGISTRO, Constantes.ACCION_UPDATE_REGISTRO_EXITOSO_MENSAJE+":Instructor "+itemSelected.getIdInstructor()+":");
 		} catch (FachadaException e) {
 			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
 					Constantes.ERROR_NUEVO_REGISTRO);
+			addBitacora(Constantes.ACCION_UPDATE_REGISTRO, Constantes.ACCION_UPDATE_REGISTRO_FALLIDO_MENSAJE+":Instructor:");
 		}
 	}
 
 	public void saveCancel() {
-		
+
 	}
 
 	// ---------- Getters & Setters --------------- //
@@ -1895,7 +1920,8 @@ public class InstructorControlador extends BaseController implements
 	}
 
 	/**
-	 * @param listSelectEstatus the listSelectEstatus to set
+	 * @param listSelectEstatus
+	 *            the listSelectEstatus to set
 	 */
 	public void setListSelectEstatus(List<SelectItem> listSelectEstatus) {
 		this.listSelectEstatus = listSelectEstatus;
@@ -1909,7 +1935,8 @@ public class InstructorControlador extends BaseController implements
 	}
 
 	/**
-	 * @param nuevoIdEstatus the nuevoIdEstatus to set
+	 * @param nuevoIdEstatus
+	 *            the nuevoIdEstatus to set
 	 */
 	public void setNuevoIdEstatus(short nuevoIdEstatus) {
 		this.nuevoIdEstatus = nuevoIdEstatus;
@@ -1923,7 +1950,8 @@ public class InstructorControlador extends BaseController implements
 	}
 
 	/**
-	 * @param editarIdEstatus the editarIdEstatus to set
+	 * @param editarIdEstatus
+	 *            the editarIdEstatus to set
 	 */
 	public void setEditarIdEstatus(short editarIdEstatus) {
 		this.editarIdEstatus = editarIdEstatus;
@@ -1947,7 +1975,8 @@ public class InstructorControlador extends BaseController implements
 			try {
 				stream = new FileInputStream(ruta);
 			} catch (FileNotFoundException e) {
-				super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR, "Archivo no disponible");
+				super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
+						"Archivo no disponible");
 			}
 			file = new DefaultStreamedContent(stream, mimeMapping, nombre);
 		}
@@ -1955,7 +1984,8 @@ public class InstructorControlador extends BaseController implements
 	}
 
 	/**
-	 * @param file the file to set
+	 * @param file
+	 *            the file to set
 	 */
 	public void setFile(StreamedContent file) {
 		this.file = file;
@@ -1969,7 +1999,8 @@ public class InstructorControlador extends BaseController implements
 	}
 
 	/**
-	 * @param documentoTempDownload the documentoTempDownload to set
+	 * @param documentoTempDownload
+	 *            the documentoTempDownload to set
 	 */
 	public void setDocumentoTempDownload(DocumentoDTO documentoTempDownload) {
 		this.documentoTempDownload = documentoTempDownload;
@@ -1983,7 +2014,8 @@ public class InstructorControlador extends BaseController implements
 	}
 
 	/**
-	 * @param documentoSelected the documentoSelected to set
+	 * @param documentoSelected
+	 *            the documentoSelected to set
 	 */
 	public void setDocumentoSelected(InstructorDocumentoDTO documentoSelected) {
 		this.documentoSelected = documentoSelected;

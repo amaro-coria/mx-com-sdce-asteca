@@ -100,14 +100,14 @@
 				widgetVar="nuevoDialog" closable="true" modal="true"
 				draggable="false" width="400">
 				<h:panelGrid columns="2" width="100%" id="displayNuevo">
-					<h:outputText value="#{msg.clave}" />
+					<h:outputText value="#{msg.clave}*" />
 					<p:inputText value="#{beanEstados.estadoNuevo.clave}"
 						style="width: 260px; font-weight:bold; height:100%" />
-					<h:outputText id="nombrePopupNuevoLabel" value="#{msg.nombre}" />
+					<h:outputText id="nombrePopupNuevoLabel" value="#{msg.nombre}*" />
 					<p:inputText id="nombrePopupNuevo"
 						value="#{beanEstados.estadoNuevo.nombre }"
 						style="width: 260px; font-weight:bold; height:100%" />
-					<h:outputText id="paisNuevo" value="#{msg.pais }" />
+					<h:outputText id="paisNuevo" value="#{msg.pais }*" />
 					<p:selectOneMenu value="#{beanEstados.idPaisNuevo }"
 						style="width: 250px; font-weight:bold; height:100%" >
 						<f:selectItem itemLabel="#{msg.seleccionarPais }" itemValue="" />
@@ -120,7 +120,6 @@
 				</h:panelGrid>
 				<h:panelGrid style="float: right;" columns="2">
 					<p:commandButton value="#{msg.aceptar }" icon="ui-icon-check"
-						oncomplete="nuevoDialog.hide()"
 						actionListener="#{beanEstados.saveEstado }"
 						update=":form:estadosTable, growl" />
 					<p:commandButton value="#{msg.cancelar }" icon="ui-icon-closethick"
