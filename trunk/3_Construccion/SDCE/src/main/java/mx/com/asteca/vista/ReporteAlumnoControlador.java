@@ -11,11 +11,10 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import mx.com.asteca.comun.Constantes;
 import mx.com.asteca.comun.dto.AlumnoDTO;
@@ -26,30 +25,32 @@ import mx.com.asteca.fachada.FachadaException;
 import net.sf.jasperreports.engine.JRException;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @ManagedBean(name = Constantes.BEAN_REPORTE_ALUMNO)
-@ViewScoped
+@SessionScoped
 public class ReporteAlumnoControlador extends BaseController implements
 		Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private static final String modulo = Constantes.MODULO_REPORTE_ALUMNO;
 	private String url;
-	private FacesContext context;
-	
+	private FacesContext context = FacesContext.getCurrentInstance();
+
 	@ManagedProperty("#{alumnoFachadaImpl}")
 	private AlumnoFachada alumnosFachada;
 	private List<AlumnoDTO> listaAlumnos;
-	
+
 	@ManagedProperty("#{catGralFachadaImpl}")
 	private CatGralFachada fachadaCatGral;
 	private List<SelectItem> listaSelectArea;
-	
+
 	private Integer areaSelected;
-	
-	private static Logger LOGGER = LoggerFactory.getLogger(ReporteAlumnoControlador.class);
+
+	private static Logger LOGGER = LoggerFactory
+			.getLogger(ReporteAlumnoControlador.class);
 
 	@PostConstruct
 	public void init() {
@@ -58,21 +59,21 @@ public class ReporteAlumnoControlador extends BaseController implements
 				.getExternalContext().getRequest();
 		String requestURL = request.getRequestURL().toString();
 		setUrl(requestURL.substring(0, requestURL.lastIndexOf("faces")));
-		
+
 		initListaCatGral();
 	}
+
 	/**
 	 * 
 	 * @throws FachadaException
 	 */
 	private void initListaAlumnos() {
-		if(CollectionUtils.isEmpty(listaAlumnos)){		
+		if (CollectionUtils.isEmpty(listaAlumnos)) {
 			try {
 				LOGGER.debug("BUSCANDO... ");
-				if(alumnosFachada != null){	
+				if (alumnosFachada != null) {
 					listaAlumnos = alumnosFachada.findByArea(areaSelected);
-				}
-				else{
+				} else {
 					listaAlumnos = new ArrayList<AlumnoDTO>();
 				}
 			} catch (FachadaException e) {
@@ -81,23 +82,23 @@ public class ReporteAlumnoControlador extends BaseController implements
 			}
 		}
 	}
-	
+
 	/**
 	 * Inicializa la lista de catalogoGeneral con la lista de tipos de equipos
 	 */
 	private void initListaCatGral() {
-		
-		if(CollectionUtils.isEmpty(listaSelectArea)){		
+
+		if (CollectionUtils.isEmpty(listaSelectArea)) {
 			try {
-				List<CatGralDTO> listaCatGral = fachadaCatGral.findByTiposArea();
-				if(listaCatGral != null){
+				List<CatGralDTO> listaCatGral = fachadaCatGral
+						.findByTiposArea();
+				if (listaCatGral != null) {
 					listaSelectArea = new ArrayList<SelectItem>();
 					for (CatGralDTO areas : listaCatGral) {
-						listaSelectArea.add(new SelectItem(areas.getIdCatGral(), 
-											areas.getDsc()));
+						listaSelectArea.add(new SelectItem(
+								areas.getIdCatGral(), areas.getDsc()));
 					}
-				}
-				else{
+				} else {
 					listaSelectArea = new ArrayList<SelectItem>();
 				}
 			} catch (FachadaException e) {
@@ -105,21 +106,24 @@ public class ReporteAlumnoControlador extends BaseController implements
 			}
 		}
 	}
-	
-	
+
 	public void mostrarReporte() throws JRException, IOException,
 			ClassNotFoundException {
 
 		initListaAlumnos();
-		
-//		Guarada parametro en session
-		HttpSession session = ((HttpServletRequest) context
-				.getExternalContext().getRequest()).getSession();
-		session.setAttribute("alumnosReporte", listaAlumnos);
-		
-//		Obtener parametro de sesion
-		listaAlumnos = (List<AlumnoDTO>) session.getAttribute("alumnosReporte");
-		
+		FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("alumnosReporte", listaAlumnos);
+//		session.setAttribute("alumnosReporte", listaAlumnos);
+		RequestContext.getCurrentInstance().execute("window.open('" + url + "Reportes?name=Reporte de Alumnos"+"')");
+
+		// // Guarada parametro en session
+		// HttpSession session = ((HttpServletRequest) context
+		// .getExternalContext().getRequest()).getSession();
+		// session.setAttribute("alumnosReporte", listaAlumnos);
+		//
+		// // Obtener parametro de sesion
+		// listaAlumnos = (List<AlumnoDTO>)
+		// session.getAttribute("alumnosReporte");
+
 	}
 
 	public String getUrl() {
@@ -129,15 +133,17 @@ public class ReporteAlumnoControlador extends BaseController implements
 	public void setUrl(String url) {
 		this.url = url;
 	}
-	
+
 	/**
 	 * @return the listaAlumnos
 	 */
 	public List<AlumnoDTO> getListaAlumnos() {
 		return listaAlumnos;
 	}
+
 	/**
-	 * @param listaAlumnos the listaAlumnos to set
+	 * @param listaAlumnos
+	 *            the listaAlumnos to set
 	 */
 	public void setListaAlumnos(List<AlumnoDTO> listaAlumnos) {
 		this.listaAlumnos = listaAlumnos;
@@ -149,14 +155,14 @@ public class ReporteAlumnoControlador extends BaseController implements
 	public AlumnoFachada getAlumnosFachada() {
 		return alumnosFachada;
 	}
+
 	/**
-	 * @param alumnosFachada the alumnosFachada to set
+	 * @param alumnosFachada
+	 *            the alumnosFachada to set
 	 */
 	public void setAlumnosFachada(AlumnoFachada alumnosFachada) {
 		this.alumnosFachada = alumnosFachada;
 	}
-
-
 
 	/**
 	 * @return the areaSelected
@@ -165,16 +171,13 @@ public class ReporteAlumnoControlador extends BaseController implements
 		return areaSelected;
 	}
 
-
-
 	/**
-	 * @param areaSelected the areaSelected to set
+	 * @param areaSelected
+	 *            the areaSelected to set
 	 */
 	public void setAreaSelected(Integer areaSelected) {
 		this.areaSelected = areaSelected;
 	}
-
-
 
 	/**
 	 * @return the fachadaCatGral
@@ -183,15 +186,14 @@ public class ReporteAlumnoControlador extends BaseController implements
 		return fachadaCatGral;
 	}
 
-
-
 	/**
-	 * @param fachadaCatGral the fachadaCatGral to set
+	 * @param fachadaCatGral
+	 *            the fachadaCatGral to set
 	 */
 	public void setFachadaCatGral(CatGralFachada fachadaCatGral) {
 		this.fachadaCatGral = fachadaCatGral;
 	}
-	
+
 	/**
 	 * @return the listaSelectArea
 	 */
@@ -199,14 +201,14 @@ public class ReporteAlumnoControlador extends BaseController implements
 		return listaSelectArea;
 	}
 
-
-
 	/**
-	 * @param listaSelectArea the listaSelectArea to set
+	 * @param listaSelectArea
+	 *            the listaSelectArea to set
 	 */
 	public void setListaSelectArea(List<SelectItem> listaSelectArea) {
 		this.listaSelectArea = listaSelectArea;
 	}
+
 	@Override
 	String getModulo() {
 		return modulo;

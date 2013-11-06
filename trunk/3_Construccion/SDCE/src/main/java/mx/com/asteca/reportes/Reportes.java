@@ -3,13 +3,16 @@ package mx.com.asteca.reportes;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import mx.com.asteca.comun.dto.AlumnoDTO;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
@@ -22,7 +25,7 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
  * Servlet implementation class Reportes
  */
 public class Reportes extends HttpServlet {
-
+	String name = null;
 	/**
 	 * 
 	 */
@@ -30,9 +33,12 @@ public class Reportes extends HttpServlet {
 
 	protected void processRequest(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		String name = null;
+
 		name = request.getParameter("name");
-		viewReportPDF(name, response);
+		HttpSession session = request.getSession();
+		@SuppressWarnings("unchecked")
+		List<AlumnoDTO> listaAlumnos = (List<AlumnoDTO>) session.getAttribute("alumnosReporte");
+		viewReportPDF(name, response, listaAlumnos);
 	}
 
 	@Override
@@ -47,8 +53,11 @@ public class Reportes extends HttpServlet {
 		processRequest(request, response);
 	}
 
-	public void viewReportPDF(String name, HttpServletResponse response) {
-		InputStream ins = UtilReporte.class.getResourceAsStream(name + ".jrxml");
+	public void viewReportPDF(String name, HttpServletResponse response,
+			List<AlumnoDTO> listaAlumnos) {
+
+		InputStream ins = UtilReporte.class.getResourceAsStream("Cedula_5"
+				+ ".jrxml");
 		try {
 			JasperReport report = JasperCompileManager.compileReport(ins);
 			HashMap<String, InputStream> param = new HashMap<String, InputStream>();
@@ -56,18 +65,20 @@ public class Reportes extends HttpServlet {
 					UtilReporte.class.getResourceAsStream("img_sct.jpg"));
 			param.put("Aero",
 					UtilReporte.class.getResourceAsStream("img_aero.jpg"));
-			JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(null);
+			JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(
+					listaAlumnos);
 			JasperPrint print = JasperFillManager.fillReport(report, param, ds);
 			byte[] file = JasperExportManager.exportReportToPdf(print);
-			downloadFile("pdf", file,response);
+			downloadFile("pdf", file, response);
 		} catch (JRException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public void downloadFile(String ext, byte[] file, HttpServletResponse response) {
+	public void downloadFile(String ext, byte[] file,
+			HttpServletResponse response) {
 
-		String physicallName = "Cedula 5." + ext;
+		String physicallName = name + "." + ext;
 		String mimeType = "application/vnd.ms-excel";
 		if (mimeType != null) {
 			response.setContentLength(file.length);

@@ -17,13 +17,14 @@
 				</p:selectOneMenu>
 			</p:panel>
 			<h:panelGrid>
+			<!-- 
 				<p:commandButton value="Imprimir" icon="ui-icon-print"
 					onclick="window.open('#{beanReporteAlumno.url}Reportes?name=Cedula_5');"
-					type="button" />
-				<p:commandButton value="Ajax Submit" update="@all"
+					actionListener="#{beanReporteAlumno.mostrarReporte}"  type="button" />
+					 -->
+				<p:commandButton value="Imprimir" icon="ui-icon-print" update="@all"
 					actionListener="#{beanReporteAlumno.mostrarReporte}"
 					styleClass="ui-priority-primary" />
-
 			</h:panelGrid>
 			<p:dialog id="modalDialog" header="Modal Dialog" widgetVar="dlg"
 				modal="true" height="100">
