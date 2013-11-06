@@ -3,51 +3,52 @@
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	
-	<field name="alumnosCursoses" class="java.util.Set">
-		<fieldDescription><![CDATA[alumnosCursoses]]></fieldDescription>
-	</field>
-	<field name="asistenciaCursos" class="java.util.Set">
-		<fieldDescription><![CDATA[asistenciaCursos]]></fieldDescription>
-	</field>
-	<field name="califCursoses" class="java.util.Set">
-		<fieldDescription><![CDATA[califCursoses]]></fieldDescription>
-	</field>
-	<field name="capacidadesAlumnoses" class="java.util.Set">
-		<fieldDescription><![CDATA[capacidadesAlumnoses]]></fieldDescription>
-	</field>
-	<field name="certificadoses" class="java.util.Set">
-		<fieldDescription><![CDATA[certificadoses]]></fieldDescription>
-	</field>
+	<parameter name="Sct" class="java.io.InputStream"/>
+	<parameter name="Aero" class="java.io.InputStream"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
 	<field name="class" class="java.lang.Class">
 		<fieldDescription><![CDATA[class]]></fieldDescription>
 	</field>
-	<field name="docsAlumnoses" class="java.util.Set">
-		<fieldDescription><![CDATA[docsAlumnoses]]></fieldDescription>
+	<field name="dtoDomicilio" class="mx.com.asteca.comun.dto.DomicilioDTO">
+		<fieldDescription><![CDATA[dtoDomicilio]]></fieldDescription>
 	</field>
-	<field name="domicilios" class="mx.com.asteca.persistencia.entidades.Domicilios">
-		<fieldDescription><![CDATA[domicilios]]></fieldDescription>
+	<field name="dtoFamilia" class="mx.com.asteca.comun.dto.FamiliaDTO">
+		<fieldDescription><![CDATA[dtoFamilia]]></fieldDescription>
 	</field>
-	<field name="estatus" class="mx.com.asteca.persistencia.entidades.Estatus">
+	<field name="dtoPersona" class="mx.com.asteca.comun.dto.PersonaDTO">
+		<fieldDescription><![CDATA[dtoPersona]]></fieldDescription>
+	</field>
+	<field name="estatus" class="java.lang.String">
 		<fieldDescription><![CDATA[estatus]]></fieldDescription>
-	</field>
-	<field name="estudiosAlumnos" class="java.util.Set">
-		<fieldDescription><![CDATA[estudiosAlumnos]]></fieldDescription>
-	</field>
-	<field name="familia" class="mx.com.asteca.persistencia.entidades.Familia">
-		<fieldDescription><![CDATA[familia]]></fieldDescription>
 	</field>
 	<field name="idAlumno" class="java.lang.Integer">
 		<fieldDescription><![CDATA[idAlumno]]></fieldDescription>
 	</field>
+	<field name="idEstatus" class="java.lang.Integer">
+		<fieldDescription><![CDATA[idEstatus]]></fieldDescription>
+	</field>
+	<field name="listaCapacidades" class="java.util.List">
+		<fieldDescription><![CDATA[listaCapacidades]]></fieldDescription>
+	</field>
+	<field name="listaDocumentos" class="java.util.List">
+		<fieldDescription><![CDATA[listaDocumentos]]></fieldDescription>
+	</field>
+	<field name="listaEstudios" class="java.util.List">
+		<fieldDescription><![CDATA[listaEstudios]]></fieldDescription>
+	</field>
+	<field name="listaEstudiosOrdenada" class="java.util.List">
+		<fieldDescription><![CDATA[listaEstudiosOrdenada]]></fieldDescription>
+	</field>
+	<field name="listaReferencias" class="java.util.List">
+		<fieldDescription><![CDATA[listaReferencias]]></fieldDescription>
+	</field>
 	<field name="matricula" class="java.lang.String">
 		<fieldDescription><![CDATA[matricula]]></fieldDescription>
 	</field>
-	<field name="personas" class="mx.com.asteca.persistencia.entidades.Personas">
-		<fieldDescription><![CDATA[personas]]></fieldDescription>
-	</field>
-	<field name="referenciases" class="java.util.Set">
-		<fieldDescription><![CDATA[referenciases]]></fieldDescription>
+	<field name="nombre" class="java.lang.String">
+		<fieldDescription><![CDATA[nombre]]></fieldDescription>
 	</field>
 	<background>
 		<band splitType="Stretch"/>
@@ -71,11 +72,11 @@ SUBDIRECCIÃ“N DE CERTIFICACIÃ“N DE LICENCIAS
 			</staticText>
 			<image>
 				<reportElement  x="0" y="0" width="134" height="77"/>
-				<imageExpression><![CDATA[$P{Sct}]]></imageExpression>
+				<imageExpression class="java.io.InputStream"><![CDATA[$P{Sct}]]></imageExpression>
 			</image>
 			<image>
 				<reportElement  x="431" y="2" width="124" height="75"/>
-				<imageExpression><![CDATA[$P{Aero}]]></imageExpression>
+				<imageExpression class="java.io.InputStream"><![CDATA[$P{Aero}]]></imageExpression>
 			</image>
 		</band>
 	</title>
@@ -90,11 +91,6 @@ SUBDIRECCIÃ“N DE CERTIFICACIÃ“N DE LICENCIAS
 				<textElement/>
 				<text><![CDATA[Apellido Paterno]]></text>
 			</staticText>
-			<textField>
-				<reportElement  x="127" y="56" width="100" height="20"/>
-				<textElement/>
-				<textFieldExpression><![CDATA[$F{personas}.getNombre()]]></textFieldExpression>
-			</textField>
 			<staticText>
 				<reportElement  x="127" y="36" width="100" height="20"/>
 				<textElement/>
@@ -119,6 +115,11 @@ SUBDIRECCIÃ“N DE CERTIFICACIÃ“N DE LICENCIAS
 				<textElement/>
 				<text><![CDATA[AREA]]></text>
 			</staticText>
+			<textField>
+				<reportElement  x="127" y="56" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[""+$F{dtoPersona}.getNombre()]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 </jasperReport>

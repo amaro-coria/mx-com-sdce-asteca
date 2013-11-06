@@ -56,7 +56,7 @@ public class Reportes extends HttpServlet {
 	public void viewReportPDF(String name, HttpServletResponse response,
 			List<AlumnoDTO> listaAlumnos) {
 
-		InputStream ins = UtilReporte.class.getResourceAsStream("Cedula_5"
+		InputStream ins = UtilReporte.class.getResourceAsStream("AlumnosPorArea"
 				+ ".jrxml");
 		try {
 			JasperReport report = JasperCompileManager.compileReport(ins);
