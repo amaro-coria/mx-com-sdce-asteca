@@ -109,21 +109,12 @@ public class ReporteAlumnoControlador extends BaseController implements
 
 	public void mostrarReporte() throws JRException, IOException,
 			ClassNotFoundException {
-
 		initListaAlumnos();
-		FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("alumnosReporte", listaAlumnos);
-//		session.setAttribute("alumnosReporte", listaAlumnos);
-		RequestContext.getCurrentInstance().execute("window.open('" + url + "Reportes?name=Reporte de Alumnos"+"')");
-
-		// // Guarada parametro en session
-		// HttpSession session = ((HttpServletRequest) context
-		// .getExternalContext().getRequest()).getSession();
-		// session.setAttribute("alumnosReporte", listaAlumnos);
-		//
-		// // Obtener parametro de sesion
-		// listaAlumnos = (List<AlumnoDTO>)
-		// session.getAttribute("alumnosReporte");
-
+		FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
+				.put("alumnosReporte", listaAlumnos);
+		RequestContext.getCurrentInstance().execute(
+				"window.open('" + url + "Reportes?name=Reporte de Alumnos"
+						+ "')");
 	}
 
 	public String getUrl() {
