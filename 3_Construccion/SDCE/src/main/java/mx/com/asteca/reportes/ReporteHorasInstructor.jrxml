@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="AlumnosPorArea" pageWidth="700" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="660" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" >
+	<property name="ireport.zoom" value="1.6105100000000026"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="Sct" class="java.io.InputStream"/>
+	<parameter name="Aero" class="java.io.InputStream"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="class" class="java.lang.Class">
+		<fieldDescription><![CDATA[class]]></fieldDescription>
+	</field>
+	<field name="fechaFinal" class="java.util.Date">
+		<fieldDescription><![CDATA[fechaFinal]]></fieldDescription>
+	</field>
+	<field name="fechaFinalString" class="java.lang.String">
+		<fieldDescription><![CDATA[fechaFinalString]]></fieldDescription>
+	</field>
+	<field name="fechaInicial" class="java.util.Date">
+		<fieldDescription><![CDATA[fechaInicial]]></fieldDescription>
+	</field>
+	<field name="fechaInicialString" class="java.lang.String">
+		<fieldDescription><![CDATA[fechaInicialString]]></fieldDescription>
+	</field>
+	<field name="idAula" class="java.lang.Integer">
+		<fieldDescription><![CDATA[idAula]]></fieldDescription>
+	</field>
+	<field name="idInstructor" class="java.lang.Integer">
+		<fieldDescription><![CDATA[idInstructor]]></fieldDescription>
+	</field>
+	<field name="idMateria" class="java.lang.Integer">
+		<fieldDescription><![CDATA[idMateria]]></fieldDescription>
+	</field>
+	<field name="idMateriaRegistro" class="java.lang.Integer">
+		<fieldDescription><![CDATA[idMateriaRegistro]]></fieldDescription>
+	</field>
+	<field name="idTipo" class="java.lang.Integer">
+		<fieldDescription><![CDATA[idTipo]]></fieldDescription>
+	</field>
+	<field name="nombre" class="java.lang.String">
+		<fieldDescription><![CDATA[nombre]]></fieldDescription>
+	</field>
+	<field name="nombreAula" class="java.lang.String">
+		<fieldDescription><![CDATA[nombreAula]]></fieldDescription>
+	</field>
+	<field name="nombreInstructor" class="java.lang.String">
+		<fieldDescription><![CDATA[nombreInstructor]]></fieldDescription>
+	</field>
+	<field name="tipoNombre" class="java.lang.String">
+		<fieldDescription><![CDATA[tipoNombre]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="137" splitType="Stretch">
+			<image>
+				<reportElement  x="0" y="0" width="134" height="77"/>
+				<imageExpression class="java.io.InputStream"><![CDATA[$P{Sct}]]></imageExpression>
+			</image>
+			<image>
+				<reportElement  x="536" y="0" width="124" height="77"/>
+				<imageExpression class="java.io.InputStream"><![CDATA[$P{Aero}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement  x="276" y="77" width="113" height="20"/>
+				<textElement/>
+				<text><![CDATA[Reporte de Instructures]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  x="0" y="117" width="100" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Instructores Internos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  x="0" y="97" width="100" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[MES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  x="134" y="0" width="402" height="77"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Double"/>
+					<topPen lineWidth="1.0" lineStyle="Double"/>
+					<leftPen lineWidth="1.0" lineStyle="Double"/>
+					<bottomPen lineWidth="1.0" lineStyle="Double"/>
+					<rightPen lineWidth="1.0" lineStyle="Double"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[DIRECCIÓN GENERAL DE AERONAUTICA CIVIL
+DIRECCIÓN DE SEGURIDAD AÉREA
+SUBDIRECCIÓN DE CERTIFICACIÓN DE LICENCIAS
+]]></text>
+			</staticText>
+			<textField>
+				<reportElement  x="100" y="97" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[""+$F{fechaFinal}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement  x="100" y="117" width="100" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Horas]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement  x="100" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[""+($F{fechaFinal}.getHours()-$F{fechaInicial}.getHours())]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement  x="0" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[""+$F{nombreInstructor}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

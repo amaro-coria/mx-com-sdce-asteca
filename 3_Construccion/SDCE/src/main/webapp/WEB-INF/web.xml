@@ -134,4 +134,12 @@
 		<servlet-name>ReporteCursos</servlet-name>
 		<url-pattern>/ReporteCursos</url-pattern>
 	</servlet-mapping>
+	<servlet>
+		<servlet-name>ReporteInstructores</servlet-name>
+		<servlet-class>mx.com.asteca.reportes.ReporteInstructores</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ReporteInstructores</servlet-name>
+		<url-pattern>/ReporteInstructores</url-pattern>
+	</servlet-mapping>
 </web-app>
