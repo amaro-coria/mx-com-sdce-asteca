@@ -31,6 +31,7 @@ public class Cursos  implements java.io.Serializable {
 
 
      private int idCurso;
+     private String nombre;
      private Integer idArea;
      private Integer idProgrEstudios;
      private Date fechaIni;
@@ -52,8 +53,9 @@ public class Cursos  implements java.io.Serializable {
     public Cursos(int idCurso) {
         this.idCurso = idCurso;
     }
-    public Cursos(int idCurso, Integer idArea, Integer idProgrEstudios, Date fechaIni, Date fechaFin, Integer idSede, String horaIni, String horaFin, Integer grupo, String referencia, Set<CalifCursos> califCursoses, Set<AlumnosCursos> alumnosCursoses, Set<CursosMaterias> cursosMateriases, Set<AsistenciaCurso> asistenciaCursos) {
+    public Cursos(int idCurso,String nombre ,Integer idArea, Integer idProgrEstudios, Date fechaIni, Date fechaFin, Integer idSede, String horaIni, String horaFin, Integer grupo, String referencia, Set<CalifCursos> califCursoses, Set<AlumnosCursos> alumnosCursoses, Set<CursosMaterias> cursosMateriases, Set<AsistenciaCurso> asistenciaCursos) {
        this.idCurso = idCurso;
+       this.nombre =nombre;
        this.idArea = idArea;
        this.idProgrEstudios = idProgrEstudios;
        this.fechaIni = fechaIni;
@@ -67,6 +69,7 @@ public class Cursos  implements java.io.Serializable {
        this.alumnosCursoses = alumnosCursoses;
        this.cursosMateriases = cursosMateriases;
        this.asistenciaCursos = asistenciaCursos;
+       
     }
    
      @Id 
@@ -160,6 +163,16 @@ public class Cursos  implements java.io.Serializable {
     public void setReferencia(String referencia) {
         this.referencia = referencia;
     }
+    @Column(name="NOMBRE", length=45)
+    public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+
 @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="cursos")
     public Set<CalifCursos> getCalifCursoses() {
         return this.califCursoses;
