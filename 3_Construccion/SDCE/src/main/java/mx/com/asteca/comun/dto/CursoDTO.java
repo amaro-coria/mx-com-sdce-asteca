@@ -16,6 +16,7 @@ public class CursoDTO implements Serializable{
     private String horaFin;
     private Integer grupo;
     private String referencia;
+    private String nombre;
 
    public CursoDTO() {
    }
@@ -143,6 +144,16 @@ public boolean equals(Object obj) {
 	if (idCurso != other.idCurso)
 		return false;
 	return true;
+}
+
+
+public String getNombre() {
+	return nombre;
+}
+
+
+public void setNombre(String nombre) {
+	this.nombre = nombre;
 }
    
    

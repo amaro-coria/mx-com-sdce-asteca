@@ -1,48 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="AlumnosPorArea" pageWidth="1250" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="1210" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="0ed9b118-5ecf-4689-83d0-d8ca7babdd46">
-	<property name="ireport.zoom" value="0.683013455365071"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="AlumnosPorArea" pageWidth="1250" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="1210" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" >
+	<property name="ireport.zoom" value="0.7513148009015781"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="Sct" class="java.io.InputStream"/>
 	<parameter name="Aero" class="java.io.InputStream"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
 	<field name="class" class="java.lang.Class">
 		<fieldDescription><![CDATA[class]]></fieldDescription>
 	</field>
-	<field name="dtoDomicilio" class="mx.com.asteca.comun.dto.DomicilioDTO">
-		<fieldDescription><![CDATA[dtoDomicilio]]></fieldDescription>
+	<field name="fechaFin" class="java.util.Date">
+		<fieldDescription><![CDATA[fechaFin]]></fieldDescription>
 	</field>
-	<field name="dtoFamilia" class="mx.com.asteca.comun.dto.FamiliaDTO">
-		<fieldDescription><![CDATA[dtoFamilia]]></fieldDescription>
+	<field name="fechaIni" class="java.util.Date">
+		<fieldDescription><![CDATA[fechaIni]]></fieldDescription>
 	</field>
-	<field name="dtoPersona" class="mx.com.asteca.comun.dto.PersonaDTO">
-		<fieldDescription><![CDATA[dtoPersona]]></fieldDescription>
+	<field name="grupo" class="java.lang.Integer">
+		<fieldDescription><![CDATA[grupo]]></fieldDescription>
 	</field>
-	<field name="estatus" class="java.lang.String">
-		<fieldDescription><![CDATA[estatus]]></fieldDescription>
+	<field name="horaFin" class="java.lang.String">
+		<fieldDescription><![CDATA[horaFin]]></fieldDescription>
 	</field>
-	<field name="idAlumno" class="java.lang.Integer">
-		<fieldDescription><![CDATA[idAlumno]]></fieldDescription>
+	<field name="horaIni" class="java.lang.String">
+		<fieldDescription><![CDATA[horaIni]]></fieldDescription>
 	</field>
-	<field name="idEstatus" class="java.lang.Integer">
-		<fieldDescription><![CDATA[idEstatus]]></fieldDescription>
+	<field name="idArea" class="java.lang.Integer">
+		<fieldDescription><![CDATA[idArea]]></fieldDescription>
 	</field>
-	<field name="listaCapacidades" class="java.util.List">
-		<fieldDescription><![CDATA[listaCapacidades]]></fieldDescription>
+	<field name="idCurso" class="java.lang.Integer">
+		<fieldDescription><![CDATA[idCurso]]></fieldDescription>
 	</field>
-	<field name="listaDocumentos" class="java.util.List">
-		<fieldDescription><![CDATA[listaDocumentos]]></fieldDescription>
+	<field name="idProgrEstudios" class="java.lang.Integer">
+		<fieldDescription><![CDATA[idProgrEstudios]]></fieldDescription>
 	</field>
-	<field name="listaEstudios" class="java.util.List">
-		<fieldDescription><![CDATA[listaEstudios]]></fieldDescription>
+	<field name="idSede" class="java.lang.Integer">
+		<fieldDescription><![CDATA[idSede]]></fieldDescription>
 	</field>
-	<field name="listaEstudiosOrdenada" class="java.util.List">
-		<fieldDescription><![CDATA[listaEstudiosOrdenada]]></fieldDescription>
-	</field>
-	<field name="listaReferencias" class="java.util.List">
-		<fieldDescription><![CDATA[listaReferencias]]></fieldDescription>
-	</field>
-	<field name="matricula" class="java.lang.String">
-		<fieldDescription><![CDATA[matricula]]></fieldDescription>
+	<field name="referencia" class="java.lang.String">
+		<fieldDescription><![CDATA[referencia]]></fieldDescription>
 	</field>
 	<field name="nombre" class="java.lang.String">
 		<fieldDescription><![CDATA[nombre]]></fieldDescription>
@@ -53,35 +50,35 @@
 	<title>
 		<band height="118" splitType="Stretch">
 			<image>
-				<reportElement uuid="75542cea-7bba-4204-8ec7-75fb1d24f375" x="0" y="0" width="134" height="77"/>
-				<imageExpression><![CDATA[$P{Sct}]]></imageExpression>
+				<reportElement  x="0" y="0" width="134" height="77"/>
+				<imageExpression class="java.io.InputStream"><![CDATA[$P{Sct}]]></imageExpression>
 			</image>
 			<image>
-				<reportElement uuid="5ba0721f-43ec-4efd-a4e4-679a36e906a9" x="1086" y="0" width="124" height="75"/>
-				<imageExpression><![CDATA[$P{Aero}]]></imageExpression>
+				<reportElement  x="1086" y="0" width="124" height="75"/>
+				<imageExpression class="java.io.InputStream"><![CDATA[$P{Aero}]]></imageExpression>
 			</image>
 			<staticText>
-				<reportElement uuid="2f453d59-6283-40a8-bd89-ddcd9636674c" x="566" y="78" width="100" height="20"/>
+				<reportElement  x="566" y="78" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[Reporte de Curso]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="b67e90bd-f877-44a9-a4a5-540fe41faada" x="100" y="97" width="100" height="20"/>
+				<reportElement  x="100" y="97" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[Nombre]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="b084f1c4-b35e-45a3-9135-754a62e572db" x="0" y="97" width="100" height="20"/>
+				<reportElement  x="0" y="97" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[Curso]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="276d30aa-54c8-49d5-b6c9-7d3507d1f603" x="200" y="97" width="100" height="20"/>
+				<reportElement x="200" y="97" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[Fecha Inicio]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="ef19261c-ec20-4ac9-9804-de00c6777a64" x="134" y="0" width="952" height="77"/>
+				<reportElement  x="134" y="0" width="952" height="77"/>
 				<box>
 					<pen lineWidth="1.0" lineStyle="Double"/>
 					<topPen lineWidth="1.0" lineStyle="Double"/>
@@ -96,47 +93,47 @@ SUBDIRECCIÓN DE CERTIFICACIÓN DE LICENCIAS
 ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="fcf8db49-6925-4d74-a9d4-893a3effbc6d" x="300" y="98" width="100" height="20"/>
+				<reportElement  x="300" y="98" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[Fecha Termino]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="a58275f0-0744-4cd0-b7d7-e8f4fa68611a" x="400" y="97" width="100" height="20"/>
+				<reportElement  x="400" y="97" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[Empresa]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="be93612d-2aeb-4dd1-a563-72be53f3347c" x="500" y="97" width="100" height="20"/>
+				<reportElement  x="500" y="97" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[Alumnos]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="d288e575-7421-4b51-94e7-5f15ba60d080" x="600" y="97" width="100" height="20"/>
+				<reportElement  x="600" y="97" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[Lugar del curso]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="bc4d2c60-8e82-4363-9a6c-219e1f5a17c4" x="700" y="97" width="100" height="20"/>
+				<reportElement  x="700" y="97" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[Instructor]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="553387af-eb27-4003-8f9f-31289340842a" x="800" y="97" width="100" height="20"/>
+				<reportElement  x="800" y="97" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[hrs instructor]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="c1b7da51-c13f-449b-9317-c1201cde429a" x="900" y="97" width="100" height="20"/>
+				<reportElement  x="900" y="97" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[practica]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="58fa387c-a049-4ac3-b78a-718f222f4536" x="1000" y="97" width="100" height="20"/>
+				<reportElement  x="1000" y="97" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[días de imparticion]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="dc0d1981-fb90-4635-9034-f32ee18d6bd6" x="1100" y="97" width="100" height="20"/>
+				<reportElement  x="1100" y="97" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[Emisión de certificados]]></text>
 			</staticText>
@@ -145,64 +142,59 @@ SUBDIRECCIÓN DE CERTIFICACIÓN DE LICENCIAS
 	<detail>
 		<band height="20" splitType="Stretch">
 			<textField>
-				<reportElement uuid="85aedc9f-31fd-4960-a714-2862829338c6" x="0" y="0" width="100" height="20"/>
+				<reportElement  x="0" y="0" width="100" height="20"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[""+$F{dtoPersona}.getNombre()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[""+$F{idCurso}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="cca4ecc5-eaf9-4e1f-b388-8a2ccdfccfde" x="100" y="0" width="100" height="20"/>
+				<reportElement  x="100" y="0" width="100" height="20"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[""+$F{dtoPersona}.getApellidoP()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[""+$F{nombre}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="2b2584ea-6218-4c54-89e7-00c965d1d731" x="200" y="0" width="100" height="20"/>
+				<reportElement  x="200" y="0" width="100" height="20"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[""+$F{dtoPersona}.getApellidoM()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[""+$F{fechaIni}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="29830d2c-64d1-4bba-a173-9f1d29171a66" x="300" y="0" width="100" height="20"/>
+				<reportElement  x="300" y="0" width="100" height="20"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[""+$F{dtoPersona}.getApellidoM()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[""+$F{fechaFin}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="36d7c0f2-16cd-422d-b3b0-571bbbbf8944" x="400" y="0" width="100" height="20"/>
+				<reportElement  x="400" y="0" width="100" height="20"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[""+$F{dtoPersona}.getApellidoM()]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="c8489cc2-3930-4ea9-80a0-8fe83b2c437f" x="500" y="0" width="100" height="20"/>
+				<reportElement  x="500" y="0" width="100" height="20"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[""+$F{dtoPersona}.getNombre()]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="de560471-1b1d-47f2-8cbd-30f7cc60e339" x="600" y="0" width="100" height="20"/>
+				<reportElement  x="600" y="0" width="100" height="20"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[""+$F{dtoPersona}.getNombre()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[""+$F{idSede}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="c283fec5-d755-4547-9f6e-c8bed4882c4e" x="700" y="0" width="100" height="20"/>
+				<reportElement  x="700" y="0" width="100" height="20"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[""+$F{dtoPersona}.getNombre()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[""]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="fb7845e2-7166-46a0-be50-fbb48aa5bc34" x="800" y="0" width="100" height="20"/>
+				<reportElement  x="800" y="0" width="100" height="20"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[""+$F{dtoPersona}.getNombre()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[""]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="2f131e10-47ee-4644-af74-7b8de14c1f48" x="900" y="0" width="100" height="20"/>
+				<reportElement  x="900" y="0" width="100" height="20"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[""+$F{dtoPersona}.getNombre()]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="1cf2c5ea-b25f-4708-9c52-af78a60c1038" x="1000" y="0" width="100" height="20"/>
+				<reportElement  x="1000" y="0" width="100" height="20"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[""+$F{dtoPersona}.getNombre()]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="f6ea4d0e-2cb7-4d40-8b67-5c7088aa8b34" x="1100" y="0" width="100" height="20"/>
+				<reportElement  x="1100" y="0" width="100" height="20"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[""+$F{dtoPersona}.getNombre()]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
