@@ -26,35 +26,39 @@ import mx.com.asteca.fachada.FachadaException;
 import net.sf.jasperreports.engine.JRException;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 @ManagedBean(name = Constantes.BEAN_REPORTE_CURSOS)
 @ViewScoped
-public class ReporteCursosControlador extends BaseController implements Serializable {
+public class ReporteCursosControlador extends BaseController implements
+		Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private static final String modulo = Constantes.MODULO_REPORTE_CURSOS;
 	private String url;
 	private FacesContext context;
-	
+
 	@ManagedProperty("#{cursoFachadaImpl}")
 	private CursoFachada cursoFachada;
 	private List<CursoDTO> listaCursos;
-	
+
 	@ManagedProperty("#{catGralFachadaImpl}")
 	private CatGralFachada fachadaCatGral;
-	
+
 	private List<SelectItem> listaSelectArea;
 	private Integer areaSelected;
-	
+
 	private List<SelectItem> listaSelectSede;
 	private Integer sedeSelected;
-	
+
 	private Date fechaIni;
 	private Date fechaFin;
-	
-	private static Logger LOGGER = LoggerFactory.getLogger(ReporteCursosControlador.class);
-	
+
+	private static Logger LOGGER = LoggerFactory
+			.getLogger(ReporteCursosControlador.class);
+
 	@PostConstruct
 	public void init() {
 		context = FacesContext.getCurrentInstance();
@@ -62,27 +66,27 @@ public class ReporteCursosControlador extends BaseController implements Serializ
 				.getExternalContext().getRequest();
 		String requestURL = request.getRequestURL().toString();
 		setUrl(requestURL.substring(0, requestURL.lastIndexOf("faces")));
-		
+
 		initListaCatGralArea();
 		initListaCatGralSede();
 	}
-	
+
 	/**
 	 * Inicializa la lista de catalogoGeneral con la lista de area
 	 */
 	private void initListaCatGralArea() {
-		
-		if(CollectionUtils.isEmpty(listaSelectArea)){		
+
+		if (CollectionUtils.isEmpty(listaSelectArea)) {
 			try {
-				List<CatGralDTO> listaCatGral = fachadaCatGral.findByTiposArea();
-				if(listaCatGral != null){
+				List<CatGralDTO> listaCatGral = fachadaCatGral
+						.findByTiposArea();
+				if (listaCatGral != null) {
 					listaSelectArea = new ArrayList<SelectItem>();
 					for (CatGralDTO areas : listaCatGral) {
-						listaSelectArea.add(new SelectItem(areas.getIdCatGral(), 
-											areas.getDsc()));
+						listaSelectArea.add(new SelectItem(
+								areas.getIdCatGral(), areas.getDsc()));
 					}
-				}
-				else{
+				} else {
 					listaSelectArea = new ArrayList<SelectItem>();
 				}
 			} catch (FachadaException e) {
@@ -90,23 +94,23 @@ public class ReporteCursosControlador extends BaseController implements Serializ
 			}
 		}
 	}
-	
+
 	/**
 	 * Inicializa la lista de catalogoGeneral con la lista de sede
 	 */
 	private void initListaCatGralSede() {
-		
-		if(CollectionUtils.isEmpty(listaSelectSede)){		
+
+		if (CollectionUtils.isEmpty(listaSelectSede)) {
 			try {
-				List<CatGralDTO> listaCatGral = fachadaCatGral.findByTiposSede();
-				if(listaCatGral != null){
+				List<CatGralDTO> listaCatGral = fachadaCatGral
+						.findByTiposSede();
+				if (listaCatGral != null) {
 					listaSelectSede = new ArrayList<SelectItem>();
 					for (CatGralDTO areas : listaCatGral) {
-						listaSelectSede.add(new SelectItem(areas.getIdCatGral(), 
-											areas.getDsc()));
+						listaSelectSede.add(new SelectItem(
+								areas.getIdCatGral(), areas.getDsc()));
 					}
-				}
-				else{
+				} else {
 					listaSelectSede = new ArrayList<SelectItem>();
 				}
 			} catch (FachadaException e) {
@@ -114,19 +118,18 @@ public class ReporteCursosControlador extends BaseController implements Serializ
 			}
 		}
 	}
-	
+
 	/**
 	 * 
 	 * @throws FachadaException
 	 */
 	private void initListaCursos() {
-		if(CollectionUtils.isEmpty(listaCursos)){		
+		if (CollectionUtils.isEmpty(listaCursos)) {
 			try {
 				LOGGER.debug("BUSCANDO... ");
-				if(cursoFachada != null){	
+				if (cursoFachada != null) {
 					listaCursos = cursoFachada.getAll();
-				}
-				else{
+				} else {
 					listaCursos = new ArrayList<CursoDTO>();
 				}
 			} catch (FachadaException e) {
@@ -135,87 +138,101 @@ public class ReporteCursosControlador extends BaseController implements Serializ
 			}
 		}
 	}
-	
+
 	public void mostrarReporte() throws JRException, IOException,
 			ClassNotFoundException {
-		
 		initListaCursos();
-//		//Guarada parametro en session
-//		HttpSession session = ((HttpServletRequest) context
-//				.getExternalContext().getRequest()).getSession();
-//		session.setAttribute("alumnosReporte", listaCursos);
-//		//Obtener parametro de sesion
-//		listaCursos = (List<CursoDTO>) session.getAttribute("cursoReporte");
-		
+		FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
+				.put("cursosReporte", listaCursos);
+		RequestContext.getCurrentInstance().execute("window.open('" + url + "ReporteCursos?name=Reporte de Cursos"
+						+ "')");
 	}
+
 	/**
 	 * @return the url
 	 */
 	public String getUrl() {
 		return url;
 	}
+
 	/**
-	 * @param url the url to set
+	 * @param url
+	 *            the url to set
 	 */
 	public void setUrl(String url) {
 		this.url = url;
 	}
+
 	/**
 	 * @return the cursoFachada
 	 */
 	public CursoFachada getCursoFachada() {
 		return cursoFachada;
 	}
+
 	/**
-	 * @param cursoFachada the cursoFachada to set
+	 * @param cursoFachada
+	 *            the cursoFachada to set
 	 */
 	public void setCursoFachada(CursoFachada cursoFachada) {
 		this.cursoFachada = cursoFachada;
 	}
+
 	/**
 	 * @return the listaCursos
 	 */
 	public List<CursoDTO> getListaCursos() {
 		return listaCursos;
 	}
+
 	/**
-	 * @param listaCursos the listaCursos to set
+	 * @param listaCursos
+	 *            the listaCursos to set
 	 */
 	public void setListaCursos(List<CursoDTO> listaCursos) {
 		this.listaCursos = listaCursos;
 	}
+
 	/**
 	 * @return the listaSelectArea
 	 */
 	public List<SelectItem> getListaSelectArea() {
 		return listaSelectArea;
 	}
+
 	/**
-	 * @param listaSelectArea the listaSelectArea to set
+	 * @param listaSelectArea
+	 *            the listaSelectArea to set
 	 */
 	public void setListaSelectArea(List<SelectItem> listaSelectArea) {
 		this.listaSelectArea = listaSelectArea;
 	}
+
 	/**
 	 * @return the areaSelected
 	 */
 	public Integer getAreaSelected() {
 		return areaSelected;
 	}
+
 	/**
-	 * @param areaSelected the areaSelected to set
+	 * @param areaSelected
+	 *            the areaSelected to set
 	 */
 	public void setAreaSelected(Integer areaSelected) {
 		this.areaSelected = areaSelected;
 	}
+
 	/**
 	 * @return the fachadaCatGral
 	 */
 	public CatGralFachada getFachadaCatGral() {
 		return fachadaCatGral;
 	}
+
 	/**
-	 * @param fachadaCatGral the fachadaCatGral to set
+	 * @param fachadaCatGral
+	 *            the fachadaCatGral to set
 	 */
 	public void setFachadaCatGral(CatGralFachada fachadaCatGral) {
 		this.fachadaCatGral = fachadaCatGral;
@@ -229,7 +246,8 @@ public class ReporteCursosControlador extends BaseController implements Serializ
 	}
 
 	/**
-	 * @param listaSelectSede the listaSelectSede to set
+	 * @param listaSelectSede
+	 *            the listaSelectSede to set
 	 */
 	public void setListaSelectSede(List<SelectItem> listaSelectSede) {
 		this.listaSelectSede = listaSelectSede;
@@ -243,7 +261,8 @@ public class ReporteCursosControlador extends BaseController implements Serializ
 	}
 
 	/**
-	 * @param sedeSelected the sedeSelected to set
+	 * @param sedeSelected
+	 *            the sedeSelected to set
 	 */
 	public void setSedeSelected(Integer sedeSelected) {
 		this.sedeSelected = sedeSelected;
@@ -257,7 +276,8 @@ public class ReporteCursosControlador extends BaseController implements Serializ
 	}
 
 	/**
-	 * @param fechaIni the fechaIni to set
+	 * @param fechaIni
+	 *            the fechaIni to set
 	 */
 	public void setFechaIni(Date fechaIni) {
 		this.fechaIni = fechaIni;
@@ -271,7 +291,8 @@ public class ReporteCursosControlador extends BaseController implements Serializ
 	}
 
 	/**
-	 * @param fechaFin the fechaFin to set
+	 * @param fechaFin
+	 *            the fechaFin to set
 	 */
 	public void setFechaFin(Date fechaFin) {
 		this.fechaFin = fechaFin;
