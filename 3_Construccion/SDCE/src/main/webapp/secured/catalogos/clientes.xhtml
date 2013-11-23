@@ -9,20 +9,20 @@
 <h:body>
 	<ui:composition>
 		<h:form id="form">
-			<p:growl id="growl" showDetail="true" sticky="true" />
+			<p:growl id="growl" showDetail="true"  />
 			<p:panel id="panel" header="Buscar" closable="false"
 				toggleable="false" style="text-align:center;">
 				<h:panelGrid columns="2" style="text-align:left;">
 					<h:outputText value="#{msg.clave} :" />
 					<p:selectOneMenu id="selectCteCveFilter"
-						value="#{beanClientes.claveSelected }" style="min-width: 480px">
+						value="#{beanClientes.claveSelected }" style="width: 500px">
 						<f:selectItem itemLabel="#{msg.seleccionarClave }" itemValue="" />
 						<f:selectItems value="#{beanClientes.listaSelectClave}" />
 						<p:ajax update="selectCteNombre"
 							listener="#{beanClientes.cambiaClaveSelected}" />
 					</p:selectOneMenu>
 					<h:outputText value="#{msg.nombre} :" />
-					<p:selectOneMenu id="selectCteNombre" style="min-width: 480px"
+					<p:selectOneMenu id="selectCteNombre" style="width: 500px"
 						value="#{beanClientes.nombreSelected }">
 						<f:selectItem itemLabel="#{msg.seleccionarNombre }" itemValue="" />
 						<f:selectItems value="#{beanClientes.listaSelectNombres}" />
@@ -30,7 +30,7 @@
 							listener="#{beanClientes.cambiaNombreSelected}" />
 					</p:selectOneMenu>
 					<h:outputText value="#{msg.responsable} :" />
-					<p:selectOneMenu id="selectCteResponsable" style="min-width: 480px"
+					<p:selectOneMenu id="selectCteResponsable" style="width: 500px"
 						value="#{beanClientes.responsableSelected }">
 						<f:selectItem itemLabel="#{msg.seleccionarResponsable }"
 							itemValue="" />
@@ -52,15 +52,15 @@
 			</p:panel>
 			<p:panel>
 				<h:panelGrid columns="4" style="text-align:left;">
-					<p:commandButton id="deleteButton" value="#{msg.eliminar }" 
+					<p:commandButton id="deleteButton" value="#{msg.eliminar }" rendered="#{beanClientes.borrar}"
 						icon="ui-icon-trash" onclick="borrarDialog.show()" update="growl" />
-					<p:commandButton id="editarButton" value="#{msg.editar }" 
+					<p:commandButton id="editarButton" value="#{msg.editar }" rendered="#{beanClientes.cambios}"
 						icon="ui-icon-pencil" onclick="editarDialog.show()"
 						update=":form:displayEditar, growl" />
-					<p:commandButton id="viewButton" value="#{msg.ver }" 
+					<p:commandButton id="viewButton" value="#{msg.ver }" rendered="#{beanClientes.consulta}"
 						icon="ui-icon-search" oncomplete="verDialog.show()"
 						update=":form:displayVer, growl" />
-					<p:commandButton id="nuevoButton" value="#{msg.nuevo }" 
+					<p:commandButton id="nuevoButton" value="#{msg.nuevo }" rendered="#{beanClientes.alta}"
 						icon="ui-icon-plusthick" onclick="nuevoDialog.show()"
 						update=":form:displayNuevo, growl" />
 				</h:panelGrid>
@@ -89,7 +89,7 @@
 				</p:dataTable>
 			</p:panel>
 			<!-- Panel de Ver -->
-			<p:dialog id="dialog" header="#{msg.ver}" widgetVar="verDialog" draggable="true" position="top"
+			<p:dialog id="dialog" header="#{msg.ver}" widgetVar="verDialog" draggable="false" position="top"
 				modal="true">
 				<h:panelGrid id="displayVer" columns="2" cellpadding="4">
 					<h:panelGroup id="messagePanelVer" layout="block">
@@ -129,7 +129,7 @@
 			<!--  Inicio panel de Nuevo -->
 			<p:dialog id="dialogNuevo" header="#{msg.frsNuevoRegistro}"
 				widgetVar="nuevoDialog" closable="true" modal="true" position="top"
-				draggable="true" width="400">
+				draggable="false" width="400">
 				<h:panelGrid columns="2" width="100%" id="displayNuevo">
 					<h:outputText value="#{msg.clave}*" />
 					<p:inputText value="#{beanClientes.clienteNuevo.clave}"   label="Clave"
@@ -171,7 +171,7 @@
 			<!-- Inicio de panel de edicion -->
 			<p:dialog id="dialogEditar" header="#{msg.frsNuevoRegistro}"
 				widgetVar="editarDialog" closable="true" modal="true" position="top"
-				draggable="true" width="400">
+				draggable="false" width="400">
 				<h:panelGrid columns="2" width="100%" id="displayEditar">
 					<h:outputText value="#{msg.clave}" />
 					<h:panelGroup>
@@ -209,7 +209,6 @@
 						<p:inputText id="inputEmailSelected" label="EditarEmail" 
 							style="width: 260px; font-weight:bold; height:100%; "
 							value="#{beanClientes.selectedClienteEmail }" >
-								<f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
 							</p:inputText>
 						<p:watermark for="inputEmailSelected"
 							value="#{beanClientes.clienteSelected.email }" />

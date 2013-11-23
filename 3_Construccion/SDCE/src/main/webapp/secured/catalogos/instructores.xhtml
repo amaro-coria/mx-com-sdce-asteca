@@ -15,18 +15,18 @@
 				<h:panelGrid columns="2" style="text-align:left;">
 					<h:outputText value="#{msg.tipo} :" />
 					<p:selectOneMenu value="#{beanInstructor.selectedTipo }"
-						style="min-width: 480px">
+						style="width: 500px">
 						<f:selectItem itemLabel="#{msg.seleccionarTipo }" itemValue="" />
 						<f:selectItems value="#{beanInstructor.listSelect1}" />
 					</p:selectOneMenu>
 					<h:outputText value="#{msg.nombre} :" />
-					<p:selectOneMenu style="min-width: 480px"
+					<p:selectOneMenu style="width: 500px"
 						value="#{beanInstructor.selectedNombre }">
 						<f:selectItem itemLabel="#{msg.seleccionarNombre }" itemValue="" />
 						<f:selectItems value="#{beanInstructor.listSelect2}" />
 					</p:selectOneMenu>
 					<h:outputText value="#{msg.estatus} :" />
-					<p:selectOneMenu style="min-width: 480px"
+					<p:selectOneMenu style="width: 500px"
 						value="#{beanInstructor.selectedEstatus }">
 						<f:selectItem itemLabel="#{msg.seleccionarEst }" itemValue="" />
 						<f:selectItems value="#{beanInstructor.listSelect3}" />
@@ -108,7 +108,7 @@
 									style="height:100%; width: 260px; font-weight:bold;"
 									value="#{beanInstructor.itemSelected.dtoPersona.nombre }" />
 								<h:outputText value="#{msg.apellidoP }" />
-								<p:inputText readonly="true" style="height:100%;"
+								<p:inputText readonly="true" style="height:100%; width: 260px; font-weight:bold;"
 									value="#{beanInstructor.itemSelected.dtoPersona.apellidoP }" />
 								<h:outputText value="#{msg.apellidoM }" />
 								<p:inputText readonly="true"
@@ -137,7 +137,7 @@
 								<h:outputText value="#{msg.instructor }" />
 								<p:inputText readonly="true"
 									value="#{beanInstructor.itemSelected.tipo }"
-									style="height:100%;" />
+									style="height:100%; width: 260px; font-weight:bold;" />
 							</h:panelGrid>
 						</p:tab>
 						<p:tab title="#{msg.domicilio }">
@@ -208,46 +208,46 @@
 			<!--  Inicio panel de Nuevo -->
 			<p:dialog id="dialogNuevo" header="#{msg.frsNuevoRegistro}"
 				widgetVar="nuevoDialog" closable="true" modal="true"
-				draggable="true" width="600" height="400" position="top">
-				<h:panelGrid columns="1" width="100%" id="displayNuevo">
+				draggable="true" height="500" width="600" position="top">
+				<h:panelGrid columns="1" width="100%" id="displayNuevo"  style=" margin: 0 auto;">
 					<p:tabView>
 						<p:tab title="#{msg.datosGenerales }">
 							<h:panelGrid columns="2">
 								<h:outputText value="#{msg.noEmpleado }*" />
-								<p:inputText value="#{beanInstructor.nuevoNoEmpleado }" required="true" label="NoEmpleado"
-									style="height:100%; width: 260px; font-weight:bold;" />
+								<p:inputText value="#{beanInstructor.nuevoNoEmpleado }"   label="NoEmpleado"
+									style="height:100%; width: 120px; font-weight:bold;" />
 								<h:outputText value="#{msg.nombre }*" />
-								<p:inputText value="#{beanInstructor.nuevoNombre }" required="true" label="Nombre"
-									style="height:100%; width: 260px; font-weight:bold;" />
+								<p:inputText value="#{beanInstructor.nuevoNombre }"   label="Nombre"
+									style="height:100%; width: 120px; font-weight:bold;" />
 								<h:outputText value="#{msg.apellidoP}*" />
-								<p:inputText value="#{beanInstructor.nuevoApellidoP }" required="true" label="ApellidoPaterno"
-									style="height:100%; width: 260px; font-weight:bold;" />
+								<p:inputText value="#{beanInstructor.nuevoApellidoP }"   label="ApellidoPaterno"
+									style="height:100%; width: 120px; font-weight:bold;" />
 								<h:outputText value="#{msg.apellidoM }" />
 								<p:inputText value="#{beanInstructor.nuevoApellidoM }"
-									style="height:100%; width: 260px; font-weight:bold;" />
+									style="height:100%; width: 120px; font-weight:bold;" />
 								<h:outputText value="#{msg.fechaNacimiento }*" />
-								<p:calendar navigator="true" required="true" label="FechaNacimiento"
-									value="#{beanInstructor.nuevoFechaNac }" styleClass="dateTimeField"/>
+								<p:calendar navigator="true"   label="FechaNacimiento"
+									value="#{beanInstructor.nuevoFechaNac }" styleClass="dateTimeField2"/>
 								<h:outputText value="#{msg.lugarNacimiento }" />
 								<p:inputText value="#{beanInstructor.nuevoLugarNac }"
-									style="height:100%; width: 260px; font-weight:bold;" />
+									style="height:100%; width: 120px; font-weight:bold;" />
 								<h:outputText value="#{msg.curp }" />
 								<p:inputText value="#{beanInstructor.nuevoCURP }"
-									style="height:100%; width: 260px; font-weight:bold;" />
+									style="height:100%; width: 120px; font-weight:bold;" />
 								<h:outputText value="#{msg.rfc }" />
 								<p:inputText value="#{beanInstructor.nuevoRFC }"
-									style="height:100%; width: 260px; font-weight:bold;" />
+									style="height:100%; width: 120px; font-weight:bold;" />
 								<h:outputText value="#{msg.ife }" />
 								<p:inputText value="#{beanInstructor.nuevoIFE }"
-									style="height:100%; width: 260px; font-weight:bold;" />
+									style="height:100%; width: 120px; font-weight:bold;" />
 								<h:outputText value="#{msg.instructor }*" />
-								<p:selectOneMenu required="true" label="Tipo"
+								<p:selectOneMenu   label="Tipo" style="width: 125px; font-weight:bold;"
 									value="#{beanInstructor.nuevoIdTipoInstructor }">
 									<f:selectItems
 										value="#{beanInstructor.listSelectTipoInstructor}" />
 								</p:selectOneMenu>
 								<h:outputText value="#{msg.estatus}*" />
-								<p:selectOneMenu value="#{beanInstructor.nuevoIdEstatus}" required="true" label="Estatus">
+								<p:selectOneMenu value="#{beanInstructor.nuevoIdEstatus}"   label="Estatus" style="width: 125px; font-weight:bold;">
 									<f:selectItem itemLabel="#{msg.seleccionarEst}" itemValue="0" />
 									<f:selectItems value="#{beanInstructor.listSelectEstatus}" />
 								</p:selectOneMenu>
@@ -256,31 +256,31 @@
 						<p:tab title="#{msg.domicilio }">
 							<h:panelGrid columns="2">
 								<h:outputText value="#{msg.calle }*" />
-								<p:inputText value="#{beanInstructor.nuevoCalle }" required="true" label="Calle"
-									style="height:100%; width: 260px; font-weight:bold;" />
+								<p:inputText value="#{beanInstructor.nuevoCalle }"   label="Calle"
+									style="height:100%; width: 120px; font-weight:bold;" />
 								<h:outputText value="#{msg.noExterior }" />
 								<p:inputText value="#{beanInstructor.nuevoNoExt }"
-									style="height:100%; width: 260px; font-weight:bold;" />
+									style="height:100%; width: 120px; font-weight:bold;" />
 								<h:outputText value="#{msg.noInterior }" />
 								<p:inputText value="#{beanInstructor.nuevoNoInt }"
-									style="height:100%; width: 260px; font-weight:bold;" />
+									style="height:100%; width: 120px; font-weight:bold;" />
 								<h:outputText value="#{msg.colonia }*" />
-								<p:selectOneMenu style="width:180px; height:100%" required="true" label="Colonia"
+								<p:selectOneMenu style="width: 125px; font-weight:bold; height:100%"   label="Colonia"
 									value="#{beanInstructor.nuevoIdAsentamientoMunicipioEstado }"
 									id="nuevoSelectColonias">
 									<f:selectItems
 										value="#{beanInstructor.nuevoSelectListColonias }" />
 								</p:selectOneMenu>
 								<h:outputText value="#{msg.estado }*" />
-								<p:inputText readonly="true" id="nuevoEstadoInput" required="true" label="Estado"
-									style="height:100%; width: 260px; font-weight:bold;"
+								<p:inputText readonly="true" id="nuevoEstadoInput"   label="Estado"
+									style="height:100%; width: 120px; font-weight:bold;"
 									value="#{beanInstructor.nuevoEstado }" />
 								<h:outputText value="#{msg.delegacion }*" />
-								<p:inputText readonly="true" id="nuevoDelegacionInput" required="true" label="Delegacion"
-									style="height:100%; width: 260px; font-weight:bold;"
+								<p:inputText readonly="true" id="nuevoDelegacionInput"   label="Delegacion"
+									style="height:100%; width: 120px; font-weight:bold;"
 									value="#{beanInstructor.nuevoDelegacion }" />
 								<h:outputText value="#{msg.codigoPostal }*" />
-								<p:autoComplete id="autoCompleteCPNuevo" style="height:100%;" required="true" label="CP"
+								<p:autoComplete id="autoCompleteCPNuevo" styleClass="dateTimeField2"   label="CP"
 									value="#{beanInstructor.nuevoCPAutoComplete}"
 									completeMethod="#{beanInstructor.complete}"
 									forceSelection="true">
@@ -317,9 +317,9 @@
 									cancelLabel="#{msg.cancelar }"
 									fileUploadListener="#{beanInstructor.handlerNuevoFileUpload}"
 									mode="advanced" update=":form:growl tableNuevosDocsInstr" />
-								<p:commandButton icon="ui-icon-plusthick" style="float: right"
+								<!-- <p:commandButton icon="ui-icon-plusthick" style="float: right"
 									update="panelDocsCargadosNuevo" value="#{msg.agregar }"
-									actionListener="#{beanInstructor.addNuevoDocumento}" />
+									actionListener="#{beanInstructor.addNuevoDocumento}" /> -->
 							</h:panelGrid>
 						</p:tab>
 					</p:tabView>
@@ -427,12 +427,12 @@
 										for="editarIFEInput" />
 								</h:panelGroup>
 								<h:outputText value="#{msg.instructor }" />
-								<p:selectOneMenu
+								<p:selectOneMenu style="width: 260px; font-weight:bold;"
 									value="#{beanInstructor.editarIdTipoInstructor}">
 									<f:selectItems value="beanInstructor.listSelectTipoInstructor" />
 								</p:selectOneMenu>
 								<h:outputText value="#{msg.estatus}" />
-								<p:selectOneMenu value="#{beanInstructor.editarIdEstatus}">
+								<p:selectOneMenu value="#{beanInstructor.editarIdEstatus}" style="width: 260px; font-weight:bold;">
 									<f:selectItem itemLabel="#{msg.seleccionarEst}" itemValue="0" />
 									<f:selectItems value="#{beanInstructor.listSelectEstatus}" />
 								</p:selectOneMenu>
@@ -469,7 +469,7 @@
 								</h:panelGroup>
 								<h:outputText value="#{msg.colonia }" />
 								<p:selectOneMenu
-									style="height:100%; width: 180px; font-weight:bold;"
+									style="height:100%; width: 260px; font-weight:bold;"
 									value="#{beanInstructor.editarIdAsentamientoMunicipioEstado }"
 									id="editarSelectColonias">
 									<f:selectItems

@@ -62,7 +62,7 @@
 				</p:dataTable>
 			</p:panel>
 			<!-- Panel de Ver -->
-			<p:dialog id="dialog" header="#{msg.ver}" widgetVar="verDialog" position="top" draggable="true"
+			<p:dialog id="dialog" header="#{msg.ver}" widgetVar="verDialog" position="top" draggable="false"
 				modal="true">
 				<h:panelGrid id="displayVer" columns="2" cellpadding="4">
 					<h:panelGroup id="messagePanelVer" layout="block">
@@ -80,7 +80,7 @@
 			<!--  Inicio panel de Nuevo -->
 			<p:dialog id="dialogNuevo" header="#{msg.frsNuevoRegistro}"
 				widgetVar="nuevoDialog" closable="true" modal="true" position="top"
-				draggable="true" width="400">
+				draggable="false" width="400" resizable="true">
 				<h:panelGrid columns="2" width="100%" id="displayNuevo">
 				<h:panelGroup id="messagePanelNuevo" layout="block">
 						<h:messages errorStyle="color: red" infoStyle="color: green"
@@ -102,7 +102,7 @@
 			<!-- Inicio de panel de edicion -->
 			<p:dialog p="dialogEditar" header="#{msg.frsEditarRegistro}"
 				widgetVar="editarDialog" closable="true" modal="true" position="top"
-				draggable="true" width="400">
+				draggable="false" width="400">
 				<h:panelGrid columns="2" width="100%" id="displayEditar">
 				<h:panelGroup id="messagePanelEditar" layout="block">
 						<h:messages errorStyle="color: red" infoStyle="color: green"
