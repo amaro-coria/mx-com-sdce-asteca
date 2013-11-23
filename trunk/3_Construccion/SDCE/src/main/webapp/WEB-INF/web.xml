@@ -43,6 +43,10 @@
     </param-value>
 	</context-param>
 	<context-param>
+		<param-name>webAppRootKey</param-name>
+		<param-value>SDCE_PUBLIC</param-value>
+	</context-param>
+	<context-param>
 		<param-name>javax.faces.FACELETS_SKIP_COMMENTS</param-name>
 		<param-value>true</param-value>
 	</context-param>
@@ -103,7 +107,7 @@
 		<param-name>primefaces.PUBLIC_CAPTCHA_KEY</param-name>
 		<!-- <param-value>6Le3WOcSAAAAAOiPrVgvcVvpmRx1goixJ-L6F7Qz</param-value> -->
 		<!-- reCaptcha public key for 201.150.38.106 domain -->
-		<param-value>6Lew2ucSAAAAAPW6trGARXAMntS5UW9xDWpJ-MHp</param-value>
+		<param-value>6LertukSAAAAABOEgE19FsqE4AdJVfX_McwT0Lbq</param-value>
 		<!-- reCaptcha public key for 201.150.38.106 domain
 		<param-value>6Lew2ucSAAAAAPW6trGARXAMntS5UW9xDWpJ-MHp</param-value>
 		-->
@@ -113,7 +117,7 @@
 		<param-name>primefaces.PRIVATE_CAPTCHA_KEY</param-name>
 		<!-- <param-value>6Le3WOcSAAAAACfgyNG2PQj_Nh0HEDzkjLU4_2OB</param-value> -->
 		<!-- reCaptcha private key for 201.150.38.106 domain -->
-		<param-value>6Lew2ucSAAAAADSrRXdafBFXGSLMrcVPJTIJ7tAa</param-value>
+		<param-value>6LertukSAAAAAHpsQR5vQQ64rPaKfyiZhxnt_7Rw</param-value>
 		<!-- reCaptcha private key for 201.150.38.106 domain
 		<param-value>6Lew2ucSAAAAADSrRXdafBFXGSLMrcVPJTIJ7tAa</param-value>
 		 -->
