@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
@@ -32,11 +33,13 @@ import mx.com.asteca.comun.dto.InstructorDocumentoDTO;
 import mx.com.asteca.comun.dto.InstructorMateriaDTO;
 import mx.com.asteca.comun.dto.MateriaRegistroDTO;
 import mx.com.asteca.comun.dto.MunicipioDTO;
+import mx.com.asteca.comun.dto.PermisosBooleanDTO;
 import mx.com.asteca.comun.dto.PersonaDTO;
 import mx.com.asteca.comun.dto.TipoInstructorDTO;
 import mx.com.asteca.fachada.FachadaException;
 import mx.com.asteca.fachada.InstructorFachada;
 import mx.com.asteca.util.FileExtensionUtil;
+import mx.com.asteca.util.RandomString;
 
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
@@ -72,8 +75,8 @@ public class InstructorControlador extends BaseController implements
 	private List<SelectItem> listSelectTipoInstructor;
 	private List<SelectItem> listSelectEstatus;
 
-	private short nuevoIdEstatus;
-	private short editarIdEstatus;
+	private Short nuevoIdEstatus = 0;
+	private Short editarIdEstatus = 0;
 
 	private String selectedTipo;
 	private String selectedNombre;
@@ -90,13 +93,13 @@ public class InstructorControlador extends BaseController implements
 	private String nuevoCURP;
 	private String nuevoRFC;
 	private String nuevoIFE;
-	private short nuevoIdTipoInstructor;
+	private Short nuevoIdTipoInstructor = 0;
 	private String nuevoCalle;
 	private String nuevoNoExt;
 	private String nuevoNoInt;
-	private int nuevoCp;
+	private Integer nuevoCp = 0;
 	private String nuevoCpString;
-	private int nuevoAsentamiento;
+	private Integer nuevoAsentamiento = 0;
 	private List<MateriaRegistroDTO> nuevoListaMaterias;
 	private List<MateriaRegistroDTO> nuevoListaMateriasTarget;
 	private List<DocumentoDTO> nuevoListaDocumentos;
@@ -111,20 +114,20 @@ public class InstructorControlador extends BaseController implements
 	private String editarCURP;
 	private String editarRFC;
 	private String editarIFE;
-	private short editarIdTipoInstructor;
+	private Short editarIdTipoInstructor = 0;
 	private String editarCalle;
 	private String editarNoExt;
 	private String editarNoInt;
-	private int editarCp;
+	private Integer editarCp = 0;
 	private String editarCpString;
-	private int editarAsentamiento;
+	private Integer editarAsentamiento = 0;
 	private List<MateriaRegistroDTO> editarListaMaterias;
 	private List<MateriaRegistroDTO> editarListaMateriasTarget;
 	private List<DocumentoDTO> editarListaDocumentos;
 	private DualListModel<MateriaRegistroDTO> editarDualListModel;
 
-	private short nuevoDocEstatusSelected;
-	private short editarDocEstatusSelected;
+	private Short nuevoDocEstatusSelected =  0;
+	private Short editarDocEstatusSelected = 0;
 	private String nuevoDocRuta;
 	private String nuevoDocNombre;
 	private String editarDocRuta;
@@ -137,7 +140,7 @@ public class InstructorControlador extends BaseController implements
 	private String nuevoDelegacion;
 	private String nuevoEstado;
 	private String nuevoCPAutoComplete;
-	private int nuevoCpIdAsentamiento;
+	private Integer nuevoCpIdAsentamiento = 0;
 	private List<String> listCPString;
 	private List<Integer> listaCPs;
 
@@ -146,7 +149,7 @@ public class InstructorControlador extends BaseController implements
 	private String editarDelegacion;
 	private String editarEstado;
 	private String editarCPAutoComplete;
-	private int editarCpIdAsentamiento;
+	private Integer editarCpIdAsentamiento = 0;
 
 	private StreamedContent file;
 	private DocumentoDTO documentoTempDownload;
@@ -161,6 +164,33 @@ public class InstructorControlador extends BaseController implements
 		editarListaMaterias = new ArrayList<MateriaRegistroDTO>();
 	}
 
+private PermisosBooleanDTO permisos;
+	
+	@PostConstruct
+	public void populate(){
+		setPermisos(super.stablishSessionPermissions());
+	}
+
+	/**
+	 * @return the permisos
+	 */
+	public PermisosBooleanDTO getPermisos() {
+		return permisos;
+	}
+
+
+
+	/**
+	 * @param permisos the permisos to set
+	 */
+	public void setPermisos(PermisosBooleanDTO permisos) {
+		this.permisos = permisos;
+		super.setAlta(permisos.isAlta());
+		super.setBorrar(permisos.isBorrar());
+		super.setCambios(permisos.isEdicion());
+		super.setConsulta(permisos.isConsulta());
+		super.setImpresion(permisos.isImpresion());
+	}
 	private void initListaSelectEstatus() {
 		try {
 			if (CollectionUtils.isEmpty(listSelectEstatus)) {
@@ -183,7 +213,7 @@ public class InstructorControlador extends BaseController implements
 	private void initDocListaSelectEstatus() {
 		if (CollectionUtils.isEmpty(listaSelectEstatusDocs)) {
 			listaSelectEstatusDocs = new ArrayList<SelectItem>();
-			if (CollectionUtils.isEmpty(getDocListaEstatus())) {
+			if (!CollectionUtils.isEmpty(getDocListaEstatus())) {
 				for (EstatusDTO dto : getDocListaEstatus()) {
 					SelectItem item = new SelectItem(dto.getIdEstatus(),
 							dto.getDescEstatus());
@@ -463,11 +493,13 @@ public class InstructorControlador extends BaseController implements
 		try {
 			String ruta = fachada.getRuta();
 			File targetFolder = new File(ruta);
+			String prefijo = RandomString.getRandomString();
+			String fileName = prefijo + "_" + event.getFile().getFileName();
 			InputStream inputStream = event.getFile().getInputstream();
 			OutputStream out = new FileOutputStream(new File(targetFolder,
-					event.getFile().getFileName()));
+					fileName));
 			nuevoDocRuta = targetFolder.getAbsolutePath()
-					+ targetFolder.separator + event.getFile().getFileName();
+					+ targetFolder.separator +fileName;
 			nuevoDocNombre = event.getFile().getFileName();
 			int read = 0;
 			byte[] bytes = new byte[1024];
@@ -478,12 +510,11 @@ public class InstructorControlador extends BaseController implements
 			inputStream.close();
 			out.flush();
 			out.close();
-			addNuevoDocumento();
+			addNuevoDocumento();			
 		} catch (IOException e) {
-			e.printStackTrace();
+			super.addErrorMessage(Constantes.ERROR_SUBIDA_ARCHIVO);
 		} catch (FachadaException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			super.addErrorMessage(Constantes.ERROR_SUBIDA_ARCHIVO);
 		}
 	}
 
@@ -559,12 +590,17 @@ public class InstructorControlador extends BaseController implements
 			return false;
 		} else if (nuevoDelegacion == null || nuevoDelegacion.isEmpty()) {
 			return false;
-		} else if (nuevoCp == 0) {
+		} else if (nuevoCPAutoComplete == null || nuevoCPAutoComplete.isEmpty()) {
 			return false;
 		}
 		return true;
 	}
 
+	public void limpiarFiltrado(){
+		listaItems = null;
+		initListaItems();
+	}
+	
 	public void delete(){
 		try{
 			fachada.remove(itemSelected);
@@ -637,12 +673,20 @@ public class InstructorControlador extends BaseController implements
 					int pkMat = fachada.saveInstructorMateria(mat);
 					mat.setId(pkMat);
 				}
+				/*
+				itemNuevo.setNombre(nuevoNombre + " " + nuevoApellidoP + " " +nuevoApellidoM);
+				TipoInstructorDTO tipo = fachada.findTipoInstructorById(nuevoIdTipoInstructor);
+				EstatusDTO estatus = fachada.findEstatusById(nuevoIdEstatus);
+				itemNuevo.setTipo(tipo.getNombre());
+				itemNuevo.setEstatus(estatus.getDescEstatus());
 				if (!CollectionUtils.isEmpty(listaItems)) {
 					listaItems.add(itemNuevo);
 				} else {
 					listaItems = new ArrayList<InstructorDTO>();
 					listaItems.add(itemNuevo);
-				}
+				}*/
+				listaItems = null;
+				initListaItems();
 				RequestContext.getCurrentInstance().execute("nuevoDialog.hide()");
 				super.addInfoMessage(Constantes.MESSAGE_TITLE_INFO, Constantes.NUEVO_REGISTRO_EXITOSO);
 				addBitacora(Constantes.ACCION_NUEVO_REGISTRO, Constantes.ACCION_NUEVO_REGISTRO_EXITOSO_MENSAJE+":Instructor "+pk+":");
@@ -1017,7 +1061,7 @@ public class InstructorControlador extends BaseController implements
 	/**
 	 * @return the nuevoIdTipoInstructor
 	 */
-	public short getNuevoIdTipoInstructor() {
+	public Short getNuevoIdTipoInstructor() {
 		return nuevoIdTipoInstructor;
 	}
 
@@ -1025,7 +1069,7 @@ public class InstructorControlador extends BaseController implements
 	 * @param nuevoIdTipoInstructor
 	 *            the nuevoIdTipoInstructor to set
 	 */
-	public void setNuevoIdTipoInstructor(short nuevoIdTipoInstructor) {
+	public void setNuevoIdTipoInstructor(Short nuevoIdTipoInstructor) {
 		this.nuevoIdTipoInstructor = nuevoIdTipoInstructor;
 	}
 
@@ -1077,7 +1121,7 @@ public class InstructorControlador extends BaseController implements
 	/**
 	 * @return the nuevoCp
 	 */
-	public int getNuevoCp() {
+	public Integer getNuevoCp() {
 		return nuevoCp;
 	}
 
@@ -1085,7 +1129,7 @@ public class InstructorControlador extends BaseController implements
 	 * @param nuevoCp
 	 *            the nuevoCp to set
 	 */
-	public void setNuevoCp(int nuevoCp) {
+	public void setNuevoCp(Integer nuevoCp) {
 		this.nuevoCp = nuevoCp;
 	}
 
@@ -1107,7 +1151,7 @@ public class InstructorControlador extends BaseController implements
 	/**
 	 * @return the nuevoAsentamiento
 	 */
-	public int getNuevoAsentamiento() {
+	public Integer getNuevoAsentamiento() {
 		return nuevoAsentamiento;
 	}
 
@@ -1115,7 +1159,7 @@ public class InstructorControlador extends BaseController implements
 	 * @param nuevoAsentamiento
 	 *            the nuevoAsentamiento to set
 	 */
-	public void setNuevoAsentamiento(int nuevoAsentamiento) {
+	public void setNuevoAsentamiento(Integer nuevoAsentamiento) {
 		this.nuevoAsentamiento = nuevoAsentamiento;
 	}
 
@@ -1288,7 +1332,7 @@ public class InstructorControlador extends BaseController implements
 	/**
 	 * @return the editarIdTipoInstructor
 	 */
-	public short getEditarIdTipoInstructor() {
+	public Short getEditarIdTipoInstructor() {
 		return editarIdTipoInstructor;
 	}
 
@@ -1296,7 +1340,7 @@ public class InstructorControlador extends BaseController implements
 	 * @param editarIdTipoInstructor
 	 *            the editarIdTipoInstructor to set
 	 */
-	public void setEditarIdTipoInstructor(short editarIdTipoInstructor) {
+	public void setEditarIdTipoInstructor(Short editarIdTipoInstructor) {
 		this.editarIdTipoInstructor = editarIdTipoInstructor;
 	}
 
@@ -1348,7 +1392,7 @@ public class InstructorControlador extends BaseController implements
 	/**
 	 * @return the editarCp
 	 */
-	public int getEditarCp() {
+	public Integer getEditarCp() {
 		return editarCp;
 	}
 
@@ -1356,7 +1400,7 @@ public class InstructorControlador extends BaseController implements
 	 * @param editarCp
 	 *            the editarCp to set
 	 */
-	public void setEditarCp(int editarCp) {
+	public void setEditarCp(Integer editarCp) {
 		this.editarCp = editarCp;
 	}
 
@@ -1378,7 +1422,7 @@ public class InstructorControlador extends BaseController implements
 	/**
 	 * @return the editarAsentamiento
 	 */
-	public int getEditarAsentamiento() {
+	public Integer getEditarAsentamiento() {
 		return editarAsentamiento;
 	}
 
@@ -1386,7 +1430,7 @@ public class InstructorControlador extends BaseController implements
 	 * @param editarAsentamiento
 	 *            the editarAsentamiento to set
 	 */
-	public void setEditarAsentamiento(int editarAsentamiento) {
+	public void setEditarAsentamiento(Integer editarAsentamiento) {
 		this.editarAsentamiento = editarAsentamiento;
 	}
 
@@ -1570,7 +1614,7 @@ public class InstructorControlador extends BaseController implements
 	/**
 	 * @return the nuevoDocEstatusSelected
 	 */
-	public short getNuevoDocEstatusSelected() {
+	public Short getNuevoDocEstatusSelected() {
 		return nuevoDocEstatusSelected;
 	}
 
@@ -1578,14 +1622,14 @@ public class InstructorControlador extends BaseController implements
 	 * @param nuevoDocEstatusSelected
 	 *            the nuevoDocEstatusSelected to set
 	 */
-	public void setNuevoDocEstatusSelected(short nuevoDocEstatusSelected) {
+	public void setNuevoDocEstatusSelected(Short nuevoDocEstatusSelected) {
 		this.nuevoDocEstatusSelected = nuevoDocEstatusSelected;
 	}
 
 	/**
 	 * @return the editarDocEstatusSelected
 	 */
-	public short getEditarDocEstatusSelected() {
+	public Short getEditarDocEstatusSelected() {
 		return editarDocEstatusSelected;
 	}
 
@@ -1593,7 +1637,7 @@ public class InstructorControlador extends BaseController implements
 	 * @param editarDocEstatusSelected
 	 *            the editarDocEstatusSelected to set
 	 */
-	public void setEditarDocEstatusSelected(short editarDocEstatusSelected) {
+	public void setEditarDocEstatusSelected(Short editarDocEstatusSelected) {
 		this.editarDocEstatusSelected = editarDocEstatusSelected;
 	}
 
@@ -1740,7 +1784,7 @@ public class InstructorControlador extends BaseController implements
 	/**
 	 * @return the nuevoCpIdAsentamiento
 	 */
-	public int getNuevoCpIdAsentamiento() {
+	public Integer getNuevoCpIdAsentamiento() {
 		return nuevoCpIdAsentamiento;
 	}
 
@@ -1748,7 +1792,7 @@ public class InstructorControlador extends BaseController implements
 	 * @param nuevoCpIdAsentamiento
 	 *            the nuevoCpIdAsentamiento to set
 	 */
-	public void setNuevoCpIdAsentamiento(int nuevoCpIdAsentamiento) {
+	public void setNuevoCpIdAsentamiento(Integer nuevoCpIdAsentamiento) {
 		this.nuevoCpIdAsentamiento = nuevoCpIdAsentamiento;
 	}
 
@@ -1894,7 +1938,7 @@ public class InstructorControlador extends BaseController implements
 	/**
 	 * @return the editarCpIdAsentamiento
 	 */
-	public int getEditarCpIdAsentamiento() {
+	public Integer getEditarCpIdAsentamiento() {
 		return editarCpIdAsentamiento;
 	}
 
@@ -1902,7 +1946,7 @@ public class InstructorControlador extends BaseController implements
 	 * @param editarCpIdAsentamiento
 	 *            the editarCpIdAsentamiento to set
 	 */
-	public void setEditarCpIdAsentamiento(int editarCpIdAsentamiento) {
+	public void setEditarCpIdAsentamiento(Integer editarCpIdAsentamiento) {
 		this.editarCpIdAsentamiento = editarCpIdAsentamiento;
 	}
 
@@ -1930,7 +1974,7 @@ public class InstructorControlador extends BaseController implements
 	/**
 	 * @return the nuevoIdEstatus
 	 */
-	public short getNuevoIdEstatus() {
+	public Short getNuevoIdEstatus() {
 		return nuevoIdEstatus;
 	}
 
@@ -1938,14 +1982,14 @@ public class InstructorControlador extends BaseController implements
 	 * @param nuevoIdEstatus
 	 *            the nuevoIdEstatus to set
 	 */
-	public void setNuevoIdEstatus(short nuevoIdEstatus) {
+	public void setNuevoIdEstatus(Short nuevoIdEstatus) {
 		this.nuevoIdEstatus = nuevoIdEstatus;
 	}
 
 	/**
 	 * @return the editarIdEstatus
 	 */
-	public short getEditarIdEstatus() {
+	public Short getEditarIdEstatus() {
 		return editarIdEstatus;
 	}
 
@@ -1953,7 +1997,7 @@ public class InstructorControlador extends BaseController implements
 	 * @param editarIdEstatus
 	 *            the editarIdEstatus to set
 	 */
-	public void setEditarIdEstatus(short editarIdEstatus) {
+	public void setEditarIdEstatus(Short editarIdEstatus) {
 		this.editarIdEstatus = editarIdEstatus;
 	}
 

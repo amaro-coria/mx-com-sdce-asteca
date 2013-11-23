@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
@@ -33,6 +34,7 @@ import mx.com.asteca.comun.dto.EstatusDTO;
 import mx.com.asteca.comun.dto.EstudioDTO;
 import mx.com.asteca.comun.dto.FamiliaDTO;
 import mx.com.asteca.comun.dto.MunicipioDTO;
+import mx.com.asteca.comun.dto.PermisosBooleanDTO;
 import mx.com.asteca.comun.dto.PersonaDTO;
 import mx.com.asteca.comun.dto.ReferenciaDTO;
 import mx.com.asteca.comun.dto.TipoEstudioDTO;
@@ -43,8 +45,10 @@ import mx.com.asteca.fachada.FachadaException;
 import mx.com.asteca.fachada.ModulosFachada;
 import mx.com.asteca.util.FechaUtil;
 import mx.com.asteca.util.FileExtensionUtil;
+import mx.com.asteca.util.RandomString;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.DefaultStreamedContent;
@@ -257,6 +261,34 @@ public class AlumnoControlador extends BaseController implements Serializable {
 		itemNuevo = new AlumnoDTO();
 		documentoSelected = new DocumentoDTO();
 	}
+private PermisosBooleanDTO permisos;
+	
+	@PostConstruct
+	public void populate(){
+		setPermisos(super.stablishSessionPermissions());
+	}
+
+	/**
+	 * @return the permisos
+	 */
+	public PermisosBooleanDTO getPermisos() {
+		return permisos;
+	}
+
+
+
+	/**
+	 * @param permisos the permisos to set
+	 */
+	public void setPermisos(PermisosBooleanDTO permisos) {
+		this.permisos = permisos;
+		super.setAlta(permisos.isAlta());
+		super.setBorrar(permisos.isBorrar());
+		super.setCambios(permisos.isEdicion());
+		super.setConsulta(permisos.isConsulta());
+		super.setImpresion(permisos.isImpresion());
+	}
+	
 
 	private void initListaCPString() {
 		if (CollectionUtils.isEmpty(listCPString)) {
@@ -474,33 +506,7 @@ public class AlumnoControlador extends BaseController implements Serializable {
 			return false;
 		}else if (nuevoAlumnoTelefono == null || nuevoAlumnoTelefono.isEmpty()) {
 			return false;
-		}else if (nuevoAlumnoCp == null || nuevoAlumnoCp.isEmpty()) {
-			return false;
-		}else if (nuevoAlumnoCapacidad == null || nuevoAlumnoCapacidad.isEmpty()) {
-			return false;
-		}else if (nuevoAlumnoCapacidadAutorizada == null || nuevoAlumnoCapacidadAutorizada.isEmpty()) {
-			return false;
-		}else if (nuevoAlumnoCapacidadHoras == null || nuevoAlumnoCapacidadHoras.isEmpty()) {
-			return false;
-		}else if (nuevoAlumnoCapacidadFechaFin == null) {
-			return false;
-		}else if (nuevoAlumnoCapacidadFechaInicio == null) {
-			return false;
-		}else if (nuevoAlumnoCapacidadAcreditada == null || nuevoAlumnoCapacidadAcreditada.isEmpty()) {
-			return false;
-		}else if (nuevoAlumnoReferenciaNuevaNombre == null || nuevoAlumnoReferenciaNuevaNombre.isEmpty()) {
-			return false;
-		}else if (nuevoAlumnoReferenciaNuevaApellidoP == null || nuevoAlumnoReferenciaNuevaApellidoP.isEmpty()) {
-			return false;
-		}else if (nuevoAlumnoReferenciaNuevaApellidoM == null || nuevoAlumnoReferenciaNuevaApellidoM.isEmpty()) {
-			return false;
-		}else if (nuevoAlumnoReferenciaNuevaCalle == null || nuevoAlumnoReferenciaNuevaCalle.isEmpty()) {
-			return false;
-		}else if (nuevoAlumnoReferenciaNuevaDelegacion == null || nuevoAlumnoReferenciaNuevaDelegacion.isEmpty()) {
-			return false;
-		}else if (nuevoAlumnoReferenciaNuevaCiudad == null || nuevoAlumnoReferenciaNuevaCiudad.isEmpty()) {
-			return false;
-		}else if (nuevoAlumnoReferenciaNuevaEntidadFederativa == null || nuevoAlumnoReferenciaNuevaEntidadFederativa.isEmpty()) {
+		}else if (nuevoAlumnoCPAutoComplete == null || nuevoAlumnoCPAutoComplete.isEmpty()) {
 			return false;
 		}else if (CollectionUtils.isEmpty(nuevoAlumnoListaEstudios)) {
 			return false;
@@ -559,9 +565,13 @@ public class AlumnoControlador extends BaseController implements Serializable {
 				listaItems.add(itemNuevo);
 				listaSelect = null;
 				initListaSelect();
+				RequestContext.getCurrentInstance().execute("nuevoDialog.hide()");
+				super.addInfoMessage(Constantes.MESSAGE_TITLE_INFO, Constantes.NUEVO_REGISTRO_EXITOSO);
+				addBitacora(Constantes.ACCION_NUEVO_REGISTRO, Constantes.ACCION_NUEVO_REGISTRO_EXITOSO_MENSAJE+":Alumno "+alumnoID+":");
 			} catch (FachadaException e) {
 				super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
 						Constantes.ERROR_NUEVO_REGISTRO);
+				addBitacora(Constantes.ACCION_NUEVO_REGISTRO, Constantes.ACCION_NUEVO_REGISTRO_FALLIDO_MENSAJE+":Alumno:");
 			}
 		}else{
 			super.addWarningMessage(Constantes.WARNING_NECESITAS_LLENAR_CAMPOS_REQUERIDOS);
@@ -570,13 +580,19 @@ public class AlumnoControlador extends BaseController implements Serializable {
 
 	public void handlerNuevoAlumnoFileUpload(FileUploadEvent event) {
 		try {
+			if(nuevoAlumnoDocEstatusSelected == 0){
+				super.addWarningMessage("Debes seleccionar un estatus para el documento");
+				return;
+			}
 			String ruta = fachada.getRuta();
 			File targetFolder = new File(ruta);
+			String prefijo = RandomString.getRandomString();
+			String fileName = prefijo+"_"+event.getFile().getFileName();
 			InputStream inputStream = event.getFile().getInputstream();
 			OutputStream out = new FileOutputStream(new File(targetFolder,
-					event.getFile().getFileName()));
+					fileName));
 			nuevoAlumnoDocRuta = targetFolder.getAbsolutePath()
-					+ targetFolder.separator + event.getFile().getFileName();
+					+ targetFolder.separator + fileName;
 			int read = 0;
 			byte[] bytes = new byte[1024];
 
@@ -586,11 +602,11 @@ public class AlumnoControlador extends BaseController implements Serializable {
 			inputStream.close();
 			out.flush();
 			out.close();
+			addAlumnoNuevoDocumento();
 		} catch (IOException e) {
-			e.printStackTrace();
+			super.addErrorMessage("Error al guardar el archivo");
 		} catch (FachadaException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			super.addErrorMessage("Error al guardar el archivo");
 		}
 	}
 

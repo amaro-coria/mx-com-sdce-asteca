@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
@@ -12,6 +13,7 @@ import javax.faces.model.SelectItem;
 
 import mx.com.asteca.comun.Constantes;
 import mx.com.asteca.comun.dto.ClienteDTO;
+import mx.com.asteca.comun.dto.PermisosBooleanDTO;
 import mx.com.asteca.comun.dto.TipoClienteDTO;
 import mx.com.asteca.fachada.ClienteFachada;
 import mx.com.asteca.fachada.FachadaException;
@@ -46,12 +48,12 @@ public class ClienteControlador extends BaseController implements Serializable {
 	private List<SelectItem> listaSelectNombres;
 	private List<SelectItem> listaSelectReponsable;
 	private List<SelectItem> listaSelectClave;
-	private int idTipoCliente;
-	private int idTipoClienteFilter;
-	private int idClienteFilter;
-	private int idCliente;
-	private int selectedIdCliente;
-	private int selectedTipoCliente;
+	private Integer idTipoCliente;
+	private Integer idTipoClienteFilter;
+	private Integer idClienteFilter;
+	private Integer idCliente;
+	private Integer selectedIdCliente;
+	private Integer selectedTipoCliente;
 	private String selectedClienteNombre;
 	private String selectedClienteClave;
 	private String selectedClienteResponsable;
@@ -68,6 +70,34 @@ public class ClienteControlador extends BaseController implements Serializable {
 		tipoClienteSelected = new TipoClienteDTO();
 	}
 
+private PermisosBooleanDTO permisos;
+	
+	@PostConstruct
+	public void populate(){
+		setPermisos(super.stablishSessionPermissions());
+	}
+
+	/**
+	 * @return the permisos
+	 */
+	public PermisosBooleanDTO getPermisos() {
+		return permisos;
+	}
+
+
+
+	/**
+	 * @param permisos the permisos to set
+	 */
+	public void setPermisos(PermisosBooleanDTO permisos) {
+		this.permisos = permisos;
+		super.setAlta(permisos.isAlta());
+		super.setBorrar(permisos.isBorrar());
+		super.setCambios(permisos.isEdicion());
+		super.setConsulta(permisos.isConsulta());
+		super.setImpresion(permisos.isImpresion());
+	}
+	
 	public void refreshClientes() {
 		try {
 			listaClientes = fachadaCliente.getAll();
@@ -220,9 +250,6 @@ public class ClienteControlador extends BaseController implements Serializable {
 			addBitacora(Constantes.ACCION_UPDATE_REGISTRO, Constantes.ACCION_UPDATE_REGISTRO_FALLIDO_MENSAJE+":Cliente:");
 			return;
 		}
-		// refreshClientes();
-		super.addInfoMessage(Constantes.UPDATE_REGISTRO_EXITOSO);
-
 	}
 
 	public void saveCliente(ActionEvent e) {
@@ -262,25 +289,25 @@ public class ClienteControlador extends BaseController implements Serializable {
 	}
 
 	public boolean validaDatos() {
-		if (clienteSelected.getClave() == null
-				|| clienteSelected.getClave().isEmpty()) {
+		if (clienteNuevo.getClave() == null
+				|| clienteNuevo.getClave().isEmpty()) {
 			return false;
-		} else if (clienteSelected.getNombre() == null
-				|| clienteSelected.getNombre().isEmpty()) {
+		} else if (clienteNuevo.getNombre() == null
+				|| clienteNuevo.getNombre().isEmpty()) {
 			return false;
-		} else if (clienteSelected.getResponsable() == null
-				|| clienteSelected.getResponsable().isEmpty()) {
+		} else if (clienteNuevo.getResponsable() == null
+				|| clienteNuevo.getResponsable().isEmpty()) {
 			return false;
-		} else if (clienteSelected.getTelefono() == null
-				|| clienteSelected.getTelefono().isEmpty()) {
+		} else if (clienteNuevo.getTelefono() == null
+				|| clienteNuevo.getTelefono().isEmpty()) {
 			return false;
-		} else if (clienteSelected.getEmail() == null
-				|| clienteSelected.getTelefono().isEmpty()) {
+		} else if (clienteNuevo.getEmail() == null
+				|| clienteNuevo.getTelefono().isEmpty()) {
 			return false;
-		} else if (clienteSelected.getEmail() != null
-				&& !clienteSelected.getTelefono().isEmpty()) {
+		} else if (clienteNuevo.getEmail() != null
+				&& !clienteNuevo.getTelefono().isEmpty()) {
 			boolean b = EmailValidator.getInstance().validate(
-					clienteSelected.getEmail());
+					clienteNuevo.getEmail());
 			if (!b) {
 				super.addWarningMessage(Constantes.MESSAGE_TITLE_WARNING,
 						Constantes.WARNING_FORMATO_EMAIL);
@@ -460,7 +487,7 @@ public class ClienteControlador extends BaseController implements Serializable {
 	/**
 	 * @return the idTipoCliente
 	 */
-	public int getIdTipoCliente() {
+	public Integer getIdTipoCliente() {
 		return idTipoCliente;
 	}
 
@@ -468,14 +495,14 @@ public class ClienteControlador extends BaseController implements Serializable {
 	 * @param idTipoCliente
 	 *            the idTipoCliente to set
 	 */
-	public void setIdTipoCliente(int idTipoCliente) {
+	public void setIdTipoCliente(Integer idTipoCliente) {
 		this.idTipoCliente = idTipoCliente;
 	}
 
 	/**
 	 * @return the idTipoClienteFilter
 	 */
-	public int getIdTipoClienteFilter() {
+	public Integer getIdTipoClienteFilter() {
 		return idTipoClienteFilter;
 	}
 
@@ -483,14 +510,14 @@ public class ClienteControlador extends BaseController implements Serializable {
 	 * @param idTipoClienteFilter
 	 *            the idTipoClienteFilter to set
 	 */
-	public void setIdTipoClienteFilter(int idTipoClienteFilter) {
+	public void setIdTipoClienteFilter(Integer idTipoClienteFilter) {
 		this.idTipoClienteFilter = idTipoClienteFilter;
 	}
 
 	/**
 	 * @return the idClienteFilter
 	 */
-	public int getIdClienteFilter() {
+	public Integer getIdClienteFilter() {
 		return idClienteFilter;
 	}
 
@@ -498,7 +525,7 @@ public class ClienteControlador extends BaseController implements Serializable {
 	 * @param idClienteFilter
 	 *            the idClienteFilter to set
 	 */
-	public void setIdClienteFilter(int idClienteFilter) {
+	public void setIdClienteFilter(Integer idClienteFilter) {
 		this.idClienteFilter = idClienteFilter;
 	}
 
@@ -574,7 +601,7 @@ public class ClienteControlador extends BaseController implements Serializable {
 	/**
 	 * @return the idCliente
 	 */
-	public int getIdCliente() {
+	public Integer getIdCliente() {
 		return idCliente;
 	}
 
@@ -582,7 +609,7 @@ public class ClienteControlador extends BaseController implements Serializable {
 	 * @param idCliente
 	 *            the idCliente to set
 	 */
-	public void setIdCliente(int idCliente) {
+	public void setIdCliente(Integer idCliente) {
 		this.idCliente = idCliente;
 	}
 
@@ -619,7 +646,7 @@ public class ClienteControlador extends BaseController implements Serializable {
 	/**
 	 * @return the selectedTipoCliente
 	 */
-	public int getSelectedTipoCliente() {
+	public Integer getSelectedTipoCliente() {
 		return selectedTipoCliente;
 	}
 
@@ -627,14 +654,14 @@ public class ClienteControlador extends BaseController implements Serializable {
 	 * @param selectedTipoCliente
 	 *            the selectedTipoCliente to set
 	 */
-	public void setSelectedTipoCliente(int selectedTipoCliente) {
+	public void setSelectedTipoCliente(Integer selectedTipoCliente) {
 		this.selectedTipoCliente = selectedTipoCliente;
 	}
 
 	/**
 	 * @return the selectedIdCliente
 	 */
-	public int getSelectedIdCliente() {
+	public Integer getSelectedIdCliente() {
 		return selectedIdCliente;
 	}
 
@@ -642,7 +669,7 @@ public class ClienteControlador extends BaseController implements Serializable {
 	 * @param selectedIdCliente
 	 *            the selectedIdCliente to set
 	 */
-	public void setSelectedIdCliente(int selectedIdCliente) {
+	public void setSelectedIdCliente(Integer selectedIdCliente) {
 		this.selectedIdCliente = selectedIdCliente;
 	}
 

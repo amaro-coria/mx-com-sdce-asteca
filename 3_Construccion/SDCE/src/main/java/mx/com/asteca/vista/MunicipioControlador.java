@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -17,6 +18,7 @@ import mx.com.asteca.comun.Constantes;
 import mx.com.asteca.comun.dto.EstadoDTO;
 import mx.com.asteca.comun.dto.MunicipioDTO;
 import mx.com.asteca.comun.dto.PaisDTO;
+import mx.com.asteca.comun.dto.PermisosBooleanDTO;
 import mx.com.asteca.fachada.FachadaException;
 import mx.com.asteca.fachada.MunicipioFachada;
 
@@ -27,7 +29,8 @@ import org.primefaces.model.SelectableDataModel;
 
 @ManagedBean(name = Constantes.BEAN_MUNICIPIOS)
 @ViewScoped
-public class MunicipioControlador extends BaseController implements Serializable{
+public class MunicipioControlador extends BaseController implements
+		Serializable {
 
 	/**
 	 * 
@@ -67,7 +70,6 @@ public class MunicipioControlador extends BaseController implements Serializable
 	private List<MunicipioDTO> listaMunicipioFiltered;
 	private String selectedMunicipioNombre;
 	private String selectedMunicipioClave;
-	
 
 	public MunicipioControlador() {
 		municipioNuevo = new MunicipioDTO();
@@ -77,7 +79,33 @@ public class MunicipioControlador extends BaseController implements Serializable
 		estadoBuscarSelected = new EstadoDTO();
 		municipioBuscarSelected = new MunicipioDTO();
 	}
-	
+
+	private PermisosBooleanDTO permisos;
+
+	@PostConstruct
+	public void populate() {
+		setPermisos(super.stablishSessionPermissions());
+	}
+
+	/**
+	 * @return the permisos
+	 */
+	public PermisosBooleanDTO getPermisos() {
+		return permisos;
+	}
+
+	/**
+	 * @param permisos
+	 *            the permisos to set
+	 */
+	public void setPermisos(PermisosBooleanDTO permisos) {
+		this.permisos = permisos;
+		super.setAlta(permisos.isAlta());
+		super.setBorrar(permisos.isBorrar());
+		super.setCambios(permisos.isEdicion());
+		super.setConsulta(permisos.isConsulta());
+		super.setImpresion(permisos.isImpresion());
+	}
 
 	private void initListaSelectPaises() {
 		if (CollectionUtils.isEmpty(listaSelectPaises)) {
@@ -152,86 +180,99 @@ public class MunicipioControlador extends BaseController implements Serializable
 			try {
 				listaDTOs = fachadaMunicipio.getFromPais(idPaisFilter);
 				for (EstadoDTO dto : listaDTOs) {
-					SelectItem item = new SelectItem(dto.getIdEstado(), dto.getNombre());
+					SelectItem item = new SelectItem(dto.getIdEstado(),
+							dto.getNombre());
 					listaSelectEstados.add(item);
 				}
 			} catch (FachadaException e) {
-				super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR, Constantes.ERROR_OBTENIENDO_LISTA_CATALOGO);
+				super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
+						Constantes.ERROR_OBTENIENDO_LISTA_CATALOGO);
 			}
 		} else {
 			listaSelectEstados = new ArrayList<SelectItem>();
 		}
 	}
-	
+
 	/**
-	 * Cambia el valor de la lista de municipios dependiendo del edo seleccionado
+	 * Cambia el valor de la lista de municipios dependiendo del edo
+	 * seleccionado
 	 */
 	public void cambiaEdoSelect() {
 		if (idPaisFilter != 0) {
-			if(idEdoFilter != 0){
+			if (idEdoFilter != 0) {
 				listaSelectMunicipios = new ArrayList<SelectItem>();
 				List<MunicipioDTO> listaDTOs;
-				try{
+				try {
 					listaDTOs = fachadaMunicipio.getFromEstado(idEdoFilter);
-					for(MunicipioDTO dto : listaDTOs){
-						SelectItem item = new SelectItem(dto.getIdMunicipio(), dto.getNombre());
+					for (MunicipioDTO dto : listaDTOs) {
+						SelectItem item = new SelectItem(dto.getIdMunicipio(),
+								dto.getNombre());
 						listaSelectMunicipios.add(item);
 					}
-				}catch(FachadaException ex){
-					super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR, Constantes.ERROR_OBTENIENDO_LISTA_CATALOGO);
+				} catch (FachadaException ex) {
+					super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
+							Constantes.ERROR_OBTENIENDO_LISTA_CATALOGO);
 				}
 			}
 		} else {
 			listaSelectMunicipios = new ArrayList<SelectItem>();
 		}
 	}
-	//HASTA AQUI
-	
+
+	// HASTA AQUI
+
 	/**
 	 * Limpia los valores de busqueda
+	 * 
 	 * @param e
 	 */
-	public void limpiarFiltrado(ActionEvent e){
+	public void limpiarFiltrado(ActionEvent e) {
 		listaEstados = null;
 		initListaEstados();
 		listaSelectEstados = null;
 		initListaSelectEstados();
 	}
-	
+
 	/**
 	 * Realiza la busqueda y actualiza valores para el datatable
+	 * 
 	 * @param e
 	 */
-	public void buscarFiltrado(ActionEvent e){
-		if(idPaisFilter == 0 && idEdoFilter == 0){
+	public void buscarFiltrado(ActionEvent e) {
+		if (idPaisFilter == 0 && idEdoFilter == 0) {
 			initListaSelectEstados();
-		}else if(idPaisFilter != 0 && idEdoFilter ==0){
+		} else if (idPaisFilter != 0 && idEdoFilter == 0) {
 			cambiaPaisSelect();
-		}else if(idPaisFilter != 0 && idEdoFilter != 0 && idMunicipioFilter == 0 ){
+		} else if (idPaisFilter != 0 && idEdoFilter != 0
+				&& idMunicipioFilter == 0) {
 			cambiaEdoSelect();
-		}else if(idPaisFilter != 0 && idEdoFilter != 0 && idMunicipioFilter != 0){
+		} else if (idPaisFilter != 0 && idEdoFilter != 0
+				&& idMunicipioFilter != 0) {
 			try {
-				MunicipioDTO municipio = fachadaMunicipio.getFromMunicipioEdo(idEdoFilter, idMunicipioFilter);
+				MunicipioDTO municipio = fachadaMunicipio.getFromMunicipioEdo(
+						idEdoFilter, idMunicipioFilter);
 				listaMunicipios = new ArrayList<MunicipioDTO>();
 				listaMunicipios.add(municipio);
 			} catch (FachadaException e1) {
-				super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR, Constantes.ERROR_OBTENIENDO_LISTA_CATALOGO);
+				super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
+						Constantes.ERROR_OBTENIENDO_LISTA_CATALOGO);
 			}
 		}
 	}
-	
+
 	/**
-	 * Cancela el borrado del municipio seleccionado. 
+	 * Cancela el borrado del municipio seleccionado.
+	 * 
 	 * @param e
 	 */
-	public void cancelDeleteMunicipio(ActionEvent e){
+	public void cancelDeleteMunicipio(ActionEvent e) {
 		setSelectedMunicipioClave("");
 		setSelectedMunicipioNombre("");
 	}
-	
-	
+
 	/**
 	 * Borra el estado seleccionado
+	 * 
 	 * @param e
 	 */
 	public void deleteMunicipio(ActionEvent e) {
@@ -241,116 +282,140 @@ public class MunicipioControlador extends BaseController implements Serializable
 			cambiaPaisSelect();
 			cambiaEdoSelect();
 		} catch (FachadaException e1) {
-			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR, Constantes.ERROR_DELETE_REGISTRO);
-			addBitacora(Constantes.ACCION_DELETE_REGISTRO, Constantes.ACCION_DELETE_REGISTRO_FALLIDO_MENSAJE+":Municipio"+municipioSelected.getIdMunicipio()+":");
+			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
+					Constantes.ERROR_DELETE_REGISTRO);
+			addBitacora(Constantes.ACCION_DELETE_REGISTRO,
+					Constantes.ACCION_DELETE_REGISTRO_FALLIDO_MENSAJE
+							+ ":Municipio" + municipioSelected.getIdMunicipio()
+							+ ":");
 			return;
 		}
 		setSelectedMunicipioClave("");
 		setSelectedMunicipioNombre("");
 		super.addInfoMessage(Constantes.DELETE_REGISTRO_EXITOSO);
-		addBitacora(Constantes.ACCION_DELETE_REGISTRO, Constantes.ACCION_DELETE_REGISTRO_EXITOSO_MENSAJE+":Municipio"+municipioSelected.getIdMunicipio()+":");
+		addBitacora(Constantes.ACCION_DELETE_REGISTRO,
+				Constantes.ACCION_DELETE_REGISTRO_EXITOSO_MENSAJE
+						+ ":Municipio" + municipioSelected.getIdMunicipio()
+						+ ":");
 	}
-	
-	
+
 	/**
 	 * Actualiza el estado seleccionado
+	 * 
 	 * @param e
 	 */
 	public void updateMunicipio(ActionEvent e) {
 		if (idPaisEdit == 0) {
-			super.addWarningMessage(Constantes.MESSAGE_TITLE_WARNING, Constantes.ERROR_NECESITAS_SELECCIONAR_UN_PAIS);
+			super.addWarningMessage(Constantes.MESSAGE_TITLE_WARNING,
+					Constantes.ERROR_NECESITAS_SELECCIONAR_UN_PAIS);
 			return;
 		}
-		if(idEdoEdit == 0){
-			super.addWarningMessage(Constantes.MESSAGE_TITLE_WARNING, Constantes.ERROR_NECESITAS_SELECCIONAR_UN_EDO);
+		if (idEdoEdit == 0) {
+			super.addWarningMessage(Constantes.MESSAGE_TITLE_WARNING,
+					Constantes.ERROR_NECESITAS_SELECCIONAR_UN_EDO);
 			return;
 		}
-		
+
 		municipioSelected.setIdPais(idPaisEdit);
 		municipioSelected.setActivo(selectedMunicipioActivo == true ? (short) 1
 				: (short) 0);
-		if(selectedMunicipioNombre != null && !selectedMunicipioNombre.isEmpty()){
+		if (selectedMunicipioNombre != null
+				&& !selectedMunicipioNombre.isEmpty()) {
 			estadoSelected.setNombre(selectedMunicipioNombre);
 		}
-		if(selectedMunicipioClave != null && !selectedMunicipioClave.isEmpty()){
+		if (selectedMunicipioClave != null && !selectedMunicipioClave.isEmpty()) {
 			estadoSelected.setClave(selectedMunicipioClave);
 		}
 		try {
 			fachadaMunicipio.update(municipioSelected);
 			int indexListFilter = listaMunicipios.indexOf(municipioSelected);
-			if(indexListFilter > 0){
+			if (indexListFilter > 0) {
 				listaMunicipios.set(indexListFilter, municipioSelected);
 			}
 			cambiaPaisSelect();
 		} catch (FachadaException e1) {
-			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR, Constantes.ERROR_UPDATE_REGISTRO);
-			addBitacora(Constantes.ACCION_UPDATE_REGISTRO, Constantes.ACCION_UPDATE_REGISTRO_FALLIDO_MENSAJE+":Municipio:");
+			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
+					Constantes.ERROR_UPDATE_REGISTRO);
+			addBitacora(Constantes.ACCION_UPDATE_REGISTRO,
+					Constantes.ACCION_UPDATE_REGISTRO_FALLIDO_MENSAJE
+							+ ":Municipio:");
 			return;
 		}
-		super.addInfoMessage(Constantes.MESSAGE_TITLE_INFO, Constantes.UPDATE_REGISTRO_EXITOSO);		
-		addBitacora(Constantes.ACCION_UPDATE_REGISTRO, Constantes.ACCION_UPDATE_REGISTRO_EXITOSO_MENSAJE+":Municipio "+municipioSelected.getIdMunicipio()+":");
+		super.addInfoMessage(Constantes.MESSAGE_TITLE_INFO,
+				Constantes.UPDATE_REGISTRO_EXITOSO);
+		addBitacora(Constantes.ACCION_UPDATE_REGISTRO,
+				Constantes.ACCION_UPDATE_REGISTRO_EXITOSO_MENSAJE
+						+ ":Municipio " + municipioSelected.getIdMunicipio()
+						+ ":");
 	}
-	
+
 	/**
 	 * Guarda el nuevo estado en BD
+	 * 
 	 * @param e
 	 */
 	public void saveEstado(ActionEvent e) {
 		if (idPaisNuevo == 0) {
-			super.addWarningMessage(Constantes.MESSAGE_TITLE_WARNING, Constantes.ERROR_NECESITAS_SELECCIONAR_UN_PAIS);
+			super.addWarningMessage(Constantes.MESSAGE_TITLE_WARNING,
+					Constantes.ERROR_NECESITAS_SELECCIONAR_UN_PAIS);
 			return;
 		}
-		
-		if(idEdoNuevo == 0){
-			super.addWarningMessage(Constantes.MESSAGE_TITLE_WARNING, Constantes.ERROR_NECESITAS_SELECCIONAR_UN_EDO);
+
+		if (idEdoNuevo == 0) {
+			super.addWarningMessage(Constantes.MESSAGE_TITLE_WARNING,
+					Constantes.ERROR_NECESITAS_SELECCIONAR_UN_EDO);
 			return;
 		}
-		if(!validate()){
-			super.addWarningMessage(Constantes.MESSAGE_TITLE_WARNING, Constantes.WARNING_NECESITAS_LLENAR_CAMPOS_REQUERIDOS);
+		if (!validate()) {
+			super.addWarningMessage(Constantes.MESSAGE_TITLE_WARNING,
+					Constantes.WARNING_NECESITAS_LLENAR_CAMPOS_REQUERIDOS);
 			return;
 		}
 		municipioNuevo.setIdPais(idPaisNuevo);
-		municipioNuevo
-				.setActivo(nuevoMunicipioActivo == true ? (short) 1 : (short) 0);
+		municipioNuevo.setActivo(nuevoMunicipioActivo == true ? (short) 1
+				: (short) 0);
 		try {
 			int pk = fachadaMunicipio.save(municipioNuevo);
-			municipioNuevo.setIdMunicipio(pk);			
+			municipioNuevo.setIdMunicipio(pk);
 			listaMunicipios.add(municipioNuevo);
 			cambiaPaisSelect();
 			super.addInfoMessage(Constantes.NUEVO_REGISTRO_EXITOSO);
 			RequestContext.getCurrentInstance().execute("nuevoDialog.hide()");
-			addBitacora(Constantes.ACCION_NUEVO_REGISTRO, Constantes.ACCION_NUEVO_REGISTRO_EXITOSO_MENSAJE+":Municipio "+municipioNuevo.getIdMunicipio()+":");
-			//refreshEstados();
+			addBitacora(Constantes.ACCION_NUEVO_REGISTRO,
+					Constantes.ACCION_NUEVO_REGISTRO_EXITOSO_MENSAJE
+							+ ":Municipio " + municipioNuevo.getIdMunicipio()
+							+ ":");
+			// refreshEstados();
 		} catch (FachadaException e1) {
-			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR, Constantes.ERROR_NUEVO_REGISTRO);
-			addBitacora(Constantes.ACCION_NUEVO_REGISTRO, Constantes.ACCION_NUEVO_REGISTRO_FALLIDO_MENSAJE+":Municipio:");
+			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
+					Constantes.ERROR_NUEVO_REGISTRO);
+			addBitacora(Constantes.ACCION_NUEVO_REGISTRO,
+					Constantes.ACCION_NUEVO_REGISTRO_FALLIDO_MENSAJE
+							+ ":Municipio:");
 			return;
 		}
 		municipioNuevo = new MunicipioDTO();
 	}
-	
-	
-	public boolean validate(){
-		if(municipioNuevo.getNombre() == null || municipioNuevo.getNombre().isEmpty()){
+
+	public boolean validate() {
+		if (municipioNuevo.getNombre() == null
+				|| municipioNuevo.getNombre().isEmpty()) {
 			return false;
 		}
 		return true;
 	}
-	
-	public void saveMunicipioCancel(ActionEvent e){
-		municipioNuevo = new MunicipioDTO();
-	}	
-	
-	public void onRowSelect(SelectEvent event) {  
-		System.out.println("OBJECT:::::::::"+event.getObject());
-		System.out.println("Source::::::::::::"+event.getSource());
-    } 
-	
-	
 
-		
-	
-	// --------------------- GETTERS & SETTERS  ------------------------------- //
+	public void saveMunicipioCancel(ActionEvent e) {
+		municipioNuevo = new MunicipioDTO();
+	}
+
+	public void onRowSelect(SelectEvent event) {
+		System.out.println("OBJECT:::::::::" + event.getObject());
+		System.out.println("Source::::::::::::" + event.getSource());
+	}
+
+	// --------------------- GETTERS & SETTERS -------------------------------
+	// //
 
 	/**
 	 * @return the municipioSelected
@@ -396,7 +461,6 @@ public class MunicipioControlador extends BaseController implements Serializable
 	public void setPaisSelected(PaisDTO paisSelected) {
 		this.paisSelected = paisSelected;
 	}
-
 
 	/**
 	 * @return the listaEstados
@@ -498,7 +562,6 @@ public class MunicipioControlador extends BaseController implements Serializable
 	public void setActivoEditar(String activoEditar) {
 		this.activoEditar = activoEditar;
 	}
-
 
 	/**
 	 * @return the estadoBuscarSelected
@@ -623,10 +686,6 @@ public class MunicipioControlador extends BaseController implements Serializable
 		this.municipioSelectedId = municipioSelectedId;
 	}
 
-
-
-
-
 	/**
 	 * @return the idPaisNuevo
 	 */
@@ -634,14 +693,13 @@ public class MunicipioControlador extends BaseController implements Serializable
 		return idPaisNuevo;
 	}
 
-
 	/**
-	 * @param idPaisNuevo the idPaisNuevo to set
+	 * @param idPaisNuevo
+	 *            the idPaisNuevo to set
 	 */
 	public void setIdPaisNuevo(int idPaisNuevo) {
 		this.idPaisNuevo = idPaisNuevo;
 	}
-
 
 	/**
 	 * @return the idEdoNuevo
@@ -650,14 +708,13 @@ public class MunicipioControlador extends BaseController implements Serializable
 		return idEdoNuevo;
 	}
 
-
 	/**
-	 * @param idEdoNuevo the idEdoNuevo to set
+	 * @param idEdoNuevo
+	 *            the idEdoNuevo to set
 	 */
 	public void setIdEdoNuevo(int idEdoNuevo) {
 		this.idEdoNuevo = idEdoNuevo;
 	}
-
 
 	/**
 	 * @return the idPaisEdit
@@ -666,14 +723,13 @@ public class MunicipioControlador extends BaseController implements Serializable
 		return idPaisEdit;
 	}
 
-
 	/**
-	 * @param idPaisEdit the idPaisEdit to set
+	 * @param idPaisEdit
+	 *            the idPaisEdit to set
 	 */
 	public void setIdPaisEdit(int idPaisEdit) {
 		this.idPaisEdit = idPaisEdit;
 	}
-
 
 	/**
 	 * @return the idEdoEdit
@@ -682,14 +738,13 @@ public class MunicipioControlador extends BaseController implements Serializable
 		return idEdoEdit;
 	}
 
-
 	/**
-	 * @param idEdoEdit the idEdoEdit to set
+	 * @param idEdoEdit
+	 *            the idEdoEdit to set
 	 */
 	public void setIdEdoEdit(int idEdoEdit) {
 		this.idEdoEdit = idEdoEdit;
 	}
-
 
 	/**
 	 * @return the idPaisFilter
@@ -698,14 +753,13 @@ public class MunicipioControlador extends BaseController implements Serializable
 		return idPaisFilter;
 	}
 
-
 	/**
-	 * @param idPaisFilter the idPaisFilter to set
+	 * @param idPaisFilter
+	 *            the idPaisFilter to set
 	 */
 	public void setIdPaisFilter(int idPaisFilter) {
 		this.idPaisFilter = idPaisFilter;
 	}
-
 
 	/**
 	 * @return the idEdoFilter
@@ -714,14 +768,13 @@ public class MunicipioControlador extends BaseController implements Serializable
 		return idEdoFilter;
 	}
 
-
 	/**
-	 * @param idEdoFilter the idEdoFilter to set
+	 * @param idEdoFilter
+	 *            the idEdoFilter to set
 	 */
 	public void setIdEdoFilter(int idEdoFilter) {
 		this.idEdoFilter = idEdoFilter;
 	}
-
 
 	/**
 	 * @return the idMunicipioFilter
@@ -730,14 +783,13 @@ public class MunicipioControlador extends BaseController implements Serializable
 		return idMunicipioFilter;
 	}
 
-
 	/**
-	 * @param idMunicipioFilter the idMunicipioFilter to set
+	 * @param idMunicipioFilter
+	 *            the idMunicipioFilter to set
 	 */
 	public void setIdMunicipioFilter(int idMunicipioFilter) {
 		this.idMunicipioFilter = idMunicipioFilter;
 	}
-
 
 	/**
 	 * @return the listaMunicipioFiltered
@@ -746,14 +798,14 @@ public class MunicipioControlador extends BaseController implements Serializable
 		return listaMunicipioFiltered;
 	}
 
-
 	/**
-	 * @param listaMunicipioFiltered the listaMunicipioFiltered to set
+	 * @param listaMunicipioFiltered
+	 *            the listaMunicipioFiltered to set
 	 */
-	public void setListaMunicipioFiltered(List<MunicipioDTO> listaMunicipioFiltered) {
+	public void setListaMunicipioFiltered(
+			List<MunicipioDTO> listaMunicipioFiltered) {
 		this.listaMunicipioFiltered = listaMunicipioFiltered;
 	}
-
 
 	/**
 	 * @return the selectedMunicipioNombre
@@ -762,14 +814,13 @@ public class MunicipioControlador extends BaseController implements Serializable
 		return selectedMunicipioNombre;
 	}
 
-
 	/**
-	 * @param selectedMunicipioNombre the selectedMunicipioNombre to set
+	 * @param selectedMunicipioNombre
+	 *            the selectedMunicipioNombre to set
 	 */
 	public void setSelectedMunicipioNombre(String selectedMunicipioNombre) {
 		this.selectedMunicipioNombre = selectedMunicipioNombre;
 	}
-
 
 	/**
 	 * @return the selectedMunicipioClave
@@ -778,14 +829,13 @@ public class MunicipioControlador extends BaseController implements Serializable
 		return selectedMunicipioClave;
 	}
 
-
 	/**
-	 * @param selectedMunicipioClave the selectedMunicipioClave to set
+	 * @param selectedMunicipioClave
+	 *            the selectedMunicipioClave to set
 	 */
 	public void setSelectedMunicipioClave(String selectedMunicipioClave) {
 		this.selectedMunicipioClave = selectedMunicipioClave;
 	}
-
 
 	/**
 	 * @return the selectedMunicipioActivo
@@ -794,14 +844,13 @@ public class MunicipioControlador extends BaseController implements Serializable
 		return selectedMunicipioActivo;
 	}
 
-
 	/**
-	 * @param selectedMunicipioActivo the selectedMunicipioActivo to set
+	 * @param selectedMunicipioActivo
+	 *            the selectedMunicipioActivo to set
 	 */
 	public void setSelectedMunicipioActivo(boolean selectedMunicipioActivo) {
 		this.selectedMunicipioActivo = selectedMunicipioActivo;
 	}
-
 
 	/**
 	 * @return the nuevoMunicipioActivo
@@ -810,14 +859,13 @@ public class MunicipioControlador extends BaseController implements Serializable
 		return nuevoMunicipioActivo;
 	}
 
-
 	/**
-	 * @param nuevoMunicipioActivo the nuevoMunicipioActivo to set
+	 * @param nuevoMunicipioActivo
+	 *            the nuevoMunicipioActivo to set
 	 */
 	public void setNuevoMunicipioActivo(boolean nuevoMunicipioActivo) {
 		this.nuevoMunicipioActivo = nuevoMunicipioActivo;
 	}
-
 
 	@Override
 	String getModulo() {

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
@@ -13,6 +14,7 @@ import javax.faces.model.SelectItem;
 import mx.com.asteca.comun.Constantes;
 import mx.com.asteca.comun.dto.CatGralDTO;
 import mx.com.asteca.comun.dto.EquipoDTO;
+import mx.com.asteca.comun.dto.PermisosBooleanDTO;
 import mx.com.asteca.fachada.EquipoFachada;
 import mx.com.asteca.fachada.FachadaException;
 
@@ -42,8 +44,8 @@ public class EquipoControlador extends BaseController implements Serializable {
 	private List<SelectItem> listaSelectDsc;
 	private List<SelectItem> listaSelectTipo;
 	private List<SelectItem> listaSelectTiposEquipoCatGral;
-	private int idCatGralSelected;
-	private int idCatGralNuevo;
+	private Integer idCatGralSelected;
+	private Integer idCatGralNuevo;
 	private String selectedDsc;
 	private String selectedClave;
 	private String selectedTipo;
@@ -61,6 +63,33 @@ public class EquipoControlador extends BaseController implements Serializable {
 		catGralNuevo = new CatGralDTO();
 	}
 
+private PermisosBooleanDTO permisos;
+	
+	@PostConstruct
+	public void populate(){
+		setPermisos(super.stablishSessionPermissions());
+	}
+
+	/**
+	 * @return the permisos
+	 */
+	public PermisosBooleanDTO getPermisos() {
+		return permisos;
+	}
+
+
+
+	/**
+	 * @param permisos the permisos to set
+	 */
+	public void setPermisos(PermisosBooleanDTO permisos) {
+		this.permisos = permisos;
+		super.setAlta(permisos.isAlta());
+		super.setBorrar(permisos.isBorrar());
+		super.setCambios(permisos.isEdicion());
+		super.setConsulta(permisos.isConsulta());
+		super.setImpresion(permisos.isImpresion());
+	}
 	/**
 	 * Inicializa la lista de equipos
 	 */
@@ -455,7 +484,7 @@ public class EquipoControlador extends BaseController implements Serializable {
 	/**
 	 * @return the idCatGralSelected
 	 */
-	public int getIdCatGralSelected() {
+	public Integer getIdCatGralSelected() {
 		return idCatGralSelected;
 	}
 
@@ -463,14 +492,14 @@ public class EquipoControlador extends BaseController implements Serializable {
 	 * @param idCatGralSelected
 	 *            the idCatGralSelected to set
 	 */
-	public void setIdCatGralSelected(int idCatGralSelected) {
+	public void setIdCatGralSelected(Integer idCatGralSelected) {
 		this.idCatGralSelected = idCatGralSelected;
 	}
 
 	/**
 	 * @return the idCatGralNuevo
 	 */
-	public int getIdCatGralNuevo() {
+	public Integer getIdCatGralNuevo() {
 		return idCatGralNuevo;
 	}
 
@@ -478,7 +507,7 @@ public class EquipoControlador extends BaseController implements Serializable {
 	 * @param idCatGralNuevo
 	 *            the idCatGralNuevo to set
 	 */
-	public void setIdCatGralNuevo(int idCatGralNuevo) {
+	public void setIdCatGralNuevo(Integer idCatGralNuevo) {
 		this.idCatGralNuevo = idCatGralNuevo;
 	}
 

@@ -61,4 +61,11 @@ public interface InstructorFachada extends BaseFachada<InstructorDTO, Integer> {
 
 	int saveDocumento(DocumentoDTO dto) throws FachadaException;
 
+	List<InstructorDTO> findInstructoresCapacitados(int idMateriaRegistro)
+			throws FachadaException;
+
+	TipoInstructorDTO findTipoInstructorById(short id) throws FachadaException;
+
+	EstatusDTO findEstatusById(short id) throws FachadaException;
+
 }

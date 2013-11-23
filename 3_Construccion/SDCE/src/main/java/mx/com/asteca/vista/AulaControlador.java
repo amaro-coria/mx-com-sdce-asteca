@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
@@ -16,6 +17,7 @@ import javax.faces.model.SelectItem;
 import mx.com.asteca.comun.Constantes;
 import mx.com.asteca.comun.dto.AulaDTO;
 import mx.com.asteca.comun.dto.CatGralDTO;
+import mx.com.asteca.comun.dto.PermisosBooleanDTO;
 import mx.com.asteca.fachada.AulaFachada;
 import mx.com.asteca.fachada.BaseFachada;
 import mx.com.asteca.fachada.FachadaException;
@@ -55,8 +57,8 @@ public class AulaControlador extends BaseController implements Serializable {
 	 * Lista con el nombre como llave
 	 */
 	private List<SelectItem> listaSelectItems;
-	private int idCatGralSelected;
-	private int idCatGralNuevo;
+	private Integer idCatGralSelected = 0;
+	private Integer idCatGralNuevo = 0;
 	private String selectedItemFilter;
 	private String selectedDscEdit;
 	private String selectedClaveEdit;
@@ -73,6 +75,34 @@ public class AulaControlador extends BaseController implements Serializable {
 		catGralNuevo = new CatGralDTO();
 	}
 
+private PermisosBooleanDTO permisos;
+	
+	@PostConstruct
+	public void populate(){
+		setPermisos(super.stablishSessionPermissions());
+	}
+
+	/**
+	 * @return the permisos
+	 */
+	public PermisosBooleanDTO getPermisos() {
+		return permisos;
+	}
+
+
+
+	/**
+	 * @param permisos the permisos to set
+	 */
+	public void setPermisos(PermisosBooleanDTO permisos) {
+		this.permisos = permisos;
+		super.setAlta(permisos.isAlta());
+		super.setBorrar(permisos.isBorrar());
+		super.setCambios(permisos.isEdicion());
+		super.setConsulta(permisos.isConsulta());
+		super.setImpresion(permisos.isImpresion());
+	}
+	
 	private void initListaItems() {
 		if (CollectionUtils.isEmpty(listaItems)) {
 			try {
@@ -433,7 +463,7 @@ public class AulaControlador extends BaseController implements Serializable {
 	/**
 	 * @return the idCatGralSelected
 	 */
-	public int getIdCatGralSelected() {
+	public Integer getIdCatGralSelected() {
 		return idCatGralSelected;
 	}
 
@@ -441,14 +471,14 @@ public class AulaControlador extends BaseController implements Serializable {
 	 * @param idCatGralSelected
 	 *            the idCatGralSelected to set
 	 */
-	public void setIdCatGralSelected(int idCatGralSelected) {
+	public void setIdCatGralSelected(Integer idCatGralSelected) {
 		this.idCatGralSelected = idCatGralSelected;
 	}
 
 	/**
 	 * @return the idCatGralNuevo
 	 */
-	public int getIdCatGralNuevo() {
+	public Integer getIdCatGralNuevo() {
 		return idCatGralNuevo;
 	}
 
@@ -456,7 +486,7 @@ public class AulaControlador extends BaseController implements Serializable {
 	 * @param idCatGralNuevo
 	 *            the idCatGralNuevo to set
 	 */
-	public void setIdCatGralNuevo(int idCatGralNuevo) {
+	public void setIdCatGralNuevo(Integer idCatGralNuevo) {
 		this.idCatGralNuevo = idCatGralNuevo;
 	}
 

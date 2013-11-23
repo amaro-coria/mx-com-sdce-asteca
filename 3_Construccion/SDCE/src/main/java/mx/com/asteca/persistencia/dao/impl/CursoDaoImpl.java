@@ -18,6 +18,18 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class CursoDaoImpl extends BaseDAOImpl<Cursos, Integer>  implements CursoDAO{
 
+	@Override
+	public Cursos findByGrupo(int grupo) throws PersistenciaException{
+		try{
+			Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(Cursos.class);
+			criteria.add(Restrictions.eq("grupo", grupo));
+			Cursos mapping = (Cursos) criteria.uniqueResult();
+			return mapping;
+		} catch (Exception ex) {
+			throw new PersistenciaException("Error en findByGrupo DAO:"
+					+ ex.getMessage(), ex);
+		}
+	}
 	
 	@Override
 	public Cursos findByReferencia(String referencia) throws PersistenciaException{

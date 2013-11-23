@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import mx.com.asteca.comun.Constantes;
 import mx.com.asteca.comun.dto.MateriaRegistroDTO;
+import mx.com.asteca.comun.dto.PermisosBooleanDTO;
 import mx.com.asteca.fachada.FachadaException;
 import mx.com.asteca.fachada.MateriaRegistroFachada;
 
@@ -53,6 +55,33 @@ public class MateriaRegistroControlador extends BaseController implements Serial
 		itemNuevo = new MateriaRegistroDTO();
 	}
 	
+private PermisosBooleanDTO permisos;
+	
+	@PostConstruct
+	public void populate(){
+		setPermisos(super.stablishSessionPermissions());
+	}
+
+	/**
+	 * @return the permisos
+	 */
+	public PermisosBooleanDTO getPermisos() {
+		return permisos;
+	}
+
+
+
+	/**
+	 * @param permisos the permisos to set
+	 */
+	public void setPermisos(PermisosBooleanDTO permisos) {
+		this.permisos = permisos;
+		super.setAlta(permisos.isAlta());
+		super.setBorrar(permisos.isBorrar());
+		super.setCambios(permisos.isEdicion());
+		super.setConsulta(permisos.isConsulta());
+		super.setImpresion(permisos.isImpresion());
+	}
 	private void initListItems(){
 		if(CollectionUtils.isEmpty(listItems)){
 			try {

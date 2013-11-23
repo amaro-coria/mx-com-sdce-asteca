@@ -7,6 +7,7 @@ import java.util.List;
 
 import mx.com.asteca.comun.dto.CatGralDTO;
 import mx.com.asteca.comun.dto.ConfDescargasDTO;
+import mx.com.asteca.comun.dto.DocumentoDTO;
 import mx.com.asteca.comun.dto.MateriaRegistroDTO;
 import mx.com.asteca.comun.dto.ProgramaEstudiosAutorizacionDTO;
 import mx.com.asteca.comun.dto.ProgramaEstudiosDTO;
@@ -164,6 +165,10 @@ public class ProgramaEstudiosFachadaImpl extends
 	@Override
 	public int saveAutorizacion(ProgramaEstudiosAutorizacionDTO dto) throws FachadaException{
 		try{
+			DocumentoDTO doc = dto.getDoc();			
+			int pkDoc = servicioDocs.save(doc);
+			doc.setIdDoc(pkDoc);
+			dto.setDoc(doc);
 			int pk = servicioAutorizaciones.save(dto);
 			return pk;
 		}catch(ServicioException e){

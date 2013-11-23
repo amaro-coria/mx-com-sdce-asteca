@@ -22,4 +22,6 @@ public interface CursoServicio extends BaseService<CursoDTO, Integer, Cursos>{
 
 	CursoDTO findByReferencia(String referencia) throws ServicioException;
 
+	CursoDTO findByGrupo(int idGrupo) throws ServicioException;
+
 }

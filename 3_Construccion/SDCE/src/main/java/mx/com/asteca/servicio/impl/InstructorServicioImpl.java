@@ -3,6 +3,8 @@
  */
 package mx.com.asteca.servicio.impl;
 
+import java.util.List;
+
 import mx.com.asteca.comun.Constantes;
 import mx.com.asteca.comun.dto.InstructorDTO;
 import mx.com.asteca.persistencia.PersistenciaException;
@@ -52,6 +54,18 @@ public class InstructorServicioImpl extends
 			daoInstructor.removeDependencias(instructores);
 		}catch(PersistenciaException e){
 			throw new ServicioException("Error en  removeDependencias: "+e.getMessage(), e);
+		}
+	}
+	
+	@Override
+	@Transactional(readOnly=true)
+	public List<InstructorDTO> findInstructoresHabilitadosParaMateria(int idMateriaRegistro) throws ServicioException{
+		try{
+			List<Instructores> listaInstructores = daoInstructor.findInstructoresHabilitados(idMateriaRegistro);
+			List<InstructorDTO> listaDTOs = assemblerInstructor.getDTOListTransform(listaInstructores);
+			return listaDTOs;
+		}catch(PersistenciaException e){
+			throw new ServicioException("Error en  findInstructoresHabilitadosParaMateria: "+e.getMessage(), e);
 		}
 	}
 

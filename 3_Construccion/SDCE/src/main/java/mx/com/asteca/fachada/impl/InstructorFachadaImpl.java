@@ -81,6 +81,36 @@ public class InstructorFachadaImpl extends
 	}
 	
 	@Override
+	public TipoInstructorDTO findTipoInstructorById(short id) throws FachadaException{
+		try{
+			TipoInstructorDTO dto = servicioTipoInstructor.findByPK(id);
+			return dto;
+		}catch(ServicioException e){
+			throw new FachadaException("Error en findTipoInstructorById: "+e.getMessage(), e);
+		}
+	}
+	
+	@Override
+	public EstatusDTO findEstatusById(short id) throws FachadaException{
+		try{
+			EstatusDTO dto  = servicioEstatus.findByPK(id);
+			return dto;
+		}catch(ServicioException e){
+			throw new FachadaException("Error en findEstatusById: "+e.getMessage(), e);
+		}
+	}
+	
+	@Override
+	public List<InstructorDTO> findInstructoresCapacitados(int idMateriaRegistro) throws FachadaException{
+		try{
+			List<InstructorDTO> listaInstructores = servicioInstructor.findInstructoresHabilitadosParaMateria(idMateriaRegistro);
+			return listaInstructores;
+		}catch(ServicioException e){
+			throw new FachadaException("Error en findInstructoresCapacitados: "+e.getMessage(), e);
+		}
+	}
+	
+	@Override
 	public void remove(InstructorDTO dto) throws FachadaException {
 		try {
 			servicioInstructor.removeDependencias(dto);

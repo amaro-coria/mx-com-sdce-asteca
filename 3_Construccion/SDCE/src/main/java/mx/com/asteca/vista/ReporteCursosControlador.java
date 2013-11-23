@@ -20,9 +20,11 @@ import javax.servlet.http.HttpServletRequest;
 import mx.com.asteca.comun.Constantes;
 import mx.com.asteca.comun.dto.CatGralDTO;
 import mx.com.asteca.comun.dto.CursoDTO;
+import mx.com.asteca.comun.dto.InstructorDTO;
 import mx.com.asteca.fachada.CatGralFachada;
 import mx.com.asteca.fachada.CursoFachada;
 import mx.com.asteca.fachada.FachadaException;
+import mx.com.asteca.fachada.InstructorFachada;
 import net.sf.jasperreports.engine.JRException;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -41,11 +43,18 @@ public class ReporteCursosControlador extends BaseController implements
 	private FacesContext context;
 
 	@ManagedProperty("#{cursoFachadaImpl}")
-	private CursoFachada cursoFachada;
+	private transient CursoFachada cursoFachada;
 	private List<CursoDTO> listaCursos;
 
 	@ManagedProperty("#{catGralFachadaImpl}")
-	private CatGralFachada fachadaCatGral;
+	private transient CatGralFachada fachadaCatGral;
+	
+	@ManagedProperty("#{instructorFachadaImpl}")
+	private transient InstructorFachada fachadaInstructor;
+	
+	private Integer instructorSelected;
+	
+	private List<SelectItem> listaSelectInstructor;
 
 	private List<SelectItem> listaSelectArea;
 	private Integer areaSelected;
@@ -71,6 +80,24 @@ public class ReporteCursosControlador extends BaseController implements
 		initListaCatGralSede();
 	}
 
+	private void initListaSelectInstructor(){
+		if(CollectionUtils.isEmpty(listaSelectInstructor)){
+			listaSelectInstructor = new ArrayList<SelectItem>();
+			List<InstructorDTO> lista = null;
+			try {
+				lista = fachadaInstructor.getAll();
+			} catch (FachadaException e) {
+				super.addErrorMessage(Constantes.ERROR_OBTENIENDO_LISTA_CATALOGO);
+			}
+			if(!CollectionUtils.isEmpty(lista)){
+				for(InstructorDTO ins : lista){
+					SelectItem item = new SelectItem(ins.getIdInstructor(), ins.getNombre());
+					listaSelectInstructor.add(item);
+				}
+			}
+		}
+	}
+	
 	/**
 	 * Inicializa la lista de catalogoGeneral con la lista de area
 	 */
@@ -301,5 +328,48 @@ public class ReporteCursosControlador extends BaseController implements
 	@Override
 	String getModulo() {
 		return modulo;
+	}
+
+	/**
+	 * @return the listaSelectInstructor
+	 */
+	public List<SelectItem> getListaSelectInstructor() {
+		initListaSelectInstructor();
+		return listaSelectInstructor;
+	}
+
+	/**
+	 * @param listaSelectInstructor the listaSelectInstructor to set
+	 */
+	public void setListaSelectInstructor(List<SelectItem> listaSelectInstructor) {
+		this.listaSelectInstructor = listaSelectInstructor;
+	}
+
+	/**
+	 * @return the fachadaInstructor
+	 */
+	public InstructorFachada getFachadaInstructor() {
+		return fachadaInstructor;
+	}
+
+	/**
+	 * @param fachadaInstructor the fachadaInstructor to set
+	 */
+	public void setFachadaInstructor(InstructorFachada fachadaInstructor) {
+		this.fachadaInstructor = fachadaInstructor;
+	}
+
+	/**
+	 * @return the instructorSelected
+	 */
+	public Integer getInstructorSelected() {
+		return instructorSelected;
+	}
+
+	/**
+	 * @param instructorSelected the instructorSelected to set
+	 */
+	public void setInstructorSelected(Integer instructorSelected) {
+		this.instructorSelected = instructorSelected;
 	}
 }

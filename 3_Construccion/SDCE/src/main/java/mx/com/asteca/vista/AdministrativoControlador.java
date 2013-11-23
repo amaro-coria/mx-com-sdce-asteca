@@ -2,12 +2,13 @@
  * 
  */
 package mx.com.asteca.vista;
-
+ 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
@@ -20,6 +21,7 @@ import mx.com.asteca.comun.dto.AsentamientoDTO;
 import mx.com.asteca.comun.dto.DomicilioDTO;
 import mx.com.asteca.comun.dto.EstadoDTO;
 import mx.com.asteca.comun.dto.MunicipioDTO;
+import mx.com.asteca.comun.dto.PermisosBooleanDTO;
 import mx.com.asteca.comun.dto.PersonaDTO;
 import mx.com.asteca.fachada.AdministrativoFachada;
 import mx.com.asteca.fachada.FachadaException;
@@ -110,11 +112,42 @@ public class AdministrativoControlador extends BaseController implements
 	private List<SelectItem> nuevoAdminSelectListColonias;
 	private List<SelectItem> editarAdminSelectListColonias;
 
+	
+	
 	public AdministrativoControlador() {
 		itemNuevo = new AdministrativoDTO();
 		itemSelected = new AdministrativoDTO();
+		
+	}
+	
+	private PermisosBooleanDTO permisos;
+	
+	@PostConstruct
+	public void populate(){
+		setPermisos(super.stablishSessionPermissions());
 	}
 
+	/**
+	 * @return the permisos
+	 */
+	public PermisosBooleanDTO getPermisos() {
+		return permisos;
+	}
+
+
+
+	/**
+	 * @param permisos the permisos to set
+	 */
+	public void setPermisos(PermisosBooleanDTO permisos) {
+		this.permisos = permisos;
+		super.setAlta(permisos.isAlta());
+		super.setBorrar(permisos.isBorrar());
+		super.setCambios(permisos.isEdicion());
+		super.setConsulta(permisos.isConsulta());
+		super.setImpresion(permisos.isImpresion());
+	}
+	
 	public void save() {
 		boolean b = validaDatos();
 		if(b){
@@ -155,6 +188,7 @@ public class AdministrativoControlador extends BaseController implements
 			try {
 				int pk = fachada.save(itemNuevo);
 				itemNuevo.setIdAmin(pk);
+				itemNuevo.setNombreCompleto(itemNuevo.getDtoPersona().getNombre() + " "+ itemNuevo.getDtoPersona().getApellidoP() + " "+itemNuevo.getDtoPersona().getApellidoM());
 				if(!listItems.isEmpty()){
 					listItems.add(itemNuevo);
 				}else{
@@ -215,6 +249,10 @@ public class AdministrativoControlador extends BaseController implements
 		nuevoAdminIdAsentamientoMunicipioEstado = "";
 	}
 
+	public void cancelDelete(){
+		
+	}
+	
 	public void delete(){
 		try{
 			fachada.delete(itemSelected);
@@ -297,6 +335,7 @@ public class AdministrativoControlador extends BaseController implements
 		}
 		try {
 			fachada.update(itemSelected);
+			itemSelected.setNombreCompleto(itemSelected.getDtoPersona().getNombre() + " "+ itemSelected.getDtoPersona().getApellidoP() + " "+itemSelected.getDtoPersona().getApellidoM());
 			super.addInfoMessage(Constantes.MESSAGE_TITLE_INFO, Constantes.UPDATE_REGISTRO_EXITOSO);		
 			addBitacora(Constantes.ACCION_UPDATE_REGISTRO, Constantes.ACCION_UPDATE_REGISTRO_EXITOSO_MENSAJE+":Administrativo "+itemSelected.getIdAmin()+":");
 		} catch (FachadaException e) {
@@ -1334,4 +1373,5 @@ public class AdministrativoControlador extends BaseController implements
 	public AdministrativoFachada getFachada() {
 		return fachada;
 	}
+	
 }

@@ -16,6 +16,7 @@ import org.springframework.util.CollectionUtils;
 import mx.com.asteca.comun.Constantes;
 import mx.com.asteca.comun.dto.CatGralDTO;
 import mx.com.asteca.comun.dto.ModulosDTO;
+import mx.com.asteca.comun.dto.PermisosBooleanDTO;
 import mx.com.asteca.comun.dto.PermisosDTO;
 import mx.com.asteca.comun.dto.RolesDTO;
 import mx.com.asteca.comun.dto.RolesModulosDTO;
@@ -37,7 +38,7 @@ public class PerfilControlador extends BaseController implements Serializable {
 	@ManagedProperty("#{rolesFachadaImpl}")
 	private RolesFachada rolesFachada;
 	@ManagedProperty("#{modulosFachadaImpl}")
-	private ModulosFachada modulosFachada;
+	private ModulosFachada modulosFachadaImpl;
 	@ManagedProperty("#{rolesModulosFachadaImpl}")
 	private RolesModulosFachada rolesModulosFachada;
 	@ManagedProperty("#{permisosFachadaImpl}")
@@ -64,6 +65,33 @@ public class PerfilControlador extends BaseController implements Serializable {
 		listaPermisos = new ArrayList<PermisosDTO>();
 	}
 
+	private PermisosBooleanDTO permisos;
+
+	@PostConstruct
+	public void populate() {
+		setPermisos(super.stablishSessionPermissions());
+	}
+
+	/**
+	 * @return the permisos
+	 */
+	public PermisosBooleanDTO getPermisos() {
+		return permisos;
+	}
+
+	/**
+	 * @param permisos
+	 *            the permisos to set
+	 */
+	public void setPermisos(PermisosBooleanDTO permisos) {
+		this.permisos = permisos;
+		super.setAlta(permisos.isAlta());
+		super.setBorrar(permisos.isBorrar());
+		super.setCambios(permisos.isEdicion());
+		super.setConsulta(permisos.isConsulta());
+		super.setImpresion(permisos.isImpresion());
+	}
+
 	public void initListaRoles() {
 		if (CollectionUtils.isEmpty(listaRoles)) {
 			try {
@@ -78,7 +106,7 @@ public class PerfilControlador extends BaseController implements Serializable {
 	public void initListaModulos() {
 		if (CollectionUtils.isEmpty(listaModulos)) {
 			try {
-				listaModulos = modulosFachada.getAll();
+				listaModulos = modulosFachadaImpl.getAll();
 			} catch (FachadaException e) {
 				super.addErrorMessage("Error al obtener Modulos");
 			}
@@ -89,7 +117,7 @@ public class PerfilControlador extends BaseController implements Serializable {
 	public void initListaModulosEdit() {
 		if (CollectionUtils.isEmpty(listaModulosEdit)) {
 			try {
-				listaModulosEdit = modulosFachada.getAll();
+				listaModulosEdit = modulosFachadaImpl.getAll();
 			} catch (FachadaException e) {
 				super.addErrorMessage("Error al obtener Modulos");
 			}
@@ -100,7 +128,7 @@ public class PerfilControlador extends BaseController implements Serializable {
 	public void initListaModulosVer() {
 		if (CollectionUtils.isEmpty(listaModulosVer)) {
 			try {
-				listaModulosVer = modulosFachada.getAll();
+				listaModulosVer = modulosFachadaImpl.getAll();
 			} catch (FachadaException e) {
 				super.addErrorMessage("Error al obtener Modulos");
 			}
@@ -132,9 +160,9 @@ public class PerfilControlador extends BaseController implements Serializable {
 					listaRoles = new ArrayList<RolesDTO>();
 				}
 				rolNuevo.setIdRol(idRol);
-				if(!CollectionUtils.isEmpty(listaRoles)){
+				if (!CollectionUtils.isEmpty(listaRoles)) {
 					listaRoles.add(rolNuevo);
-				}else{
+				} else {
 					listaRoles = new ArrayList<RolesDTO>();
 					listaRoles.add(rolNuevo);
 				}
@@ -166,13 +194,19 @@ public class PerfilControlador extends BaseController implements Serializable {
 						rolesModulosFachada.save(rolesModulos);
 					}
 				}
-				RequestContext.getCurrentInstance().execute("nuevoDialog.hide()");
-				super.addInfoMessage(Constantes.MESSAGE_TITLE_INFO, Constantes.NUEVO_REGISTRO_EXITOSO);
-				addBitacora(Constantes.ACCION_NUEVO_REGISTRO, Constantes.ACCION_NUEVO_REGISTRO_EXITOSO_MENSAJE+":Rol  "+rolNuevo.getIdRol()+":");
+				RequestContext.getCurrentInstance().execute(
+						"nuevoDialog.hide()");
+				super.addInfoMessage(Constantes.MESSAGE_TITLE_INFO,
+						Constantes.NUEVO_REGISTRO_EXITOSO);
+				addBitacora(Constantes.ACCION_NUEVO_REGISTRO,
+						Constantes.ACCION_NUEVO_REGISTRO_EXITOSO_MENSAJE
+								+ ":Rol  " + rolNuevo.getIdRol() + ":");
 			} catch (FachadaException e1) {
 				super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
 						Constantes.ERROR_NUEVO_REGISTRO);
-				addBitacora(Constantes.ACCION_NUEVO_REGISTRO, Constantes.ACCION_NUEVO_REGISTRO_FALLIDO_MENSAJE+":Rol:");
+				addBitacora(Constantes.ACCION_NUEVO_REGISTRO,
+						Constantes.ACCION_NUEVO_REGISTRO_FALLIDO_MENSAJE
+								+ ":Rol:");
 				return;
 			}
 			rolNuevo = new RolesDTO();
@@ -206,11 +240,15 @@ public class PerfilControlador extends BaseController implements Serializable {
 			rolesFachada.remove(rolSelected);
 
 			listaRoles.remove(rolSelected);
-			addBitacora(Constantes.ACCION_DELETE_REGISTRO, Constantes.ACCION_DELETE_REGISTRO_EXITOSO_MENSAJE+":Aula"+rolSelected.getIdRol()+":");
+			addBitacora(Constantes.ACCION_DELETE_REGISTRO,
+					Constantes.ACCION_DELETE_REGISTRO_EXITOSO_MENSAJE + ":Aula"
+							+ rolSelected.getIdRol() + ":");
 		} catch (FachadaException e1) {
 			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
 					Constantes.ERROR_DELETE_REGISTRO);
-			addBitacora(Constantes.ACCION_DELETE_REGISTRO, Constantes.ACCION_DELETE_REGISTRO_FALLIDO_MENSAJE+":Rol "+rolSelected.getIdRol()+":");
+			addBitacora(Constantes.ACCION_DELETE_REGISTRO,
+					Constantes.ACCION_DELETE_REGISTRO_FALLIDO_MENSAJE + ":Rol "
+							+ rolSelected.getIdRol() + ":");
 			return;
 		}
 		super.addInfoMessage(Constantes.DELETE_REGISTRO_EXITOSO);
@@ -293,14 +331,18 @@ public class PerfilControlador extends BaseController implements Serializable {
 		} catch (FachadaException e1) {
 			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR,
 					Constantes.ERROR_UPDATE_REGISTRO);
-			addBitacora(Constantes.ACCION_UPDATE_REGISTRO, Constantes.ACCION_UPDATE_REGISTRO_FALLIDO_MENSAJE+":Rol:");
+			addBitacora(Constantes.ACCION_UPDATE_REGISTRO,
+					Constantes.ACCION_UPDATE_REGISTRO_FALLIDO_MENSAJE + ":Rol:");
 			return;
 		}
 		setSelectedClave("");
 		setSelectedNombre("");
 		initListaModulos();
-		super.addInfoMessage(Constantes.MESSAGE_TITLE_INFO, Constantes.UPDATE_REGISTRO_EXITOSO);		
-		addBitacora(Constantes.ACCION_UPDATE_REGISTRO, Constantes.ACCION_UPDATE_REGISTRO_EXITOSO_MENSAJE+":Rol "+rolSelected.getIdRol()+":");
+		super.addInfoMessage(Constantes.MESSAGE_TITLE_INFO,
+				Constantes.UPDATE_REGISTRO_EXITOSO);
+		addBitacora(Constantes.ACCION_UPDATE_REGISTRO,
+				Constantes.ACCION_UPDATE_REGISTRO_EXITOSO_MENSAJE + ":Rol "
+						+ rolSelected.getIdRol() + ":");
 	}
 
 	public void editar(ActionEvent e) {
@@ -481,12 +523,12 @@ public class PerfilControlador extends BaseController implements Serializable {
 		this.rolesFachada = rolesFachada;
 	}
 
-	public ModulosFachada getModulosFachada() {
-		return modulosFachada;
+	public ModulosFachada getModulosFachadaImpl() {
+		return modulosFachadaImpl;
 	}
 
-	public void setModulosFachada(ModulosFachada modulosFachada) {
-		this.modulosFachada = modulosFachada;
+	public void setModulosFachadaImpl(ModulosFachada modulosFachada) {
+		this.modulosFachadaImpl = modulosFachada;
 	}
 
 	public RolesModulosFachada getRolesModulosFachada() {

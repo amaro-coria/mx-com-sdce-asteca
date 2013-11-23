@@ -29,4 +29,6 @@ public interface CursoDAO extends BaseDAO<Cursos, Integer> {
 			throws PersistenciaException;
 
 	Cursos findByReferencia(String referencia) throws PersistenciaException;
+
+	Cursos findByGrupo(int grupo) throws PersistenciaException;
 }

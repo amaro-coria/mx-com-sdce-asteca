@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import mx.com.asteca.comun.Constantes;
 import mx.com.asteca.comun.dto.BitacoraDTO;
 import mx.com.asteca.comun.dto.ModulosDTO;
+import mx.com.asteca.comun.dto.PermisosBooleanDTO;
 import mx.com.asteca.fachada.BitacoraFachada;
 import mx.com.asteca.fachada.FachadaException;
 import mx.com.asteca.fachada.ModulosFachada;
@@ -56,6 +57,9 @@ public abstract class BaseController {
 	public void addBitacora(String accion, String mensaje){
 		HttpServletRequest servletReq = (HttpServletRequest) getFacesContext().getCurrentInstance().getExternalContext().getRequest();		
 		Integer idUsr = (Integer) servletReq.getAttribute(Constantes.SESION_ATRIBUTO_USUARIO);
+		if(idUsr == null){
+			idUsr = (Integer) servletReq.getSession().getAttribute(Constantes.SESION_ATRIBUTO_USUARIO);
+		}
 		String ip = servletReq.getRemoteAddr();
 		BitacoraDTO dto = new BitacoraDTO();
 		dto.setAccion(accion);
@@ -75,7 +79,6 @@ public abstract class BaseController {
 	}
 
 	public void setAlta(boolean alta) {
-		setSessionPermissions();
 		this.alta = alta;
 	}
 
@@ -296,6 +299,31 @@ public abstract class BaseController {
 			setImpresion(permiso.isImprimir());
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+
+	}
+	
+	public PermisosBooleanDTO stablishSessionPermissions() {
+		try {
+			ModulosDTO idModulo = modulosFachada.buscarPorNombre(getModulo());
+			HttpServletRequest request = (HttpServletRequest) this
+					.getFacesContext().getExternalContext().getRequest();
+			HashMap<Integer, ModulosDTO> permisos = (HashMap<Integer, ModulosDTO>) request
+					.getSession()
+					.getAttribute("permisos");
+
+			ModulosDTO permiso = permisos.get(idModulo.getIdModulo());
+
+			PermisosBooleanDTO permisosBoolean = new PermisosBooleanDTO(); 
+			
+			permisosBoolean.setAlta(permiso.isAlta());
+			permisosBoolean.setBorrar(permiso.isBorrar());
+			permisosBoolean.setEdicion(permiso.isEditar());
+			permisosBoolean.setConsulta(permiso.isConsulta());
+			permisosBoolean.setImpresion(permiso.isImprimir());		
+			return permisosBoolean;
+		} catch (Exception e) {
+			return null;
 		}
 
 	}
