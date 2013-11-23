@@ -9,62 +9,60 @@
 <h:body>
 	<ui:composition>
 		<h:form id="form">
-			<p:growl id="growl" showDetail="true" sticky="true" />
+			<p:growl id="growl" showDetail="true"  />
 			<h:panelGrid columns="2" style="text-align:left;">
 				<h:panelGrid columns="2">
-					<h:outputText value="#{msg.cliente }" />
+					<h:outputText value="#{msg.cliente }*" />
 					<p:selectOneMenu style="width:150px;"
 					value="#{beanCurso.idClienteSelected}">
 						<f:selectItem itemLabel="#{msg.seleccionarCliente}" itemValue="0" />
 						<f:selectItems value="#{beanCurso.listSelectClientes}" />
 					</p:selectOneMenu>
-					<h:outputText value="#{msg.area }" />
+					<h:outputText value="#{msg.area }*" />
 					<p:selectOneMenu value="#{beanCurso.idAreaSelected}"
 					style="width:150px;">
 						<f:selectItem itemLabel="#{msg.seleccionarArea}" itemValue="0" />
 						<f:selectItems value="#{beanCurso.listSelectArea}" />
 					</p:selectOneMenu>
-					<h:outputText value="#{msg.curso }" />
+					<h:outputText value="#{msg.curso }*" />
 					<p:selectOneMenu value="#{beanCurso.idProgramaEstudioSelected}"
 					style="width:150px">
 						<f:selectItem itemLabel="#{msg.seleccionarCurso}" itemValue="0" />
 						<f:selectItems value="#{beanCurso.listSelectProgramaEstudio}" />
 					</p:selectOneMenu>
-					<h:outputText value="#{msg.periodo }" />
+					<h:outputText value="#{msg.periodo }*" />
 					<h:panelGroup>
-						<p:calendar navigator="true"
-							value="#{beanCurso.nuevoCursoFechaInicio}" /> #{msg.al } <p:calendar
-							navigator="true" value="#{beanCurso.nuevoCursoFechaFin}" />
+						<p:calendar navigator="true" styleClass="dateTimeField2"
+							value="#{beanCurso.nuevoCursoFechaInicio}" /> #{msg.al }* <p:calendar
+							navigator="true" value="#{beanCurso.nuevoCursoFechaFin}" styleClass="dateTimeField2" />
 					</h:panelGroup>
-					<h:outputText value="#{msg.sede }" />
+					<h:outputText value="#{msg.sede }*" />
 					<p:selectOneMenu value="#{beanCurso.idSedeSelected}"
 					style="width:150px">
 						<f:selectItem itemLabel="#{seleccionarSede}" itemValue="0" />
 						<f:selectItems value="#{beanCurso.listSelectSede}" />
 					</p:selectOneMenu>
-					<h:outputText value="#{msg.horarioDe }" />
+					<h:outputText value="#{msg.horarioDe }*" />
 					<h:panelGroup>
-						<p:calendar value="#{beanCurso.nuevoCursoHoraInicio}"
-							pattern="HH:mm" timeOnly="true" /> #{msg.a } <p:calendar
-							value="#{beanCurso.nuevoCursoHoraFin}" pattern="HH:mm"
+						<p:calendar value="#{beanCurso.nuevoCursoHoraInicio}" styleClass="dateTimeField2"
+							pattern="HH:mm" timeOnly="true" /> #{msg.a }* <p:calendar
+							value="#{beanCurso.nuevoCursoHoraFin}" pattern="HH:mm" styleClass="dateTimeField2"
 							timeOnly="true" />
 					</h:panelGroup>
 				</h:panelGrid>
-				<h:panelGrid columns="1">
 					<h:panelGrid columns="2" style="vertical-align:top;">
-						<h:outputText value="#{msg.grupo }" />
+						<h:outputText value="#{msg.grupo }*" />
 						<p:inputText style="height:100%"
 							value="#{beanCurso.nuevoCursoGrupoString}" />
-						<h:outputText value="#{msg.referencia }" />
+						<h:outputText value="#{msg.referencia }*" />
 						<p:inputText style="height:100%"
 							value="#{beanCurso.nuevoCursoReferencia}" />
-					</h:panelGrid>
-					<h:panelGrid columns="1" style="vertical-align:bottom;">
-						<p:commandButton value="#{msg.crearCurso}" update="tabView"
+						<p:spacer height="105px" />
+						<p:spacer height="105px" />
+						<h:outputText />
+							<p:commandButton value="#{msg.crearCurso}" update="tabView growl"
 							actionListener="#{beanCurso.creaCurso}" />
 					</h:panelGrid>
-
-				</h:panelGrid>
 			</h:panelGrid>
 			<p:separator />
 			<p:tabView id="tabView" widgetVar="tabView1">
@@ -112,7 +110,7 @@
 						<p:commandButton value="#{msg.agregar}" icon="ui-icon-plusthick"
 							onclick="agregarMateriaDialog.show()" update=":form:growl" />
 						<p:commandButton value="#{msg.editar}" icon="ui-icon-pencil"
-							oncomplete="editarMateriaDialog.show()"
+							oncomplete="editarMateriaDialog.show()" actionListener="#{beanCurso.handleEditMateria}"
 							update="displayEditar :form:growl" />
 						<p:commandButton value="#{msg.eliminar}" icon="ui-icon-trash"
 							onclick="borrarDialog.show()" update=":form:growl" />
@@ -124,13 +122,11 @@
 						height="400">
 						<h:panelGrid columns="2" id="displayEditar">
 							<h:outputText value="#{msg.materia}" />
-							<p:selectOneMenu value="#{beanCurso.idMateriaSelected}">
-								<f:selectItems value="#{beanCurso.listSelectMaterias}" />
-							</p:selectOneMenu>
+							<h:inputText value="#{beanCurso.selectedMateria.nombre}"  readonly="true" style="width:300px"/>
 							<h:outputText value="#{msg.fechaHoraInicial}" />
 							<h:panelGroup>
 								<p:calendar value="#{beanCurso.editarFechaHoraInicial}"
-									navigator="true" pattern="MM/dd/yyyy HH:mm">
+									navigator="true" pattern="MM/dd/yyyy HH:mm" styleClass="dateTimeField3">
 									<p:ajax event="dateSelect"
 										listener="#{beanCurso.handleCambiaFechaEditar}"
 										update="aulasDisponiblesEditar" />
@@ -138,7 +134,7 @@
 							</h:panelGroup>
 							<h:outputText value="#{msg.fechaHoraFinal}" />
 							<h:panelGroup>
-								<p:calendar value="#{beanCurso.editarFechaHoraFinal}"
+								<p:calendar value="#{beanCurso.editarFechaHoraFinal}" styleClass="dateTimeField3"
 									navigator="true" pattern="MM/dd/yyyy HH:mm">
 									<p:ajax event="dateSelect"
 										listener="#{beanCurso.handleCambiaFechaEditar}"
@@ -146,17 +142,17 @@
 								</p:calendar>
 							</h:panelGroup>
 							<h:outputText value="#{msg.aula}" />
-							<p:selectOneMenu value="#{beanCurso.idAulaEditarSelected}"
+							<p:selectOneMenu value="#{beanCurso.idAulaEditarSelected}" style="width: 300px;"
 								id="aulasDisponiblesEditar">
 								<f:selectItems
 									value="#{beanCurso.listSelectAulasDisponiblesEditar}" />
 							</p:selectOneMenu>
 							<h:outputText value="#{msg.instructor}" />
-							<p:selectOneMenu value="#{beanCurso.idInstructorSelected}">
-								<f:selectItems value="#{beanCurso.listSelectInstructor}" />
+							<p:selectOneMenu value="#{beanCurso.idInstructorSelected}" style="width:300px;">
+								<f:selectItems value="#{beanCurso.listSelectInstructorCapacitado}" />
 							</p:selectOneMenu>
 							<h:outputText value="#{msg.tipo}" />
-							<p:selectOneMenu value="#{beanCurso.idTipoCursoSelected}">
+							<p:selectOneMenu value="#{beanCurso.idTipoCursoSelected}" style="width:300px;">
 								<f:selectItem itemLabel="#{msg.seleccionarTipo}" itemValue="0" />
 								<f:selectItems value="#{beanCurso.listSelectClasifCurso}" />
 							</p:selectOneMenu>
@@ -165,7 +161,7 @@
 							<p:commandButton value="#{msg.aceptar}"
 								oncomplete="editarMateriaDialog.hide()"
 								actionListener="#{beanCurso.updateMateriaSelected}"
-								update="table :form:growl" />
+								update="table :form:growl aulasDisponiblesEditar" />
 							<p:commandButton value="#{msg.cancelar}"
 								onclick="editarMateriaDialog.hide()" />
 						</h:panelGrid>
@@ -178,35 +174,35 @@
 						height="400">
 						<h:panelGrid columns="2">
 							<h:outputText value="#{msg.materia}" />
-							<p:selectOneMenu value="#{beanCurso.idNuevoMateriaSelected}">
+							<p:selectOneMenu value="#{beanCurso.idNuevoMateriaSelected}" style="width:120px;">
 								<f:selectItems value="#{beanCurso.listSelectMaterias}" />
 							</p:selectOneMenu>
 							<h:outputText value="#{msg.fechaHoraInicial}" />
-							<p:calendar value="#{beanCurso.nuevoFechaHoraInicial}"
+							<p:calendar value="#{beanCurso.nuevoFechaHoraInicial}" styleClass="dateTimeField3"
 								navigator="true" pattern="MM/dd/yyyy HH:mm">
 								<p:ajax event="dateSelect"
 									listener="#{beanCurso.handleCambiaFechaNuevo}"
 									update="aulasDisponiblesNuevo" />
 							</p:calendar>
 							<h:outputText value="#{msg.fechaHoraFinal}" />
-							<p:calendar value="#{beanCurso.nuevoFechaHoraFinal}"
+							<p:calendar value="#{beanCurso.nuevoFechaHoraFinal}" styleClass="dateTimeField3"
 								navigator="true" pattern="MM/dd/yyyy HH:mm">
 								<p:ajax event="dateSelect"
 									listener="#{beanCurso.handleCambiaFechaNuevo}"
 									update="aulasDisponiblesNuevo" />
 							</p:calendar>
 							<h:outputText value="#{msg.aula}" />
-							<p:selectOneMenu value="#{beanCurso.idAulaNuevoSelected}"
+							<p:selectOneMenu value="#{beanCurso.idAulaNuevoSelected}" style="width:120px;"
 								id="aulasDisponiblesNuevo">
 								<f:selectItems
 									value="#{beanCurso.listSelectAulasDisponiblesNuevo}" />
 							</p:selectOneMenu>
 							<h:outputText value="#{msg.instructor}" />
-							<p:selectOneMenu value="#{beanCurso.idNuevoInstructorSelected}">
+							<p:selectOneMenu value="#{beanCurso.idNuevoInstructorSelected}" style="width:120px;">
 								<f:selectItems value="#{beanCurso.listSelectInstructor}" />
 							</p:selectOneMenu>
 							<h:outputText value="#{msg.tipo}" />
-							<p:selectOneMenu value="#{beanCurso.idNuevoTipoCursoSelected}">
+							<p:selectOneMenu value="#{beanCurso.idNuevoTipoCursoSelected}" style="width:120px;">
 								<f:selectItem itemLabel="#{msg.seleccionarTipo}" itemValue="0" />
 								<f:selectItems value="#{beanCurso.listSelectClasifCurso}" />
 							</p:selectOneMenu>
@@ -250,7 +246,7 @@
 						</p:column>
 					</p:dataTable>
 					<h:panelGrid columns="2">
-						<p:commandButton value="#{msg.agregar}" icon="ui-icon-plusthick"
+						<p:commandButton value="#{msg.agregar}" icon="ui-icon-plusthick" actionListener="#{beanCurso.handleShowAgregarAlumnoPopup}"
 							onclick="agregarAlumnoDialog.show()" update=":form:growl" />
 						<p:commandButton value="#{msg.eliminar}" />
 					</h:panelGrid>
@@ -260,13 +256,13 @@
 						height="400">
 						<h:panelGrid columns="2">
 							<h:outputText value="#{msg.alumno}" />
-							<p:selectOneMenu value="#{beanCurso.idAlumnoAgregar}">
+							<p:selectOneMenu value="#{beanCurso.idAlumnoAgregar}" style="width:120px;" id="listaAgregarAlumnosSelect">
 								<f:selectItems value="#{beanCurso.listaSelectAgregarAlumno}" />
 							</p:selectOneMenu>
 							<h:outputText />
 							<p:commandButton value="#{msg.aceptar}"
 								actionListener="#{beanCurso.addAlumno}"
-								oncomplete="agregarAlumnoDialog.hide()" update="tableAlumnos" />
+								oncomplete="agregarAlumnoDialog.hide()" update="tableAlumnos listaAgregarAlumnosSelect" />
 						</h:panelGrid>
 					</p:dialog>
 					<p:confirmDialog showEffect="fade" widgetVar="borrarAlumnoDialog"

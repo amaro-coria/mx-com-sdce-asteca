@@ -13,7 +13,7 @@
 				<h:panelGrid columns="2" style="text-align:left;">
 					<h:outputText value="#{msg.accion} :" />
 					<p:selectOneMenu id="selectEstado"
-						value="#{beanBitacora.accionSelected}" style="min-width: 450px;">
+						value="#{beanBitacora.accionSelected}" style="width: 500px;">
 						<f:selectItem itemLabel="#{msg.seleccionarAccion}" itemValue=""
 							noSelectionOption="true" />
 						<f:selectItems value="#{beanBitacora.listSelectAccion}" />
@@ -21,7 +21,7 @@
 
 					<h:outputText value="#{msg.usuario} :" />
 					<p:selectOneMenu id="selectTipo"
-						value="#{beanBitacora.usuarioSelected}" style="min-width: 450px;">
+						value="#{beanBitacora.usuarioSelected}" style="width: 500px;">
 						<f:selectItem itemLabel="#{msg.seleccionarUsuario}" itemValue="0"
 							noSelectionOption="true" />
 						<f:selectItems value="#{beanBitacora.listSelectUsuarios}" />
@@ -41,7 +41,7 @@
 				</h:panelGrid>
 			</p:panel>
 			<p:panel>
-				<p:commandButton value="#{msg.ver}" icon="ui-icon-search"
+				<p:commandButton value="#{msg.ver}" icon="ui-icon-search" rendered="#{beanBitacora.consulta}"
 					oncomplete="verDialog.show()" update="displayVer, growl" />
 			</p:panel>
 			<p:panel>
@@ -76,8 +76,8 @@
 				</p:dataTable>
 				<!-- Panel de Ver -->
 				<p:dialog id="dialog" header="#{msg.ver}" widgetVar="verDialog"
-					modal="true">
-					<h:panelGrid id="displayVer" columns="2" cellpadding="4">
+					modal="true" draggable="false" width="260px" height="300px">
+					<h:panelGrid id="displayVer" columns="2" >
 						<h:panelGroup id="messagePanelVer" layout="block">
 							<h:messages errorStyle="color: red" infoStyle="color: green"
 								layout="list" style="font-size:12px;font-family:Arial" />
@@ -85,23 +85,23 @@
 						<h:outputText />
 						<h:outputText value="#{msg.fecha}" />
 						<p:inputText value="#{beanBitacora.itemSelected.fechaString}"
-							style="font-weight:bold" readonly="true" />
+							style="font-weight:bold; width:150px" readonly="true" />
 						<h:outputText value="#{msg.accion}" />
 						<p:inputText value="#{beanBitacora.itemSelected.accion}"
-							style="font-weight:bold" readonly="true" />
+							style="font-weight:bold; width:150px" readonly="true" />
 						<h:outputText value="#{msg.ip}" />
 						<p:inputText value="#{beanBitacora.itemSelected.ip}"
-							style="font-weight:bold" readonly="true" />
+							style="font-weight:bold; width:150px" readonly="true" />
 						<h:outputText value="#{msg.usuario}" />
 						<p:inputText value="#{beanBitacora.itemSelected.usuario}"
-							style="font-weight:bold" readonly="true" />
+							style="font-weight:bold; width:150px" readonly="true" />
 						<h:outputText value="#{msg.mensaje}" />
 						<p:inputTextarea value="#{beanBitacora.itemSelected.mensaje}"
-							style="font-weight:bold" readonly="true" />
-
-					</h:panelGrid>
-					<p:commandButton id="aceptarVerBtn" value="#{msg.aceptar}"
+							style="font-weight:bold; width:150px" readonly="true" />
+							<h:outputText />
+							<p:commandButton id="aceptarVerBtn" value="#{msg.aceptar}"
 						icon="ui-icon-check" onclick="verDialog.hide()" />
+					</h:panelGrid>
 				</p:dialog>
 				<!-- Fin de panel de Ver -->
 			</p:panel>

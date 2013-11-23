@@ -14,22 +14,20 @@
 				<h:panelGrid columns="2" style="text-align:left;">
 					<h:outputText value="#{msg.matricula} :" />
 					<p:selectOneMenu id="selectCveFilter"
-						value="#{beanAlumno.selectedItemFilter }" style="min-width: 480px">
+						value="#{beanAlumno.selectedItemFilter }" style="width: 500px">
 						<f:selectItem itemLabel="#{msg.seleccionarMatricula }"
 							itemValue="" />
 						<f:selectItems value="#{beanAlumno.listaSelect}" />
 					</p:selectOneMenu>
 					<h:outputText value="#{msg.nombre} :" />
 					<p:selectOneMenu id="selectFilter2"
-						value="#{beanAlumno.selectedItemFilter2 }"
-						style="min-width: 480px">
+						value="#{beanAlumno.selectedItemFilter2 }" style="width: 500px">
 						<f:selectItem itemLabel="#{msg.seleccionarNombre }" itemValue="" />
 						<f:selectItems value="#{beanAlumno.listaSelect2}" />
 					</p:selectOneMenu>
 					<h:outputText value="#{msg.estatus} :" />
 					<p:selectOneMenu id="selectFilter3"
-						value="#{beanAlumno.selectedItemFilter3 }"
-						style="min-width: 480px">
+						value="#{beanAlumno.selectedItemFilter3 }" style="width: 500px">
 						<f:selectItem itemLabel="#{msg.seleccionarEst }" itemValue="" />
 						<f:selectItems value="#{beanAlumno.listaSelect3}" />
 					</p:selectOneMenu>
@@ -51,17 +49,20 @@
 			<p:panel>
 				<h:panelGrid columns="4" style="text-align:left;">
 					<p:commandButton id="deleteButton" value="#{msg.eliminar }"
-						icon="ui-icon-trash" onclick="borrarDialog.show()" update="growl" />
+						icon="ui-icon-trash" onclick="borrarDialog.show()" update="growl"
+						rendered="#{beanAlumno.borrar}" />
 					<p:commandButton id="editarButton" value="#{msg.editar }"
 						icon="ui-icon-pencil" oncomplete="editarDialog.show()"
 						actionListener="#{beanAlumno.showVer}"
-						update=":form:displayEditar, growl" />
+						update=":form:displayEditar, growl"
+						rendered="#{beanAlumno.cambios}" />
 					<p:commandButton id="viewButton" value="#{msg.ver }"
 						actionListener="#{beanAlumno.showVer }" icon="ui-icon-search"
-						oncomplete="verDialog.show()" update=":form:displayVer, growl" />
+						oncomplete="verDialog.show()" update=":form:displayVer, growl"
+						rendered="#{beanAlumno.consulta}" />
 					<p:commandButton id="nuevoButton" value="#{msg.nuevo }"
 						icon="ui-icon-plusthick" onclick="nuevoDialog.show()"
-						update="growl" />
+						update="growl" rendered="#{beanAlumno.alta}" />
 				</h:panelGrid>
 			</p:panel>
 			<p:panel>
@@ -87,7 +88,8 @@
 				</p:dataTable>
 			</p:panel>
 			<!-- Panel de Ver -->
-			<p:dialog id="dialog" header="#{msg.ver}" widgetVar="verDialog" position="top" draggable="true" width="850" height="500"
+			<p:dialog id="dialog" header="#{msg.ver}" widgetVar="verDialog"
+				position="top" draggable="true" width="650" height="500"
 				modal="true">
 				<h:panelGrid id="displayVer" columns="1" cellpadding="4">
 					<h:panelGroup id="messagePanelVer" layout="block">
@@ -96,15 +98,19 @@
 					</h:panelGroup>
 					<h:panelGrid columns="2">
 						<h:outputText value="#{msg.matricula }" />
-						<h:outputText value="#{beanAlumno.itemSelected.matricula }"  style="font-weight:bold;"/>
+						<h:outputText value="#{beanAlumno.itemSelected.matricula }"
+							style="font-weight:bold;" />
 						<h:outputText value="#{msg.nombre }" />
-						<h:outputText value="#{beanAlumno.itemSelected.dtoPersona.nombre}"  style="font-weight:bold;"/>
+						<h:outputText value="#{beanAlumno.itemSelected.dtoPersona.nombre}"
+							style="font-weight:bold;" />
 						<h:outputText value="#{msg.apellidoP }" />
 						<h:outputText
-							value="#{beanAlumno.itemSelected.dtoPersona.apellidoP}"  style="font-weight:bold;"/>
+							value="#{beanAlumno.itemSelected.dtoPersona.apellidoP}"
+							style="font-weight:bold;" />
 						<h:outputText value="#{msg.apellidoM }" />
 						<h:outputText
-							value="#{beanAlumno.itemSelected.dtoPersona.apellidoM}" style="font-weight:bold;" />
+							value="#{beanAlumno.itemSelected.dtoPersona.apellidoM}"
+							style="font-weight:bold;" />
 					</h:panelGrid>
 
 					<p:tabView id="tabVer">
@@ -112,23 +118,30 @@
 							<h:panelGrid columns="2">
 								<h:outputText value="#{msg.fechaNacimiento }" />
 								<h:outputText
-									value="#{beanAlumno.itemSelected.dtoPersona.fechaNacStr }"  style="font-weight:bold;"/>
+									value="#{beanAlumno.itemSelected.dtoPersona.fechaNacStr }"
+									style="font-weight:bold;" />
 								<h:outputText value="#{msg.lugarNacimiento }" />
 								<h:outputText
-									value="#{beanAlumno.itemSelected.dtoPersona.lugarNac }"  style="font-weight:bold;"/>
+									value="#{beanAlumno.itemSelected.dtoPersona.lugarNac }"
+									style="font-weight:bold;" />
 								<h:outputText value="#{msg.curp }" />
 								<h:outputText
-									value="#{beanAlumno.itemSelected.dtoPersona.curp }"  style="font-weight:bold;"/>
+									value="#{beanAlumno.itemSelected.dtoPersona.curp }"
+									style="font-weight:bold;" />
 								<h:outputText value="#{msg.rfc }" />
-								<h:outputText value="#{beanAlumno.itemSelected.dtoPersona.rfc }"  style="font-weight:bold;"/>
+								<h:outputText value="#{beanAlumno.itemSelected.dtoPersona.rfc }"
+									style="font-weight:bold;" />
 								<h:outputText value="#{msg.pasaporte }" />
 								<h:outputText
-									value="#{beanAlumno.itemSelected.dtoPersona.pasaporte }" style="font-weight:bold;" />
+									value="#{beanAlumno.itemSelected.dtoPersona.pasaporte }"
+									style="font-weight:bold;" />
 								<h:outputText value="#{msg.ife }" />
-								<h:outputText value="#{beanAlumno.itemSelected.dtoPersona.ife }"  style="font-weight:bold;"/>
+								<h:outputText value="#{beanAlumno.itemSelected.dtoPersona.ife }"
+									style="font-weight:bold;" />
 								<h:outputText value="#{msg.email }" />
 								<h:outputText
-									value="#{beanAlumno.itemSelected.dtoPersona.email }"  style="font-weight:bold;" />
+									value="#{beanAlumno.itemSelected.dtoPersona.email }"
+									style="font-weight:bold;" />
 							</h:panelGrid>
 						</p:tab>
 						<p:tab title="#{msg.domicilio }">
@@ -136,33 +149,42 @@
 								<h:panelGrid columns="2">
 									<h:outputText value="#{msg.calle }" />
 									<h:outputText
-										value="#{beanAlumno.itemSelected.dtoDomicilio.calle }"  style="font-weight:bold;"/>
+										value="#{beanAlumno.itemSelected.dtoDomicilio.calle }"
+										style="font-weight:bold;" />
 									<h:outputText value="#{msg.noExterior }" />
 									<h:outputText
-										value="#{beanAlumno.itemSelected.dtoDomicilio.noExterior }"  style="font-weight:bold;"/>
+										value="#{beanAlumno.itemSelected.dtoDomicilio.noExterior }"
+										style="font-weight:bold;" />
 									<h:outputText value="#{msg.colonia }" />
 									<h:outputText
-										value="#{beanAlumno.itemSelected.dtoDomicilio.asentamiento }"  style="font-weight:bold;"/>
+										value="#{beanAlumno.itemSelected.dtoDomicilio.asentamiento }"
+										style="font-weight:bold;" />
 									<h:outputText value="#{msg.delegacion }" />
 									<h:outputText
-										value="#{beanAlumno.itemSelected.dtoDomicilio.municipio }"  style="font-weight:bold;"/>
+										value="#{beanAlumno.itemSelected.dtoDomicilio.municipio }"
+										style="font-weight:bold;" />
 									<h:outputText value="#{msg.ciudad }" />
 									<h:outputText
-										value="#{beanAlumno.itemSelected.dtoDomicilio.municipio }"  style="font-weight:bold;"/>
+										value="#{beanAlumno.itemSelected.dtoDomicilio.municipio }"
+										style="font-weight:bold;" />
 									<h:outputText value="#{msg.entidadFederativa }" />
 									<h:outputText
-										value="#{beanAlumno.itemSelected.dtoDomicilio.estado }"  style="font-weight:bold;"/>
+										value="#{beanAlumno.itemSelected.dtoDomicilio.estado }"
+										style="font-weight:bold;" />
 									<h:outputText value="#{msg.telefono }" />
 									<h:outputText
-										value="#{beanAlumno.itemSelected.dtoDomicilio.telefono }"  style="font-weight:bold;"/>
+										value="#{beanAlumno.itemSelected.dtoDomicilio.telefono }"
+										style="font-weight:bold;" />
 								</h:panelGrid>
 								<h:panelGrid columns="2">
 									<h:outputText value="#{msg.noInterior }" />
 									<h:outputText
-										value="#{beanAlumno.itemSelected.dtoDomicilio.noInterior }"  style="font-weight:bold;"/>
+										value="#{beanAlumno.itemSelected.dtoDomicilio.noInterior }"
+										style="font-weight:bold;" />
 									<h:outputText value="#{msg.codigoPostal }" />
 									<h:outputText
-										value="#{beanAlumno.itemSelected.dtoDomicilio.cp }"  style="font-weight:bold;"/>
+										value="#{beanAlumno.itemSelected.dtoDomicilio.cp }"
+										style="font-weight:bold;" />
 								</h:panelGrid>
 
 							</h:panelGrid>
@@ -283,37 +305,46 @@
 								<h:panelGrid columns="2" id="panelRefVer1">
 									<h:outputText value="#{msg.calle}" />
 									<h:outputText
-										value="#{beanAlumno.domiclioReferenciaSelected.calle }"  style="font-weight:bold;"/>
+										value="#{beanAlumno.domiclioReferenciaSelected.calle }"
+										style="font-weight:bold;" />
 									<h:outputText value="#{msg.colonia }" />
 									<h:outputText
-										value="#{beanAlumno.domiclioReferenciaSelected.asentamiento }"  style="font-weight:bold;"/>
+										value="#{beanAlumno.domiclioReferenciaSelected.asentamiento }"
+										style="font-weight:bold;" />
 									<h:outputText value="#{msg.delegacion }" />
 									<h:outputText
-										value="#{beanAlumno.domiclioReferenciaSelected.municipio }"  style="font-weight:bold;"/>
+										value="#{beanAlumno.domiclioReferenciaSelected.municipio }"
+										style="font-weight:bold;" />
 									<h:outputText value="#{msg.ciudad }" />
 									<h:outputText
-										value="#{beanAlumno.domiclioReferenciaSelected.municipio }"  style="font-weight:bold;"/>
+										value="#{beanAlumno.domiclioReferenciaSelected.municipio }"
+										style="font-weight:bold;" />
 								</h:panelGrid>
 								<h:panelGrid columns="2" id="panelRefVer2">
 									<h:panelGroup>
 										<h:outputText value="#{msg.noExterior }" />
 										<h:outputText
-											value="#{beanAlumno.domiclioReferenciaSelected.noExterior }"  style="font-weight:bold;"/>
+											value="#{beanAlumno.domiclioReferenciaSelected.noExterior }"
+											style="font-weight:bold;" />
 									</h:panelGroup>
 									<h:panelGroup>
 										<h:outputText value="#{msg.noInterior }" />
 										<h:outputText
-											value="#{beanAlumno.domiclioReferenciaSelected.noInterior }"  style="font-weight:bold;"/>
+											value="#{beanAlumno.domiclioReferenciaSelected.noInterior }"
+											style="font-weight:bold;" />
 									</h:panelGroup>
 									<h:outputText value="#{msg.codigoPostal }" />
 									<h:outputText
-										value="#{beanAlumno.domiclioReferenciaSelected.cp }"  style="font-weight:bold;"/>
+										value="#{beanAlumno.domiclioReferenciaSelected.cp }"
+										style="font-weight:bold;" />
 									<h:outputText value="#{msg.telefono }" />
 									<h:outputText
-										value="#{beanAlumno.domiclioReferenciaSelected.telefono }"  style="font-weight:bold;"/>
+										value="#{beanAlumno.domiclioReferenciaSelected.telefono }"
+										style="font-weight:bold;" />
 									<h:outputText value="#{msg.entidadFederativa }" />
 									<h:outputText
-										value="#{beanAlumno.domiclioReferenciaSelected.estado }"  style="font-weight:bold;"/>
+										value="#{beanAlumno.domiclioReferenciaSelected.estado }"
+										style="font-weight:bold;" />
 								</h:panelGrid>
 							</h:panelGrid>
 						</p:tab>
@@ -345,7 +376,7 @@
 											<p:column>#{beanAlumno.documentoSelected.estatus }</p:column>
 										</p:row>
 									</p:panelGrid>
-									<p:commandButton value="Download" ajax="false"
+									<p:commandButton value="Descargar" ajax="false"
 										onclick="PrimeFaces.monitorDownload(showStatus, hideStatus)">
 										<p:fileDownload value="#{beanAlumno.file}" />
 									</p:commandButton>
@@ -353,9 +384,9 @@
 							</h:panelGrid>
 						</p:tab>
 					</p:tabView>
+					<p:commandButton id="aceptarVerBtn" value="#{msg.aceptar }"
+						icon="ui-icon-check" onclick="verDialog.hide()" />
 				</h:panelGrid>
-				<p:commandButton id="aceptarVerBtn" value="#{msg.aceptar }"
-					icon="ui-icon-check" onclick="verDialog.hide()" />
 			</p:dialog>
 			<!-- Fin de panel de Ver -->
 			<!-- Inicio de panel monitor de descarga -->
@@ -365,8 +396,9 @@
 			</p:dialog>
 			<!-- Fin de panel monitor de descarga -->
 			<!-- Panel de Nuevo -->
-			<p:dialog id="dialogNuevo" header="#{msg.nuevo}" draggable="true" position="top"
-				widgetVar="nuevoDialog" modal="true" maximizable="true" width="900px" height="600px">
+			<p:dialog id="dialogNuevo" header="#{msg.nuevo}" draggable="true"
+				position="top" widgetVar="nuevoDialog" modal="true"
+				maximizable="true" width="950px" height="600px">
 				<h:panelGrid id="displayNuevo" columns="1" cellpadding="4">
 					<h:panelGroup id="messagePanelNuevo" layout="block">
 						<h:messages errorStyle="color: red" infoStyle="color: green"
@@ -375,20 +407,20 @@
 					<h:panelGrid columns="2">
 						<h:outputText value="#{msg.matricula }" />
 						<p:inputText value="#{beanAlumno.nuevoAlumnoMatricula }"
-						style="width:300px; height:30px"/>
+							style="width:300px; height:15px" />
 						<h:outputText value="#{msg.nombre }" />
-						<p:inputText value="#{beanAlumno.nuevoAlumnoNombre}" 
-						style="width:300px; height:30px"/>
+						<p:inputText value="#{beanAlumno.nuevoAlumnoNombre}"
+							style="width:300px; height:15px" />
 						<h:outputText value="#{msg.apellidoP }" />
 						<p:inputText value="#{beanAlumno.nuevoAlumnoApellidoP}"
-						style="width:300px; height:30px" />
+							style="width:300px; height:15px" />
 						<h:outputText value="#{msg.apellidoM }" />
-						<p:inputText value="#{beanAlumno.nuevoAlumnoApellidoM}" 
-						style="width:300px; height:30px"/>
+						<p:inputText value="#{beanAlumno.nuevoAlumnoApellidoM}"
+							style="width:300px; height:15px" />
 						<h:outputText value="#{msg.estatus }" />
 						<p:selectOneMenu
 							value="#{beanAlumno.nuevoAlumnoIdEstatusSelected }"
-							style="width:300px; height:30px">
+							style="width:315px">
 							<f:selectItems value="#{beanAlumno.listaSelectEstatus }" />
 						</p:selectOneMenu>
 					</h:panelGrid>
@@ -396,68 +428,67 @@
 						<p:tab title="#{msg.personales }">
 							<h:panelGrid columns="2">
 								<h:outputText value="#{msg.fechaNacimiento }" />
-								<p:calendar value="#{beanAlumno.nuevoAlumnoFechaNac}" 
-								styleClass="dateTimeField" navigator="true"/>
+								<p:calendar value="#{beanAlumno.nuevoAlumnoFechaNac}"
+									styleClass="dateTimeField3" navigator="true" />
 								<h:outputText value="#{msg.lugarNacimiento }" />
-								<p:inputText value="#{beanAlumno.nuevoAlumnoLugarNac }" 
-								style="width:300px; height:30px"/>
+								<p:inputText value="#{beanAlumno.nuevoAlumnoLugarNac }"
+									style="width:300px; height:15px" />
 								<h:outputText value="#{msg.curp }" />
-								<p:inputText value="#{beanAlumno.nuevoAlumnoCurp }" 
-								style="width:300px; height:30px"/>
+								<p:inputText value="#{beanAlumno.nuevoAlumnoCurp }"
+									style="width:300px; height:15px" />
 								<h:outputText value="#{msg.rfc }" />
-								<p:inputText value="#{beanAlumno.nuevoAlumnoRfc }" 
-								style="width:300px; height:30px"/>
+								<p:inputText value="#{beanAlumno.nuevoAlumnoRfc }"
+									style="width:300px; height:15px" />
 								<h:outputText value="#{msg.pasaporte }" />
-								<p:inputText value="#{beanAlumno.nuevoAlumnoPasaporte }" 
-								style="width:300px; height:30px"/>
+								<p:inputText value="#{beanAlumno.nuevoAlumnoPasaporte }"
+									style="width:300px; height:15px" />
 								<h:outputText value="#{msg.ife }" />
-								<p:inputText value="#{beanAlumno.nuevoAlumnoIfe }" 
-								style="width:300px; height:30px"/>
+								<p:inputText value="#{beanAlumno.nuevoAlumnoIfe }"
+									style="width:300px; height:15px" />
 								<h:outputText value="#{msg.email }" />
-								<p:inputText value="#{beanAlumno.nuevoAlumnoEmail }" 
-								style="width:300px; height:30px"/>
+								<p:inputText value="#{beanAlumno.nuevoAlumnoEmail }"
+									style="width:300px; height:15px" />
 							</h:panelGrid>
 						</p:tab>
 						<p:tab title="#{msg.domicilio }">
 							<h:panelGrid columns="2">
 								<h:panelGrid columns="2">
 									<h:outputText value="#{msg.calle }" />
-									<p:inputText value="#{beanAlumno.nuevoAlumnoCalle }" 
-									style="width:300px; height:30px"/>
+									<p:inputText value="#{beanAlumno.nuevoAlumnoCalle }"
+										style="width:300px; height:15px" />
 									<h:outputText value="#{msg.noExterior }" />
-									<p:inputText value="#{beanAlumno.nuevoAlumnoNoExt }" 
-									style="width:300px; height:30px"/>
+									<p:inputText value="#{beanAlumno.nuevoAlumnoNoExt }"
+										style="width:300px; height:15px" />
 									<h:outputText value="#{msg.colonia }" />
 									<p:selectOneMenu
 										value="#{beanAlumno.nuevoAlumnoIdAsentamientoMunicipioEstado }"
-										style="width:300px; height:30px"
-										id="nuevoAlumnoSelectColonias">
+										style="width:300px" id="nuevoAlumnoSelectColonias">
 										<f:selectItems
 											value="#{beanAlumno.nuevoAlumnoSelectListColonias }" />
 									</p:selectOneMenu>
 									<h:outputText value="#{msg.delegacion }" />
 									<p:inputText value="#{beanAlumno.nuevoAlumnoDelegacion }"
-									style="width:300px; height:30px"
-										readonly="true" id="nuevoAlumnoDelegacion" />
+										style="width:300px; height:15px" readonly="true"
+										id="nuevoAlumnoDelegacion" />
 									<h:outputText value="#{msg.ciudad }" />
-									<p:inputText value="#{beanAlumno.nuevoAlumnoCiudad }" 
-									style="width:300px; height:30px"/>
+									<p:inputText value="#{beanAlumno.nuevoAlumnoCiudad }"
+										style="width:300px; height:15px" />
 									<h:outputText value="#{msg.entidadFederativa }" />
 									<p:inputText id="nuevoAlumnoEntidadF" readonly="true"
-										value="#{beanAlumno.nuevoAlumnoEntidadFederativa }" 
-										style="width:300px; height:30px"/>
+										value="#{beanAlumno.nuevoAlumnoEntidadFederativa }"
+										style="width:300px; height:15px" />
 									<h:outputText value="#{msg.telefono }" />
-									<p:inputText value="#{beanAlumno.nuevoAlumnoTelefono }" 
-									style="width:300px; height:30px"/>
+									<p:inputText value="#{beanAlumno.nuevoAlumnoTelefono }"
+										style="width:300px; height:15px" />
 								</h:panelGrid>
 								<h:panelGrid columns="2">
 									<h:outputText value="#{msg.noInterior }" />
-									<p:inputText value="#{beanAlumno.nuevoAlumnoNoInt }" 
-									style="width:300px; height:30px"/>
+									<p:inputText value="#{beanAlumno.nuevoAlumnoNoInt }"
+										style="width:300px; height:15px" />
 									<h:outputText value="#{msg.codigoPostal }" />
 									<p:autoComplete id="autoCompleteCPNuevo"
 										value="#{beanAlumno.nuevoAlumnoCPAutoComplete}"
-										styleClass="dateTimeField"
+										styleClass="dateTimeField3"
 										completeMethod="#{beanAlumno.complete}" forceSelection="true">
 										<p:ajax
 											update="nuevoAlumnoSelectColonias nuevoAlumnoEntidadF nuevoAlumnoDelegacion"
@@ -513,7 +544,7 @@
 										style="width:100px; height:30px"
 										value="#{beanAlumno.nuevoAlumnoCapacidad }" />
 									<p:watermark for="nuevoAlumnoCapacidadPW"
-										value="#{msg.capacidad }"/>
+										value="#{msg.capacidad }" />
 								</h:panelGroup>
 								<h:panelGroup>
 									<p:inputText id="nuevoAlumnoCapacidadAutorizadaPW"
@@ -531,16 +562,14 @@
 								</h:panelGroup>
 								<h:panelGroup>
 									<p:calendar id="nuevoAlumnoCapacidadFechaInicioPW"
-										styleClass="dateTimeField2"
-										navigator="true"
+										styleClass="dateTimeField2" navigator="true"
 										value="#{beanAlumno.nuevoAlumnoCapacidadFechaInicio}" />
 									<p:watermark for="nuevoAlumnoCapacidadFechaInicioPW"
 										value="#{msg.fechaInicio }" />
 								</h:panelGroup>
 								<h:panelGroup>
 									<p:calendar id="nuevoAlumnoCapacidadFechaFinPW"
-										styleClass="dateTimeField2"
-										navigator="true"
+										styleClass="dateTimeField2" navigator="true"
 										value="#{beanAlumno.nuevoAlumnoCapacidadFechaFin}" />
 									<p:watermark for="nuevoAlumnoCapacidadFechaFinPW"
 										value="#{msg.fechaFin }" />
@@ -617,24 +646,22 @@
 								<p:row>
 									<p:column>#{msg.conyugue }</p:column>
 									<p:column>
-										<p:inputText value="#{beanAlumno.nuevoAlumnoConyugueNombre }" 
-										style="height:30px; width: 200px;"/>
+										<p:inputText value="#{beanAlumno.nuevoAlumnoConyugueNombre }"
+											style="height:20px; width: 200px;" />
 									</p:column>
 									<p:column>
-										<p:calendar styleClass="dateTimeField"
-											navigator="true"
-											value="#{beanAlumno.nuevoAlumnoConyugueFechaNac}"/>
+										<p:calendar styleClass="dateTimeField3" navigator="true"
+											value="#{beanAlumno.nuevoAlumnoConyugueFechaNac}" />
 									</p:column>
 								</p:row>
 								<p:row>
 									<p:column>#{msg.hijo }</p:column>
 									<p:column>
-										<p:inputText value="#{beanAlumno.nuevoAlumnoHijo1Nombre }" 
-										style="height:30px; width: 200px;"/>
+										<p:inputText value="#{beanAlumno.nuevoAlumnoHijo1Nombre }"
+											style="height:20px; width: 200px;" />
 									</p:column>
 									<p:column>
-										<p:calendar styleClass="dateTimeField"
-											navigator="true"
+										<p:calendar styleClass="dateTimeField3" navigator="true"
 											value="#{beanAlumno.nuevoAlumnoHijo1FechaNac}" />
 									</p:column>
 								</p:row>
@@ -642,11 +669,10 @@
 									<p:column>#{msg.hijo }</p:column>
 									<p:column>
 										<p:inputText value="#{beanAlumno.nuevoAlumnoHijo2Nombre }"
-										style="height:30px; width: 200px;" />
+											style="height:20px; width: 200px;" />
 									</p:column>
 									<p:column>
-										<p:calendar styleClass="dateTimeField"
-											navigator="true"
+										<p:calendar styleClass="dateTimeField3" navigator="true"
 											value="#{beanAlumno.nuevoAlumnoHijo2FechaNac}" />
 									</p:column>
 								</p:row>
@@ -654,11 +680,10 @@
 									<p:column>#{msg.padre }</p:column>
 									<p:column>
 										<p:inputText value="#{beanAlumno.nuevoAlumnoPadreNombre }"
-										style="height:30px; width: 200px;" />
+											style="height:20px; width: 200px;" />
 									</p:column>
 									<p:column>
-										<p:calendar styleClass="dateTimeField"
-											navigator="true"
+										<p:calendar styleClass="dateTimeField3" navigator="true"
 											value="#{beanAlumno.nuevoAlumnoPadreFechaNac}" />
 									</p:column>
 								</p:row>
@@ -666,11 +691,10 @@
 									<p:column>#{msg.madre }</p:column>
 									<p:column>
 										<p:inputText value="#{beanAlumno.nuevoAlumnoMadreNombre }"
-										style="height:30px; width: 200px;" />
+											style="height:20px; width: 200px;" />
 									</p:column>
 									<p:column>
-										<p:calendar styleClass="dateTimeField"
-											navigator="true"
+										<p:calendar styleClass="dateTimeField3" navigator="true"
 											value="#{beanAlumno.nuevoAlumnoMadreFechaNac}" />
 									</p:column>
 								</p:row>
@@ -699,56 +723,43 @@
 								<h:outputText value="#{msg.nombre }" />
 								<p:inputText
 									value="#{beanAlumno.nuevoAlumnoReferenciaNuevaNombre }"
-									style="height:30px; width: 200px;" />
+									style="height:20px; width: 200px;" />
 								<h:outputText value="#{msg.apellidoP }" />
 								<p:inputText
 									value="#{beanAlumno.nuevoAlumnoReferenciaNuevaApellidoP }"
-									style="height:30px; width: 200px;" />
+									style="height:20px; width: 200px;" />
 								<h:outputText value="#{msg.apellidoM }" />
 								<p:inputText
 									value="#{beanAlumno.nuevoAlumnoReferenciaNuevaApellidoM }"
-									style="height:30px; width: 200px;" />
+									style="height:20px; width: 200px;" />
 							</h:panelGrid>
 							<h:panelGrid columns="2" id="gridReferenciaNuevo">
 								<h:panelGrid columns="2" id="panelRefNuevo1">
 									<h:outputText value="#{msg.calle}" />
 									<p:inputText
 										value="#{beanAlumno.nuevoAlumnoReferenciaNuevaCalle }"
-										style="height:30px; width: 200px;" />
+										style="height:20px; width: 200px;" />
 									<h:outputText value="#{msg.colonia }" />
-									<p:selectOneMenu style="height:30px; width: 200px;"
+									<p:selectOneMenu style="width: 200px;"
 										value="#{beanAlumno.nuevoAlumnoIdAsentamientoMunicipioEstadoReferenciaNueva }"
 										id="nuevoAlumnoSelectColoniasReferenciaNueva">
 										<f:selectItems
 											value="#{beanAlumno.nuevoAlumnoSelectListColoniasReferenciaNueva }" />
 									</p:selectOneMenu>
 									<h:outputText value="#{msg.delegacion }" />
-									<p:inputText
-										style="height:30px; width: 200px;"
+									<p:inputText style="height:20px; width: 200px;"
 										value="#{beanAlumno.nuevoAlumnoReferenciaNuevaDelegacion }"
 										readonly="true" id="nuevoAlumnoDelegacionRefNueva" />
 
 									<h:outputText value="#{msg.ciudad }" />
 									<p:inputText
 										value="#{beanAlumno.nuevoAlumnoReferenciaNuevaCiudad }"
-										style="height:30px; width: 200px;" />
+										style="height:20px; width: 200px;" />
 								</h:panelGrid>
 								<h:panelGrid columns="2" id="panelRefNuevo2">
-									<h:panelGroup>
-										<h:outputText value="#{msg.noExterior }" />
-										<p:inputText
-											value="#{beanAlumno.nuevoAlumnoReferenciaNuevaNoExt }"
-											style="height:30px; width: 120px;" />
-									</h:panelGroup>
-									<h:panelGroup>
-										<h:outputText value="#{msg.noInterior }" />
-										<p:inputText
-											value="#{beanAlumno.nuevoAlumnoReferenciaNuevaNoInt }"
-											style="height:30px; width: 120px;" />
-									</h:panelGroup>
 									<h:outputText value="#{msg.codigoPostal }" />
 									<p:autoComplete id="autoCompleteCPReferenciaNuevo"
-										styleClass="zipCodeField"
+										styleClass="zipCodeField2"
 										value="#{beanAlumno.nuevoAlumnoReferenciaCPAutoComplete}"
 										completeMethod="#{beanAlumno.complete}" forceSelection="true">
 										<p:ajax
@@ -756,25 +767,33 @@
 											listener="#{beanAlumno.handleSelectCambiaCPReferenciaNueva}"
 											event="itemSelect" />
 									</p:autoComplete>
+									<h:outputText value="#{msg.noExterior }" />
+									<p:inputText
+										value="#{beanAlumno.nuevoAlumnoReferenciaNuevaNoExt }"
+										style="height:20px; width: 200px;" />
+									<h:outputText value="#{msg.noInterior }" />
+									<p:inputText
+										value="#{beanAlumno.nuevoAlumnoReferenciaNuevaNoInt }"
+										style="height:20px; width: 200px;" />
 									<h:outputText value="#{msg.telefono }" />
 									<p:inputText
 										value="#{beanAlumno.nuevoAlumnoReferenciaNuevaTel }"
-										style="height:30px; width: 200px;" />
+										style="height:20px; width: 200px;" />
 									<h:outputText value="#{msg.entidadFederativa }" />
 									<p:inputText id="nuevoAlumnoEntidadFNuevaRef" readonly="true"
 										value="#{beanAlumno.nuevoAlumnoReferenciaNuevaEntidadFederativa }"
-										style="height:30px; width: 200px;" />
+										style="height:20px; width: 200px;" />
+									<h:outputText />
+									<p:commandButton icon="ui-icon-plusthick"
+										value="#{msg.agregar}"
+										update="tableReferenciasNuevo nuevoAlumnoRefPers gridReferenciaNuevo"
+										actionListener="#{beanAlumno.addAlumnoNuevoReferencia}" />
 								</h:panelGrid>
-								<p:commandButton icon="ui-icon-plusthick"
-									update="tableReferenciasNuevo nuevoAlumnoRefPers gridReferenciaNuevo"
-									actionListener="#{beanAlumno.addAlumnoNuevoReferencia}" />
-
 							</h:panelGrid>
 						</p:tab>
 						<p:tab title="#{msg.anexos }">
 							<h:panelGrid columns="2" style="width:300px">
-								<h:panelGrid id="panelNuevoDocNombre"
-									styleClass="mystyle">
+								<h:panelGrid id="panelNuevoDocNombre" styleClass="mystyle">
 									<p:dataTable id="tableDocumentosNuevo"
 										value="#{beanAlumno.itemNuevo.listaDocumentos}" var="item"
 										selection="#{beanAlumno.documentoSelected}"
@@ -790,12 +809,10 @@
 										<h:outputText value="#{msg.nombre }" />
 										<p:inputText
 											value="#{beanAlumno.nuevoAlumnoDocumentoNuevoNombre }"
-											style="height:30px; width: 350px;"/>
+											style="height:20px; width: 350px;" />
 										<h:outputText value="#{msg.estatus }" />
-										<p:selectOneMenu style="height:30px; width: 350px;"
+										<p:selectOneMenu style=" width: 350px;"
 											value="#{beanAlumno.nuevoAlumnoDocEstatusSelected }">
-											<f:selectItem itemLabel="#{msg.seleccionarEst }"
-												itemValue="0" />
 											<f:selectItems
 												value="#{beanAlumno.nuevoAlumnoDocListaSelectEstatus }" />
 										</p:selectOneMenu>
@@ -804,52 +821,51 @@
 										showButtons="false" uploadLabel="#{msg.cargar }"
 										cancelLabel="#{msg.cancelar }"
 										fileUploadListener="#{beanAlumno.handlerNuevoAlumnoFileUpload}"
-										mode="advanced" update=":form:growl" />
-									<p:commandButton icon="ui-icon-plusthick" style="float: right"
+										mode="advanced"
+										update=":form:growl tableDocumentosNuevo panelDocsCargadosNuevo" />
+									<!-- 
+									 <p:commandButton icon="ui-icon-plusthick" style="float: right"
 										update="tableDocumentosNuevo panelDocsCargadosNuevo"
 										value="#{msg.agregar }"
 										actionListener="#{beanAlumno.addAlumnoNuevoDocumento}" />
+										-->
 								</h:panelGrid>
 							</h:panelGrid>
 						</p:tab>
 					</p:tabView>
 				</h:panelGrid>
 				<p:commandButton id="aceptarNuevoBtn" value="#{msg.aceptar }"
-					icon="ui-icon-check" oncomplete="nuevoDialog.hide()"
-					actionListener="#{beanAlumno.addAlumno }" />
+					icon="ui-icon-check" actionListener="#{beanAlumno.addAlumno }" />
 			</p:dialog>
 			<!-- Fin de panel de Nuevo -->
 			<!-- Inicio de panel de edicion -->
-			<p:dialog id="dialogEditar" header="#{msg.editarAlumno}" position="top"
-				widgetVar="editarDialog" modal="true" maximizable="true"
-				width="900px" height="600px">
+			<p:dialog id="dialogEditar" header="#{msg.editarAlumno}"
+				position="top" widgetVar="editarDialog" modal="true"
+				maximizable="true" width="950px" height="600px">
 				<h:panelGrid id="displayEditar" columns="1" cellpadding="4">
 					<h:panelGroup id="messagePanelEditar" layout="block">
 						<h:messages errorStyle="color: red" infoStyle="color: green"
 							layout="list" style="font-size:12px;font-family:Arial" />
 					</h:panelGroup>
-					<h:panelGrid columns="2" styleClass="panelGridCenter" >
+					<h:panelGrid columns="2" styleClass="panelGridCenter">
 						<h:outputText value="#{msg.matricula }" />
 						<h:panelGroup>
 							<p:inputText value="#{beanAlumno.editarAlumnoMatricula }"
-								id="editarAlumnoMatriculaInput"
-								style="width:300px;height:30px"/>
+								id="editarAlumnoMatriculaInput" style="width:300px;height:20px" />
 							<p:watermark value="#{beanAlumno.itemSelected.matricula}"
 								for="editarAlumnoMatriculaInput" />
 						</h:panelGroup>
 						<h:outputText value="#{msg.nombre }" />
 						<h:panelGroup>
 							<p:inputText value="#{beanAlumno.editarAlumnoNombre}"
-								id="editarAlumnoNombreInput"
-								style="width:300px; height:30px"/>
+								id="editarAlumnoNombreInput" style="width:300px; height:20px" />
 							<p:watermark value="#{beanAlumno.itemSelected.dtoPersona.nombre}"
 								for="editarAlumnoNombreInput" />
 						</h:panelGroup>
 						<h:outputText value="#{msg.apellidoP }" />
 						<h:panelGroup>
 							<p:inputText value="#{beanAlumno.editarAlumnoApellidoP}"
-								id="editarAlumnoApellidoPInput"
-								style="width:300px; height:30px" />
+								id="editarAlumnoApellidoPInput" style="width:300px; height:20px" />
 							<p:watermark
 								value="#{beanAlumno.itemSelected.dtoPersona.apellidoP}"
 								for="editarAlumnoApellidoPInput" />
@@ -857,28 +873,26 @@
 						<h:outputText value="#{msg.apellidoM }" />
 						<h:panelGroup>
 							<p:inputText value="#{beanAlumno.editarAlumnoApellidoM}"
-								id="editarAlumnoApellidoMInput"
-								style="width:300px; height:30px" />
+								id="editarAlumnoApellidoMInput" style="width:300px; height:20px" />
 							<p:watermark
 								value="#{beanAlumno.itemSelected.dtoPersona.apellidoM}"
 								for="editarAlumnoApellidoMInput" />
 						</h:panelGroup>
 						<h:outputText value="#{msg.estatus }" />
-						<p:selectOneMenu
-							style="width:300px; height:30px"
+						<p:selectOneMenu style="width:300px"
 							value="#{beanAlumno.editarAlumnoIdEstatusSelected}">
 							<f:selectItems value="#{beanAlumno.listaSelectEstatus }" />
 						</p:selectOneMenu>
-						</h:panelGrid>
-						<h:panelGrid columns="1">
+					</h:panelGrid>
+					<h:panelGrid columns="1">
 						<p:tabView id="tabEditar">
 							<p:tab title="#{msg.personales }">
 								<h:panelGrid columns="2">
 									<h:outputText value="#{msg.fechaNacimiento }" />
 									<h:panelGroup>
 										<p:calendar value="#{beanAlumno.editarAlumnoFechaNac}"
-											navigator="true" id="editarAlumnoFechaNacInput" 
-											styleClass="dateTimeField" />
+											navigator="true" id="editarAlumnoFechaNacInput"
+											styleClass="dateTimeField3" />
 										<p:watermark
 											value="#{beanAlumno.itemSelected.dtoPersona.fechaNacStr}"
 											for="editarAlumnoFechaNacInput" />
@@ -887,7 +901,7 @@
 									<h:panelGroup>
 										<p:inputText value="#{beanAlumno.editarAlumnoLugarNac }"
 											id="editarAlumnoLugarNacInput"
-											style="width:300px; height:30px" />
+											style="width:300px; height:20px" />
 										<p:watermark
 											value="#{beanAlumno.itemSelected.dtoPersona.lugarNac}"
 											for="editarAlumnoLugarNacInput" />
@@ -895,8 +909,7 @@
 									<h:outputText value="#{msg.curp }" />
 									<h:panelGroup>
 										<p:inputText value="#{beanAlumno.editarAlumnoCurp }"
-											id="editarAlumnoCurpInput"
-											style="width:300px; height:30px" />
+											id="editarAlumnoCurpInput" style="width:300px; height:20px" />
 										<p:watermark
 											value="#{beanAlumno.itemSelected.dtoPersona.curp}"
 											for="editarAlumnoCurpInput" />
@@ -904,8 +917,7 @@
 									<h:outputText value="#{msg.rfc }" />
 									<h:panelGroup>
 										<p:inputText value="#{beanAlumno.editarAlumnoRfc }"
-											id="editarAlumnoRfcInput"
-											style="width:300px; height:30px" />
+											id="editarAlumnoRfcInput" style="width:300px; height:20px" />
 										<p:watermark value="#{beanAlumno.itemSelected.dtoPersona.rfc}"
 											for="editarAlumnoRfcInput" />
 									</h:panelGroup>
@@ -913,7 +925,7 @@
 									<h:panelGroup>
 										<p:inputText value="#{beanAlumno.editarAlumnoPasaporte }"
 											id="editarAlumnoPasaporteInput"
-											style="width:300px; height:30px" />
+											style="width:300px; height:20px" />
 										<p:watermark
 											value="#{beanAlumno.itemSelected.dtoPersona.pasaporte}"
 											for="editarAlumnoPasaporteInput" />
@@ -921,16 +933,14 @@
 									<h:outputText value="#{msg.ife }" />
 									<h:panelGroup>
 										<p:inputText value="#{beanAlumno.editarAlumnoIfe }"
-											id="editarAlumnoIfeInput"
-											style="width:300px; height:30px"/>
+											id="editarAlumnoIfeInput" style="width:300px; height:20px" />
 										<p:watermark value="#{beanAlumno.itemSelected.dtoPersona.ife}"
 											for="editarAlumnoIfeInput" />
 									</h:panelGroup>
 									<h:outputText value="#{msg.email }" />
 									<h:panelGroup>
 										<p:inputText value="#{beanAlumno.editarAlumnoEmail }"
-											id="editarAlumnoEmailInput"
-											style="width:300px; height:30px" />
+											id="editarAlumnoEmailInput" style="width:300px; height:20px" />
 										<p:watermark
 											value="#{beanAlumno.itemSelected.dtoPersona.email}"
 											for="editarAlumnoEmailInput" />
@@ -943,8 +953,7 @@
 										<h:outputText value="#{msg.calle }" />
 										<h:panelGroup>
 											<p:inputText value="#{beanAlumno.editarAlumnoCalle }"
-												id="editarAlumnoCalleInput"
-												style="width:300px; height:30px" />
+												id="editarAlumnoCalleInput" style="width:300px; height:20px" />
 											<p:watermark
 												value="#{beanAlumno.itemSelected.dtoDomicilio.calle}"
 												for="editarAlumnoCalleInput" />
@@ -952,15 +961,14 @@
 										<h:outputText value="#{msg.noExterior }" />
 										<h:panelGroup>
 											<p:inputText value="#{beanAlumno.editarAlumnoNoExt }"
-												id="editarAlumnoNoExtInput"
-												style="width:300px; height:30px" />
+												id="editarAlumnoNoExtInput" style="width:300px; height:20px" />
 											<p:watermark
 												value="#{beanAlumno.itemSelected.dtoDomicilio.noExterior}"
 												for="editarAlumnoNoExtInput" />
 										</h:panelGroup>
 										<h:outputText value="#{msg.colonia }" />
 										<h:panelGroup>
-											<p:selectOneMenu style="width:300px; height:30px"
+											<p:selectOneMenu style="width:300px"
 												value="#{beanAlumno.editarAlumnoIdAsentamientoMunicipioEstado }"
 												id="editarAlumnoSelectColonias">
 												<f:selectItems
@@ -974,7 +982,7 @@
 										<h:panelGroup>
 											<p:inputText value="#{beanAlumno.editarAlumnoDelegacion }"
 												readonly="true" id="editarAlumnoDelegacion"
-												style="width:300px; height:30px" />
+												style="width:300px; height:20px" />
 											<p:watermark
 												value="#{beanAlumno.itemSelected.dtoDomicilio.municipio}"
 												for="editarAlumnoDelegacion" />
@@ -983,7 +991,7 @@
 										<h:panelGroup>
 											<p:inputText value="#{beanAlumno.editarAlumnoCiudad }"
 												id="editarAlumnoCiudadInput"
-												style="width:300px; height:30px" />
+												style="width:300px; height:20px" />
 											<p:watermark
 												value="#{beanAlumno.itemSelected.dtoDomicilio.ciudad}"
 												for="editarAlumnoCiudadInput" />
@@ -992,7 +1000,7 @@
 										<h:panelGroup>
 											<p:inputText id="editarAlumnoEntidadF" readonly="true"
 												value="#{beanAlumno.editarAlumnoEntidadFederativa }"
-												style="width:300px; height:30px" />
+												style="width:300px; height:20px" />
 											<p:watermark
 												value="#{beanAlumno.itemSelected.dtoDomicilio.estado}"
 												for="editarAlumnoEntidadF" />
@@ -1001,7 +1009,7 @@
 										<h:panelGroup>
 											<p:inputText value="#{beanAlumno.editarAlumnoTelefono }"
 												id="editarAlumnoTelefonoInput"
-												style="width:300px; height:30px" />
+												style="width:300px; height:20px" />
 											<p:watermark
 												value="#{beanAlumno.itemSelected.dtoDomicilio.telefono}"
 												for="editarAlumnoTelefonoInput" />
@@ -1011,8 +1019,7 @@
 										<h:outputText value="#{msg.noInterior }" />
 										<h:panelGroup>
 											<p:inputText value="#{beanAlumno.editarAlumnoNoInt }"
-												id="editarAlumnoNoIntInput" 
-												style="width:300px; height:30px"/>
+												id="editarAlumnoNoIntInput" style="width:300px; height:20px" />
 											<p:watermark
 												value="#{beanAlumno.itemSelected.dtoDomicilio.noInterior}"
 												for="editarAlumnoNoIntInput" />
@@ -1022,7 +1029,7 @@
 											<p:autoComplete id="autoCompleteCPEditar"
 												value="#{beanAlumno.editarAlumnoCPAutoComplete}"
 												completeMethod="#{beanAlumno.complete}"
-												forceSelection="true" styleClass="dateTimeField">
+												forceSelection="true" styleClass="dateTimeField3">
 												<p:ajax
 													update="editarAlumnoSelectColonias editarAlumnoEntidadF editarAlumnoDelegacion"
 													listener="#{beanAlumno.handleSelectCambiaCpEditar}"
@@ -1078,42 +1085,42 @@
 									</h:panelGroup>
 									<h:panelGroup>
 										<p:inputText id="editarAlumnoCapacidadPW"
-											style="width:100px; height:30px"
+											style="width:100px; height:20px"
 											value="#{beanAlumno.editarAlumnoCapacidad }" />
 										<p:watermark for="editarAlumnoCapacidadPW"
 											value="#{msg.capacidad }" />
 									</h:panelGroup>
 									<h:panelGroup>
 										<p:inputText id="editarAlumnoCapacidadAutorizadaPW"
-											style="width:100px; height:30px"
+											style="width:100px; height:20px"
 											value="#{beanAlumno.editarAlumnoCapacidadAutorizada }" />
 										<p:watermark for="editarAlumnoCapacidadAutorizadaPW"
 											value="#{msg.autorizada }" />
 									</h:panelGroup>
 									<h:panelGroup>
 										<p:inputText id="editarAlumnoCapacidadHorasPW"
-											style="width:80px; height:30px"
+											style="width:80px; height:20px"
 											value="#{beanAlumno.editarAlumnoCapacidadHoras }" />
 										<p:watermark for="editarAlumnoCapacidadHorasPW"
 											value="#{msg.horas }" />
 									</h:panelGroup>
 									<h:panelGroup>
 										<p:calendar id="editarAlumnoCapacidadFechaInicioPW"
-											styleClass="dateTimeField2" navigator="true"
+											styleClass="dateTimeField3" navigator="true"
 											value="#{beanAlumno.editarAlumnoCapacidadFechaInicio}" />
 										<p:watermark for="editarAlumnoCapacidadFechaInicioPW"
 											value="#{msg.fechaInicio }" />
 									</h:panelGroup>
 									<h:panelGroup>
 										<p:calendar id="editarAlumnoCapacidadFechaFinPW"
-											styleClass="dateTimeField2" navigator="true"
+											styleClass="dateTimeField3" navigator="true"
 											value="#{beanAlumno.editarAlumnoCapacidadFechaFin}" />
 										<p:watermark for="editarAlumnoCapacidadFechaFinPW"
 											value="#{msg.fechaFin }" />
 									</h:panelGroup>
 									<h:panelGroup>
 										<p:inputText id="editarAlumnoCapacidadAcreditadaPW"
-											style="width:100px; height:30px"
+											style="width:100px; height:20px"
 											value="#{beanAlumno.editarAlumnoCapacidadAcreditada }" />
 										<p:watermark for="editarAlumnoCapacidadAcreditadaPW"
 											value="#{msg.acreditada }" />
@@ -1125,9 +1132,8 @@
 							</p:tab>
 							<p:tab title="#{msg.estudios }">
 								<p:dataTable id="tableEstudiosEditar" editable="true"
-									editMode="cell"
-									value="#{beanAlumno.editarAlumnoListaEstudios}" var="item"
-									rowKey="#{item.idEstudios}">
+									editMode="cell" value="#{beanAlumno.editarAlumnoListaEstudios}"
+									var="item" rowKey="#{item.idEstudios}">
 									<p:column headerText="">
 										<h:outputText value="#{item.tipoEstudio}" />
 									</p:column>
@@ -1137,7 +1143,8 @@
 												<h:outputText value="#{item.institucion}" />
 											</f:facet>
 											<f:facet name="input">
-												<p:inputText value="#{item.institucion}" style=" height:100%;"/>
+												<p:inputText value="#{item.institucion}"
+													style=" height:100%;" />
 											</f:facet>
 										</p:cellEditor>
 									</p:column>
@@ -1147,7 +1154,7 @@
 												<h:outputText value="#{item.fechaIni}" />
 											</f:facet>
 											<f:facet name="input">
-												<p:inputText value="#{item.fechaIni}" style=" height:100%;"/>
+												<p:inputText value="#{item.fechaIni}" style=" height:20px," />
 											</f:facet>
 										</p:cellEditor>
 									</p:column>
@@ -1157,7 +1164,7 @@
 												<h:outputText value="#{item.fechaFin}" />
 											</f:facet>
 											<f:facet name="input">
-												<p:inputText value="#{item.fechaFin}" style=" height:100%;"/>
+												<p:inputText value="#{item.fechaFin}" style=" height:20px;" />
 											</f:facet>
 										</p:cellEditor>
 									</p:column>
@@ -1167,7 +1174,7 @@
 												<h:outputText value="#{item.cert}" />
 											</f:facet>
 											<f:facet name="input">
-												<p:inputText value="#{item.cert}" style=" height:100%;"/>
+												<p:inputText value="#{item.cert}" style=" height:20px;" />
 											</f:facet>
 										</p:cellEditor>
 									</p:column>
@@ -1185,7 +1192,7 @@
 										<p:column>#{msg.conyugue }</p:column>
 										<p:column>
 											<h:panelGroup>
-												<p:inputText style="height:30px; width: 200px;"
+												<p:inputText style="height:20px; width: 200px;"
 													value="#{beanAlumno.editarAlumnoConyugueNombre }"
 													id="editarAlumnoConyNombreInput" />
 												<p:watermark
@@ -1195,8 +1202,7 @@
 										</p:column>
 										<p:column>
 											<h:panelGroup>
-												<p:calendar styleClass="dateTimeField"
-													navigator="true"
+												<p:calendar styleClass="dateTimeField3" navigator="true"
 													value="#{beanAlumno.editarAlumnoConyugueFechaNac}"
 													id="editarAlumnoConyugueFechaNacInput" />
 												<p:watermark
@@ -1210,7 +1216,7 @@
 										<p:column>
 											<h:panelGroup>
 												<p:inputText value="#{beanAlumno.editarAlumnoHijo1Nombre }"
-													style="height:30px; width: 200px;"
+													style="height:20px; width: 200px;"
 													id="editarAlumnoHijo1NombreInput" />
 												<p:watermark
 													value="#{beanAlumno.itemSelected.dtoFamilia.hijo1Nombre}"
@@ -1219,10 +1225,9 @@
 										</p:column>
 										<p:column>
 											<h:panelGroup>
-												<p:calendar styleClass="dateTimeField"
+												<p:calendar styleClass="dateTimeField3"
 													value="#{beanAlumno.editarAlumnoHijo1FechaNac}"
-													navigator="true"
-													id="editarAlumnoHijo1FechaNacInput" />
+													navigator="true" id="editarAlumnoHijo1FechaNacInput" />
 												<p:watermark
 													value="#{beanAlumno.itemSelected.dtoFamilia.hijo1FechaNacStr}"
 													for="editarAlumnoHijo1FechaNacInput" />
@@ -1234,7 +1239,7 @@
 										<p:column>
 											<h:panelGroup>
 												<p:inputText value="#{beanAlumno.editarAlumnoHijo2Nombre }"
-													style="height:30px; width: 200px;"
+													style="height:20px; width: 200px;"
 													id="editarAlumniHijo2NombreInput" />
 												<p:watermark
 													value="#{beanAlumno.itemSelected.dtoFamilia.hijo2Nombre}"
@@ -1243,10 +1248,9 @@
 										</p:column>
 										<p:column>
 											<h:panelGroup>
-												<p:calendar styleClass="dateTimeField"
+												<p:calendar styleClass="dateTimeField3"
 													value="#{beanAlumno.editarAlumnoHijo2FechaNac}"
-													navigator="true"
-													id="editarAlumnoHijo2FechaNacInput" />
+													navigator="true" id="editarAlumnoHijo2FechaNacInput" />
 												<p:watermark
 													value="#{beanAlumno.itemSelected.dtoFamilia.hijo2FechaNacStr}"
 													for="editarAlumnoHijo2FechaNacInput" />
@@ -1258,7 +1262,7 @@
 										<p:column>
 											<h:panelGroup>
 												<p:inputText value="#{beanAlumno.editarAlumnoPadreNombre }"
-													style="height:30px; width: 200px;"
+													style="height:20px; width: 200px;"
 													id="editarAlumnoPadreNombreInput" />
 												<p:watermark
 													value="#{beanAlumno.itemSelected.dtoFamilia.padreNombre}"
@@ -1267,10 +1271,9 @@
 										</p:column>
 										<p:column>
 											<h:panelGroup>
-												<p:calendar styleClass="dateTimeField"
+												<p:calendar styleClass="dateTimeField3"
 													value="#{beanAlumno.editarAlumnoPadreFechaNac}"
-													navigator="true"
-													id="editarAlumnoPadreFechaNacInput" />
+													navigator="true" id="editarAlumnoPadreFechaNacInput" />
 												<p:watermark
 													value="#{beanAlumno.itemSelected.dtoFamilia.padreFechaNacStr}"
 													for="editarAlumnoPadreFechaNacInput" />
@@ -1282,7 +1285,7 @@
 										<p:column>
 											<h:panelGroup>
 												<p:inputText value="#{beanAlumno.editarAlumnoMadreNombre }"
-													style="height:30px; width: 200px;"
+													style="height:20px; width: 200px;"
 													id="editarAlumnoMadreNombreInput" />
 												<p:watermark
 													value="#{beanAlumno.itemSelected.dtoFamilia.madreNombre}"
@@ -1291,10 +1294,9 @@
 										</p:column>
 										<p:column>
 											<h:panelGroup>
-												<p:calendar styleClass="dateTimeField"
+												<p:calendar styleClass="dateTimeField3"
 													value="#{beanAlumno.editarAlumnoMadreFechaNac}"
-													navigator="true"
-													id="editarAlumnoMadreFechaNacInput" />
+													navigator="true" id="editarAlumnoMadreFechaNacInput" />
 												<p:watermark
 													value="#{beanAlumno.itemSelected.dtoFamilia.madreFechaNacStr}"
 													for="editarAlumnoMadreFechaNacInput" />
@@ -1304,132 +1306,128 @@
 								</p:panelGrid>
 							</p:tab>
 							<p:tab title="#{msg.referencias }" id="tabRefererenciasEditar1">
-							<p:dataTable id="tableReferenciasEditar"
-								value="#{beanAlumno.itemSelected.listaReferencias}" var="item"
-								selection="#{beanAlumno.editarAlumnoReferenciaSelected}"
-								selectionMode="single" rowKey="#{item.idReferencia}">
-								<!-- <p:ajax event="rowSelect"
+								<p:dataTable id="tableReferenciasEditar"
+									value="#{beanAlumno.itemSelected.listaReferencias}" var="item"
+									selection="#{beanAlumno.editarAlumnoReferenciaSelected}"
+									selectionMode="single" rowKey="#{item.idReferencia}">
+									<!-- <p:ajax event="rowSelect"
 									listener="#{beanAlumno.onReferenciaSelect}"
 									update=":form:tabVer:panelRefNuevo1 :form:tabVer:panelRefNuevo2" /> -->
-								<p:column headerText="#{msg.nombre }">
-									<h:outputText value="#{item.dtoPersona.nombre}" />
-								</p:column>
-								<p:column headerText="#{msg.apellidoP }">
-									<h:outputText value="#{item.dtoPersona.apellidoP}" />
-								</p:column>
-								<p:column headerText="#{msg.apellidoM }">
-									<h:outputText value="#{item.dtoPersona.apellidoM}" />
-								</p:column>
-							</p:dataTable>
-							<p:separator />
-							<h:panelGrid columns="6" id="editarAlumnoRefPers">
-								<h:outputText value="#{msg.nombre }" />
-								<p:inputText style=" height:100%;"
-									value="#{beanAlumno.editarAlumnoReferenciaNuevaNombre }" />
-								<h:outputText value="#{msg.apellidoP }" />
-								<p:inputText style="height:30px; width: 200px;"
-									value="#{beanAlumno.editarAlumnoReferenciaNuevaApellidoP }" />
-								<h:outputText value="#{msg.apellidoM }" />
-								<p:inputText style="height:30px; width: 200px;"
-									value="#{beanAlumno.editarAlumnoReferenciaNuevaApellidoM }" />
-							</h:panelGrid>
-							<h:panelGrid columns="2" id="gridReferenciaEditar">
-								<h:panelGrid columns="2" id="panelRefEditar1">
-									<h:outputText value="#{msg.calle}" />
-									<p:inputText style="height:30px; width: 200px;"
-										value="#{beanAlumno.editarAlumnoReferenciaNuevaCalle }" />
-									<h:outputText value="#{msg.colonia }" />
-									<p:selectOneMenu style="height:30px; width: 200px;"
-										value="#{beanAlumno.editarAlumnoIdAsentamientoMunicipioEstadoReferenciaNueva }"
-										id="editarAlumnoSelectColoniasReferenciaNuevo">
-										<f:selectItems
-											value="#{beanAlumno.editarAlumnoSelectListColoniasReferenciaNueva }" />
-									</p:selectOneMenu>
-									<h:outputText value="#{msg.delegacion }" />
-									<p:inputText style="height:30px; width: 200px;"
-										value="#{beanAlumno.editarAlumnoReferenciaNuevaDelegacion }"
-										readonly="true" id="editarAlumnoDelegacionRefNueva" />
-
-									<h:outputText value="#{msg.ciudad }" />
-									<p:inputText style="height:30px; width: 200px;"
-										value="#{beanAlumno.editarAlumnoReferenciaNuevaCiudad }" />
+									<p:column headerText="#{msg.nombre }">
+										<h:outputText value="#{item.dtoPersona.nombre}" />
+									</p:column>
+									<p:column headerText="#{msg.apellidoP }">
+										<h:outputText value="#{item.dtoPersona.apellidoP}" />
+									</p:column>
+									<p:column headerText="#{msg.apellidoM }">
+										<h:outputText value="#{item.dtoPersona.apellidoM}" />
+									</p:column>
+								</p:dataTable>
+								<p:separator />
+								<h:panelGrid columns="6" id="editarAlumnoRefPers">
+									<h:outputText value="#{msg.nombre }" />
+									<p:inputText style=" height:20px;"
+										value="#{beanAlumno.editarAlumnoReferenciaNuevaNombre }" />
+									<h:outputText value="#{msg.apellidoP }" />
+									<p:inputText style="height:20px; width: 200px;"
+										value="#{beanAlumno.editarAlumnoReferenciaNuevaApellidoP }" />
+									<h:outputText value="#{msg.apellidoM }" />
+									<p:inputText style="height:20px; width: 200px;"
+										value="#{beanAlumno.editarAlumnoReferenciaNuevaApellidoM }" />
 								</h:panelGrid>
-								<h:panelGrid columns="2" id="panelReEditar2">
-									<h:panelGroup>
-										<h:outputText value="#{msg.noExterior }" />
-										<p:inputText
-											value="#{beanAlumno.editarAlumnoReferenciaNuevaNoExt }"
-											style="height:30px; width: 117px;" />
-									</h:panelGroup>
-									<h:panelGroup>
-										<h:outputText value="#{msg.noInterior }" />
-										<p:inputText style="height:30px; width: 117px;"
-											value="#{beanAlumno.editarAlumnoReferenciaNuevaNoInt }" />
-									</h:panelGroup>
-									<h:outputText value="#{msg.codigoPostal }" />
-									<p:autoComplete id="autoCompleteCPReferenciaEditar" styleClass="zipCodeField"
-										value="#{beanAlumno.editarAlumnoReferenciaCPAutoComplete}"
-										completeMethod="#{beanAlumno.complete}" forceSelection="true">
-										<p:ajax
-											update="editarAlumnoSelectColoniasReferenciaNuevo editarAlumnoEntidadFNuevaRef editarAlumnoDelegacionRefNueva"
-											listener="#{beanAlumno.handleSelectCambiaCPReferenciaNueva}"
-											event="itemSelect" />
-									</p:autoComplete>
-									<h:outputText value="#{msg.telefono }" />
-									<p:inputText style="height:30px; width: 200px;"
-										value="#{beanAlumno.editarAlumnoReferenciaNuevaTel }" />
-									<h:outputText value="#{msg.entidadFederativa }" />
-									<p:inputText id="editarAlumnoEntidadFNuevaRef" readonly="true" 
-										style="height:30px; width: 200px;"
-										value="#{beanAlumno.editarAlumnoReferenciaNuevaEntidadFederativa}" />
-								</h:panelGrid>
-								<p:commandButton icon="ui-icon-plusthick"
-									update="tableReferenciasEditar editarAlumnoRefPers gridReferenciaEditar"
-									actionListener="#{beanAlumno.addAlumnoEditarReferencia}" />
-
-							</h:panelGrid>
-						</p:tab>
-						<p:tab title="#{msg.anexos }">
-							<h:panelGrid columns="2" style="width:300px">
-								<h:panelGrid id="panelEditarDocNombre"
-									styleClass="mystyle">
-									<p:dataTable id="tableDocumentosEditar"
-										value="#{beanAlumno.itemSelected.listaDocumentos}" var="item"
-										selection="#{beanAlumno.documentoSelected}"
-										selectionMode="single" rowKey="#{item.idDoc}">
-										<p:column headerText="#{msg.documento }">
-											<h:outputText value="#{item.nombre}" />
-										</p:column>
-									</p:dataTable>
-								</h:panelGrid>
-								<h:panelGrid id="panelDocsCargadosEditar" columns="1"
-									style="width:400px">
-									<h:panelGrid columns="2">
-										<h:outputText value="#{msg.nombre }" />
-										<p:inputText
-											value="#{beanAlumno.editarAlumnoDocumentoNuevoNombre }" 
-											style="height:30px; width: 350px;"/>
-										<h:outputText value="#{msg.estatus }" />
-										<p:selectOneMenu style="height:30px; width: 350px;"
-											value="#{beanAlumno.editarAlumnoDocEstatusSelected }">
-											<f:selectItem itemLabel="#{msg.seleccionarEst }"
-												itemValue="0" />
+								<h:panelGrid columns="2" id="gridReferenciaEditar">
+									<h:panelGrid columns="2" id="panelRefEditar1">
+										<h:outputText value="#{msg.calle}" />
+										<p:inputText style="height:20px; width: 200px;"
+											value="#{beanAlumno.editarAlumnoReferenciaNuevaCalle }" />
+										<h:outputText value="#{msg.colonia }" />
+										<p:selectOneMenu style="height:20px; width: 200px;"
+											value="#{beanAlumno.editarAlumnoIdAsentamientoMunicipioEstadoReferenciaNueva }"
+											id="editarAlumnoSelectColoniasReferenciaNuevo">
 											<f:selectItems
-												value="#{beanAlumno.nuevoAlumnoDocListaSelectEstatus }" />
+												value="#{beanAlumno.editarAlumnoSelectListColoniasReferenciaNueva }" />
 										</p:selectOneMenu>
+										<h:outputText value="#{msg.delegacion }" />
+										<p:inputText style="height:20px; width: 200px;"
+											value="#{beanAlumno.editarAlumnoReferenciaNuevaDelegacion }"
+											readonly="true" id="editarAlumnoDelegacionRefNueva" />
+
+										<h:outputText value="#{msg.ciudad }" />
+										<p:inputText style="height:20px; width: 200px;"
+											value="#{beanAlumno.editarAlumnoReferenciaNuevaCiudad }" />
 									</h:panelGrid>
-									<p:fileUpload label="#{msg.frsSeleccionar }" fileLimit="1"
-										showButtons="false" uploadLabel="#{msg.cargar }"
-										cancelLabel="#{msg.cancelar }"
-										fileUploadListener="#{beanAlumno.handlerNuevoAlumnoFileUpload}"
-										mode="advanced" update=":form:growl" />
-									<p:commandButton icon="ui-icon-plusthick" style="float: right"
-										update="tableDocumentosEditar panelDocsCargadosEditar"
-										value="#{msg.agregar }"
-										actionListener="#{beanAlumno.addAlumnoNuevoDocumento}" />
+									<h:panelGrid columns="2" id="panelReEditar2">
+									<h:outputText value="#{msg.codigoPostal }" />
+										<p:autoComplete id="autoCompleteCPReferenciaEditar"
+											styleClass="zipCodeField2"
+											value="#{beanAlumno.editarAlumnoReferenciaCPAutoComplete}"
+											completeMethod="#{beanAlumno.complete}" forceSelection="true">
+											<p:ajax
+												update="editarAlumnoSelectColoniasReferenciaNuevo editarAlumnoEntidadFNuevaRef editarAlumnoDelegacionRefNueva"
+												listener="#{beanAlumno.handleSelectCambiaCPReferenciaNueva}"
+												event="itemSelect" />
+										</p:autoComplete>
+											<h:outputText value="#{msg.noExterior }" />
+											<p:inputText
+												value="#{beanAlumno.editarAlumnoReferenciaNuevaNoExt }"
+												style="height:20px; width: 200px;" />
+											<h:outputText value="#{msg.noInterior }" />
+											<p:inputText style="height:20px; width: 200px;"
+												value="#{beanAlumno.editarAlumnoReferenciaNuevaNoInt }" />
+										<h:outputText value="#{msg.telefono }" />
+										<p:inputText style="height:20px; width: 200px;"
+											value="#{beanAlumno.editarAlumnoReferenciaNuevaTel }" />
+										<h:outputText value="#{msg.entidadFederativa }" />
+										<p:inputText id="editarAlumnoEntidadFNuevaRef" readonly="true"
+											style="height:20px; width: 200px;"
+											value="#{beanAlumno.editarAlumnoReferenciaNuevaEntidadFederativa}" />
+											<h:outputText />
+											<p:commandButton icon="ui-icon-plusthick" value="#{msg.agregar}"
+										update="tableReferenciasEditar editarAlumnoRefPers gridReferenciaEditar"
+										actionListener="#{beanAlumno.addAlumnoEditarReferencia}" />
+									</h:panelGrid>
 								</h:panelGrid>
-							</h:panelGrid>
-						</p:tab>
+							</p:tab>
+							<p:tab title="#{msg.anexos }">
+								<h:panelGrid columns="2" style="width:300px">
+									<h:panelGrid id="panelEditarDocNombre" styleClass="mystyle">
+										<p:dataTable id="tableDocumentosEditar"
+											value="#{beanAlumno.itemSelected.listaDocumentos}" var="item"
+											selection="#{beanAlumno.documentoSelected}"
+											selectionMode="single" rowKey="#{item.idDoc}">
+											<p:column headerText="#{msg.documento }">
+												<h:outputText value="#{item.nombre}" />
+											</p:column>
+										</p:dataTable>
+									</h:panelGrid>
+									<h:panelGrid id="panelDocsCargadosEditar" columns="1"
+										style="width:400px">
+										<h:panelGrid columns="2">
+											<h:outputText value="#{msg.nombre }" />
+											<p:inputText
+												value="#{beanAlumno.editarAlumnoDocumentoNuevoNombre }"
+												style="height:20px; width: 350px;" />
+											<h:outputText value="#{msg.estatus }" />
+											<p:selectOneMenu style="height:20px; width: 350px;"
+												value="#{beanAlumno.editarAlumnoDocEstatusSelected }">
+												<f:selectItems
+													value="#{beanAlumno.nuevoAlumnoDocListaSelectEstatus }" />
+											</p:selectOneMenu>
+										</h:panelGrid>
+										<p:fileUpload label="#{msg.frsSeleccionar }" fileLimit="1"
+											showButtons="false" uploadLabel="#{msg.cargar }"
+											cancelLabel="#{msg.cancelar }"
+											fileUploadListener="#{beanAlumno.handlerNuevoAlumnoFileUpload}"
+											mode="advanced" update=":form:growl" />
+										<!-- 
+										<p:commandButton icon="ui-icon-plusthick" style="float: right"
+											update="tableDocumentosEditar panelDocsCargadosEditar"
+											value="#{msg.agregar }"
+											actionListener="#{beanAlumno.addAlumnoNuevoDocumento}" />
+											-->
+									</h:panelGrid>
+								</h:panelGrid>
+							</p:tab>
 						</p:tabView>
 
 					</h:panelGrid>

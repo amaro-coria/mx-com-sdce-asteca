@@ -9,13 +9,13 @@
 <h:body>
 	<ui:composition>
 		<h:form id="form">
-			<p:growl id="growl" showDetail="true" sticky="true" />
+			<p:growl id="growl" showDetail="true" />
 			<p:panel id="panel" header="Buscar" closable="false"
 				toggleable="false" style="text-align:center;">
 				<h:panelGrid columns="2" style="text-align:left;">
 					<h:outputText value="#{msg.sede} :" />
 					<p:selectOneMenu id="selectCveFilter"
-						value="#{beanAulas.selectedItemFilter }" style="min-width: 480px">
+						value="#{beanAulas.selectedItemFilter }" style="width: 500px">
 						<f:selectItem itemLabel="#{msg.seleccionarSede }" itemValue="" />
 						<f:selectItems value="#{beanAulas.listaSelectItems}" />
 					</p:selectOneMenu>
@@ -36,14 +36,14 @@
 			<p:panel>
 				<h:panelGrid columns="4" style="text-align:left;">
 					<p:commandButton id="deleteButton" value="#{msg.eliminar }"
-						icon="ui-icon-trash" onclick="borrarDialog.show()" update="growl" />
+						icon="ui-icon-trash" onclick="borrarDialog.show()" update="growl" rendered="#{beanAulas.borrar}"/>
 					<p:commandButton id="editarButton" value="#{msg.editar }"
-						icon="ui-icon-pencil" onclick="editarDialog.show()" 
+						icon="ui-icon-pencil" onclick="editarDialog.show()" rendered="#{beanAulas.cambios}"
 						update=":form:displayEditar, growl" />
-					<p:commandButton id="viewButton" value="#{msg.ver }"
+					<p:commandButton id="viewButton" value="#{msg.ver }" rendered="#{beanAulas.consulta}"
 						icon="ui-icon-search" oncomplete="verDialog.show()" 
 						update=":form:displayVer, growl" />
-					<p:commandButton id="nuevoButton" value="#{msg.nuevo }"
+					<p:commandButton id="nuevoButton" value="#{msg.nuevo }" rendered="#{beanAulas.alta}"
 						icon="ui-icon-plusthick" onclick="nuevoDialog.show()" 
 						update=":form:displayNuevo, growl" />
 				</h:panelGrid>
@@ -72,7 +72,7 @@
 			</p:panel>
 			<!-- Panel de Ver -->
 			<p:dialog id="dialog" header="#{msg.ver}" widgetVar="verDialog" position="top"
-				modal="true">
+				modal="true" draggable="false">
 				<h:panelGrid id="displayVer" columns="2" cellpadding="4">
 					<h:panelGroup id="messagePanelVer" layout="block">
 						<h:messages errorStyle="color: red" infoStyle="color: green"
@@ -112,7 +112,7 @@
 					<p:inputText id="nombrePopupNuevo"
 						value="#{beanAulas.itemNuevo.dsc }" style="min-width: 260px; font-weight:bold; height:100%" />
 					<h:outputText value="#{msg.sede}*" />
-					<p:selectOneMenu id="selectSedeTipoNuevo" style="min-width: 260px; font-weight:bold; height:100%"  
+					<p:selectOneMenu id="selectSedeTipoNuevo" style="width: 260px; font-weight:bold; height:100%"  
 						value="#{beanAulas.idCatGralNuevo }">
 						<f:selectItem itemLabel="#{msg.seleccionarSede }" itemValue="" />
 						<f:selectItems value="#{beanAulas.listaSelectTiposItemsCatGral }" />
@@ -120,7 +120,6 @@
 					<h:outputText value="#{msg.capacidad}" />
 					<p:inputText id="capacidadPopupNuevo"   requiredMessage="Capacidad no valida"
 						value="#{beanAulas.capacidadNuevo }" style="min-width: 260px; font-weight:bold; height:100%" >
-							<f:validateRegex pattern="(^[0-9]{9}$)" />
 						</p:inputText>
 					<h:outputText id="activoPopupNuevoLabel" value="#{msg.activo}" />
 					<h:selectBooleanCheckbox id="activoPopupNuevo"
@@ -156,7 +155,7 @@
 							value="#{beanAulas.itemSelected.dsc }" />
 					</h:panelGroup>
 					<h:outputText value="#{msg.sede}" />
-					<p:selectOneMenu id="selectTipoSelected" style="min-width: 260px; font-weight:bold; height:100%"
+					<p:selectOneMenu id="selectTipoSelected" style="width: 260px; font-weight:bold; height:100%"
 						value="#{beanAulas.idCatGralSelected }">
 						<f:selectItem itemLabel="#{msg.seleccionarSede }" itemValue="" />
 						<f:selectItems value="#{beanAulas.listaSelectTiposItemsCatGral }" />
@@ -165,7 +164,6 @@
 					<h:panelGroup>
 						<p:inputText id="inputCapacidaqdSelected" style="width: 260px; font-weight:bold; height:100% "
 							value="#{beanAulas.selectedCapacidadEdit }" >
-								<f:validateRegex pattern="(^[0-9]{9}$)" />
 							</p:inputText>
 						<p:watermark for="inputCapacidaqdSelected"
 							value="#{beanAulas.itemSelected.capacidad }" />

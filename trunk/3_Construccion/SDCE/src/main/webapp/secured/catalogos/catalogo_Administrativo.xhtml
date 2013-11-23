@@ -15,12 +15,12 @@
 				<h:panelGrid columns="2" style="text-align:left;">
 					<h:outputText value="#{msg.clave} :" />
 					<p:selectOneMenu id="selectCveFilter"
-						value="#{beanCatAdmin.selectedClave }" style="min-width: 480px">
+						value="#{beanCatAdmin.selectedClave }" style="width: 500px">
 						<f:selectItem itemLabel="#{msg.seleccionarClave }" itemValue="" />
 						<f:selectItems value="#{beanCatAdmin.listSelectItems1}" />
 					</p:selectOneMenu>
 					<h:outputText value="#{msg.nombre} :" />
-					<p:selectOneMenu id="selectDsc" style="min-width: 480px"
+					<p:selectOneMenu id="selectDsc" style="width: 500px"
 						value="#{beanCatAdmin.selectedNombre }">
 						<f:selectItem itemLabel="#{msg.seleccionarNombre }" itemValue="" />
 						<f:selectItems value="#{beanCatAdmin.listSelectItems2}" />
@@ -41,15 +41,15 @@
 			</p:panel>
 			<p:panel>
 				<h:panelGrid columns="4" style="text-align:left;">
-					<p:commandButton id="deleteButton" value="#{msg.eliminar }" 
+					<p:commandButton id="deleteButton" value="#{msg.eliminar }" rendered="#{beanCatAdmin.borrar}"
 						icon="ui-icon-trash" onclick="borrarDialog.show()" update="growl" />
-					<p:commandButton id="editarButton" value="#{msg.editar }" 
+					<p:commandButton id="editarButton" value="#{msg.editar }"  rendered="#{beanCatAdmin.cambios}"
 						icon="ui-icon-pencil" onclick="editarDialog.show()"
 						update=":form:displayEditar growl" />
-					<p:commandButton id="viewButton" value="#{msg.ver }" 
+					<p:commandButton id="viewButton" value="#{msg.ver }"  rendered="#{beanCatAdmin.consulta}"
 						icon="ui-icon-search" oncomplete="verDialog.show()"
 						update=":form:displayVer growl" />
-					<p:commandButton id="nuevoButton" value="#{msg.nuevo }" 
+					<p:commandButton id="nuevoButton" value="#{msg.nuevo }"  rendered="#{beanCatAdmin.alta}"
 						icon="ui-icon-plusthick" onclick="nuevoDialog.show()"
 						update=":form:displayNuevo growl" />
 				</h:panelGrid>
@@ -73,7 +73,7 @@
 			</p:panel>
 			<!-- Panel de Ver -->
 			<p:dialog id="dialog" header="#{msg.ver}" widgetVar="verDialog"
-				modal="true" position="top">
+				modal="true" position="top" draggable="false">
 				<h:panelGrid id="displayVer" columns="1" cellpadding="4">
 					<h:panelGroup id="messagePanelVer" layout="block">
 						<h:messages errorStyle="color: red" infoStyle="color: green"
@@ -174,7 +174,7 @@
 			<!--  Inicio panel de Nuevo -->
 			<p:dialog id="dialogNuevo" header="#{msg.frsNuevoRegistro}"
 				position="top" widgetVar="nuevoDialog" closable="true" modal="true"
-				draggable="true" width="400" height="550">
+				draggable="false" width="500" height="550">
 				<h:panelGrid columns="2" width="100%" id="displayNuevo">
 					<p:tabView>
 						<p:tab title="#{msg.datosGenerales }">
@@ -211,7 +211,7 @@
 								<h:panelGroup>
 									<p:calendar value="#{beanCatAdmin.nuevoAdminFechaNac}"
 										navigator="true" id="nuevoAdminFechaNacimientoInput"
-										styleClass="dateTimeField" />
+										styleClass="dateTimeField3" />
 								</h:panelGroup>
 								<h:outputText value="#{msg.lugarNacimiento }" />
 								<h:panelGroup>
@@ -265,7 +265,7 @@
 									style="font-weight:bold; height:100%; width:100%" />
 								<h:outputText value="#{msg.colonia }*" />
 								<p:selectOneMenu
-									style="width:180px; font-weight:bold; height:100%; width:100%" label="Colonia"
+									style="width:330px; font-weight:bold; height:100%;" label="Colonia"
 									value="#{beanCatAdmin.nuevoAdminIdAsentamientoMunicipioEstado }"
 									id="nuevoAdminSelectColonias"  >
 									<f:selectItems
@@ -287,7 +287,7 @@
 								<p:autoComplete id="autoCompleteCPNuevo"   label="CP"
 									value="#{beanCatAdmin.nuevoAdminCPAutoComplete}"
 									completeMethod="#{beanCatAdmin.complete}" forceSelection="true"
-									styleClass="autoComplete">
+									styleClass="dateTimeField3">
 									<p:ajax
 										update="nuevoAdminSelectColonias nuevoAdminEntidadF nuevoAdminDelegacion nuevoAdminPais"
 										listener="#{beanCatAdmin.handleSelectCambiaCp}"
@@ -309,7 +309,7 @@
 			<!-- Inicio de panel de edicion -->
 			<p:dialog id="dialogEditar" header="#{msg.frsEditarRegistro}"
 				widgetVar="editarDialog" closable="true" modal="true"
-				draggable="true" width="400" height="550" position="top">
+				draggable="false" width="500" height="550" position="top">
 				<h:panelGrid columns="2" width="100%" id="displayEditar">
 					<p:tabView>
 						<p:tab title="#{msg.datosGenerales }">
@@ -352,7 +352,7 @@
 								<h:outputText value="#{msg.fechaNacimiento }" />
 								<h:panelGroup>
 									<p:calendar value="#{beanCatAdmin.editarAdminFechaNac }"
-										id="editarAdminFechaNacInput" styleClass="dateTimeField"
+										id="editarAdminFechaNacInput" styleClass="dateTimeField3"
 										navigator="true" />
 									<p:watermark
 										value="#{beanCatAdmin.itemSelected.dtoPersona.fechaNacStr }"
@@ -445,7 +445,7 @@
 								</h:panelGroup>
 								<h:outputText value="#{msg.colonia }" />
 								<p:selectOneMenu
-									style="font-weight:bold; height:100%; width: 100%"
+									style="font-weight:bold; height:100%; width: 320px"
 									value="#{beanCatAdmin.editarAdminIdAsentamientoMunicipioEstado }"
 									id="editarAdminSelectColonias">
 									<f:selectItems
@@ -482,7 +482,7 @@
 								<h:outputText value="#{msg.codigoPostal }" />
 								<h:panelGroup>
 									<p:autoComplete id="autoCompleteCPEditar"
-										styleClass="autoComplete"
+										styleClass="dateTimeField3"
 										value="#{beanCatAdmin.editarAdminCPAutoComplete}"
 										completeMethod="#{beanCatAdmin.complete}"
 										forceSelection="true">
@@ -519,7 +519,7 @@
 					oncomplete="borrarDialog.hide()" />
 				<p:commandButton value="#{msg.no }" type="button"
 					styleClass="ui-confirmdialog-no" icon="ui-icon-close"
-					oncomplete="borrarDialog.hide()" />
+					onclick="borrarDialog.hide()" />
 			</p:confirmDialog>
 			<!-- Fin de panel de borrado -->
 		</h:form>

@@ -13,14 +13,14 @@
 				<h:panelGrid columns="2" style="text-align:left;">
 					<h:outputText value="#{msg.clave} :" />
 					<p:selectOneMenu id="cveFilter"
-						value="#{beanCatGral.catalogoCveFilter }" style="min-width: 480px">
+						value="#{beanCatGral.catalogoCveFilter }" style="width: 500px">
 						<f:selectItem itemLabel="#{msg.seleccionarCve }" itemValue="" />
 						<f:selectItems value="#{beanCatGral.listaSelectCatalogosCve}" />
 						<p:ajax update="selectDscFilter"
 							listener="#{beanCatGral.cambiaDescSelect}" />
 					</p:selectOneMenu>
 					<h:outputText value="#{msg.descripcion} :" />
-					<p:selectOneMenu id="selectDscFilter" style="min-width: 480px"
+					<p:selectOneMenu id="selectDscFilter" style="width: 500px"
 						value="#{beanCatGral.catalogoDscFilter }">
 						<f:selectItem itemLabel="#{msg.seleccionarDsc }" itemValue="" />
 						<f:selectItems value="#{beanCatGral.listaSelectCatalogosDsc}" />
@@ -28,7 +28,7 @@
 							listener="#{beanCatGral.cambiaEstatusSelect}" />
 					</p:selectOneMenu>
 					<h:outputText value="#{msg.estatus} :" />
-					<p:selectOneMenu id="selectEstFilter" style="min-width: 480px"
+					<p:selectOneMenu id="selectEstFilter" style="width: 500px"
 						value="#{beanCatGral.catalogoEstFilter }">
 						<f:selectItem itemLabel="#{msg.seleccionarEst }" itemValue="" />
 						<f:selectItems value="#{beanCatGral.listaSelectCatalogosEst}" />
@@ -49,15 +49,15 @@
 			</p:panel>
 			<p:panel>
 				<h:panelGrid columns="4" style="text-align:left;">
-					<p:commandButton id="deleteButton" value="#{msg.eliminar }"
+					<p:commandButton id="deleteButton" value="#{msg.eliminar }" rendered="#{beanCatGral.borrar}"
 						icon="ui-icon-trash" onclick="borrarDialog.show()" update="growl" />
-					<p:commandButton id="editarButton" value="#{msg.editar }"
+					<p:commandButton id="editarButton" value="#{msg.editar }" rendered="#{beanCatGral.cambios}"
 						icon="ui-icon-pencil" onclick="editarDialog.show()"
 						update=":form:displayEditar, growl" />
-					<p:commandButton id="viewButton" value="#{msg.ver }"
+					<p:commandButton id="viewButton" value="#{msg.ver }" rendered="#{beanCatGral.consulta}"
 						icon="ui-icon-search" oncomplete="verDialog.show()"
 						update=":form:displayVer, growl" />
-					<p:commandButton id="nuevoButton" value="#{msg.nuevo }"
+					<p:commandButton id="nuevoButton" value="#{msg.nuevo }" rendered="#{beanCatGral.alta}"
 						icon="ui-icon-plusthick" onclick="nuevoDialog.show()"
 						update=":form:displayNuevo, growl" />
 				</h:panelGrid>
@@ -85,10 +85,11 @@
 						filterBy="#{cat.estatus }" sortBy="#{cat.estatus}">
 						<h:outputText id="nombreEstatusTbl" value="#{cat.estatus}" />
 					</p:column>
+					
 				</p:dataTable>
 			</p:panel>
 			<!-- Panel de Ver -->
-			<p:dialog id="dialog" header="#{msg.ver}" widgetVar="verDialog" position="top"
+			<p:dialog id="dialog" header="#{msg.ver}" widgetVar="verDialog" position="top" draggable="false"
 				modal="true">
 				<h:panelGrid id="displayVer" columns="2" cellpadding="4">
 					<h:panelGroup id="messagePanelVer" layout="block">
@@ -114,7 +115,7 @@
 			<!--  Inicio panel de Nuevo -->
 			<p:dialog id="dialogNuevo" header="#{msg.frsNuevoRegistro}" position="top"
 				widgetVar="nuevoDialog" closable="true" modal="true"
-				draggable="true" width="400">
+				draggable="false" width="400">
 				<h:panelGrid columns="2" width="100%" id="displayNuevo">
 					<h:outputText value="#{msg.clave}*" />
 					<p:inputText value="#{beanCatGral.catalogoNuevo.cveRegistro}"
@@ -123,7 +124,7 @@
 					<p:inputText id="nombrePopupNuevo"
 						value="#{beanCatGral.catalogoNuevo.dsc}" style="font-weight:bold; height:100%; width:260px" />
 						<h:outputText value="#{msg.tipo}"/>
-						<p:selectOneMenu value="#{beanCatGral.idTipoCatGralNuevo}" style="width:100%">
+						<p:selectOneMenu value="#{beanCatGral.idTipoCatGralNuevo}" style="width: 260px;">
 							<f:selectItem itemLabel="#{msg.seleccionarTipo}" itemValue="0"/>
 							<f:selectItems value="#{beanCatGral.listSelectTipoCat}"/>
 						</p:selectOneMenu>
@@ -145,7 +146,7 @@
 			<!-- Inicio de panel de edicion -->
 			<p:dialog id="dialogEditar" header="#{msg.frsNuevoRegistro}"
 				widgetVar="editarDialog" closable="true" modal="true" position="top"
-				draggable="true" width="400">
+				draggable="false" width="400">
 				<h:panelGrid columns="2" width="100%" id="displayEditar">
 					<h:outputText value="#{msg.clave}" />
 					<h:panelGroup>
@@ -163,7 +164,7 @@
 							value="#{beanCatGral.catalogoSelected.dsc }" />
 					</h:panelGroup>
 					<h:outputText value="#{msg.tipo}"/>
-						<p:selectOneMenu value="#{beanCatGral.idTipoCatGralEdit}" style="width:100%">
+						<p:selectOneMenu value="#{beanCatGral.idTipoCatGralEdit}" style="width: 260px;">
 							<f:selectItem itemLabel="#{msg.seleccionarTipo}" itemValue="0"/>
 							<f:selectItems value="#{beanCatGral.listSelectTipoCat}"/>
 						</p:selectOneMenu>

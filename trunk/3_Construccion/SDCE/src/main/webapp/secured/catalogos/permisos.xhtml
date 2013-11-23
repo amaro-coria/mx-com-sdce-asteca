@@ -51,7 +51,7 @@
 				</p:dataTable>
 			</p:panel>
 			<!-- Panel de Ver -->
-			<p:dialog id="dialog" header="#{msg.ver}" widgetVar="verDialog" draggable="true" position="top"
+			<p:dialog id="dialog" header="#{msg.ver}" widgetVar="verDialog" draggable="false" position="top"
 				modal="true">
 				<h:panelGrid id="displayVer" columns="1" >
 					<h:panelGrid columns="2" cellpadding="4">
@@ -117,15 +117,15 @@
 			<!-- Fin de panel de Ver -->
 			<!--  Inicio panel de Nuevo -->
 			<p:dialog id="dialogNuevo" header="#{msg.frsNuevoRegistro}"
-				widgetVar="nuevoDialog" closable="true" modal="true" position="top"
-				draggable="true" width="400">
+				widgetVar="nuevoDialog" closable="true" modal="true" position="top" maximizable="true"
+				draggable="false" width="1000" height="600">
 				<h:panelGrid columns="2" width="100%" id="displayNuevo">
 					<h:outputText value="#{msg.clave}*" />
 					<p:inputText value="#{perfilBean.rolNuevo.clave}"   label="Clave"
 						style="width: 260px; " />
 					<h:outputText value="#{msg.descripcion}*" />
 					<p:inputText id="nombrePopupNuevo"   label="Descripcion"
-						value="#{perfilBean.rolNuevo.nombre}" style="min-width: 260px" />
+						value="#{perfilBean.rolNuevo.nombre}" style="width: 260px" />
 					<h:outputText id="activoPopupNuevoLabel" value="#{msg.activo}*" />
 					<h:selectBooleanCheckbox id="activoPopupNuevo"   label="Activo"
 						value="#{perfilBean.nuevoRolActivo}">
@@ -184,7 +184,7 @@
 			<!-- Inicio de panel de edicion -->
 			<p:dialog id="dialogEditar" header="#{msg.frsNuevoRegistro}" position="top"
 				widgetVar="editarDialog" closable="true" modal="true"
-				draggable="true" width="400">
+				draggable="false" width="1000" height="600" resizable="true" maximizable="true">
 				<h:panelGrid columns="1" id="displayEditar">
 				<h:panelGrid columns="2" width="100%">
 					<h:outputText value="#{msg.clave}" />

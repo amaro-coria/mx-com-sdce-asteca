@@ -55,7 +55,7 @@
 				</p:dataTable>
 			</p:panel>
 			<!-- Panel de Ver -->
-			<p:dialog id="dialog" header="#{msg.ver}" widgetVar="verDialog" draggable="true" position="top"
+			<p:dialog id="dialog" header="#{msg.ver}" widgetVar="verDialog" draggable="false" position="top"
 				modal="true">
 				<h:panelGrid id="displayVer" columns="1" >
 					<h:panelGrid columns="2" cellpadding="4">
@@ -125,7 +125,7 @@
 			<!--  Inicio panel de Nuevo -->
 			<p:dialog id="dialogNuevo" header="#{msg.frsNuevoRegistro}"
 				widgetVar="nuevoDialog" closable="true" modal="true" position="top"
-				draggable="true" width="400">
+				draggable="false" width="1000" height="600" maximizable="true" resizable="true">
 				<h:panelGrid columns="2" width="100%" id="displayNuevo">
 					<h:outputText value="#{msg.nombre}" />
 					<h:outputText value="#{permisoRolBean.userSelected.nombre}"
@@ -204,8 +204,8 @@
 			<!-- Fin de panel de nuevo -->
 			<!-- Inicio de panel de edicion -->
 			<p:dialog id="dialogEditar" header="#{msg.frsNuevoRegistro}" position="top"
-				widgetVar="editarDialog" closable="true" modal="true"
-				draggable="true" width="400">
+				widgetVar="editarDialog" closable="true" modal="true" height="600" maximizable="true" resizable="true"
+				draggable="false" >
 				<h:panelGrid columns="1" id="displayEditar">
 				<h:panelGrid columns="2" width="100%">
 					<h:outputText value="#{msg.clave}" />

@@ -7,25 +7,25 @@
 <h:body>
 	<ui:composition>
 		<h:form id="form">
-			<p:growl id="growl" showDetail="true" sticky="true" />
+			<p:growl id="growl" showDetail="true" />
 			<p:panel id="panel" header="Buscar" closable="false"
 				toggleable="false" style="text-align:center;">
 				<h:panelGrid columns="2" style="text-align:left;">
 					<h:outputText value="#{msg.clave} :" />
 					<p:selectOneMenu id="cveFilter"
 						value="#{beanProgramaEstudios.selectedClave }"
-						style="min-width: 480px">
+						style="width: 500px">
 						<f:selectItem itemLabel="#{msg.seleccionarCve }" itemValue="" />
 						<f:selectItems value="#{beanProgramaEstudios.listSelect1}" />
 					</p:selectOneMenu>
 					<h:outputText value="#{msg.descripcion} :" />
-					<p:selectOneMenu id="selectDscFilter" style="min-width: 480px"
+					<p:selectOneMenu id="selectDscFilter" style="width: 500px"
 						value="#{beanProgramaEstudios.selectedDsc }">
 						<f:selectItem itemLabel="#{msg.seleccionarDsc }" itemValue="" />
 						<f:selectItems value="#{beanProgramaEstudios.listSelect2}" />
 					</p:selectOneMenu>
 					<h:outputText value="#{msg.tipo} :" />
-					<p:selectOneMenu id="selectEstFilter" style="min-width: 480px"
+					<p:selectOneMenu id="selectEstFilter" style="width: 500px"
 						value="#{beanProgramaEstudios.selectedTipo }">
 						<f:selectItem itemLabel="#{msg.seleccionarTipo }" itemValue="0" />
 						<f:selectItems value="#{beanProgramaEstudios.listSelect3}" />
@@ -47,14 +47,14 @@
 			</p:panel>
 			<p:panel>
 				<h:panelGrid columns="4" style="text-align:left;">
-					<p:commandButton id="deleteButton" value="#{msg.eliminar }" process="@this"
+					<p:commandButton id="deleteButton" value="#{msg.eliminar }" 
 						icon="ui-icon-trash" onclick="borrarDialog.show()" update="growl" />
-					<p:commandButton id="editarButton" value="#{msg.editar }" process="@this"
-						icon="ui-icon-pencil" onclick="editarDialog.show()" update="growl" />
-					<p:commandButton id="viewButton" value="#{msg.ver }" process="@this"
+					<p:commandButton id="editarButton" value="#{msg.editar }" 
+						icon="ui-icon-pencil" onclick="editarDialog.show()" update=":form:displayEditar growl" />
+					<p:commandButton id="viewButton" value="#{msg.ver }" actionListener="#{beanProgramaEstudios.testVer}"
 						icon="ui-icon-search" oncomplete="verDialog.show()"
-						update=":form:displayVer, growl" />
-					<p:commandButton id="nuevoButton" value="#{msg.nuevo }" process="@this"
+						update=":form:displayVer growl" />
+					<p:commandButton id="nuevoButton" value="#{msg.nuevo }" 
 						icon="ui-icon-plusthick" onclick="nuevoDialog.show()"
 						update="growl" />
 				</h:panelGrid>
@@ -65,7 +65,7 @@
 					rowKey="#{item.idProgEstudio}" paginator="true"
 					selection="#{beanProgramaEstudios.selectedItem}"
 					filteredValue="#{beanProgramaEstudios.filteredList }"
-					paginatorPosition="bottom" rows="10">
+					paginatorPosition="bottom" rows="10" >
 					<p:column selectionMode="single" style="width:2%" />
 					<p:column id="catCveColumn" headerText="#{msg.clave}"
 						filterBy="#{item.clave }" sortBy="#{item.clave}">
@@ -91,9 +91,15 @@
 					</p:column>
 				</p:dataTable>
 			</p:panel>
+			<!-- Inicio de panel monitor de descarga -->
+			<p:dialog modal="true" widgetVar="statusDownloadDialog"
+				header="Status" draggable="false" closable="false">
+				<p:graphicImage value="/images/ajax-loader.gif" />
+			</p:dialog>
+			<!-- Fin de panel monitor de descarga -->
 			<!-- Panel de Ver -->
 			<p:dialog id="dialog" header="#{msg.ver}" widgetVar="verDialog"
-				modal="true">
+				modal="true" draggable="false" position="top">
 				<h:panelGrid id="displayVer" columns="2" cellpadding="4">
 					<h:panelGroup id="messagePanelVer" layout="block">
 						<h:messages errorStyle="color: red" infoStyle="color: green"
@@ -137,13 +143,13 @@
 									selection="#{beanProgramaEstudios.materiaSelected}"
 									selectionMode="single">
 									<p:column headerText="#{msg.materia }">
-										<p:inputText readonly="true" value="#{item.materia.nombre }" />
+										<h:outputText   value="#{item.materia.nombre }" />
 									</p:column>
 									<p:column headerText="#{msg.horasPractica }">
-										<p:inputText readonly="true" value="#{item.horasPractica }" />
+										<h:outputText  value="#{item.horasPractica }" />
 									</p:column>
 									<p:column headerText="#{msg.horasTeoria }">
-										<p:inputText readonly="true" value="#{item.horasTeoria }" />
+										<h:outputText  value="#{item.horasTeoria }" />
 									</p:column>
 								</p:dataTable>
 							</p:tab>
@@ -153,11 +159,15 @@
 									rowKey="#{item.idAutorizacion}"
 									selection="#{beanProgramaEstudios.autSelected}"
 									selectionMode="single">
+									<p:ajax event="rowSelect"
+									listener="#{beanProgramaEstudios.onDocumentoSelect}" />
 									<p:column headerText="#{msg.archivo }">
-										<p:inputText readonly="true" value="#{item.doc.nombre }" />
+										<h:outputText value="#{item.doc.nombre }" />
 									</p:column>
 								</p:dataTable>
-								<p:commandButton value="#{msg.ver }" />
+								<p:commandButton value="#{msg.ver }" ajax="false" onclick="PrimeFaces.monitorDownload(showStatus, hideStatus)">
+									<p:fileDownload value="#{beanProgramaEstudios.file}" />
+								</p:commandButton>
 							</p:tab>
 						</p:tabView>
 					</h:panelGroup>
@@ -167,10 +177,10 @@
 					icon="ui-icon-check" onclick="verDialog.hide()" />
 			</p:dialog>
 			<!-- Fin de panel de Ver -->
-			<!--  Inicio panel de Nuevo -->
+		<!--  Inicio panel de Nuevo -->
 			<p:dialog id="dialogNuevo" header="#{msg.frsNuevoRegistro}"
 				widgetVar="nuevoDialog" closable="true" modal="true"
-				draggable="true" width="550" height="500">
+				draggable="false" position="top" width="800" height="500">
 				<h:panelGrid id="displayNuevo" columns="2" cellpadding="4">
 					<h:panelGroup id="messagePanelNuevo" layout="block">
 						<h:messages errorStyle="color: red" infoStyle="color: green"
@@ -179,26 +189,26 @@
 							<h:panelGrid columns="2">
 								<h:outputText value="#{msg.clave }*" />
 								<p:inputText value="#{beanProgramaEstudios.nuevoClave }"  style="height:100%; width: 100%; font-weight:bold;"
-								required="true" label="Clave"/>
+								  label="Clave"/>
 								<h:outputText value="#{msg.descripcion }*" />
 								<p:inputText value="#{beanProgramaEstudios.nuevoDsc }" style="height:100%; width: 100%; font-weight:bold;"
-								required="true" label="Descripcion"/>
+								  label="Descripcion"/>
 								<h:outputText value="#{msg.tipo }*" />
-								<p:selectOneMenu value="#{beanProgramaEstudios.nuevoIdTipo }" style="height:100%; width: 100%; font-weight:bold;" required="true" label="Tipo">
+								<p:selectOneMenu value="#{beanProgramaEstudios.nuevoIdTipo }" style="height:100%; width: 260px; font-weight:bold;"   label="Tipo">
 									<f:selectItem itemLabel="#{msg.seleccionarTipo }" itemValue="0" />
 									<f:selectItems value="#{beanProgramaEstudios.listTipos }" />
 								</p:selectOneMenu>
 								<h:outputText value="#{msg.noAut }*" />
-								<p:inputText value="#{beanProgramaEstudios.nuevoNoAut }" style="height:100%; width: 100%; font-weight:bold;" required="true" label="NoAut."/>
-								<h:outputText value="#{msg.horasPractica }*" />
-								<p:inputText value="#{beanProgramaEstudios.nuevoHorasPractica }" style="height:100%; width: 100%; font-weight:bold;" required="true" label="HorasPractica"/>
+								<p:inputText value="#{beanProgramaEstudios.nuevoNoAut }" style="height:100%; width: 100%; font-weight:bold;"   label="NoAut."/>
 							</h:panelGrid>
 							<h:panelGrid columns="2">
 								<h:outputText value="#{msg.fecha }*" />
-								<p:calendar navigator="true" required="true"
-									value="#{beanProgramaEstudios.nuevoFechaAut }" styleClass="dateTimeField"/>
+								<p:calendar navigator="true"  
+									value="#{beanProgramaEstudios.nuevoFechaAut }" styleClass="dateTimeField3"/>
 								<h:outputText value="#{msg.horasTeoria }*" />
-								<p:inputText value="#{beanProgramaEstudios.nuevoHorasTeoria }" style="height:100%; width: 100%; font-weight:bold;" required="true" label="HorasTeoria"/>
+								<p:inputText value="#{beanProgramaEstudios.nuevoHorasTeoria }" style="height:100%; width: 100%; font-weight:bold;"   label="HorasTeoria"/>
+								<h:outputText value="#{msg.horasPractica }*" />
+								<p:inputText value="#{beanProgramaEstudios.nuevoHorasPractica }" style="height:100%; width: 100%; font-weight:bold;"   label="HorasPractica"/>
 							</h:panelGrid>
 						</h:panelGrid>
 						<p:separator />
@@ -221,20 +231,20 @@
 								</p:dataTable>
 								<h:panelGrid columns="4">
 									<p:selectOneMenu
-										value="#{beanProgramaEstudios.nuevoMateriaId } " style="height:100%; width: 100%; font-weight:bold;">
+										value="#{beanProgramaEstudios.nuevoMateriaId}" style="height:100%; width: 180px; font-weight:bold;">
 										<f:selectItems
 											value="#{beanProgramaEstudios.listMateriasDisponibles }" />
 									</p:selectOneMenu>
 									<h:panelGroup>
 										<p:inputText
-											value="#{beanProgramaEstudios.nuevoMateriaHorasPracticas }" style="height:100%; width: 100%; font-weight:bold;"
+											value="#{beanProgramaEstudios.nuevoMateriaHorasPracticas }" style="height:100%; width: 200px; font-weight:bold;"
 											id="nuevoMateriaHorasPracticasInput" />
 										<p:watermark value="#{msg.horasPractica }"
 											for="nuevoMateriaHorasPracticasInput" />
 									</h:panelGroup>
 									<h:panelGroup>
 										<p:inputText
-											value="#{beanProgramaEstudios.nuevoMateriaHorasTeoria }" style="height:100%; width: 100%; font-weight:bold;"
+											value="#{beanProgramaEstudios.nuevoMateriaHorasTeoria }" style="height:100%; width: 200px; font-weight:bold;"
 											id="nuevoMateriaHorasTeoriaInput" />
 										<p:watermark value="#{msg.horasTeoria }"
 											for="nuevoMateriaHorasTeoriaInput" />
@@ -251,26 +261,25 @@
 									selection="#{beanProgramaEstudios.autSelected}"
 									selectionMode="single">
 									<p:column headerText="#{msg.archivo }">
-										<p:inputText readonly="true" value="#{item.doc.nombre }" />
+										<h:outputText value="#{item.doc.nombre }" />
 									</p:column>
 								</p:dataTable>
 								<p:fileUpload label="#{msg.frsSeleccionar }" fileLimit="1"
 										showButtons="false" uploadLabel="#{msg.cargar }"
 										cancelLabel="#{msg.cancelar }"
 										fileUploadListener="#{beanProgramaEstudios.handlerNuevoRegistroFileUpload}"
-										mode="advanced" update=":form:growl" />
-									<p:commandButton icon="ui-icon-plusthick" style="float: right"
+										mode="advanced" update=":form:growl materiasTableNuevo2" />
+								 <!-- <p:commandButton icon="ui-icon-plusthick" style="float: right"
 										update="materiasTableNuevo2"
 										value="#{msg.agregar }"
-										actionListener="#{beanProgramaEstudios.addNuevoDocumento}" />
+										actionListener="#{beanProgramaEstudios.addNuevoDocumento}" />-->
 							</p:tab>
 						</p:tabView>
 					</h:panelGroup>
 					<h:outputText />
 				</h:panelGrid>
 				<h:panelGrid style="float: right;" columns="2">
-					<p:commandButton value="#{msg.aceptar }" icon="ui-icon-check"
-						oncomplete="if(!args.validationFailed) nuevoDialog.hide()"
+					<p:commandButton value="#{msg.aceptar }" icon="ui-icon-check"						
 						actionListener="#{beanProgramaEstudios.save }"
 						update=":form:catGralTable, growl" />
 					<p:commandButton value="#{msg.cancelar }" icon="ui-icon-closethick"
@@ -282,7 +291,7 @@
 			<!-- Inicio de panel de edicion -->
 			<p:dialog id="dialogEditar" header="#{msg.frsNuevoRegistro}"
 				widgetVar="editarDialog" closable="true" modal="true"
-				draggable="true" width="550" height="500">
+				draggable="false" position="top" width="800" height="500">
 				<h:panelGrid id="displayEditar" columns="2" cellpadding="4">
 					<h:panelGroup id="messagePanelEditar" layout="block">
 						<h:messages errorStyle="color: red" infoStyle="color: green"
@@ -290,25 +299,40 @@
 						<h:panelGrid columns="2">
 							<h:panelGrid columns="2">
 								<h:outputText value="#{msg.clave }" />
-								<p:inputText value="#{beanProgramaEstudios.editarClave }" style="height:100%; width: 100%; font-weight:bold;"/>
+								<h:panelGroup>
+								<p:inputText id="editarCveId" value="#{beanProgramaEstudios.editarClave }" style="height:100%; width: 100%; font-weight:bold;"/>
+								<p:watermark value="#{beanProgramaEstudios.selectedItem.clave}" for="editarCveId" />
+								</h:panelGroup>
 								<h:outputText value="#{msg.descripcion }" />
-								<p:inputText value="#{beanProgramaEstudios.editarDsc }" style="height:100%; width: 100%; font-weight:bold;"/>
+								<h:panelGroup>
+								<p:inputText id="editarDscId" value="#{beanProgramaEstudios.editarDsc }" style="height:100%; width: 100%; font-weight:bold;"/>
+								<p:watermark value="#{beanProgramaEstudios.selectedItem.dsc}"  for="editarDscId"/>
+								</h:panelGroup>
 								<h:outputText value="#{msg.tipo }" />
-								<p:selectOneMenu value="#{beanProgramaEstudios.editarIdTipo }" style="height:100%; width: 100%; font-weight:bold;">
+								<p:selectOneMenu value="#{beanProgramaEstudios.editarIdTipo }" style="height:100%; width: 260px; font-weight:bold;">
 									<f:selectItem itemLabel="#{msg.seleccionarTipo }" itemValue="0" />
 									<f:selectItems value="#{beanProgramaEstudios.listTipos }" />
 								</p:selectOneMenu>
 								<h:outputText value="#{msg.noAut }" />
-								<p:inputText value="#{beanProgramaEstudios.editarNoAut }" style="height:100%; width: 100%; font-weight:bold;"/>
+								<h:panelGroup>
+								<p:inputText id="editarNoautId" value="#{beanProgramaEstudios.editarNoAut }" style="height:100%; width: 100%; font-weight:bold;"/>
+								<p:watermark value="#{beanProgramaEstudios.selectedItem.noAut}" for="editarNoautId" />
+								</h:panelGroup>
 								<h:outputText value="#{msg.horasPractica }" />
-								<p:inputText value="#{beanProgramaEstudios.editarHorasPractica }" style="height:100%; width: 100%; font-weight:bold;"/>
+								<h:panelGroup>
+								<p:inputText id="editarHorasPracticaId" value="#{beanProgramaEstudios.editarHorasPractica }" style="height:100%; width: 100%; font-weight:bold;"/>
+								<p:watermark value="#{beanProgramaEstudios.selectedItem.horasPractica}" for="editarHorasPracticaId" />
+								</h:panelGroup>
 							</h:panelGrid>
 							<h:panelGrid columns="2">
 								<h:outputText value="#{msg.fecha }" />
 								<p:calendar navigator="true"
 									value="#{beanProgramaEstudios.editarFechaAut }" styleClass="dateTimeField"/>
 								<h:outputText value="#{msg.horasTeoria }" />
-								<p:inputText value="#{beanProgramaEstudios.editarHorasTeoria }" />
+								<h:panelGroup>
+								<p:inputText id="editarHorasTeoriaId" value="#{beanProgramaEstudios.editarHorasTeoria }" />
+								<p:watermark value="#{beanProgramaEstudios.selectedItem.horasTeoria}" for="editarHorasTeoriaId"/>
+								</h:panelGroup>
 							</h:panelGrid>
 						</h:panelGrid>
 						<p:separator />
@@ -331,7 +355,7 @@
 								</p:dataTable>
 								<h:panelGrid columns="4">
 									<p:selectOneMenu
-										value="#{beanProgramaEstudios.editarMateriaId }" style="height:100%; width: 100%; font-weight:bold;">
+										value="#{beanProgramaEstudios.editarMateriaId }" style="height:100%; width: 260px; font-weight:bold;">
 										<f:selectItems
 											value="#{beanProgramaEstudios.listMateriasDisponibles }" />
 									</p:selectOneMenu>
@@ -389,20 +413,15 @@
 				</h:panelGrid>
 			</p:dialog>
 			<!-- Fin de panel de edicion -->
-			<!-- Panel de borrado -->
-			<p:confirmDialog showEffect="fade" widgetVar="borrarDialog"
-				header="#{msg.confirmar }" message="#{msg.frsBorrarConfirmacion }">
-				<p:commandButton value="#{msg.si }"
-					actionListener="#{beanProgramaEstudios.delete}"
-					update="catGralTable, growl" styleClass="ui-confirmdialog-yes"
-					icon="ui-icon-check" oncomplete="borrarDialog.hide()" />
-				<p:commandButton value="#{msg.no }" type="button"
-					styleClass="ui-confirmdialog-no" icon="ui-icon-close"
-					onclick="borrarDialog.hide()" />
-			</p:confirmDialog>
-			<!-- Fin de panel de borrado -->
 		</h:form>
-
+<script type="text/javascript">
+			function showStatus() {
+				statusDownloadDialog.show();
+			}
+			function hideStatus() {
+				statusDownloadDialog.hide();
+			}
+		</script>
 
 	</ui:composition>
 </h:body>

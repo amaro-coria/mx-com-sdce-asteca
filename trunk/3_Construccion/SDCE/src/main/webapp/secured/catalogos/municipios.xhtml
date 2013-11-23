@@ -15,14 +15,14 @@
 				<h:panelGrid columns="2" style="text-align:left;">
 					<h:outputText value="#{msg.pais} :" />
 					<p:selectOneMenu id="selectPaisFilter"
-						value="#{beanMunicipios.idPaisFilter }" style="min-width: 500px">
+						value="#{beanMunicipios.idPaisFilter }" style="width: 500px">
 						<f:selectItem itemLabel="#{msg.seleccionarPais }" itemValue="" />
 						<f:selectItems value="#{beanMunicipios.listaSelectPaises}" />
 						<p:ajax update="selectEdoFilter"
 							listener="#{beanMunicipios.cambiaPaisSelect}" />
 					</p:selectOneMenu>
 					<h:outputText value="#{msg.estados} :" />
-					<p:selectOneMenu id="selectEdoFilter" style="min-width: 500px"
+					<p:selectOneMenu id="selectEdoFilter" style="width: 500px"
 						value="#{beanMunicipios.idEdoFilter }">
 						<f:selectItem itemLabel="#{msg.seleccionarEdo }" itemValue="" />
 						<f:selectItems value="#{beanMunicipios.listaSelectEstados}" />
@@ -30,7 +30,7 @@
 							listener="#{beanMunicipios.cambiaEdoSelect}" />
 					</p:selectOneMenu>
 					<h:outputText value="#{msg.municipios} :" />
-					<p:selectOneMenu id="selectMpioFilter" style="min-width: 500px"
+					<p:selectOneMenu id="selectMpioFilter" style="width: 500px"
 						value="#{beanMunicipios.idMunicipioFilter }">
 						<f:selectItem itemLabel="#{msg.seleccionarMuninicipio }"
 							itemValue="" />
