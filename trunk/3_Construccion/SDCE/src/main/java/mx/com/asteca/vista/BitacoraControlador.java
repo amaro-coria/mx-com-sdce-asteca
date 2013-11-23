@@ -6,6 +6,7 @@ package mx.com.asteca.vista;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
@@ -17,6 +18,7 @@ import com.sun.org.apache.bcel.internal.generic.ARRAYLENGTH;
 
 import mx.com.asteca.comun.Constantes;
 import mx.com.asteca.comun.dto.BitacoraDTO;
+import mx.com.asteca.comun.dto.PermisosBooleanDTO;
 import mx.com.asteca.fachada.BitacoraFachada;
 import mx.com.asteca.fachada.FachadaException;
 
@@ -43,6 +45,34 @@ public class BitacoraControlador extends BaseController {
 	private transient BitacoraFachada fachada;
 	
 	private BitacoraDTO itemSelected;
+	
+private PermisosBooleanDTO permisos;
+	
+	@PostConstruct
+	public void populate(){
+		setPermisos(super.stablishSessionPermissions());
+	}
+
+	/**
+	 * @return the permisos
+	 */
+	public PermisosBooleanDTO getPermisos() {
+		return permisos;
+	}
+
+
+
+	/**
+	 * @param permisos the permisos to set
+	 */
+	public void setPermisos(PermisosBooleanDTO permisos) {
+		this.permisos = permisos;
+		super.setAlta(permisos.isAlta());
+		super.setBorrar(permisos.isBorrar());
+		super.setCambios(permisos.isEdicion());
+		super.setConsulta(permisos.isConsulta());
+		super.setImpresion(permisos.isImpresion());
+	}
 	
 	private void initListItems(){
 		if(CollectionUtils.isEmpty(listItems)){

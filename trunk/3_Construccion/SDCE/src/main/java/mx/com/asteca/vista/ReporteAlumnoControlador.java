@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import mx.com.asteca.comun.Constantes;
 import mx.com.asteca.comun.dto.AlumnoDTO;
 import mx.com.asteca.comun.dto.CatGralDTO;
+import mx.com.asteca.comun.dto.PermisosBooleanDTO;
 import mx.com.asteca.fachada.AlumnoFachada;
 import mx.com.asteca.fachada.CatGralFachada;
 import mx.com.asteca.fachada.FachadaException;
@@ -52,6 +53,28 @@ public class ReporteAlumnoControlador extends BaseController implements
 	private static Logger LOGGER = LoggerFactory
 			.getLogger(ReporteAlumnoControlador.class);
 
+	private PermisosBooleanDTO permisos;
+
+	/**
+	 * @return the permisos
+	 */
+	public PermisosBooleanDTO getPermisos() {
+		return permisos;
+	}
+
+	/**
+	 * @param permisos
+	 *            the permisos to set
+	 */
+	public void setPermisos(PermisosBooleanDTO permisos) {
+		this.permisos = permisos;
+		super.setAlta(permisos.isAlta());
+		super.setBorrar(permisos.isBorrar());
+		super.setCambios(permisos.isEdicion());
+		super.setConsulta(permisos.isConsulta());
+		super.setImpresion(permisos.isImpresion());
+	}
+
 	@PostConstruct
 	public void init() {
 		context = FacesContext.getCurrentInstance();
@@ -61,6 +84,7 @@ public class ReporteAlumnoControlador extends BaseController implements
 		setUrl(requestURL.substring(0, requestURL.lastIndexOf("faces")));
 
 		initListaCatGral();
+		setPermisos(super.stablishSessionPermissions());
 	}
 
 	/**
@@ -109,7 +133,7 @@ public class ReporteAlumnoControlador extends BaseController implements
 
 	public void mostrarReporte() throws JRException, IOException,
 			ClassNotFoundException {
-		initListaAlumnos();
+		initListaAlumnos();	
 		FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
 				.put("alumnosReporte", listaAlumnos);
 		RequestContext.getCurrentInstance().execute(

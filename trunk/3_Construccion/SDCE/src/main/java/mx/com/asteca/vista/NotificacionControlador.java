@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
@@ -14,6 +15,7 @@ import mx.com.asteca.comun.Constantes;
 import mx.com.asteca.comun.dto.NotificacionDTO;
 import mx.com.asteca.comun.dto.NotificacionEstadoDTO;
 import mx.com.asteca.comun.dto.NotificacionTipoDTO;
+import mx.com.asteca.comun.dto.PermisosBooleanDTO;
 import mx.com.asteca.fachada.FachadaException;
 import mx.com.asteca.fachada.NotificacionEstadoFachada;
 import mx.com.asteca.fachada.NotificacionFachada;
@@ -54,6 +56,34 @@ public class NotificacionControlador extends BaseController implements Serializa
 	private Long estadoSelected;
 	private Long tipoSelected;
 	private boolean dialogVisible;
+	
+private PermisosBooleanDTO permisos;
+	
+	@PostConstruct
+	public void populate(){
+		setPermisos(super.stablishSessionPermissions());
+	}
+
+	/**
+	 * @return the permisos
+	 */
+	public PermisosBooleanDTO getPermisos() {
+		return permisos;
+	}
+
+
+
+	/**
+	 * @param permisos the permisos to set
+	 */
+	public void setPermisos(PermisosBooleanDTO permisos) {
+		this.permisos = permisos;
+		super.setAlta(permisos.isAlta());
+		super.setBorrar(permisos.isBorrar());
+		super.setCambios(permisos.isEdicion());
+		super.setConsulta(permisos.isConsulta());
+		super.setImpresion(permisos.isImpresion());
+	}
 	/**
 	 * 
 	 * @throws FachadaException

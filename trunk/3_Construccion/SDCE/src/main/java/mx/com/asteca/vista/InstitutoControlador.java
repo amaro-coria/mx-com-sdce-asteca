@@ -6,6 +6,7 @@ package mx.com.asteca.vista;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
@@ -13,6 +14,7 @@ import javax.faces.bean.ViewScoped;
 import mx.com.asteca.comun.Constantes;
 import mx.com.asteca.comun.dto.InstitutoContactoDTO;
 import mx.com.asteca.comun.dto.InstitutoDTO;
+import mx.com.asteca.comun.dto.PermisosBooleanDTO;
 import mx.com.asteca.fachada.FachadaException;
 import mx.com.asteca.fachada.InstitutoFachada;
 
@@ -34,6 +36,33 @@ public class InstitutoControlador extends BaseController implements
 	
 	private InstitutoContactoDTO director;
 	private InstitutoContactoDTO representante;
+private PermisosBooleanDTO permisos;
+	
+	@PostConstruct
+	public void populate(){
+		setPermisos(super.stablishSessionPermissions());
+	}
+
+	/**
+	 * @return the permisos
+	 */
+	public PermisosBooleanDTO getPermisos() {
+		return permisos;
+	}
+
+
+
+	/**
+	 * @param permisos the permisos to set
+	 */
+	public void setPermisos(PermisosBooleanDTO permisos) {
+		this.permisos = permisos;
+		super.setAlta(permisos.isAlta());
+		super.setBorrar(permisos.isBorrar());
+		super.setCambios(permisos.isEdicion());
+		super.setConsulta(permisos.isConsulta());
+		super.setImpresion(permisos.isImpresion());
+	}
 	
 	private void initItem(){
 		if(item == null){

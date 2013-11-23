@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
@@ -16,6 +17,7 @@ import org.springframework.util.CollectionUtils;
 
 import mx.com.asteca.comun.Constantes;
 import mx.com.asteca.comun.dto.ModulosDTO;
+import mx.com.asteca.comun.dto.PermisosBooleanDTO;
 import mx.com.asteca.comun.dto.PermisosDTO;
 import mx.com.asteca.comun.dto.PersonaDTO;
 import mx.com.asteca.comun.dto.RolesDTO;
@@ -47,7 +49,7 @@ public class PermisoRolControlador extends BaseController implements
 	@ManagedProperty("#{rolesFachadaImpl}")
 	private RolesFachada rolesFachada;
 	@ManagedProperty("#{modulosFachadaImpl}")
-	private ModulosFachada modulosFachada;
+	private ModulosFachada modulosFachadaImpl;
 	@ManagedProperty("#{rolesModulosFachadaImpl}")
 	private RolesModulosFachada rolesModulosFachada;
 	@ManagedProperty("#{permisosFachadaImpl}")
@@ -123,6 +125,33 @@ public class PermisoRolControlador extends BaseController implements
 		listaPermisos = new ArrayList<PermisosDTO>();
 	}
 
+private PermisosBooleanDTO permisosBooleanDTO;
+	
+	@PostConstruct
+	public void populate(){
+		setPermisos(super.stablishSessionPermissions());
+	}
+
+	/**
+	 * @return the permisos
+	 */
+	public PermisosBooleanDTO getPermisos() {
+		return permisosBooleanDTO;
+	}
+
+
+
+	/**
+	 * @param permisos the permisos to set
+	 */
+	public void setPermisos(PermisosBooleanDTO permisos) {
+		this.permisosBooleanDTO = permisos;
+		super.setAlta(permisosBooleanDTO.isAlta());
+		super.setBorrar(permisosBooleanDTO.isBorrar());
+		super.setCambios(permisosBooleanDTO.isEdicion());
+		super.setConsulta(permisosBooleanDTO.isConsulta());
+		super.setImpresion(permisosBooleanDTO.isImpresion());
+	}
 	public void editar(ActionEvent ev) {
 		try {
 			rolesModUsuarios = rolesModUsuariosFachada
@@ -514,7 +543,7 @@ public class PermisoRolControlador extends BaseController implements
 		if (CollectionUtils.isEmpty(listaModulos)) {
 			try {
 				for (RolesModulosDTO rolesModulos : listaRolesModulos) {
-					listaModulos.add(modulosFachada.findByPK(rolesModulos
+					listaModulos.add(modulosFachadaImpl.findByPK(rolesModulos
 							.getIdModulo()));
 					listaPermisos.add(permisosFachada.findByPK(rolesModulos
 							.getIdPermisos()));
@@ -553,7 +582,7 @@ public class PermisoRolControlador extends BaseController implements
 		if (CollectionUtils.isEmpty(listaModulosEdit)) {
 			try {
 				for (RolesModulosDTO rolesModulos : listaRolesModulos) {
-					listaModulosEdit.add(modulosFachada.findByPK(rolesModulos
+					listaModulosEdit.add(modulosFachadaImpl.findByPK(rolesModulos
 							.getIdModulo()));
 					listaPermisos.add(permisosFachada.findByPK(rolesModulos
 							.getIdPermisos()));
@@ -590,7 +619,7 @@ public class PermisoRolControlador extends BaseController implements
 		if (CollectionUtils.isEmpty(listaModulosEdit)) {
 			try {
 				for (RolesModulosDTO rolesModulos : listaRolesModulos) {
-					listaModulosVer.add(modulosFachada.findByPK(rolesModulos
+					listaModulosVer.add(modulosFachadaImpl.findByPK(rolesModulos
 							.getIdModulo()));
 					listaPermisos.add(permisosFachada.findByPK(rolesModulos
 							.getIdPermisos()));
@@ -650,12 +679,12 @@ public class PermisoRolControlador extends BaseController implements
 		this.rolesFachada = rolesFachada;
 	}
 
-	public ModulosFachada getModulosFachada() {
-		return modulosFachada;
+	public ModulosFachada getModulosFachadaImpl() {
+		return modulosFachadaImpl;
 	}
 
-	public void setModulosFachada(ModulosFachada modulosFachada) {
-		this.modulosFachada = modulosFachada;
+	public void setModulosFachadaImpl(ModulosFachada modulosFachada) {
+		this.modulosFachadaImpl = modulosFachada;
 	}
 
 	public RolesModulosFachada getRolesModulosFachada() {

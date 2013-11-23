@@ -1,13 +1,12 @@
 package mx.com.asteca.vista;
 
-import java.io.Serializable;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -28,15 +27,19 @@ import org.springframework.util.CollectionUtils;
 
 @ManagedBean(name = Constantes.BEAN_MENU)
 @SessionScoped
-public class MenuControlador extends BaseController implements Serializable {
+public class MenuControlador extends BaseController implements Serializable, ActionListener {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private static final String modulo = "menu";
-	@ManagedProperty("#{modulosFachadaImpl}")
+	@ManagedProperty("#{modulosFachadaImpl}") 
 	private transient ModulosFachada fachadaModulos;
-
+	public static final String MENU_ACTION_KEY = "menuAction";
 	private List<ModulosDTO> listaModulos;
 
-	private String navegacion = "";
+	private String navegacion = "/secured/bienvenida.xhtml";
 	private Submenu submenu = new Submenu();
 
 	public void initMenu() {
@@ -73,25 +76,35 @@ public class MenuControlador extends BaseController implements Serializable {
 		for (ModulosDTO it : items) {
 			item = new MenuItem();
 			final String url = it.getDsc();
-
+			//ProcessActionListenerHelper actionListener = new ProcessActionListenerHelper();
+			//actionListener.setUrl(url);
 			item.setAjax(true);
 			item.setProcess(Constantes.MENU_ITEM_PROCESS);
 			item.setUpdate(Constantes.MENU_ITEM_UPDATE);
+			//item.setUrl(url);
 			item.setValue(it.getNombre());
 			item.setId(getItemId(it.getNombre()));
+			/* Descomentar para local, comentar siguientes lineas
+			item.addActionListener(this);
+			*/
+			/*
+			 * Descomentar para subir a produccion, comentar linea anterior*/
 			item.addActionListener(new ActionListener() {
+				
 				@Override
-				public void processAction(ActionEvent arg0)
+				public void processAction(ActionEvent event)
 						throws AbortProcessingException {
 					setNavegacion(url);
 				}
 			});
+			/**/
+			item.getAttributes().put(MENU_ACTION_KEY, url);
 			submenu.getChildren().add(item);
 		}
-		submenu.getChildren().add(addReport());
-		submenu.getChildren().add(addLogoutItem());
+		//submenu.getChildren().add(addReport());
+		//submenu.getChildren().add(addLogoutItem());
 	}
-
+	
 	private List<ModulosDTO> getMenuItems() throws Exception {
 		listaModulos = new ArrayList<ModulosDTO>();
 		HashMap<Integer, ModulosDTO> permisos = getMenuItemsSession();
@@ -110,7 +123,7 @@ public class MenuControlador extends BaseController implements Serializable {
 		HttpServletRequest request = (HttpServletRequest) getFacesContext().getCurrentInstance().getExternalContext().getRequest();
 		HashMap<Integer, ModulosDTO> permisos = (HashMap<Integer, ModulosDTO>) request
 				.getSession()
-				.getAttribute("permisos");
+				.getAttribute("permisos"); 
 
 		return permisos;
 	}
@@ -128,7 +141,7 @@ public class MenuControlador extends BaseController implements Serializable {
 		logout.setAjax(true);
 		logout.setProcess(Constantes.MENU_ITEM_PROCESS);
 		logout.setUpdate(Constantes.MENU_ITEM_UPDATE);
-		logout.setValue("Cerrar Sesión");
+		logout.setValue("Cerrar Sesi&oacute;n");
 		logout.setUrl("/j_spring_security_logout");
 
 		return logout;
@@ -172,6 +185,16 @@ public class MenuControlador extends BaseController implements Serializable {
 	@Override
 	String getModulo() {
 		return modulo;
+	}
+
+	@Override
+	public void processAction(ActionEvent event)
+			throws AbortProcessingException {
+		if(event.getComponent() instanceof MenuItem){
+			MenuItem item = (MenuItem) event.getComponent();
+			String url = (String) item.getAttributes().get(MENU_ACTION_KEY);
+			setNavegacion(url);
+		}
 	}
 
 }

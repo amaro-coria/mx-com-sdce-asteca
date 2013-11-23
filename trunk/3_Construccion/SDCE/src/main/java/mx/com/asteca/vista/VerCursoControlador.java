@@ -7,8 +7,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
@@ -23,6 +25,7 @@ import mx.com.asteca.comun.dto.AlumnoCalificacionMateriaDTO;
 import mx.com.asteca.comun.dto.AlumnoDTO;
 import mx.com.asteca.comun.dto.CursoDTO;
 import mx.com.asteca.comun.dto.MateriaDTO;
+import mx.com.asteca.comun.dto.PermisosBooleanDTO;
 import mx.com.asteca.fachada.CursoFachada;
 import mx.com.asteca.fachada.FachadaException;
 import mx.com.asteca.util.FechaUtil;
@@ -74,6 +77,34 @@ public class VerCursoControlador extends BaseController implements Serializable 
 		itemSelected = new CursoDTO();
 	}
 
+private PermisosBooleanDTO permisos;
+	
+	@PostConstruct
+	public void populate(){
+		setPermisos(super.stablishSessionPermissions());
+	}
+
+	/**
+	 * @return the permisos
+	 */
+	public PermisosBooleanDTO getPermisos() {
+		return permisos;
+	}
+
+
+
+	/**
+	 * @param permisos the permisos to set
+	 */
+	public void setPermisos(PermisosBooleanDTO permisos) {
+		this.permisos = permisos;
+		super.setAlta(permisos.isAlta());
+		super.setBorrar(permisos.isBorrar());
+		super.setCambios(permisos.isEdicion());
+		super.setConsulta(permisos.isConsulta());
+		super.setImpresion(permisos.isImpresion());
+	}
+	
 	private void initListSelectItem1() {
 		if (CollectionUtils.isEmpty(listSelectItem1)) {
 			listSelectItem1 = new ArrayList<SelectItem>();
@@ -140,10 +171,14 @@ public class VerCursoControlador extends BaseController implements Serializable 
 			for(AlumnoCalifMateriaSingle dto : listaCalifMateriaSingle){
 				try {
 					fachada.saveCalificacion(dto.getIdAlumno(), itemSelected.getIdCurso(), dto.getIdMateria(), dto.getCalificacion());
+					super.addBitacora(Constantes.ACCION_NUEVO_REGISTRO, Constantes.ACCION_NUEVA_CALIFICACION_REGISTRADA);
+					super.addInfoMessage(Constantes.MESSAGE_TITLE_INFO, Constantes.NUEVO_REGISTRO_EXITOSO);
 				} catch (FachadaException e) {
 					super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR, Constantes.ERROR_NUEVO_REGISTRO);
+					super.addBitacora(Constantes.MESSAGE_TITLE_ERROR, Constantes.ERROR_NUEVO_REGISTRO);
 				}
 			}
+			buildAlumnosMaterias(listaAlumnosAgregados, itemSelected);
 		}
 	}
 	
@@ -230,16 +265,21 @@ public class VerCursoControlador extends BaseController implements Serializable 
 			Date fechaFin = dtoCurso.getFechaFin();
 			minDate = fechaInicio;
 			maxDate = fechaFin;
+			Calendar calendarFin = Calendar.getInstance();
+			calendarFin.setTime(fechaFin);
 			Date fechaTemp = fechaInicio;
-			List<String> dias = new ArrayList<String>();
-			List<String> asistencias = new ArrayList<String>();
+			List<String> dias = null;
+			List<String> asistencias = null;
 			Calendar cal = Calendar.getInstance();
 			List<AlumnoAsistenciaDTO> listaAsistencia = new ArrayList<AlumnoAsistenciaDTO>();
 			for (AlumnoDTO dto : listaAlumnos) {
+				asistencias = new ArrayList<String>();
+				dias = new ArrayList<String>();
 				AlumnoAsistenciaDTO asistenciaDTO = new AlumnoAsistenciaDTO();
 				asistenciaDTO.setMatricula(dto.getMatricula());
 				asistenciaDTO.setNombre(dto.getNombre());
-				while (fechaFin.after(fechaTemp)) {
+				fechaTemp = fechaInicio;
+				while (fechaFin.after(fechaTemp) || (cal.get(Calendar.DAY_OF_YEAR) == calendarFin.get(Calendar.DAY_OF_YEAR))) {
 					String asistencia;
 					try {
 						asistencia = fachada.findAsistencia(dto.getIdAlumno(), dtoCurso.getIdCurso(), fechaTemp);
@@ -255,21 +295,29 @@ public class VerCursoControlador extends BaseController implements Serializable 
 					//String asistencia = "S";
 					asistencias.add(asistencia);
 				}
-				listaAsistencia.add(asistenciaDTO);
 				asistenciaDTO.setDias(dias);
 				asistenciaDTO.setAsistencias(asistencias);
+				listaAsistencia.add(asistenciaDTO);
 			}
 			setListaAlumnosAsistencia(listaAsistencia);			
 			setEncabezadoDias(listaAsistencia.get(0).getDias());
 		}
 	}
 	
-	public void registraAsistencia() throws FachadaException{
+	public void registraAsistencia() {
 		if(!CollectionUtils.isEmpty(listaAsistenciaSelecteds)){
 			for(AlumnoAsistenciaDiaDTO dto : listaAsistenciaSelecteds){
-				fachada.registraAsistencia(dto.getIdAlumno(), itemSelected.getIdCurso() , dto.getFechaAsistencia(), (short) 1);
+				try {
+					fachada.registraAsistencia(dto.getIdAlumno(), itemSelected.getIdCurso() , dto.getFechaAsistencia(), (short) 1);
+					super.addBitacora(Constantes.ACCION_NUEVO_REGISTRO, Constantes.ACCION_NUEVA_ASISTENCIA_REGISTRADA);
+					super.addInfoMessage(Constantes.MESSAGE_TITLE_INFO, Constantes.NUEVO_REGISTRO_EXITOSO);
+				} catch (FachadaException e) {
+					super.addBitacora(Constantes.ACCION_NUEVO_REGISTRO, Constantes.ACCION_NUEVA_ASISTENCIA_FALLO);
+					super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR, Constantes.ERROR_NUEVO_REGISTRO);
+				}
 			}
 			buildAlumnosAsistencia(listaAlumnosAgregados, itemSelected);
+			
 		}
 	}
 	

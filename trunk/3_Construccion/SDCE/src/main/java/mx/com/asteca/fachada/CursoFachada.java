@@ -92,4 +92,9 @@ public interface CursoFachada extends BaseFachada<CursoDTO, Integer> {
 	long saveCalificacion(int idAlumno, int idCurso, int idMateria,
 			double calificacion) throws FachadaException;
 
+	List<InstructorDTO> findInstructorCapacidato(int idMateriaRegistro)
+			throws FachadaException;
+
+	CursoDTO findCursoByGrupo(int grupo) throws FachadaException;
+
 }

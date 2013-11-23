@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
@@ -24,6 +25,7 @@ import mx.com.asteca.comun.dto.CursoDTO;
 import mx.com.asteca.comun.dto.InstructorDTO;
 import mx.com.asteca.comun.dto.MateriaDTO;
 import mx.com.asteca.comun.dto.MateriaRegistroDTO;
+import mx.com.asteca.comun.dto.PermisosBooleanDTO;
 import mx.com.asteca.comun.dto.ProgramaEstudiosDTO;
 import mx.com.asteca.fachada.CursoFachada;
 import mx.com.asteca.fachada.FachadaException;
@@ -51,36 +53,38 @@ public class CursoControlador extends BaseController implements Serializable{
 	private List<SelectItem> listSelectInstructor;
 	private List<SelectItem> listSelectMaterias;
 	private List<SelectItem> listSelectClasifCurso;
+	private List<SelectItem> listSelectInstructorCapacitado;
 	
 	private List<SelectItem> listaSelectAgregarAlumno;
 	private List<AlumnoDTO> listaAlumnosInicial;
 	private List<AlumnoDTO> listaAlumnosAgregados;
 	private AlumnoDTO selectedAlumno;
-	private int idAlumnoAgregar;
+	private Integer idAlumnoAgregar;
 	
-	private int idClienteSelected;
-	private int idAreaSelected;
-	private int idProgramaEstudioSelected;
-	private int idSedeSelected;
-	private int idInstructorSelected;
-	private int idMateriaSelected;
-	private int idTipoCursoSelected;
+	private Integer idClienteSelected;
+	private Integer idAreaSelected;
+	private Integer idProgramaEstudioSelected;
+	private Integer idSedeSelected;
+	private Integer idInstructorSelected;
+	private Integer idMateriaSelected;
+	private Integer idTipoCursoSelected;
 	
-	private int idNuevoClienteSelected;
-	private int idNuevoAreaSelected;
-	private int idNuevoProgramaEstudioSelected;
-	private int idNuevoSedeSelected;
-	private int idNuevoInstructorSelected;
-	private int idNuevoMateriaSelected;
-	private int idNuevoTipoCursoSelected;
+	private Integer idNuevoClienteSelected;
+	private Integer idNuevoAreaSelected;
+	private Integer idNuevoProgramaEstudioSelected;
+	private Integer idNuevoSedeSelected;
+	private Integer idNuevoInstructorSelected;
+	private Integer idNuevoMateriaSelected;
+	private Integer idNuevoTipoCursoSelected;
+	private Integer idMateriaRegistroSelected;
 	
 	private Date editarFechaHoraInicial;
 	private Date editarFechaHoraFinal;
-	private int idAulaEditarSelected;
+	private Integer idAulaEditarSelected;
 	
 	private Date nuevoFechaHoraInicial;
 	private Date nuevoFechaHoraFinal;
-	private int idAulaNuevoSelected;
+	private Integer idAulaNuevoSelected;
 	
 	private List<MateriaDTO> listMaterias;
 	private MateriaDTO selectedMateria;
@@ -99,6 +103,34 @@ public class CursoControlador extends BaseController implements Serializable{
 	private String nuevoCursoReferencia;
 	private boolean tabViewShow;
 	private CursoDTO dtoCursoNuevo;
+	
+private PermisosBooleanDTO permisos;
+	
+	@PostConstruct
+	public void populate(){
+		setPermisos(super.stablishSessionPermissions());
+	}
+
+	/**
+	 * @return the permisos
+	 */
+	public PermisosBooleanDTO getPermisos() {
+		return permisos;
+	}
+
+
+
+	/**
+	 * @param permisos the permisos to set
+	 */
+	public void setPermisos(PermisosBooleanDTO permisos) {
+		this.permisos = permisos;
+		super.setAlta(permisos.isAlta());
+		super.setBorrar(permisos.isBorrar());
+		super.setCambios(permisos.isEdicion());
+		super.setConsulta(permisos.isConsulta());
+		super.setImpresion(permisos.isImpresion());
+	}
 	
 	public void handleCambiaFechaEditar(SelectEvent event) {  
 		initListAulasDisponibles1();
@@ -183,6 +215,7 @@ public class CursoControlador extends BaseController implements Serializable{
 		selectedMateria.setIdInstructor(idInstructorSelected);
 		selectedMateria.setIdMateriaRegistro(idMateriaSelected);
 		selectedMateria.setIdTipo(idTipoCursoSelected);
+		selectedMateria.setIdMateriaRegistro(idMateriaRegistroSelected);
 		try {
 			fachada.updateMateria(selectedMateria);			
 			listMateriasNuevo = fachada.findMateriasPorProgramaEstudio(idProgramaEstudioSelected);
@@ -190,6 +223,10 @@ public class CursoControlador extends BaseController implements Serializable{
 		} catch (FachadaException e) {
 			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR, Constantes.ERROR_UPDATE_REGISTRO);
 		}
+	}
+	
+	public void handleShowAgregarAlumnoPopup(){
+		initListaSelectAgregarAlumnos();
 	}
 	
 	public void addMateriaNueva(){
@@ -345,7 +382,7 @@ public class CursoControlador extends BaseController implements Serializable{
 		if(idProgramaEstudioSelected != 0){
 			try {
 				listMateriasNuevo = fachada.findMateriasPorProgramaEstudio(idProgramaEstudioSelected);
-				handleChangeListMaterias();
+				handleChangeListMaterias();				
 			} catch (FachadaException e) {
 				super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR, Constantes.ERROR_OBTENIENDO_LISTA_CATALOGO);
 			}
@@ -353,6 +390,33 @@ public class CursoControlador extends BaseController implements Serializable{
 	}
 	
 	public void creaCurso(){
+		boolean b = validaCreacionCurso();
+		if(b == false){
+			super.addWarningMessage(Constantes.MESSAGE_TITLE_WARNING, Constantes.WARNING_NECESITAS_LLENAR_CAMPOS_REQUERIDOS);
+			return;
+		}
+		if(nuevoCursoFechaFin.before(nuevoCursoFechaInicio)){
+			super.addWarningMessage(Constantes.MESSAGE_TITLE_WARNING, Constantes.WARNING_FECHAS_INICIO_FIN_NO_COINCIDEN);
+			return;
+		}
+		try {
+			CursoDTO referencia = fachada.findByReferencia(nuevoCursoReferencia);
+			int grupo = Integer.parseInt(nuevoCursoGrupoString);
+			CursoDTO grupoRef = fachada.findCursoByGrupo(grupo);
+			if(referencia != null){
+				super.addInfoMessage(Constantes.MESSAGE_TITLE_INFO, Constantes.INFO_REFERENCIA_DUPLICADA_CURSO);
+				return;
+			}else if(grupoRef != null){
+				super.addInfoMessage(Constantes.MESSAGE_TITLE_INFO, Constantes.INFO_REFERENCIA_DUPLICADA_GRUPO_CURSO);
+				return;
+			}
+		} catch(NumberFormatException e){
+			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR, Constantes.ERROR_FORMATO_NUMERO);
+			return;
+		}catch (FachadaException e1) {
+			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR, Constantes.ERROR_NUEVO_REGISTRO);
+			return;
+		}
 		CursoDTO dto = new CursoDTO();
 		dto.setFechaFin(nuevoCursoFechaFin);
 		dto.setFechaIni(nuevoCursoFechaInicio);
@@ -389,6 +453,27 @@ public class CursoControlador extends BaseController implements Serializable{
 		}
 	}
 	
+	private boolean validaCreacionCurso(){
+		if(nuevoCursoFechaFin == null || nuevoCursoFechaInicio == null){
+			return false;
+		}else if(idClienteSelected == 0){
+			return false;
+		}else if(idAreaSelected == 0){
+			return false;
+		}else if(idProgramaEstudioSelected == 0){
+			return false;
+		}else if(idSedeSelected == 0){
+			return false;
+		}else if(nuevoCursoHoraFin == null || nuevoCursoHoraInicio == null){
+			return false;
+		}else if(nuevoCursoGrupoString == null || nuevoCursoGrupoString.isEmpty()){
+			return false;
+		}else if(nuevoCursoReferencia == null || nuevoCursoReferencia.isEmpty()){
+			return false;
+		}
+		return true;
+	}
+	
 	public void handleChangeListMaterias(){
 		listMaterias = new ArrayList<MateriaDTO>();
 		if(!CollectionUtils.isEmpty(listMateriasNuevo)){
@@ -403,7 +488,6 @@ public class CursoControlador extends BaseController implements Serializable{
 	}
 	
 	private void addCursoMateriasDefault(List<MateriaDTO> listaMaterias){
-		//Registrar las materias para el curso para poderlas editar
 		try{
 			List<MateriaDTO> listaMateriasTemp = new ArrayList<MateriaDTO>();
 			for(MateriaDTO dto : listaMaterias){
@@ -416,6 +500,23 @@ public class CursoControlador extends BaseController implements Serializable{
 			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR, Constantes.ERROR_OBTENIENDO_LISTA_CATALOGO);
 		}
 		
+	}
+	
+	public void handleEditMateria(){
+		//listSelectInstructor
+		idMateriaRegistroSelected = selectedMateria.getIdMateriaRegistro();
+		try {
+			List<InstructorDTO> listaInstructoresCapacitados = fachada.findInstructorCapacidato(idMateriaRegistroSelected);
+			listSelectInstructorCapacitado = new ArrayList<SelectItem>();
+			if(!CollectionUtils.isEmpty(listaInstructoresCapacitados)){
+				for(InstructorDTO dto : listaInstructoresCapacitados){
+					SelectItem item = new SelectItem(dto.getIdInstructor(), dto.getNombre());
+					listSelectInstructorCapacitado.add(item);
+				}
+			}
+		} catch (FachadaException e) {
+			super.addErrorMessage(Constantes.MESSAGE_TITLE_ERROR, Constantes.ERROR_NO_HAY_INSTRUCTOR_CALIFICADO);
+		}
 	}
 	
 	private void initSelectListMaterias(){
@@ -639,56 +740,56 @@ public class CursoControlador extends BaseController implements Serializable{
 	/**
 	 * @return the idClienteSelected
 	 */
-	public int getIdClienteSelected() {
+	public Integer getIdClienteSelected() {
 		return idClienteSelected;
 	}
 
 	/**
 	 * @param idClienteSelected the idClienteSelected to set
 	 */
-	public void setIdClienteSelected(int idClienteSelected) {
+	public void setIdClienteSelected(Integer idClienteSelected) {
 		this.idClienteSelected = idClienteSelected;
 	}
 
 	/**
 	 * @return the idAreaSelected
 	 */
-	public int getIdAreaSelected() {
+	public Integer getIdAreaSelected() {
 		return idAreaSelected;
 	}
 
 	/**
 	 * @param idAreaSelected the idAreaSelected to set
 	 */
-	public void setIdAreaSelected(int idAreaSelected) {
+	public void setIdAreaSelected(Integer idAreaSelected) {
 		this.idAreaSelected = idAreaSelected;
 	}
 
 	/**
 	 * @return the idProgramaEstudioSelected
 	 */
-	public int getIdProgramaEstudioSelected() {
+	public Integer getIdProgramaEstudioSelected() {
 		return idProgramaEstudioSelected;
 	}
 
 	/**
 	 * @param idProgramaEstudioSelected the idProgramaEstudioSelected to set
 	 */
-	public void setIdProgramaEstudioSelected(int idProgramaEstudioSelected) {
+	public void setIdProgramaEstudioSelected(Integer idProgramaEstudioSelected) {
 		this.idProgramaEstudioSelected = idProgramaEstudioSelected;
 	}
 
 	/**
 	 * @return the idSedeSelected
 	 */
-	public int getIdSedeSelected() {
+	public Integer getIdSedeSelected() {
 		return idSedeSelected;
 	}
 
 	/**
 	 * @param idSedeSelected the idSedeSelected to set
 	 */
-	public void setIdSedeSelected(int idSedeSelected) {
+	public void setIdSedeSelected(Integer idSedeSelected) {
 		this.idSedeSelected = idSedeSelected;
 	}
 
@@ -724,14 +825,14 @@ public class CursoControlador extends BaseController implements Serializable{
 	/**
 	 * @return the idInstructorSelected
 	 */
-	public int getIdInstructorSelected() {
+	public Integer getIdInstructorSelected() {
 		return idInstructorSelected;
 	}
 
 	/**
 	 * @param idInstructorSelected the idInstructorSelected to set
 	 */
-	public void setIdInstructorSelected(int idInstructorSelected) {
+	public void setIdInstructorSelected(Integer idInstructorSelected) {
 		this.idInstructorSelected = idInstructorSelected;
 	}
 
@@ -767,14 +868,14 @@ public class CursoControlador extends BaseController implements Serializable{
 	/**
 	 * @return the idMateriaSelected
 	 */
-	public int getIdMateriaSelected() {
+	public Integer getIdMateriaSelected() {
 		return idMateriaSelected;
 	}
 
 	/**
 	 * @param idMateriaSelected the idMateriaSelected to set
 	 */
-	public void setIdMateriaSelected(int idMateriaSelected) {
+	public void setIdMateriaSelected(Integer idMateriaSelected) {
 		this.idMateriaSelected = idMateriaSelected;
 	}
 
@@ -814,7 +915,7 @@ public class CursoControlador extends BaseController implements Serializable{
 	/**
 	 * @return the idAulaEditarSelected
 	 */
-	public int getIdAulaEditarSelected() {
+	public Integer getIdAulaEditarSelected() {
 		return idAulaEditarSelected;
 	}
 
@@ -822,7 +923,7 @@ public class CursoControlador extends BaseController implements Serializable{
 	/**
 	 * @param idAulaEditarSelected the idAulaEditarSelected to set
 	 */
-	public void setIdAulaEditarSelected(int idAulaEditarSelected) {
+	public void setIdAulaEditarSelected(Integer idAulaEditarSelected) {
 		this.idAulaEditarSelected = idAulaEditarSelected;
 	}
 
@@ -862,112 +963,112 @@ public class CursoControlador extends BaseController implements Serializable{
 	/**
 	 * @return the idTipoCursoSelected
 	 */
-	public int getIdTipoCursoSelected() {
+	public Integer getIdTipoCursoSelected() {
 		return idTipoCursoSelected;
 	}
 
 	/**
 	 * @param idTipoCursoSelected the idTipoCursoSelected to set
 	 */
-	public void setIdTipoCursoSelected(int idTipoCursoSelected) {
+	public void setIdTipoCursoSelected(Integer idTipoCursoSelected) {
 		this.idTipoCursoSelected = idTipoCursoSelected;
 	}
 
 	/**
 	 * @return the idNuevoClienteSelected
 	 */
-	public int getIdNuevoClienteSelected() {
+	public Integer getIdNuevoClienteSelected() {
 		return idNuevoClienteSelected;
 	}
 
 	/**
 	 * @param idNuevoClienteSelected the idNuevoClienteSelected to set
 	 */
-	public void setIdNuevoClienteSelected(int idNuevoClienteSelected) {
+	public void setIdNuevoClienteSelected(Integer idNuevoClienteSelected) {
 		this.idNuevoClienteSelected = idNuevoClienteSelected;
 	}
 
 	/**
 	 * @return the idNuevoAreaSelected
 	 */
-	public int getIdNuevoAreaSelected() {
+	public Integer getIdNuevoAreaSelected() {
 		return idNuevoAreaSelected;
 	}
 
 	/**
 	 * @param idNuevoAreaSelected the idNuevoAreaSelected to set
 	 */
-	public void setIdNuevoAreaSelected(int idNuevoAreaSelected) {
+	public void setIdNuevoAreaSelected(Integer idNuevoAreaSelected) {
 		this.idNuevoAreaSelected = idNuevoAreaSelected;
 	}
 
 	/**
 	 * @return the idNuevoProgramaEstudioSelected
 	 */
-	public int getIdNuevoProgramaEstudioSelected() {
+	public Integer getIdNuevoProgramaEstudioSelected() {
 		return idNuevoProgramaEstudioSelected;
 	}
 
 	/**
 	 * @param idNuevoProgramaEstudioSelected the idNuevoProgramaEstudioSelected to set
 	 */
-	public void setIdNuevoProgramaEstudioSelected(int idNuevoProgramaEstudioSelected) {
+	public void setIdNuevoProgramaEstudioSelected(Integer idNuevoProgramaEstudioSelected) {
 		this.idNuevoProgramaEstudioSelected = idNuevoProgramaEstudioSelected;
 	}
 
 	/**
 	 * @return the idNuevoSedeSelected
 	 */
-	public int getIdNuevoSedeSelected() {
+	public Integer getIdNuevoSedeSelected() {
 		return idNuevoSedeSelected;
 	}
 
 	/**
 	 * @param idNuevoSedeSelected the idNuevoSedeSelected to set
 	 */
-	public void setIdNuevoSedeSelected(int idNuevoSedeSelected) {
+	public void setIdNuevoSedeSelected(Integer idNuevoSedeSelected) {
 		this.idNuevoSedeSelected = idNuevoSedeSelected;
 	}
 
 	/**
 	 * @return the idNuevoInstructorSelected
 	 */
-	public int getIdNuevoInstructorSelected() {
+	public Integer getIdNuevoInstructorSelected() {
 		return idNuevoInstructorSelected;
 	}
 
 	/**
 	 * @param idNuevoInstructorSelected the idNuevoInstructorSelected to set
 	 */
-	public void setIdNuevoInstructorSelected(int idNuevoInstructorSelected) {
+	public void setIdNuevoInstructorSelected(Integer idNuevoInstructorSelected) {
 		this.idNuevoInstructorSelected = idNuevoInstructorSelected;
 	}
 
 	/**
 	 * @return the idNuevoMateriaSelected
 	 */
-	public int getIdNuevoMateriaSelected() {
+	public Integer getIdNuevoMateriaSelected() {
 		return idNuevoMateriaSelected;
 	}
 
 	/**
 	 * @param idNuevoMateriaSelected the idNuevoMateriaSelected to set
 	 */
-	public void setIdNuevoMateriaSelected(int idNuevoMateriaSelected) {
+	public void setIdNuevoMateriaSelected(Integer idNuevoMateriaSelected) {
 		this.idNuevoMateriaSelected = idNuevoMateriaSelected;
 	}
 
 	/**
 	 * @return the idNuevoTipoCursoSelected
 	 */
-	public int getIdNuevoTipoCursoSelected() {
+	public Integer getIdNuevoTipoCursoSelected() {
 		return idNuevoTipoCursoSelected;
 	}
 
 	/**
 	 * @param idNuevoTipoCursoSelected the idNuevoTipoCursoSelected to set
 	 */
-	public void setIdNuevoTipoCursoSelected(int idNuevoTipoCursoSelected) {
+	public void setIdNuevoTipoCursoSelected(Integer idNuevoTipoCursoSelected) {
 		this.idNuevoTipoCursoSelected = idNuevoTipoCursoSelected;
 	}
 
@@ -1002,14 +1103,14 @@ public class CursoControlador extends BaseController implements Serializable{
 	/**
 	 * @return the idAulaNuevoSelected
 	 */
-	public int getIdAulaNuevoSelected() {
+	public Integer getIdAulaNuevoSelected() {
 		return idAulaNuevoSelected;
 	}
 
 	/**
 	 * @param idAulaNuevoSelected the idAulaNuevoSelected to set
 	 */
-	public void setIdAulaNuevoSelected(int idAulaNuevoSelected) {
+	public void setIdAulaNuevoSelected(Integer idAulaNuevoSelected) {
 		this.idAulaNuevoSelected = idAulaNuevoSelected;
 	}
 
@@ -1218,15 +1319,44 @@ public class CursoControlador extends BaseController implements Serializable{
 	/**
 	 * @return the idAlumnoAgregar
 	 */
-	public int getIdAlumnoAgregar() {
+	public Integer getIdAlumnoAgregar() {
 		return idAlumnoAgregar;
 	}
 
 	/**
 	 * @param idAlumnoAgregar the idAlumnoAgregar to set
 	 */
-	public void setIdAlumnoAgregar(int idAlumnoAgregar) {
+	public void setIdAlumnoAgregar(Integer idAlumnoAgregar) {
 		this.idAlumnoAgregar = idAlumnoAgregar;
+	}
+
+	/**
+	 * @return the listSelectInstructorCapacitado
+	 */
+	public List<SelectItem> getListSelectInstructorCapacitado() {
+		return listSelectInstructorCapacitado;
+	}
+
+	/**
+	 * @param listSelectInstructorCapacitado the listSelectInstructorCapacitado to set
+	 */
+	public void setListSelectInstructorCapacitado(
+			List<SelectItem> listSelectInstructorCapacitado) {
+		this.listSelectInstructorCapacitado = listSelectInstructorCapacitado;
+	}
+
+	/**
+	 * @return the idMateriaRegistroSelected
+	 */
+	public Integer getIdMateriaRegistroSelected() {
+		return idMateriaRegistroSelected;
+	}
+
+	/**
+	 * @param idMateriaRegistroSelected the idMateriaRegistroSelected to set
+	 */
+	public void setIdMateriaRegistroSelected(Integer idMateriaRegistroSelected) {
+		this.idMateriaRegistroSelected = idMateriaRegistroSelected;
 	}
 
 }

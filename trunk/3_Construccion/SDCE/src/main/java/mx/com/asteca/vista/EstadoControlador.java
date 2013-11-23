@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
@@ -13,6 +14,7 @@ import javax.faces.model.SelectItem;
 import mx.com.asteca.comun.Constantes;
 import mx.com.asteca.comun.dto.EstadoDTO;
 import mx.com.asteca.comun.dto.PaisDTO;
+import mx.com.asteca.comun.dto.PermisosBooleanDTO;
 import mx.com.asteca.fachada.EstadoFachada;
 import mx.com.asteca.fachada.FachadaException;
 
@@ -69,6 +71,33 @@ public class EstadoControlador extends BaseController implements Serializable {
 		paisSelected = new PaisDTO();
 	}
 
+private PermisosBooleanDTO permisos;
+	
+	@PostConstruct
+	public void populate(){
+		setPermisos(super.stablishSessionPermissions());
+	}
+
+	/**
+	 * @return the permisos
+	 */
+	public PermisosBooleanDTO getPermisos() {
+		return permisos;
+	}
+
+
+
+	/**
+	 * @param permisos the permisos to set
+	 */
+	public void setPermisos(PermisosBooleanDTO permisos) {
+		this.permisos = permisos;
+		super.setAlta(permisos.isAlta());
+		super.setBorrar(permisos.isBorrar());
+		super.setCambios(permisos.isEdicion());
+		super.setConsulta(permisos.isConsulta());
+		super.setImpresion(permisos.isImpresion());
+	}
 
 	/**
 	 * Inicializa la lista de paises de <code>SelectItem</code>

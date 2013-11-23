@@ -55,6 +55,10 @@ public class Constantes {
 	public static final String ACCION_LOGIN="Login";
 	public static final String ACCION_LOGOUT="Logout";
 	public static final String ACCION_NUEVO_REGISTRO="Nuevo Registro";
+	public static final String ACCION_NUEVA_CALIFICACION_REGISTRADA="Nueva calificación registrada con éxito.";
+	public static final String ACCION_NUEVA_CALIFICACION_FALLO="Falló al registrar nueva calificación";
+	public static final String ACCION_NUEVA_ASISTENCIA_REGISTRADA="Nueva asistencia registrada con éxito";
+	public static final String ACCION_NUEVA_ASISTENCIA_FALLO="Falló al registrar nueva asistencia";
 	public static final String ACCION_NUEVO_REGISTRO_EXITOSO_MENSAJE="Nuevo registro guardado con éxito";
 	public static final String ACCION_NUEVO_REGISTRO_FALLIDO_MENSAJE="Nuevo registro tuvo fallo al guardar";
 	public static final String ACCION_UPDATE_REGISTRO="Edición de Registro";
@@ -97,7 +101,7 @@ public class Constantes {
 	public static final String ERROR_NECESITAS_SELECCIONAR_UN_TIPO_CLIENTE="Necesitas seleccionar un tipo de cliente";
 	public static final String ERROR_NECESITAS_SELECCIONAR_UN_TIPO_EQUIPO="Necesitas seleccionar un tipo de equipos";
 	public static final String ERROR_NECESITAS_SELECCIONAR_UNA_SEDE="Necesitas seleccionar una sede";
-	public static final String ERROR_FORMATO_NUMERO="Debes introducir una cantidad valida";
+	public static final String ERROR_FORMATO_NUMERO="Debes introducir una cantidad numerica valida";
 	public static final String NUEVO_REGISTRO_EXITOSO="Se ha insertado un nuevo registro exitosamente";
 	public static final String DELETE_REGISTRO_EXITOSO="Se ha eliminado el registro exitosamente";
 	public static final String UPDATE_REGISTRO_EXITOSO="Se ha actualizado el registro exitosamente";
@@ -117,6 +121,7 @@ public class Constantes {
 	public static final String BEAN_REPORTE_INSTRUCTOR="beanReporteInstructor";
 	public static final String WARNING_NECESITAS_LLENAR_CAMPOS_REQUERIDOS="Necesitas llenar todos los campos requeridos";
 	public static final String WARNING_FORMATO_EMAIL="Email no valido";
+	public static final String WARNING_FECHAS_INICIO_FIN_NO_COINCIDEN="Las fechas de Inicio y Fin no coinciden.";
 	public static final String MODULO_ADMIN = "Administrativos";
 	public static final String MODULO_ALUMNO = "Alumnos";
 	public static final String MODULO_AULA = "Aulas";
@@ -142,4 +147,8 @@ public class Constantes {
 	public static final String MODULO_VER_CURSO="Ver Cursos";
 	public static final String MODULO_BITACORA="Bitacora";
 	public static final String SESION_ATRIBUTO_USUARIO="idUsuario";
+	public static final String INFO_REFERENCIA_DUPLICADA_CURSO="Ya existe un curso con esa referencia, favor de asignar otra para continuar.";
+	public static final String INFO_REFERENCIA_DUPLICADA_GRUPO_CURSO="Ya existe un curso con ese grupo, favor de asignar otra para continuar.";
+	public static final String ERROR_NO_HAY_INSTRUCTOR_CALIFICADO="No se encuentran instructores calificados para impartir la materia.";
+	public static final String ERROR_SUBIDA_ARCHIVO="Se produjo un error al intentar subir el archivo.";
 }

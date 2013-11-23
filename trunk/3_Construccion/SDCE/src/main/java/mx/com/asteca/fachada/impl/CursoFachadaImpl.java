@@ -69,6 +69,30 @@ public class CursoFachadaImpl extends BaseFachadaImpl<CursoDTO, Integer>
 	}
 	
 	@Override
+	public CursoDTO findCursoByGrupo(int grupo) throws FachadaException{
+		try{
+			CursoDTO dto = cursoServicio.findByGrupo(grupo);
+			return dto;
+		}catch (ServicioException e)  {
+			throw new FachadaException(
+					"Error en findCursoByGrupo Fachada : "
+							+ e.getMessage(), e);
+		}
+	}
+	
+	@Override
+	public List<InstructorDTO> findInstructorCapacidato(int idMateriaRegistro) throws FachadaException{
+		try{
+			List<InstructorDTO> lista = servicioInstructor.findInstructoresHabilitadosParaMateria(idMateriaRegistro);
+			return lista;
+		}catch (ServicioException e)  {
+			throw new FachadaException(
+					"Error en findInstructorCapacidato Fachada : "
+							+ e.getMessage(), e);
+		}
+	}
+	
+	@Override
 	public long saveCalificacion(int idAlumno, int idCurso, int idMateria, double calificacion) throws FachadaException{
 		try{
 			long pk = servicioAlumnos.saveCalificacion(idAlumno, idCurso, idMateria, calificacion);

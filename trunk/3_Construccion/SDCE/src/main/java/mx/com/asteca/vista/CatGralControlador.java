@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
@@ -19,6 +20,7 @@ import org.primefaces.context.RequestContext;
 import mx.com.asteca.comun.Constantes;
 import mx.com.asteca.comun.dto.CatGralDTO;
 import mx.com.asteca.comun.dto.EstadoDTO;
+import mx.com.asteca.comun.dto.PermisosBooleanDTO;
 import mx.com.asteca.comun.dto.TipoCatGralDTO;
 import mx.com.asteca.fachada.CatGralFachada;
 import mx.com.asteca.fachada.FachadaException;
@@ -66,6 +68,34 @@ public class CatGralControlador extends BaseController implements Serializable {
 		catalogoSelected = new CatGralDTO();
 		catalogoNuevo = new CatGralDTO();
 	}
+private PermisosBooleanDTO permisos;
+	
+	@PostConstruct
+	public void populate(){
+		setPermisos(super.stablishSessionPermissions());
+	}
+
+	/**
+	 * @return the permisos
+	 */
+	public PermisosBooleanDTO getPermisos() {
+		return permisos;
+	}
+
+
+
+	/**
+	 * @param permisos the permisos to set
+	 */
+	public void setPermisos(PermisosBooleanDTO permisos) {
+		this.permisos = permisos;
+		super.setAlta(permisos.isAlta());
+		super.setBorrar(permisos.isBorrar());
+		super.setCambios(permisos.isEdicion());
+		super.setConsulta(permisos.isConsulta());
+		super.setImpresion(permisos.isImpresion());
+	}
+	
 	
 	private void initListaSelectTipoCat(){
 		if(CollectionUtils.isEmpty(listSelectTipoCat)){
@@ -298,7 +328,6 @@ public class CatGralControlador extends BaseController implements Serializable {
 				return;
 			}
 			catalogoNuevo = new CatGralDTO();
-			super.addInfoMessage(Constantes.NUEVO_REGISTRO_EXITOSO);
 		}else{
 			super.addWarningMessage(Constantes.MESSAGE_TITLE_WARNING, Constantes.WARNING_NECESITAS_LLENAR_CAMPOS_REQUERIDOS);
 		}

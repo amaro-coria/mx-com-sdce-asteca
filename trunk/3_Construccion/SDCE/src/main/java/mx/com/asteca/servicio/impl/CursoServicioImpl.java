@@ -10,6 +10,7 @@ import mx.com.asteca.persistencia.dao.BaseDAO;
 import mx.com.asteca.persistencia.dao.CursoDAO;
 import mx.com.asteca.persistencia.entidades.Alumnos;
 import mx.com.asteca.persistencia.entidades.Cursos;
+import mx.com.asteca.persistencia.entidades.CursosMaterias;
 import mx.com.asteca.persistencia.entidades.Materias;
 import mx.com.asteca.servicio.CursoServicio;
 import mx.com.asteca.servicio.ServicioException;
@@ -39,6 +40,18 @@ public class CursoServicioImpl extends
 	@Override
 	Assembler getAssembler() {
 		return assemblerCurso;
+	}
+	
+	@Override
+	@Transactional(readOnly=true)
+	public CursoDTO findByGrupo(int idGrupo) throws ServicioException{
+		try{
+			Cursos mapping = cursoDAO.findByGrupo(idGrupo);
+			CursoDTO dto = (CursoDTO) assemblerCurso.getDTOTransform(mapping);
+			return dto;
+		} catch (PersistenciaException e) {
+			throw new ServicioException(e.getMessage(), e);
+		}
 	}
 
 	@Override
