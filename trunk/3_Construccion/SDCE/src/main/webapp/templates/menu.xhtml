@@ -5,7 +5,6 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
-
 <h:head>
 	<link href="../css/asteca.css" rel="stylesheet" type="text/css" />
 </h:head>
@@ -17,8 +16,8 @@
 				<h:form id="frmMenu" >
 				<p:growl id="growl" showDetail="true" sticky="true" />
 					<p:menu type="plain" id="exampleMenu">
-						<p:submenu label="Menu" binding="#{menuBean.submenu}">
-							
+						<p:submenu label="#{msg.menu}" binding="#{menuBean.submenu}" >
+							<p:menuitem url="/j_spring_security_logout" value="#{msg.cerrarSesion}" update="@all"  process="@this"/>
 						</p:submenu>
 					</p:menu>
 				</h:form>
