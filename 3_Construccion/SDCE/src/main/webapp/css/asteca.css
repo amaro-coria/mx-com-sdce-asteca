@@ -57,8 +57,8 @@ img {
 }
 
 #templatemo_container {
-	margin: 0px auto;
-	width: 930px;
+	margin: 15px 30px 0;
+	width: 1270px;
 	margin-top: 15px;
 }
 
@@ -83,7 +83,7 @@ img {
 	clear: both;
 	padding: 0px;
 	margin: 0px 0px 5px 0px;
-	width: 930px;
+	width: 1270px;
 	height: 147px;
 }
 
@@ -111,9 +111,9 @@ img {
 }
 
 #header {
-	margin: 0px;
-	float: right;
-	width: 690px;
+	margin: 0 3px;
+	float: left;
+	width: 1010px;
 	height: 147px;
 	background: url(../images/templatemo_heading_background.jpg) no-repeat;
 }
@@ -196,7 +196,7 @@ img {
 	float: left;
 	margin: 0px;
 	padding: 0px;
-	width: 930px;
+	width: 1270px;
 }
 
 #templatemo_left_column {
@@ -210,7 +210,7 @@ img {
 
 #templatemo_middle_column {
 	float: left;
-	width: 670px;
+	width: 1010px;
 	min-height: 400px;
 	margin-top: 0px;
 	margin-right: 0px;
@@ -228,7 +228,7 @@ img {
 	padding: 20px 0px 0px 0px;
 	width: 200px;
 	background: #e0e0e0;
-	min-height: 400px;zz
+	min-height: 400px;
 }
 
 /* left column */
@@ -444,14 +444,24 @@ input{
    height: 30px;
 }
 
+.dateTimeField3 input {
+   width: 300px;
+   height: 20px;
+}
+
 .dateTimeField2 input {
    width: 120px;
-   height: 30px;
+   height: 20px;
 }
 
 .zipCodeField input {
    width: 200px;
    height: 30px;
+}
+
+.zipCodeField2 input {
+   width: 200px;
+   height: 20px;
 }
 
 .mystyle {
@@ -471,7 +481,7 @@ width: 300px;
 #templatemo_footer {
 	clear: both;
 	padding: 10px 0px 0px 0px;
-	width: 930px;
+	width: 1270px;
 	height: 50px;
 	text-align: center;
 	color: #666;
@@ -501,6 +511,27 @@ width: 300px;
 
 #templatemo_footer a:hover{
 	color: #ffffff;
+}
+
+.gradientBoxesWithOuterShadows { 
+height: 200px;
+width: 400px; 
+padding: 20px;
+background-color: white; 
+
+/* outer shadows  (note the rgba is red, green, blue, alpha) */
+-webkit-box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.4); 
+-moz-box-shadow: 0px 1px 6px rgba(23, 69, 88, .5);
+
+/* rounded corners */
+-webkit-border-radius: 12px;
+-moz-border-radius: 7px; 
+border-radius: 7px;
+
+/* gradients */
+background: -webkit-gradient(linear, left top, left bottom, 
+color-stop(0%, white), color-stop(15%, white), color-stop(100%, #D7E9F5)); 
+background: -moz-linear-gradient(top, white 0%, white 55%, #D5E4F3 130%); 
 }
 
 /* ----- End of Footer ----- */

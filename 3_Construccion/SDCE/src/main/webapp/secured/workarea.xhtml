@@ -30,6 +30,19 @@
 	background: none repeat scroll 0 0 #F9F9F9;
 	border-top: 1px solid #BBBBBB;
 }
+
+.ui-selectonemenu {
+	width: 100%;
+}
+
+.ui-selectonemenu-label {
+	width: 100%;
+}
+
+.ui-selectonemenu label.ui-selectonemenu-label {
+	padding-right: 500px;
+	text-align: left;
+}
 </style>
 </h:head>
 
@@ -51,9 +64,10 @@
 
 			<div id="templatemo_middle_column">
 				<ui:insert name="templatemo_left_column">
-					<p:ajaxStatus onstart="statusDialog.show();" 
-						onsuccess="statusDialog.hide();" oncomplete="statusDialog.hide();" onerror="statusDialog.hide();" />
-					<p:dialog modal="true" widgetVar="statusDialog" header="Status"
+					<p:ajaxStatus onstart="statusDialog.show();"
+						onsuccess="statusDialog.hide();" oncomplete="statusDialog.hide();"
+						onerror="statusDialog.hide();" />
+					<p:dialog modal="true" widgetVar="statusDialog"
 						draggable="false" closable="false">
 						<p:graphicImage value="../../images/ajax-loader.gif" />
 					</p:dialog>
@@ -63,7 +77,12 @@
 		</div>
 
 		<div id="templatemo_footer">
-			Copyright © <a href="#">Asteca</a> | Designed by RIG
+			<table align="center">
+				<tr>
+					<td>Soportado por Intuition Technologies </td>
+					<td><p:graphicImage value="../../images/logo-intuition.png" /></td>
+				</tr>			
+			</table>
 		</div>
 
 	</div>
