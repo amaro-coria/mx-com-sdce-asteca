@@ -54,11 +54,13 @@
 			<groupId>com.sun.faces</groupId>
 			<artifactId>jsf-api</artifactId>
 			<version>2.1.13</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.sun.faces</groupId>
 			<artifactId>jsf-impl</artifactId>
 			<version>2.1.13</version>
+			<scope>provided</scope>
 		</dependency>
 		<!-- Dependencias para Log -->
 		<dependency>
@@ -159,6 +161,12 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-openid</artifactId>
 			<version>3.0.5.RELEASE</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>xercesImpl</artifactId>
+					<groupId>xerces</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.security</groupId>
@@ -272,7 +280,18 @@
 			<version>1.2.1</version>
 		</dependency>
 		<!-- Fin de Dependencias para File Upload -->
-
+		<!-- Dependencia para PluginsPrime -->
+		<dependency>
+			<groupId>org.primefaces.extensions</groupId>
+			<artifactId>primefaces-extensions</artifactId>
+			<version>0.6.3</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.3</version>
+		</dependency>
+		<!-- Fin de dependencia para plugins prime -->
 	</dependencies>
 	<build>
 		<resources>
