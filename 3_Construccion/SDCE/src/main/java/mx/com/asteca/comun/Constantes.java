@@ -52,6 +52,7 @@ public class Constantes {
 	public static final String ASSEMBLER_CURSO="assemblerCurso";
 	public static final String ASSEMBLER_TIPOS_CAT_GRAL="assemblerTiposCatGral";
 	public static final String ASSEMBLER_BITACORA="assemblerBitacora";
+	public static final String ASSEMBLER_REPORTE_AULAS="assemblerReporteAulas";
 	public static final String ACCION_LOGIN="Login";
 	public static final String ACCION_LOGOUT="Logout";
 	public static final String ACCION_NUEVO_REGISTRO="Nuevo Registro";
