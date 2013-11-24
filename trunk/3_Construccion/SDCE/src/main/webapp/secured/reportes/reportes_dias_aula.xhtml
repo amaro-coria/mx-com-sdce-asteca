@@ -9,6 +9,9 @@
 		<h:form id="form" styleClass="login">
 
 			<p:panel id="panel" header="Reporte de Aulas" closable="false">
+			<p:commandButton value="Imprimir" icon="ui-icon-print" update="@all"
+					actionListener="#{beanReporteAula.mostrarReporte}"
+					styleClass="ui-priority-primary" />
 			</p:panel>
 
 		</h:form>

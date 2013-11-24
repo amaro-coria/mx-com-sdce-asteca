@@ -16,9 +16,9 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 
 import mx.com.asteca.comun.Constantes;
-import mx.com.asteca.comun.dto.AulaDTO;
-import mx.com.asteca.fachada.AulaFachada;
+import mx.com.asteca.comun.dto.ReporteAulasDTO;
 import mx.com.asteca.fachada.FachadaException;
+import mx.com.asteca.fachada.ReporteAulasFachada;
 import net.sf.jasperreports.engine.JRException;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -36,9 +36,9 @@ public class ReporteAulaControlador extends BaseController implements
 	private String url;
 	private FacesContext context = FacesContext.getCurrentInstance();
 
-	@ManagedProperty("#{aulaFachadaImpl}")
-	private AulaFachada aulaFachada;
-	private List<AulaDTO> listaAula;
+	@ManagedProperty("#{reporteAulasFachadaImpl}")
+	private ReporteAulasFachada reportAulaFachada;
+	private List<ReporteAulasDTO> listaReportAula;
 
 	private static Logger LOGGER = LoggerFactory
 			.getLogger(ReporteAulaControlador.class);
@@ -57,17 +57,17 @@ public class ReporteAulaControlador extends BaseController implements
 	 * 
 	 * @throws FachadaException
 	 */
-	private void initListaaula() {
-		if (CollectionUtils.isEmpty(listaAula)) {
+	private void initListaAula() {
+		if (CollectionUtils.isEmpty(listaReportAula)) {
 			try {
 				LOGGER.debug("BUSCANDO... ");
-				if (aulaFachada != null) {
-					listaAula = aulaFachada.findBySede("");
+				if (reportAulaFachada != null) {
+					listaReportAula = reportAulaFachada.getAll();
 				} else {
-					listaAula = new ArrayList<AulaDTO>();
+					listaReportAula = new ArrayList<ReporteAulasDTO>();
 				}
 			} catch (FachadaException e) {
-				listaAula = new ArrayList<AulaDTO>();
+				listaReportAula = new ArrayList<ReporteAulasDTO>();
 				LOGGER.error(Constantes.ERROR_OBTENIENDO_LISTA_CATALOGO);
 			}
 		}
@@ -82,11 +82,11 @@ public class ReporteAulaControlador extends BaseController implements
 
 	public void mostrarReporte() throws JRException, IOException,
 			ClassNotFoundException {
-		initListaaula();
+		initListaAula();
 		FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
-				.put("aulasReporte", listaAula);
+				.put("aulasReporte", listaReportAula);
 		RequestContext.getCurrentInstance().execute(
-				"window.open('" + url + "Reportes?name=Reporte de aula" + "')");
+				"window.open('" + url + "ReporteAulas?name=Reporte de aula" + "')");
 	}
 
 	public String getUrl() {
@@ -97,34 +97,28 @@ public class ReporteAulaControlador extends BaseController implements
 		this.url = url;
 	}
 
-	/**
-	 * @return the listaAula
-	 */
-	public List<AulaDTO> getListaAula() {
-		return listaAula;
+	public FacesContext getContext() {
+		return context;
 	}
 
-	/**
-	 * @param listaaula
-	 *            the listaAula to set
-	 */
-	public void setListaaula(List<AulaDTO> listaAula) {
-		this.listaAula = listaAula;
+	public void setContext(FacesContext context) {
+		this.context = context;
 	}
 
-	/**
-	 * @return the aulaFachada
-	 */
-	public AulaFachada getaulaFachada() {
-		return aulaFachada;
+	public ReporteAulasFachada getReportAulaFachada() {
+		return reportAulaFachada;
 	}
 
-	/**
-	 * @param aulaFachada
-	 *            the aulaFachada to set
-	 */
-	public void setaulaFachada(AulaFachada aulaFachada) {
-		this.aulaFachada = aulaFachada;
+	public void setReportAulaFachada(ReporteAulasFachada reportAulaFachada) {
+		this.reportAulaFachada = reportAulaFachada;
+	}
+
+	public List<ReporteAulasDTO> getListaReportAula() {
+		return listaReportAula;
+	}
+
+	public void setListaReportAula(List<ReporteAulasDTO> listaReportAula) {
+		this.listaReportAula = listaReportAula;
 	}
 
 	@Override

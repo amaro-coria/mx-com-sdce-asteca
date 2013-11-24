@@ -24,7 +24,7 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 /**
  * Servlet implementation class Reportes
  */
-public class Aulas extends HttpServlet {
+public class ReporteAulas extends HttpServlet {
 	String name = null;
 	/**
 	 * 
@@ -57,7 +57,7 @@ public class Aulas extends HttpServlet {
 	public void viewReportPDF(String name, HttpServletResponse response,
 			List<AulaDTO> listaAulas) {
 
-		InputStream ins = UtilReporte.class.getResourceAsStream("aulasPorArea"+ ".jrxml");
+		InputStream ins = UtilReporte.class.getResourceAsStream("ReporteAulas"+ ".jrxml");
 		try {
 			JasperReport report = JasperCompileManager.compileReport(ins);
 			HashMap<String, InputStream> param = new HashMap<String, InputStream>();
