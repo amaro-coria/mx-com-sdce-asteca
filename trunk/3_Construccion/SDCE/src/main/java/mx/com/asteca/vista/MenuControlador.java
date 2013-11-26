@@ -84,9 +84,9 @@ public class MenuControlador extends BaseController implements Serializable, Act
 			//item.setUrl(url);
 			item.setValue(it.getNombre());
 			item.setId(getItemId(it.getNombre()));
-			/* Descomentar para local, comentar siguientes lineas
-			item.addActionListener(this);
-			*/
+			/* Descomentar para local, comentar siguientes lineas*/
+			//item.addActionListener(this);
+			
 			/*
 			 * Descomentar para subir a produccion, comentar linea anterior*/
 			item.addActionListener(new ActionListener() {
@@ -195,6 +195,11 @@ public class MenuControlador extends BaseController implements Serializable, Act
 			String url = (String) item.getAttributes().get(MENU_ACTION_KEY);
 			setNavegacion(url);
 		}
+	}
+	
+	public String regresaInicio(){
+		setNavegacion("/secured/bienvenida.xhtml");
+		return "/secured/workarea.xhtml";
 	}
 
 }

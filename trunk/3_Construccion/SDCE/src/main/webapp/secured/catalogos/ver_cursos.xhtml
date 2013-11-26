@@ -10,6 +10,16 @@
 <h:body>
 	<ui:composition>
 		<h:form id="form">
+		<table>
+				<tr>
+					<td align="left">
+						<div class="breadcrumb flat" style="text-align: left">
+							<h:commandLink action="#{menuBean.regresaInicio}" value="Inicio" />
+							<h:outputLink value="#" styleClass="active">#{msg.frsEditarCursos}</h:outputLink>
+						</div>
+					</td>
+				</tr>
+			</table>
 			<p:growl id="growl" showDetail="true" sticky="true" />
 			<p:panel id="panel" header="Buscar" closable="false"
 				toggleable="false" style="text-align:center;">

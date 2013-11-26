@@ -7,6 +7,16 @@
 <h:body>
 	<ui:composition>
 		<h:form id="form" >
+		<table>
+				<tr>
+					<td align="left">
+						<div class="breadcrumb flat" style="text-align: left">
+							<h:commandLink action="#{menuBean.regresaInicio}" value="Inicio" />
+							<h:outputLink value="#" styleClass="active">#{msg.instituto}</h:outputLink>
+						</div>
+					</td>
+				</tr>
+			</table>
 			<p:growl id="growl" showDetail="true" sticky="true" />
 			<!-- Panel de Ver -->
 				<h:panelGrid id="displayVer" columns="2" cellpadding="4">
