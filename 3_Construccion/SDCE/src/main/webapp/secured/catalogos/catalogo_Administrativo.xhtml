@@ -9,7 +9,17 @@
 <h:body>
 	<ui:composition>
 		<h:form id="form">
-			<p:growl id="growl" showDetail="true"/>
+			<table>
+				<tr>
+					<td align="left">
+						<div class="breadcrumb flat" style="text-align: left">
+							<h:commandLink action="#{menuBean.regresaInicio}" value="Inicio" />
+							<h:outputLink value="#" styleClass="active">#{msg.catalogoAdmin}</h:outputLink>
+						</div></td>
+				</tr>
+			</table>
+
+			<p:growl id="growl" showDetail="true" />
 			<p:panel id="panel" header="Buscar" closable="false"
 				toggleable="false" style="text-align:center;">
 				<h:panelGrid columns="2" style="text-align:left;">
@@ -41,17 +51,18 @@
 			</p:panel>
 			<p:panel>
 				<h:panelGrid columns="4" style="text-align:left;">
-					<p:commandButton id="deleteButton" value="#{msg.eliminar }" rendered="#{beanCatAdmin.borrar}"
-						icon="ui-icon-trash" onclick="borrarDialog.show()" update="growl" />
-					<p:commandButton id="editarButton" value="#{msg.editar }"  rendered="#{beanCatAdmin.cambios}"
-						icon="ui-icon-pencil" onclick="editarDialog.show()"
-						update=":form:displayEditar growl" />
-					<p:commandButton id="viewButton" value="#{msg.ver }"  rendered="#{beanCatAdmin.consulta}"
-						icon="ui-icon-search" oncomplete="verDialog.show()"
-						update=":form:displayVer growl" />
-					<p:commandButton id="nuevoButton" value="#{msg.nuevo }"  rendered="#{beanCatAdmin.alta}"
-						icon="ui-icon-plusthick" onclick="nuevoDialog.show()"
-						update=":form:displayNuevo growl" />
+					<p:commandButton id="deleteButton" value="#{msg.eliminar }"
+						rendered="#{beanCatAdmin.borrar}" icon="ui-icon-trash"
+						onclick="borrarDialog.show()" update="growl" />
+					<p:commandButton id="editarButton" value="#{msg.editar }"
+						rendered="#{beanCatAdmin.cambios}" icon="ui-icon-pencil"
+						onclick="editarDialog.show()" update=":form:displayEditar growl" />
+					<p:commandButton id="viewButton" value="#{msg.ver }"
+						rendered="#{beanCatAdmin.consulta}" icon="ui-icon-search"
+						oncomplete="verDialog.show()" update=":form:displayVer growl" />
+					<p:commandButton id="nuevoButton" value="#{msg.nuevo }"
+						rendered="#{beanCatAdmin.alta}" icon="ui-icon-plusthick"
+						onclick="nuevoDialog.show()" update=":form:displayNuevo growl" />
 				</h:panelGrid>
 			</p:panel>
 			<p:panel>
@@ -183,29 +194,25 @@
 								<h:panelGroup>
 									<p:inputText value="#{beanCatAdmin.nuevoAdminNoEmpleado }"
 										id="nuevoAdminNoEmpleadoInput" label="NoEmpleado"
-										style="font-weight:bold; height:100%; width:100%"
-										/>
+										style="font-weight:bold; height:100%; width:100%" />
 								</h:panelGroup>
 								<h:outputText value="#{msg.nombre }*" />
 								<h:panelGroup>
 									<p:inputText value="#{beanCatAdmin.nuevoAdminNombre }"
 										id="nuevoAdminNombreInput" label="Nombre"
-										style="font-weight:bold; height:100%; width:100%"
-										/>
+										style="font-weight:bold; height:100%; width:100%" />
 								</h:panelGroup>
 								<h:outputText value="#{msg.apellidoP }*" />
 								<h:panelGroup>
-									<p:inputText value="#{beanCatAdmin.nuevoAdminApaterno }" label="ApellidoPaterno"
-										id="nuevoAdminApaternoInput"
-										style="font-weight:bold; height:100%; width:100%"
-										 />
+									<p:inputText value="#{beanCatAdmin.nuevoAdminApaterno }"
+										label="ApellidoPaterno" id="nuevoAdminApaternoInput"
+										style="font-weight:bold; height:100%; width:100%" />
 								</h:panelGroup>
 								<h:outputText value="#{msg.apellidoM }*" />
 								<h:panelGroup>
-									<p:inputText value="#{beanCatAdmin.nuevoAdminAmaterno }" label="ApellidoMaterno"
-										id="nuevoAdminAMaternoInput"
-										style="font-weight:bold; height:100%; width:100%"
-										  />
+									<p:inputText value="#{beanCatAdmin.nuevoAdminAmaterno }"
+										label="ApellidoMaterno" id="nuevoAdminAMaternoInput"
+										style="font-weight:bold; height:100%; width:100%" />
 								</h:panelGroup>
 								<h:outputText value="#{msg.fechaNacimiento }" />
 								<h:panelGroup>
@@ -247,7 +254,8 @@
 								<h:panelGroup>
 									<p:inputText value="#{beanCatAdmin.nuevoAdminEmail }"
 										id="nuevoAdminEmailInput" label="Email"
-										style="font-weight:bold; height:100%; width:100%"   requiredMessage="Email no valido">
+										style="font-weight:bold; height:100%; width:100%"
+										requiredMessage="Email no valido">
 									</p:inputText>
 								</h:panelGroup>
 							</h:panelGrid>
@@ -256,7 +264,7 @@
 							<h:panelGrid columns="2">
 								<h:outputText value="#{msg.calle }*" />
 								<p:inputText value="#{beanCatAdmin.nuevoAdminCalle }"
-									style="font-weight:bold; height:100%; width:100%"   label="Calle"/>
+									style="font-weight:bold; height:100%; width:100%" label="Calle" />
 								<h:outputText value="#{msg.noExterior }" />
 								<p:inputText value="#{beanCatAdmin.nuevoAdminNoExt }"
 									style="font-weight:bold; height:100%; width:100%" />
@@ -265,26 +273,27 @@
 									style="font-weight:bold; height:100%; width:100%" />
 								<h:outputText value="#{msg.colonia }*" />
 								<p:selectOneMenu
-									style="width:330px; font-weight:bold; height:100%;" label="Colonia"
+									style="width:330px; font-weight:bold; height:100%;"
+									label="Colonia"
 									value="#{beanCatAdmin.nuevoAdminIdAsentamientoMunicipioEstado }"
-									id="nuevoAdminSelectColonias"  >
+									id="nuevoAdminSelectColonias">
 									<f:selectItems
 										value="#{beanCatAdmin.nuevoAdminSelectListColonias }" />
 								</p:selectOneMenu>
 								<h:outputText value="#{msg.pais }*" />
-								<p:inputText id="nuevoAdminPais"   label="Pais"
+								<p:inputText id="nuevoAdminPais" label="Pais"
 									value="#{beanCatAdmin.nuevoAdminPais }"
 									style="font-weight:bold; height:100%; width:100%" />
 								<h:outputText value="#{msg.estado }*" />
-								<p:inputText id="nuevoAdminEntidadF"   label="Estado"
+								<p:inputText id="nuevoAdminEntidadF" label="Estado"
 									value="#{beanCatAdmin.nuevoAdminEntidadFederativa }"
 									style="font-weight:bold; height:100%; width:100%" />
 								<h:outputText value="#{msg.delegacion }*" />
-								<p:inputText id="nuevoAdminDelegacion"   label="Delegacion"
-									value="#{beanCatAdmin.nuevoAdminDelegacion }" 
+								<p:inputText id="nuevoAdminDelegacion" label="Delegacion"
+									value="#{beanCatAdmin.nuevoAdminDelegacion }"
 									style="font-weight:bold; height:100%; width:100%" />
 								<h:outputText value="#{msg.codigoPostal }*" />
-								<p:autoComplete id="autoCompleteCPNuevo"   label="CP"
+								<p:autoComplete id="autoCompleteCPNuevo" label="CP"
 									value="#{beanCatAdmin.nuevoAdminCPAutoComplete}"
 									completeMethod="#{beanCatAdmin.complete}" forceSelection="true"
 									styleClass="dateTimeField3">
@@ -301,7 +310,7 @@
 					<p:commandButton value="#{msg.aceptar }" icon="ui-icon-check"
 						actionListener="#{beanCatAdmin.save }" update=":form:table, growl" />
 					<p:commandButton value="#{msg.cancelar }" icon="ui-icon-closethick"
-						oncomplete="nuevoDialog.hide()" 
+						oncomplete="nuevoDialog.hide()"
 						actionListener="#{beanCatAdmin.saveCancel }" />
 				</h:panelGrid>
 			</p:dialog>
@@ -524,7 +533,7 @@
 			<!-- Fin de panel de borrado -->
 		</h:form>
 
-<script type="text/javascript">  
+		<script type="text/javascript">  
     function handleNewRequest(xhr, status, args) {  
         if(args.validationFailed || !args.loggedIn) {  
             'nuevoDialog'.jq.effect("shake", { times:5 }, 100);  
@@ -533,8 +542,8 @@
             'nuevoDialog'.hide();             
         }  
     }  
-</script>  
-            
+</script>
+
 	</ui:composition>
 </h:body>
 </html>

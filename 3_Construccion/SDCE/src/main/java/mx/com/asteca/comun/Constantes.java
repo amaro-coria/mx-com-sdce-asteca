@@ -52,6 +52,7 @@ public class Constantes {
 	public static final String ASSEMBLER_CURSO="assemblerCurso";
 	public static final String ASSEMBLER_TIPOS_CAT_GRAL="assemblerTiposCatGral";
 	public static final String ASSEMBLER_BITACORA="assemblerBitacora";
+	public static final String ASSEMBLER_CERTIFICADO="assemblerCertificado";
 	public static final String ASSEMBLER_REPORTE_AULAS="assemblerReporteAulas";
 	public static final String ACCION_LOGIN="Login";
 	public static final String ACCION_LOGOUT="Logout";
@@ -69,6 +70,9 @@ public class Constantes {
 	public static final String ACCION_DELETE_REGISTRO="Borrado de registro";
 	public static final String ACCION_DELETE_REGISTRO_EXITOSO_MENSAJE="Borrado de registro exitoso";
 	public static final String ACCION_DELETE_REGISTRO_FALLIDO_MENSAJE="Falla al borrar registro";
+	public static final String ACCION_CANCELAR_CERTIFICADO_EXITOSO="Certificado cancelado exitosamente";
+	public static final String ACCION_CANCELAR_CERTIFICADO="Cancelar certificado";
+	public static final String ACCION_CANCELAR_CERTIFICADO_FALLIDO="Fallo al cancelar certificado";
 	public static final String ERROR_OBTENIENDO_LISTA_CATALOGO="No se pudo obtener el catalogo.";
 	public static final String ERROR_NUEVO_REGISTRO="No se pudo completar el nuevo registro.";
 	public static final String BEAN_EQUIPO="beanEquipo";
@@ -96,6 +100,7 @@ public class Constantes {
 	public static final String BEAN_MAERIAS_REGISTRO="beanMateria";
 	public static final String BEAN_VER_CURSOS="beanVerCurso";
 	public static final String BEAN_BITACORA="beanBitacora";
+	public static final String BEAN_ADMIN_CERTIFICADOS="beanCertificados";
 	public static final String ERROR_NECESITAS_SELECCIONAR_UN_PAIS="Necesitas seleccionar un pais";
 	public static final String ERROR_NECESITAS_SELECCIONAR_UN_EDO="Necesitas seleccionar un estado";
 	public static final String ERROR_NECESITAS_SELECCIONAR_UN_CLIENTE="Necesitas seleccionar un cliente";
@@ -103,6 +108,7 @@ public class Constantes {
 	public static final String ERROR_NECESITAS_SELECCIONAR_UN_TIPO_EQUIPO="Necesitas seleccionar un tipo de equipos";
 	public static final String ERROR_NECESITAS_SELECCIONAR_UNA_SEDE="Necesitas seleccionar una sede";
 	public static final String ERROR_FORMATO_NUMERO="Debes introducir una cantidad numerica valida";
+	public static final String ERROR_CANCELAR_CERTIFICADO="Error al cancelar certificado.";
 	public static final String NUEVO_REGISTRO_EXITOSO="Se ha insertado un nuevo registro exitosamente";
 	public static final String DELETE_REGISTRO_EXITOSO="Se ha eliminado el registro exitosamente";
 	public static final String UPDATE_REGISTRO_EXITOSO="Se ha actualizado el registro exitosamente";
@@ -147,6 +153,7 @@ public class Constantes {
 	public static final String MODULO_MATERIAS="Materias";
 	public static final String MODULO_VER_CURSO="Ver Cursos";
 	public static final String MODULO_BITACORA="Bitacora";
+	public static final String MODULO_ADMIN_CERTIFICADOS="Certificados";
 	public static final String SESION_ATRIBUTO_USUARIO="idUsuario";
 	public static final String INFO_REFERENCIA_DUPLICADA_CURSO="Ya existe un curso con esa referencia, favor de asignar otra para continuar.";
 	public static final String INFO_REFERENCIA_DUPLICADA_GRUPO_CURSO="Ya existe un curso con ese grupo, favor de asignar otra para continuar.";
