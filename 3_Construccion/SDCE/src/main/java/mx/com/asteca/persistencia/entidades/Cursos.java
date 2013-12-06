@@ -41,6 +41,13 @@ public class Cursos  implements java.io.Serializable {
      private String horaFin;
      private Integer grupo;
      private String referencia;
+     private String empresa;
+     private String alumnos;
+     private String instructor;
+     private Integer horasInstructor;
+     private String practica;
+     private Integer diasImp;
+     private String emision;
      private Set<CalifCursos> califCursoses = new HashSet<CalifCursos>(0);
      private Set<AlumnosCursos> alumnosCursoses = new HashSet<AlumnosCursos>(0);
      private Set<CursosMaterias> cursosMateriases = new HashSet<CursosMaterias>(0);
@@ -172,6 +179,68 @@ public class Cursos  implements java.io.Serializable {
 		this.nombre = nombre;
 	}
 
+	  @Column(name="EMPRESA", length=45)
+	    public String getEmpresa() {
+	        return this.empresa;
+	    }
+	    
+	    public void setEmpresa(String empresa) {
+	        this.empresa = empresa;
+	    }
+	    
+	    @Column(name="ALUMNOS", length=45)
+	    public String getAlumnos() {
+	        return this.alumnos;
+	    }
+	    
+	    public void setAlumnos(String alumnos) {
+	        this.alumnos = alumnos;
+	    }
+	    
+	    @Column(name="INSTRUCTOR", length=45)
+	    public String getInstructor() {
+	        return this.instructor;
+	    }
+	    
+	    public void setInstructor(String instructor) {
+	        this.instructor = instructor;
+	    }
+	    
+	    @Column(name="HORAS_INSTRUCTOR")
+	    public Integer getHorasInstructor() {
+	        return this.horasInstructor;
+	    }
+	    
+	    public void setHorasInstructor(Integer horasInstructor) {
+	        this.horasInstructor = horasInstructor;
+	    }
+	    
+	    @Column(name="PRACTICA", length=45)
+	    public String getPractica() {
+	        return this.practica;
+	    }
+	    
+	    public void setPractica(String practica) {
+	        this.practica = practica;
+	    }
+	    
+	    @Column(name="DIAS_IMP")
+	    public Integer getDiasImp() {
+	        return this.diasImp;
+	    }
+	    
+	    public void setDiasImp(Integer diasImp) {
+	        this.diasImp = diasImp;
+	    }
+	    
+	    @Column(name="EMISION", length=45)
+	    public String getEmision() {
+	        return this.emision;
+	    }
+	    
+	    public void setEmision(String emision) {
+	        this.emision = emision;
+	    }
 
 @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="cursos")
     public Set<CalifCursos> getCalifCursoses() {
