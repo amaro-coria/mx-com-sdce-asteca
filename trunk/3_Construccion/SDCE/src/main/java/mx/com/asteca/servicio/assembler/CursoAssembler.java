@@ -35,8 +35,13 @@ public class CursoAssembler extends Assembler<CursoDTO, Cursos> {
 		dto.setIdSede(mapping.getIdSede());
 		dto.setReferencia(mapping.getReferencia());
 		dto.setNombre(mapping.getNombre());
-		
-		
+		dto.setEmpresa(mapping.getEmpresa());
+		dto.setAlumnos(mapping.getAlumnos());
+		dto.setInstructor(mapping.getInstructor());
+		dto.setHorasInstructor(mapping.getHorasInstructor());
+		dto.setPractica(mapping.getPractica());
+		dto.setDiasImp(mapping.getDiasImp());
+		dto.setEmision(mapping.getEmision());
 		return dto;
 
 	}
@@ -59,7 +64,13 @@ public class CursoAssembler extends Assembler<CursoDTO, Cursos> {
 		mapping.setIdSede(dto.getIdSede());
 		mapping.setReferencia(dto.getReferencia());
 		mapping.setNombre(dto.getNombre());
-		
+		mapping.setEmpresa(dto.getEmpresa());
+		mapping.setAlumnos(dto.getAlumnos());
+		mapping.setInstructor(dto.getInstructor());
+		mapping.setHorasInstructor(dto.getHorasInstructor());
+		mapping.setPractica(dto.getPractica());
+		mapping.setDiasImp(dto.getDiasImp());
+		mapping.setEmision(dto.getEmision());
 		return mapping;
 	}
 

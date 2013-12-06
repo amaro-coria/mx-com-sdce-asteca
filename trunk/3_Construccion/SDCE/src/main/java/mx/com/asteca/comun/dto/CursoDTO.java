@@ -17,6 +17,13 @@ public class CursoDTO implements Serializable{
     private Integer grupo;
     private String referencia;
     private String nombre;
+    private String empresa;
+    private String alumnos;
+    private String instructor;
+    private Integer horasInstructor;
+    private String practica;
+    private Integer diasImp;
+    private String emision;
 
    public CursoDTO() {
    }
@@ -154,6 +161,118 @@ public String getNombre() {
 
 public void setNombre(String nombre) {
 	this.nombre = nombre;
+}
+
+
+/**
+ * @return the empresa
+ */
+public String getEmpresa() {
+	return empresa;
+}
+
+
+/**
+ * @param empresa the empresa to set
+ */
+public void setEmpresa(String empresa) {
+	this.empresa = empresa;
+}
+
+
+/**
+ * @return the alumnos
+ */
+public String getAlumnos() {
+	return alumnos;
+}
+
+
+/**
+ * @param alumnos the alumnos to set
+ */
+public void setAlumnos(String alumnos) {
+	this.alumnos = alumnos;
+}
+
+
+/**
+ * @return the instructor
+ */
+public String getInstructor() {
+	return instructor;
+}
+
+
+/**
+ * @param instructor the instructor to set
+ */
+public void setInstructor(String instructor) {
+	this.instructor = instructor;
+}
+
+
+/**
+ * @return the horasInstructor
+ */
+public Integer getHorasInstructor() {
+	return horasInstructor;
+}
+
+
+/**
+ * @param horasInstructor the horasInstructor to set
+ */
+public void setHorasInstructor(Integer horasInstructor) {
+	this.horasInstructor = horasInstructor;
+}
+
+
+/**
+ * @return the practica
+ */
+public String getPractica() {
+	return practica;
+}
+
+
+/**
+ * @param practica the practica to set
+ */
+public void setPractica(String practica) {
+	this.practica = practica;
+}
+
+
+/**
+ * @return the diasImp
+ */
+public Integer getDiasImp() {
+	return diasImp;
+}
+
+
+/**
+ * @param diasImp the diasImp to set
+ */
+public void setDiasImp(Integer diasImp) {
+	this.diasImp = diasImp;
+}
+
+
+/**
+ * @return the emision
+ */
+public String getEmision() {
+	return emision;
+}
+
+
+/**
+ * @param emision the emision to set
+ */
+public void setEmision(String emision) {
+	this.emision = emision;
 }
    
    
