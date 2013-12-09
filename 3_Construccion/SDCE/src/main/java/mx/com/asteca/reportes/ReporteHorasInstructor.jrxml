@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="AlumnosPorArea" pageWidth="700" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="660" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" >
-	<property name="ireport.zoom" value="1.6105100000000026"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.zoom" value="1.9487171000000034"/>
+	<property name="ireport.x" value="105"/>
 	<property name="ireport.y" value="0"/>
+	<property name="net.sf.jasperreports.chart.theme" value="default"/>
 	<parameter name="Sct" class="java.io.InputStream"/>
 	<parameter name="Aero" class="java.io.InputStream"/>
 	<queryString>
@@ -54,7 +55,7 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="137" splitType="Stretch">
+		<band height="196" splitType="Stretch">
 			<image>
 				<reportElement  x="0" y="0" width="134" height="77"/>
 				<imageExpression class="java.io.InputStream"><![CDATA[$P{Sct}]]></imageExpression>
@@ -69,12 +70,12 @@
 				<text><![CDATA[Reporte de Instructures]]></text>
 			</staticText>
 			<staticText>
-				<reportElement  x="0" y="117" width="100" height="20"/>
+				<reportElement  x="0" y="176" width="100" height="20"/>
 				<textElement textAlignment="Center"/>
 				<text><![CDATA[Instructores Internos]]></text>
 			</staticText>
 			<staticText>
-				<reportElement  x="0" y="97" width="100" height="20"/>
+				<reportElement  x="0" y="156" width="100" height="20"/>
 				<textElement textAlignment="Center"/>
 				<text><![CDATA[MES]]></text>
 			</staticText>
@@ -94,15 +95,42 @@ SUBDIRECCIÓN DE CERTIFICACIÓN DE LICENCIAS
 ]]></text>
 			</staticText>
 			<textField>
-				<reportElement  x="100" y="97" width="100" height="20"/>
+				<reportElement  x="100" y="156" width="100" height="20"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[""+$F{fechaFinal}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement  x="100" y="117" width="100" height="20"/>
+				<reportElement x="100" y="176" width="100" height="20"/>
 				<textElement textAlignment="Center"/>
 				<text><![CDATA[Horas]]></text>
 			</staticText>
+			<barChart>
+				<chart evaluationTime="Report">
+					<reportElement  x="276" y="97" width="384" height="99"/>
+					<chartTitle>
+						<titleExpression><![CDATA["Reporte de Instuctores"]]></titleExpression>
+					</chartTitle>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<categoryDataset>
+					<categorySeries>
+						<seriesExpression><![CDATA[""+$F{nombreInstructor}]]></seriesExpression>
+						<categoryExpression><![CDATA[""+$F{nombreInstructor}]]></categoryExpression>
+						<valueExpression><![CDATA[new Integer(($F{fechaFinal}.getHours()-$F{fechaInicial}.getHours()))]]></valueExpression>
+					</categorySeries>
+				</categoryDataset>
+				<barPlot isShowTickMarks="false">
+					<plot/>
+					<itemLabel/>
+					<categoryAxisFormat>
+						<axisFormat/>
+					</categoryAxisFormat>
+					<valueAxisFormat>
+						<axisFormat/>
+					</valueAxisFormat>
+				</barPlot>
+			</barChart>
 		</band>
 	</title>
 	<detail>
@@ -113,7 +141,7 @@ SUBDIRECCIÓN DE CERTIFICACIÓN DE LICENCIAS
 				<textFieldExpression><![CDATA[""+($F{fechaFinal}.getHours()-$F{fechaInicial}.getHours())]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement  x="0" y="0" width="100" height="20"/>
+				<reportElement x="0" y="0" width="100" height="20"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[""+$F{nombreInstructor}]]></textFieldExpression>
 			</textField>
