@@ -3,7 +3,6 @@ package mx.com.asteca.reportes;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
@@ -12,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import mx.com.asteca.comun.dto.AlumnoDTO;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
@@ -26,6 +24,7 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
  */
 public class Reportes extends HttpServlet {
 	String name = null;
+	String nombreCedula = null;
 	/**
 	 * 
 	 */
@@ -35,10 +34,9 @@ public class Reportes extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 
 		name = request.getParameter("name");
+		nombreCedula = request.getParameter("nombreCedula");
 		HttpSession session = request.getSession();
-		@SuppressWarnings("unchecked")
-		List<AlumnoDTO> listaAlumnos = (List<AlumnoDTO>) session.getAttribute("alumnosReporte");
-		viewReportPDF(name, response, listaAlumnos);
+		viewReportPDF(name, response);
 	}
 
 	@Override
@@ -53,10 +51,9 @@ public class Reportes extends HttpServlet {
 		processRequest(request, response);
 	}
 
-	public void viewReportPDF(String name, HttpServletResponse response,
-			List<AlumnoDTO> listaAlumnos) {
+	public void viewReportPDF(String name, HttpServletResponse response) {
 
-		InputStream ins = UtilReporte.class.getResourceAsStream("AlumnosPorArea"
+		InputStream ins = UtilReporte.class.getResourceAsStream(nombreCedula
 				+ ".jrxml");
 		try {
 			JasperReport report = JasperCompileManager.compileReport(ins);
@@ -65,9 +62,7 @@ public class Reportes extends HttpServlet {
 					UtilReporte.class.getResourceAsStream("img_sct.jpg"));
 			param.put("Aero",
 					UtilReporte.class.getResourceAsStream("img_aero.jpg"));
-			JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(
-					listaAlumnos);
-			JasperPrint print = JasperFillManager.fillReport(report, param, ds);
+			JasperPrint print = JasperFillManager.fillReport(report, param);
 			byte[] file = JasperExportManager.exportReportToPdf(print);
 			downloadFile("pdf", file, response);
 		} catch (JRException e) {
