@@ -122,6 +122,7 @@ public class Constantes {
 	public static final String MENU_ITEM_PROCESS="@this";
 	public static final String MENU_ITEM_UPDATE="@all";
 	public static final String BEAN_REPORTE_ALUMNO="beanReporteAlumno";
+	public static final String BEAN_REPORTE_CEDULA="beanReporteCedula";
 	public static final String BEAN_REPORTE_AULA="beanReporteAula";
 	public static final String BEAN_REPORTE_CURSOS="beanReporteCursos";
 	public static final String BEAN_REPORTE_MENSUAL="beanReporteMensual";
@@ -145,6 +146,7 @@ public class Constantes {
 	public static final String MODULO_PERMISOS = "Permisos";
 	public static final String MODULO_PROGRAMA_ESTUDIOS = "Programa de Estudios";
 	public static final String MODULO_REPORTE_ALUMNO = "Reporte de Alumnos";
+	public static final String MODULO_REPORTE_CEDULA = "Reporte de Cedula";
 	public static final String MODULO_REPORTE_AULA = "Reporte de Aulas";
 	public static final String MODULO_REPORTE_CURSOS = "Reporte de Cursos";
 	public static final String MODULO_REPORTE_INSTRUCTOR = "Reporte de Instructores";
