@@ -55,7 +55,7 @@ public class ReporteCedulaControlador extends BaseController implements
 
 	public void mostrarReporte(String nombreCedula) {
 		RequestContext.getCurrentInstance().execute(
-				"window.open('" + url + "Reportes?name=Reporte de Alumnos&nombreCedula="+nombreCedula+ "')");
+				"window.open('" + url + "Reportes?name="+nombreCedula+"&nombreCedula="+nombreCedula+ "')");
 	}
 
 	public String getUrl() {
