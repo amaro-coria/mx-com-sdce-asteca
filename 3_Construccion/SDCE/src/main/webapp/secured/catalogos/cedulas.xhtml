@@ -20,7 +20,7 @@
 						<h:panelGrid columns="2" cellpadding="10">
 							<p:commandButton value="Descargar" icon="ui-icon-print"
 								update="@all"
-								actionListener="#{beanReporteCedula.mostrarReporte}"
+								actionListener="#{beanReporteCedula.mostrarReporte('Cedula_1')}"
 								styleClass="ui-dialog-buttonpane" />
 						</h:panelGrid>
 					</p:tab>
@@ -28,7 +28,23 @@
 						<h:panelGrid columns="2" cellpadding="10">
 							<p:commandButton value="Descargar" icon="ui-icon-print"
 								update="@all"
-								actionListener="#{beanReporteCedula.mostrarReporte}"
+								actionListener="#{beanReporteCedula.mostrarReporte('Cedula_2')}"
+								styleClass="ui-dialog-buttonpane" />
+						</h:panelGrid>
+					</p:tab>
+					<p:tab id="tab4" title="Cedula 4">
+						<h:panelGrid columns="2" cellpadding="10">
+							<p:commandButton value="Descargar" icon="ui-icon-print"
+								update="@all"
+								actionListener="#{beanReporteCedula.mostrarReporte('Cedula_3')}"
+								styleClass="ui-dialog-buttonpane" />
+						</h:panelGrid>
+					</p:tab>
+					<p:tab id="tab5" title="Cedula 5">
+						<h:panelGrid columns="2" cellpadding="10">
+							<p:commandButton value="Descargar" icon="ui-icon-print"
+								update="@all"
+								actionListener="#{beanReporteCedula.mostrarReporte('Cedula_4')}"
 								styleClass="ui-dialog-buttonpane" />
 						</h:panelGrid>
 					</p:tab>
